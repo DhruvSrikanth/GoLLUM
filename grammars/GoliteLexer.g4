@@ -10,9 +10,8 @@ lexer grammar GoliteLexer;
 // 6: keyword
 // 7: literals
 // 8: types
-// 9: eof
-// 10: identifiers
-// 11: skip
+// 9: identifiers
+// 10: skip
 
 // Does this precedence look okay?
 
@@ -75,9 +74,9 @@ STRUCT: 'struct';
 
 DOT: '.';
 
-FUNCTION: 'func';
+FUNC: 'func';
 
-RETURN: 'return';
+RET: 'return';
 
 IF: 'if';
 
@@ -87,7 +86,7 @@ FOR: 'for';
 
 SCAN: 'scan';
 
-PRINT: 'printf';
+PRINTF: 'printf';
 
 // Literals
 INT_LIT: [-]?[1-9][0-9]* | [-]?[0];
@@ -106,9 +105,6 @@ STRING: 'string'; // Is this a type?
 BOOL: 'bool';
 
 PTR: '*'IDENT; // Is this how you define a pointer type? Would this have higher precedence than the '*' and identifier operators?
-
-// EOF
-EOF_TOK: 'eof'; // How to declare EOF token?
 
 // Identifiers
 IDENT: [a-zA-Z][a-zA-Z0-9]*;
