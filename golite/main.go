@@ -9,14 +9,14 @@ import (
 
 func main() {
 	// Parse the command line
-	cmdline := cmdline.ReadCmdline()
-	if cmdline == nil {
+	cmd := cmdline.ReadCmdline()
+	if cmd == nil {
 		return
 	}
 
 	// Get the input source file path
 	// Input source path is always the last argument
-	inputSourcePath := cmdline.Args[len(cmdline.Args)-1]
+	inputSourcePath := cmd.Args[len(cmd.Args)-1]
 
 	// Get a new lexer
 	lexer := lexer.NewLexer(inputSourcePath)
@@ -27,8 +27,8 @@ func main() {
 	// Parse the input source file (lexes and parses)
 	invalidParse := parser.Parse()
 	if invalidParse {
-		fmt.Println("Valid parse as program is correct (till now...)!")
+		fmt.Println("Program as is incorrect!")
 	} else {
-		fmt.Println("Invalid parse as program is incorrect!")
+		fmt.Println("Program is correct! (till now...)")
 	}
 }

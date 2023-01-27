@@ -8,13 +8,15 @@ import (
 
 type Cmdline struct {
 	Program string
+	LexFlag bool
 	Args    []string
 }
 
 // Returns a new Cmdline struct with the program name and arguments
-func newCmdline(program string, args []string) *Cmdline {
+func newCmdline(program string, lexFlag bool, args []string) *Cmdline {
 	return &Cmdline{
 		Program: program,
+		LexFlag: lexFlag,
 		Args:    args,
 	}
 }
@@ -30,10 +32,17 @@ func ReadCmdline() *Cmdline {
 	}
 
 	programFile := os.Args[0]
+	var lexFlag bool
+	var args []string
+	if len(os.Args) == 2 {
+		lexFlag = false
+		args = os.Args[1:]
+	} else if len(os.Args) == 3 {
+		lexFlag = true
+		args = os.Args[2:]
+	}
 
-	Args := os.Args[1:]
-
-	cmdline := newCmdline(programFile, Args)
+	cmdline := newCmdline(programFile, lexFlag, args)
 
 	return cmdline
 }
