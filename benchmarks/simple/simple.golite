@@ -1,0 +1,9 @@
+func main() {
+    
+    var a int;
+    
+    a = 3 + 4 + 5;
+    
+    printf("%d", a);
+
+}
