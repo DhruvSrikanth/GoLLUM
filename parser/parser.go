@@ -16,10 +16,9 @@ type Parser interface {
 // parser struct
 type goliteParser struct {
 	*antlr.DefaultErrorListener // Embed default which ensures we fit the interface
-	// *BaseCalParserListener
-	parser *GoliteParser
-	lexer  lexer.Lexer
-	errors []*context.CompilerError
+	parser                      *GoliteParser
+	lexer                       lexer.Lexer
+	errors                      []*context.CompilerError
 }
 
 // Get errors from the parser
@@ -50,6 +49,8 @@ func NewParser(lexer lexer.Lexer) Parser {
 // Parse the tokens in the token stream as they are lexed
 func (gParser *goliteParser) Parse() bool {
 	gParser.parser.Program()
+
+	// This should return an AST but we have not got to that part yet so we are just returning if there are any errors
 	return context.HasErrors(gParser.lexer.GetErrors()) ||
 		context.HasErrors(gParser.GetErrors())
 }
