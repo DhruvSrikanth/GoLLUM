@@ -1,4 +1,6 @@
 #!/bin/bash
 
 # Generate the lexer and parser
-source grammars/generate.sh
+cd grammars
+source generate.sh
+cd ..

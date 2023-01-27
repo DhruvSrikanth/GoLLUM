@@ -53,7 +53,7 @@ fields: decl SEMICOLON (decl SEMICOLON)*;
 
 decl: IDENT type;
 
-type: INT | BOOL | PTR;
+type: INT | BOOL | (MULT IDENT);
 
 declarations: declaration*;
 
@@ -81,7 +81,7 @@ delete: DELETE expression SEMICOLON;
 
 assignment: lValue ASSIGN (expression | SCAN) SEMICOLON;
 
-print: PRINTF LPAREN STRING (COMMA expression)* RPAREN SEMICOLON;
+print: PRINTF LPAREN STRING_LIT (COMMA expression)* RPAREN SEMICOLON;
 
 conditional: IF LPAREN expression RPAREN block (ELSE block)?;
 

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"golite/cmdline"
 	"golite/lexer"
 	"golite/parser"
@@ -21,14 +20,15 @@ func main() {
 	// Get a new lexer
 	lexer := lexer.NewLexer(inputSourcePath)
 
-	// Get a new parser
-	parser := parser.NewParser(lexer)
-
-	// Parse the input source file (lexes and parses)
-	invalidParse := parser.Parse()
-	if invalidParse {
-		fmt.Println("Program as is incorrect!")
+	// Check the lex flag
+	if cmd.LexFlag {
+		// Print the tokens
+		lexer.PrintTokens()
 	} else {
-		fmt.Println("Program is correct! (till now...)")
+		// Get a new parser
+		parser := parser.NewParser(lexer)
+
+		// Parse the input source file (lexes and parses)
+		parser.Parse()
 	}
 }

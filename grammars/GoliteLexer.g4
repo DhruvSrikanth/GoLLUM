@@ -13,8 +13,6 @@ lexer grammar GoliteLexer;
 // 9: identifiers
 // 10: skip
 
-// Does this precedence look okay?
-
 
 // Assignment operator
 ASSIGN: '=';
@@ -91,7 +89,7 @@ PRINTF: 'printf';
 // Literals
 INT_LIT: [-]?[1-9][0-9]* | [-]?[0];
 
-// STRING_LIT: .*; // How to declare a string literal? this is incorrect because it matches the empty string
+STRING_LIT: '"'.*?'"';
 
 BOOL_LIT: 'true' | 'false';
 
@@ -100,11 +98,7 @@ NIL_LIT: 'nil';
 // TYPES
 INT: 'int';
 
-STRING: 'string'; // Is this a type?
-
 BOOL: 'bool';
-
-PTR: '*'IDENT; // Is this how you define a pointer type? Would this have higher precedence than the '*' and identifier operators?
 
 // Identifiers
 IDENT: [a-zA-Z][a-zA-Z0-9]*;
@@ -113,5 +107,5 @@ IDENT: [a-zA-Z][a-zA-Z0-9]*;
 // whitespace, newline, carriage return, tab
 WS: [ \t\r\n]+ -> skip;
 
-// Comments
-COMMENT: '//'.*?'\t'*'\r'*'\n' -> skip; // Is this the right way to declare a comment? It is suggesting that I had a ? for a non-greedy match, but I don't know what that means.
+// Comments (only single line comments)
+COMMENT: '//'.*?'\n' -> skip;

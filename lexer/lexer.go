@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"fmt"
 	"golite/context"
 
 	"github.com/antlr/antlr4/runtime/Go/antlr/v4"
@@ -10,6 +11,7 @@ import (
 type Lexer interface {
 	GetTokenStream() *antlr.CommonTokenStream
 	GetErrors() []*context.CompilerError
+	PrintTokens()
 }
 
 // Lexer encapsulates the lexer
@@ -33,6 +35,13 @@ func (lex *lexer) SyntaxError(recognizer antlr.Recognizer, offendingSymbol inter
 // Get the token stream for the lexer
 func (lexer *lexer) GetTokenStream() *antlr.CommonTokenStream {
 	return lexer.stream
+}
+
+func (lexer *lexer) PrintTokens() {
+	tokens := lexer.GetTokenStream().GetAllTokens()
+	for _, token := range tokens {
+		fmt.Println(token.GetText())
+	}
 }
 
 // Get the errors from the lexer

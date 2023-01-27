@@ -36,14 +36,14 @@ func goliteparserParserInit() {
 		"'!='", "'+'", "'-'", "'*'", "'/'", "'('", "')'", "'{'", "'}'", "';'",
 		"','", "'var'", "'type'", "'new'", "'delete'", "'struct'", "'.'", "'func'",
 		"'return'", "'if'", "'else'", "'for'", "'scan'", "'printf'", "", "",
-		"'nil'", "'int'", "'string'", "'bool'",
+		"'nil'", "'int'", "'bool'", "'string'",
 	}
 	staticData.symbolicNames = []string{
 		"", "ASSIGN", "AND", "OR", "NOT", "LT", "GT", "LE", "GE", "EQ", "NE",
 		"PLUS", "MINUS", "MULT", "DIV", "LPAREN", "RPAREN", "LBRACE", "RBRACE",
 		"SEMICOLON", "COMMA", "VAR", "TYPE", "NEW", "DELETE", "STRUCT", "DOT",
 		"FUNC", "RET", "IF", "ELSE", "FOR", "SCAN", "PRINTF", "INT_LIT", "BOOL_LIT",
-		"NIL_LIT", "INT", "STRING", "BOOL", "PTR", "IDENT", "WS", "COMMENT",
+		"NIL_LIT", "INT", "BOOL", "STRING", "PTR", "IDENT", "WS", "COMMENT",
 	}
 	staticData.ruleNames = []string{
 		"program", "types", "typeDeclaration", "fields", "decl", "type", "declarations",
@@ -91,7 +91,7 @@ func goliteparserParserInit() {
 		1, 34, 1, 34, 1, 34, 3, 34, 320, 8, 34, 1, 34, 1, 34, 1, 34, 1, 34, 1,
 		34, 3, 34, 327, 8, 34, 1, 34, 0, 0, 35, 0, 2, 4, 6, 8, 10, 12, 14, 16,
 		18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52,
-		54, 56, 58, 60, 62, 64, 66, 68, 0, 5, 2, 0, 37, 37, 39, 40, 1, 0, 9, 10,
+		54, 56, 58, 60, 62, 64, 66, 68, 0, 5, 2, 0, 37, 38, 40, 40, 1, 0, 9, 10,
 		1, 0, 5, 7, 1, 0, 11, 12, 1, 0, 13, 14, 331, 0, 70, 1, 0, 0, 0, 2, 78,
 		1, 0, 0, 0, 4, 81, 1, 0, 0, 0, 6, 89, 1, 0, 0, 0, 8, 99, 1, 0, 0, 0, 10,
 		102, 1, 0, 0, 0, 12, 107, 1, 0, 0, 0, 14, 110, 1, 0, 0, 0, 16, 115, 1,
@@ -145,7 +145,7 @@ func goliteparserParserInit() {
 		0, 184, 187, 5, 1, 0, 0, 185, 188, 3, 52, 26, 0, 186, 188, 5, 32, 0, 0,
 		187, 185, 1, 0, 0, 0, 187, 186, 1, 0, 0, 0, 188, 189, 1, 0, 0, 0, 189,
 		190, 5, 19, 0, 0, 190, 37, 1, 0, 0, 0, 191, 192, 5, 33, 0, 0, 192, 193,
-		5, 15, 0, 0, 193, 198, 5, 38, 0, 0, 194, 195, 5, 20, 0, 0, 195, 197, 3,
+		5, 15, 0, 0, 193, 198, 5, 39, 0, 0, 194, 195, 5, 20, 0, 0, 195, 197, 3,
 		52, 26, 0, 196, 194, 1, 0, 0, 0, 197, 200, 1, 0, 0, 0, 198, 196, 1, 0,
 		0, 0, 198, 199, 1, 0, 0, 0, 199, 201, 1, 0, 0, 0, 200, 198, 1, 0, 0, 0,
 		201, 202, 5, 16, 0, 0, 202, 203, 5, 19, 0, 0, 203, 39, 1, 0, 0, 0, 204,
@@ -271,8 +271,8 @@ const (
 	GoliteParserBOOL_LIT  = 35
 	GoliteParserNIL_LIT   = 36
 	GoliteParserINT       = 37
-	GoliteParserSTRING    = 38
-	GoliteParserBOOL      = 39
+	GoliteParserBOOL      = 38
+	GoliteParserSTRING    = 39
 	GoliteParserPTR       = 40
 	GoliteParserIDENT     = 41
 	GoliteParserWS        = 42
@@ -1143,7 +1143,7 @@ func (p *GoliteParser) Type_() (localctx ITypeContext) {
 		p.SetState(102)
 		_la = p.GetTokenStream().LA(1)
 
-		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1786706395136) != 0) {
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1511828488192) != 0) {
 			p.GetErrorHandler().RecoverInline(p)
 		} else {
 			p.GetErrorHandler().ReportMatch(p)
@@ -1884,7 +1884,7 @@ func (p *GoliteParser) Function() (localctx IFunctionContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1786706395136) != 0 {
+	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1511828488192) != 0 {
 		{
 			p.SetState(132)
 			p.ReturnType()
