@@ -113,5 +113,3 @@ selectorTerm: factor (DOT IDENT)*;
 
 factor: LPAREN expression RPAREN | IDENT arguments? | INT_LIT | NEW IDENT | BOOL_LIT | NIL_LIT; // Can i nest the true | false as BOOL_LIT?
 
-
-
