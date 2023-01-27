@@ -10,7 +10,7 @@ type Cmdline struct {
 }
 
 // Returns a new Cmdline struct with the program name and arguments
-func newCmdline(program string, args []string) *Cmdline {
+func NewCmdline(program string, args []string) *Cmdline {
 	return &Cmdline{
 		Program: program,
 		Args:    args,
