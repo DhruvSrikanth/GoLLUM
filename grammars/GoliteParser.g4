@@ -107,9 +107,9 @@ simpleTerm: term ((PLUS | MINUS) term)*;
 
 term: unaryTerm ((MULT | DIV) unaryTerm)*;
 
-unaryTerm: NOT selectorTerm | MINUS selectorTerm | selectorTerm; // Not sure what this line does especially the minus and is the ! a not?
+unaryTerm: NOT selectorTerm | MINUS selectorTerm | selectorTerm;
 
 selectorTerm: factor (DOT IDENT)*;
 
-factor: LPAREN expression RPAREN | IDENT arguments? | INT_LIT | NEW IDENT | BOOL_LIT | NIL_LIT; // Can i nest the true | false as BOOL_LIT?
+factor: LPAREN expression RPAREN | IDENT arguments? | INT_LIT | NEW IDENT | BOOL_LIT | NIL_LIT;
 

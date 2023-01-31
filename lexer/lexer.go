@@ -37,9 +37,16 @@ func (lexer *lexer) GetTokenStream() *antlr.CommonTokenStream {
 	return lexer.stream
 }
 
+// Print all tokens
 func (lexer *lexer) PrintTokens() {
-	tokens := lexer.GetTokenStream().GetAllTokens()
-	for _, token := range tokens {
+	// Get the token stream
+	tokenStream := lexer.GetTokenStream()
+
+	// Lex all tokens
+	tokenStream.Fill()
+
+	// Print all tokens
+	for _, token := range tokenStream.GetAllTokens() {
 		fmt.Println(token.GetText())
 	}
 }
