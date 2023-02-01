@@ -41,6 +41,7 @@ Example of code that will not work:
 func main() {
     
     var a bool;
+    var x_ double;
     
     a = +;
     
