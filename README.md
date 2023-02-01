@@ -73,5 +73,5 @@ make test_parser
 
 Test all completed portions of the compiler:
 ```shell
-make test
+make test_compiler
 ```

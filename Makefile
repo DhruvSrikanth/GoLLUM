@@ -20,6 +20,6 @@ test_parser:
 	cd ..
 
 # Run all tests
-test_golite:
+test_compiler:
 	@make test_lexer
 	@make test_parser
