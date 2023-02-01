@@ -19,12 +19,9 @@ func stringSliceEquals(expected, actual []string) bool {
 	return true
 }
 
-func formatLexedOutput(out string) []string {
+func formatOutput(out string) []string {
 	s := strings.TrimSpace(out)
-	s = strings.ReplaceAll(s, "\n", " ")
-	s = strings.ReplaceAll(s, "\t", " ")
-	s = strings.ReplaceAll(s, "\r", " ")
-	actual := strings.Split(s, " ")
+	actual := strings.Split(s, "\n")
 	return actual
 
 }
@@ -40,7 +37,7 @@ func TestLexer(t *testing.T) {
 		{"../benchmarks/simple/simple1.golite", []string{"func", "main", "(", ")", "{", "var", "a", "int", ";", "a", "=", "3", "+", "4", "+", "5", ";", "printf", "(", "\"%d\"", ",", "a", ")", ";", "}", "<EOF>"}},
 
 		// Bad programs
-		// {"../benchmarks/bad/bad1.golite", "}
+		{"../benchmarks/bad/bad1.golite", []string{"func", "main", "(", ")", "{", "var", "a", "bool", ";", "var", "x", "double", ";", "a", "=", "+", ";", "printf", "(", "\"%d\"", ",", "a", ")", ";", "}", "<EOF>", "lexer error(4:9): token recognition error at: '_'"}},
 	}
 	for num, test := range lexTests {
 		testname := fmt.Sprintf("T=%v", num)
@@ -48,7 +45,7 @@ func TestLexer(t *testing.T) {
 			var err error
 			cmd := exec.Command("go", "run", "main.go", lexFlag, test.programPath)
 			out, err := cmd.Output()
-			actual := formatLexedOutput(string(out))
+			actual := formatOutput(string(out))
 			if err != nil || !stringSliceEquals(test.expected, actual) {
 				t.Errorf("\nRan:%s\nExpected:%s\nGot:%s", cmd, test.expected, actual)
 			}
@@ -65,7 +62,7 @@ func TestParser(t *testing.T) {
 		{"../benchmarks/simple/simple1.golite", []string{""}},
 
 		// Bad programs
-		// {"../benchmarks/bad/bad1.golite", "}
+		{"../benchmarks/bad/bad1.golite", []string{"lexer error(4:9): token recognition error at: '_'"}},
 	}
 	for num, test := range parseTests {
 		testname := fmt.Sprintf("T=%v", num)
@@ -73,7 +70,7 @@ func TestParser(t *testing.T) {
 			var err error
 			cmd := exec.Command("go", "run", "main.go", test.programPath)
 			out, err := cmd.Output()
-			actual := formatLexedOutput(string(out))
+			actual := formatOutput(string(out))
 			if err != nil || !stringSliceEquals(test.expected, actual) {
 				t.Errorf("\nRan:%s\nExpected:%s\nGot:%s", cmd, test.expected, actual)
 			}

@@ -1,6 +1,7 @@
 func main() {
     
     var a bool;
+    var x_ double;
     
     a = +;
     
