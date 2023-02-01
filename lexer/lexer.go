@@ -49,6 +49,9 @@ func (lexer *lexer) PrintTokens() {
 	for _, token := range tokenStream.GetAllTokens() {
 		fmt.Println(token.GetText())
 	}
+
+	// Print the errors
+	context.HasErrors(lexer.GetErrors())
 }
 
 // Get the errors from the lexer

@@ -54,7 +54,8 @@ func checkArgs() bool {
 
 // Check if the file is a golite file
 func isGoliteFile() bool {
-	return strings.Split(os.Args[len(os.Args)-1], ".")[1] == "golite"
+	fileName := os.Args[len(os.Args)-1]
+	return strings.HasSuffix(fileName, ".golite")
 }
 
 // usage of the program

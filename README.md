@@ -57,20 +57,21 @@ go run golite/main.go -lex benchmarks/bad/bad.golite
 
 Build `golite`:
 ```shell
-make golite
+make compiler
 ```
 
-Correct program tests:
+Test `lexer`:
 ```shell
-make test_correct
+make test_lexer
 ```
 
-Incorrect program tests:
+Test `parser`:
 ```shell
-make test_incorrect
+make test_parser
 ```
 
-All tests:
+
+Test all completed portions of the compiler:
 ```shell
 make test
 ```

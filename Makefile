@@ -1,23 +1,25 @@
 # Generate grammars
-golite:
-	source build.sh
+golite_compiler:
+	@sh build.sh
+
+compiler:
+	@make --always-make golite_compiler
 
 # Run simple correct tests
-test_correct:
-	make golite
-	go run golite/main.go benchmarks/simple/simple.golite 
-	go run golite/main.go -lex benchmarks/simple/simple.golite 
+test_lexer:
+	@make compiler
+	@cd golite && \
+	go test -v -run TestLexer && \
+	cd ..
 
 # Run simple incorrect tests
-test_incorrect:
-	make golite
-	go run golite/main.go benchmarks/bad/bad.golite 
-	go run golite/main.go -lex benchmarks/bad/bad.golite 
+test_parser:
+	@make compiler
+	@cd golite && \
+	go test -v -run TestParser && \
+	cd ..
 
 # Run all tests
-test:
-	make golite
-	go run golite/main.go benchmarks/simple/simple.golite 
-	go run golite/main.go -lex benchmarks/simple/simple.golite 
-	go run golite/main.go benchmarks/bad/bad.golite 
-	go run golite/main.go -lex benchmarks/bad/bad.golite 
+test_golite:
+	@make test_lexer
+	@make test_parser
