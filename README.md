@@ -32,7 +32,7 @@ func main() {
 Run - 
 
 ```bash
-go run golite/main.go -lex benchmarks/simple/simple.golite 
+go run golite/main.go benchmarks/simple/simple.golite 
 ```
 
 Example of code that will not work:
@@ -51,7 +51,7 @@ func main() {
 ```
 
 ```bash
-go run golite/main.go -lex benchmarks/bad/bad.golite 
+go run golite/main.go benchmarks/bad/bad.golite 
 ```
 
 ## Run tests using Makefile
