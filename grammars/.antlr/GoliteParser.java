@@ -1654,9 +1654,9 @@ public class GoliteParser extends Parser {
 		public SimpleTermContext simpleTerm(int i) {
 			return getRuleContext(SimpleTermContext.class,i);
 		}
-		public List<TerminalNode> GT() { return getTokens(GoliteParser.GT); }
-		public TerminalNode GT(int i) {
-			return getToken(GoliteParser.GT, i);
+		public List<TerminalNode> GE() { return getTokens(GoliteParser.GE); }
+		public TerminalNode GE(int i) {
+			return getToken(GoliteParser.GE, i);
 		}
 		public List<TerminalNode> LT() { return getTokens(GoliteParser.LT); }
 		public TerminalNode LT(int i) {
@@ -1665,6 +1665,10 @@ public class GoliteParser extends Parser {
 		public List<TerminalNode> LE() { return getTokens(GoliteParser.LE); }
 		public TerminalNode LE(int i) {
 			return getToken(GoliteParser.LE, i);
+		}
+		public List<TerminalNode> GT() { return getTokens(GoliteParser.GT); }
+		public TerminalNode GT(int i) {
+			return getToken(GoliteParser.GT, i);
 		}
 		public RelationTermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1684,12 +1688,12 @@ public class GoliteParser extends Parser {
 			setState(283);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << GT) | (1L << LE))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << GT) | (1L << LE) | (1L << GE))) != 0)) {
 				{
 				{
 				setState(279);
 				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << GT) | (1L << LE))) != 0)) ) {
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << GT) | (1L << LE) | (1L << GE))) != 0)) ) {
 				_errHandler.recoverInline(this);
 				}
 				else {
@@ -2100,7 +2104,7 @@ public class GoliteParser extends Parser {
 		" \u0127\13 \3!\3!\3!\7!\u012c\n!\f!\16!\u012f\13!\3\"\3\"\3\"\3\"\3\""+
 		"\5\"\u0136\n\"\3#\3#\3#\7#\u013b\n#\f#\16#\u013e\13#\3$\3$\3$\3$\3$\3"+
 		"$\5$\u0146\n$\3$\3$\3$\3$\3$\5$\u014d\n$\3$\2\2%\2\4\6\b\n\f\16\20\22"+
-		"\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDF\2\6\3\2\13\f\3\2\7\t\3"+
+		"\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDF\2\6\3\2\13\f\3\2\7\n\3"+
 		"\2\r\16\3\2\17\20\2\u0153\2H\3\2\2\2\4P\3\2\2\2\6S\3\2\2\2\b[\3\2\2\2"+
 		"\ne\3\2\2\2\fl\3\2\2\2\16q\3\2\2\2\20t\3\2\2\2\22y\3\2\2\2\24\u0084\3"+
 		"\2\2\2\26\u0087\3\2\2\2\30\u0092\3\2\2\2\32\u009f\3\2\2\2\34\u00a4\3\2"+

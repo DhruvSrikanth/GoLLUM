@@ -101,7 +101,7 @@ boolTerm: equalTerm (AND equalTerm)*;
 
 equalTerm: relationTerm ((EQ | NE) relationTerm)*;
 
-relationTerm: simpleTerm ((GT | LT | LE | GT) simpleTerm)*;
+relationTerm: simpleTerm ((GE | LT | LE | GT) simpleTerm)*;
 
 simpleTerm: term ((PLUS | MINUS) term)*;
 

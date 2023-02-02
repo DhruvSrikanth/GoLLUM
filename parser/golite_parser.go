@@ -92,7 +92,7 @@ func goliteparserParserInit() {
 		34, 1, 34, 1, 34, 1, 34, 1, 34, 3, 34, 331, 8, 34, 1, 34, 0, 0, 35, 0,
 		2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38,
 		40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 0, 4, 1, 0,
-		9, 10, 1, 0, 5, 7, 1, 0, 11, 12, 1, 0, 13, 14, 337, 0, 70, 1, 0, 0, 0,
+		9, 10, 1, 0, 5, 8, 1, 0, 11, 12, 1, 0, 13, 14, 337, 0, 70, 1, 0, 0, 0,
 		2, 78, 1, 0, 0, 0, 4, 81, 1, 0, 0, 0, 6, 89, 1, 0, 0, 0, 8, 99, 1, 0, 0,
 		0, 10, 106, 1, 0, 0, 0, 12, 111, 1, 0, 0, 0, 14, 114, 1, 0, 0, 0, 16, 119,
 		1, 0, 0, 0, 18, 130, 1, 0, 0, 0, 20, 133, 1, 0, 0, 0, 22, 144, 1, 0, 0,
@@ -4829,12 +4829,12 @@ func (s *RelationTermContext) SimpleTerm(i int) ISimpleTermContext {
 	return t.(ISimpleTermContext)
 }
 
-func (s *RelationTermContext) AllGT() []antlr.TerminalNode {
-	return s.GetTokens(GoliteParserGT)
+func (s *RelationTermContext) AllGE() []antlr.TerminalNode {
+	return s.GetTokens(GoliteParserGE)
 }
 
-func (s *RelationTermContext) GT(i int) antlr.TerminalNode {
-	return s.GetToken(GoliteParserGT, i)
+func (s *RelationTermContext) GE(i int) antlr.TerminalNode {
+	return s.GetToken(GoliteParserGE, i)
 }
 
 func (s *RelationTermContext) AllLT() []antlr.TerminalNode {
@@ -4851,6 +4851,14 @@ func (s *RelationTermContext) AllLE() []antlr.TerminalNode {
 
 func (s *RelationTermContext) LE(i int) antlr.TerminalNode {
 	return s.GetToken(GoliteParserLE, i)
+}
+
+func (s *RelationTermContext) AllGT() []antlr.TerminalNode {
+	return s.GetTokens(GoliteParserGT)
+}
+
+func (s *RelationTermContext) GT(i int) antlr.TerminalNode {
+	return s.GetToken(GoliteParserGT, i)
 }
 
 func (s *RelationTermContext) GetRuleContext() antlr.RuleContext {
@@ -4906,12 +4914,12 @@ func (p *GoliteParser) RelationTerm() (localctx IRelationTermContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&224) != 0 {
+	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&480) != 0 {
 		{
 			p.SetState(279)
 			_la = p.GetTokenStream().LA(1)
 
-			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&224) != 0) {
+			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&480) != 0) {
 				p.GetErrorHandler().RecoverInline(p)
 			} else {
 				p.GetErrorHandler().ReportMatch(p)
