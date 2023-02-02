@@ -66,6 +66,8 @@ This runs both the `lexer` and `parser`. If you want to only run the `lexer` and
 go run golite/main.go -lex benchmarks/simple/simple1.golite 
 ```
 
+Check out the `benchmarks` folder for more examples.
+
 ## Run tests using Makefile
 
 Build `golite`:
