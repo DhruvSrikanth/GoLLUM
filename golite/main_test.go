@@ -60,6 +60,10 @@ func TestParser(t *testing.T) {
 	}{
 		// Good programs
 		{"../benchmarks/simple/simple1.golite", []string{""}},
+		{"../benchmarks/simple/simple2.golite", []string{""}},
+		{"../benchmarks/simple/simple3.golite", []string{""}},
+		{"../benchmarks/simple/simple4.golite", []string{""}},
+		{"../benchmarks/simple/simple5.golite", []string{""}},
 
 		// Bad programs
 		{"../benchmarks/bad/bad1.golite", []string{"lexer error(4:9): token recognition error at: '_'"}},

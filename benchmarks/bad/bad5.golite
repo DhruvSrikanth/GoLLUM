@@ -1,0 +1,9 @@
+func main() {
+    var a, b, c int;
+    return sum(a, b, c);
+}
+
+func sum(a, b, c int) {
+    // Mistake of not setting the return value
+    return a + b + c;
+}

@@ -1,0 +1,6 @@
+func main() {
+    var a int;
+    var i int;
+    i = 0;
+    a{i} = 1;
+}

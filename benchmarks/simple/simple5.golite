@@ -1,0 +1,25 @@
+func main() {
+    // Create a struct that represents a point in 2D space.
+    type Point struct {
+        x int;
+        y int;
+    };
+
+    var p1 Point;
+    var p2 Point;
+    var l2Squared int;
+
+    // Point values
+    p1.x = 10;
+    p1.y = 20;
+    p2.x = 30;
+    p2.y = 40;
+
+    // Calculate the squared distance between the two points.
+    var dx, dy int;
+    dx = p1.x - p2.x;
+    dy = p1.y - p2.y;
+    result = dx * dx + dy * dy;
+    printf("The squared distance between the two points is %d", result);
+    return ;    
+}

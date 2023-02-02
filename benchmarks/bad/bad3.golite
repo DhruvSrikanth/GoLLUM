@@ -1,0 +1,14 @@
+func main() {
+    var a bool;
+    var b bool;
+    var c bool;
+    var d bool;
+    var e bool;
+    a = true;
+    b = false;
+    c = a && b;
+    d = a || b;
+    e = !a;
+    f = (a && b) || (c and d) || e;
+    printf("%b %b %b %b %b %b", a, b, c, d, e, f);
+}

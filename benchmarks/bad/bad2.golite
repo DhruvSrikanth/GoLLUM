@@ -1,0 +1,6 @@
+func main() {
+    var ptr *a;
+    ptr = new a;
+    // ... do some stuff
+    delete ptr;
+}

@@ -1,0 +1,28 @@
+func main() {
+    // Lets find the fibonacci sequence
+    var n int;
+    var result int;
+    n = scan;
+    result = fib(n);
+    printf("fibonacci(%d)= %d", n, result);
+}
+
+func fib(n int) int {
+    // Recursive function to find the fibonacci sequence
+    var temp1, temp2 int;
+    var res1, res2, result int;
+    temp1 = n - 1;
+    temp2 = n - 2;
+    if (n == 0) {
+        return 0;
+    } else {
+        if (n == 1) {
+            return 1;
+        } else {
+            res1 = fib(temp1);
+            res2 = fib(temp2);
+            result = res1 + res2;
+            return result;
+        }
+    }
+}
