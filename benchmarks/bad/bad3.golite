@@ -9,6 +9,7 @@ func main() {
     c = a && b;
     d = a || b;
     e = !a;
+    // and is not a keyword nor is it an alternative for &&
     f = (a && b) || (c and d) || e;
     printf("%b %b %b %b %b %b", a, b, c, d, e, f);
 }

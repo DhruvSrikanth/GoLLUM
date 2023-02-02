@@ -7,6 +7,7 @@ func main() {
 
     var p1 Point;
     var p2 Point;
+    var dx, dy int;
     var l2Squared int;
 
     // Point values
@@ -16,10 +17,9 @@ func main() {
     p2.y = 40;
 
     // Calculate the squared distance between the two points.
-    var dx, dy int;
     dx = p1.x - p2.x;
     dy = p1.y - p2.y;
-    result = dx * dx + dy * dy;
-    printf("The squared distance between the two points is %d", result);
+    l2Squared = dx * dx + dy * dy;
+    printf("The squared distance between the two points is %d", l2Squared);
     return ;    
 }

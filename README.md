@@ -13,6 +13,12 @@
 source build.sh
 ```
 
+or 
+
+```bash
+make compiler
+```
+
 ## Run Golite compiler
 
 Example of code that will work:
@@ -32,7 +38,7 @@ func main() {
 Run - 
 
 ```bash
-go run golite/main.go benchmarks/simple/simple.golite 
+go run golite/main.go benchmarks/simple/simple1.golite 
 ```
 
 Example of code that will not work:
@@ -51,7 +57,13 @@ func main() {
 ```
 
 ```bash
-go run golite/main.go benchmarks/bad/bad.golite 
+go run golite/main.go benchmarks/bad/bad1.golite 
+```
+
+This runs both the `lexer` and `parser`. If you want to only run the `lexer` and print the tokens (along with errors found along the way) lexed, use the `-lex` flag. For example - 
+
+```bash
+go run golite/main.go -lex benchmarks/simple/simple1.golite 
 ```
 
 ## Run tests using Makefile

@@ -1,6 +1,12 @@
 func main() {
-    var ptr *a;
-    ptr = new a;
-    // ... do some stuff
-    delete ptr;
+    var a int;
+    var b int;
+    var c int;
+    printf("Enter a number: ");
+    a = scan;
+    printf("Enter another number: ");
+    b = scan;
+    // Mismatch between parenthesis
+    c = (a + b));
+    printf("The sum of the two numbers is: ", c);
 }
