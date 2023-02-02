@@ -1,14 +1,19 @@
+type Point struct {
+    x int;
+    y int;
+};
+
+
 func main() {
     // Create a struct that represents a point in 2D space.
-    type Point struct {
-        x int;
-        y int;
-    };
+    var p1 *Point;
+    var p2 *Point;
+    var result int;
 
-    var p1 Point;
-    var p2 Point;
-    var dx, dy int;
-    var l2Squared int;
+    // Allocate memory for the struct.
+    p1 = new Point;
+    p2 = new Point;
+
 
     // Point values
     p1.x = 10;
@@ -16,10 +21,28 @@ func main() {
     p2.x = 30;
     p2.y = 40;
 
+    // Calculate the distance between the two points.
+    result = distance2D(p1, p2);
+    printf("The squared distance between the two points is %d", l2Squared);
+
+    // Free the memory allocated for the struct.
+    delete p1;
+    delete p2;
+
+    return ;    
+}
+
+func distance2D(p1 *Point, p2 *Point) int {
+    // Calculate the squared distance between two points
+
+    var dx, dy int;
+    var l2Squared int;
+
     // Calculate the squared distance between the two points.
     dx = p1.x - p2.x;
     dy = p1.y - p2.y;
+    
     l2Squared = dx * dx + dy * dy;
-    printf("The squared distance between the two points is %d", l2Squared);
-    return ;    
+
+    return l2Squared;
 }
