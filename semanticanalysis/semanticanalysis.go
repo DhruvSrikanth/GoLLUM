@@ -10,6 +10,7 @@ func hasErrors(errors []string) bool {
 	return len(errors) > 0
 }
 
+// Report the errors to the user
 func reportErrors(errors []string) {
 	for _, err := range errors {
 		println(err)
