@@ -21,10 +21,10 @@ Parameters = '(' [ Decl {',' Decl}] ')'                                         
 ReturnType = type                                                                                  ;
 Statements = {Statement}                                                                           ;
 Statement = Block | Assignment | Print | Delete | Conditional | Loop | Return | Read | Invocation  ;
-Read =  'scan' expression ';'                                                                      ;
+Read =  'scan' LValue ';'                                                                      ;
 Block = '{' Statements '}'                                                                         ;
 Delete = 'delete' Expression ';'                                                                   ;
-Assignment = LValue '=' (Expression | 'scan') ';'                                                  ;
+Assignment = LValue '=' Expression ';'                                                  ;
 Print = 'printf' '(' 'string' { ',' Expression} ')'  ';'                                           ;
 Conditional = 'if' '(' Expression ')' Block ['else' Block]                                         ;
 Loop = 'for' '(' Expression ')' Block                                                              ;
@@ -71,15 +71,15 @@ returnType: type;
 
 statements: statement*;
 
-statement: block | assignment | print | delete | conditional | loop | returnRule | invocation;
+statement: block | assignment | print | delete | read | conditional | loop | returnRule | invocation;
 
-read: SCAN expression SEMICOLON;
+read: SCAN lValue SEMICOLON;
 
 block: LBRACE statements RBRACE;
 
 delete: DELETE expression SEMICOLON;
 
-assignment: lValue ASSIGN (expression | SCAN) SEMICOLON;
+assignment: lValue ASSIGN expression SEMICOLON;
 
 print: PRINTF LPAREN STRING_LIT (COMMA expression)* RPAREN SEMICOLON;
 
