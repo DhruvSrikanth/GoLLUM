@@ -2,77 +2,7 @@ package symboltable
 
 import (
 	"fmt"
-	"golite/types"
 )
-
-// Type Aliasing for a variable entry in the symbol table
-type VarScope int
-
-// Scope of a variable
-const (
-	GLOBAL VarScope = iota
-	LOCAL
-)
-
-// Variable entry in the symbol table
-type VarEntry struct {
-	Name  string
-	Ty    types.Type
-	Scope VarScope
-}
-
-// String representation of an variable entry in the symbol table
-func (entry *VarEntry) String() string {
-	scope := "Global"
-	if entry.Scope == LOCAL {
-		scope = "Local"
-	}
-	return fmt.Sprintf("[%s (Type: %s) (Scope: %s)]", entry.Name, entry.Ty, scope)
-}
-
-// Function entry in the symbol table
-type FuncEntry struct {
-	Name       string
-	RetTy      types.Type
-	Parameters []*VarEntry
-	Variables  *SymbolTable[*VarEntry]
-}
-
-// String representation of a function entry in the symbol table
-func (entry *FuncEntry) String() string {
-	parameters := ""
-	for _, param := range entry.Parameters {
-		parameters += fmt.Sprintf("%s, ", param.String())
-	}
-	parameters = parameters[:len(parameters)-2]
-
-	vars := *entry.Variables
-	variables := ""
-	for k, v := range vars.table {
-		variable := *v
-		variables += fmt.Sprintf("%s: %s, ", k, variable.String())
-	}
-	variables = variables[:len(variables)-2]
-
-	return fmt.Sprintf("%s {Return Type: %s} {Parameters: %s} {Variables: %v}", entry.Name, entry.RetTy, parameters, variables)
-}
-
-// Struct entry in the symbol table
-type StructEntry struct {
-	Name   string
-	Fields []*VarEntry
-}
-
-// String representation of a struct entry in the symbol table
-func (entry *StructEntry) String() string {
-	fields := ""
-	for _, f := range entry.Fields {
-		field := *f
-		fields += fmt.Sprintf("%s, ", field.String())
-	}
-	fields = fields[:len(fields)-2]
-	return fmt.Sprintf("%s {Fields: %s}", entry.Name, fields)
-}
 
 // Symbol tables for the program (stack)
 type SymbolTables struct {
