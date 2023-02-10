@@ -1,11 +1,25 @@
 package symboltable
 
-import "fmt"
+import (
+	"fmt"
+	"golite/types"
+)
+
+// Struct field entry
+type FieldEntry struct {
+	Name string
+	Ty   types.Type
+}
+
+// String representation of a struct field entry in the symbol table
+func (entry *FieldEntry) String() string {
+	return fmt.Sprintf("[%s (Type: %s)]", entry.Name, entry.Ty)
+}
 
 // Struct entry in the symbol table
 type StructEntry struct {
 	Name   string
-	Fields []*VarEntry
+	Fields []*FieldEntry
 }
 
 // String representation of a struct entry in the symbol table
