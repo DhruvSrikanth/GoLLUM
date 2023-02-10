@@ -38,7 +38,7 @@ func NewSymbolTable[T fmt.Stringer](parent *SymbolTable[T]) *SymbolTable[T] {
 func (st *SymbolTable[T]) Insert(id string, entry T) {
 	// Sanity check
 	if _, ok := st.table[id]; ok {
-		panic(fmt.Sprintf("Symbol %s already exists.", id))
+		fmt.Printf("Symbol %s already exists.", id)
 	}
 	st.table[id] = entry
 }
