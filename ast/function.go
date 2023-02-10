@@ -61,7 +61,7 @@ func (f *Function) BuildSymbolTable(tables *st.SymbolTables) {
 	// Build up the entries for the parameters
 	params := make([]*st.VarEntry, 0)
 	for _, param := range f.parameters {
-		params = append(params, &st.VarEntry{param.variable, param.ty, st.LOCAL})
+		params = append(params, &st.VarEntry{Name: param.variable, Ty: param.ty, Scope: st.LOCAL})
 	}
 
 	// Function local symbol table
@@ -69,11 +69,11 @@ func (f *Function) BuildSymbolTable(tables *st.SymbolTables) {
 
 	// Build up the entries for the variables
 	for _, decl := range f.declarations {
-		localTable.Insert(decl.variable, &st.VarEntry{decl.variable, decl.ty, st.LOCAL})
+		localTable.Insert(decl.variable, &st.VarEntry{Name: decl.variable, Ty: decl.ty, Scope: st.LOCAL})
 	}
 
 	// Add the function to the symbol table
-	tables.Funcs.Insert(f.name, &st.FuncEntry{f.name, f.returnType, params, localTable})
+	tables.Funcs.Insert(f.name, &st.FuncEntry{Name: f.name, RetTy: f.returnType, Parameters: params, Variables: localTable})
 
 }
 

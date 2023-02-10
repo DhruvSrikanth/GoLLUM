@@ -32,7 +32,7 @@ func (d *Declaration) String() string {
 
 // Build the symbol table for the declaration
 func (d *Declaration) BuildSymbolTable(tables *st.SymbolTables) {
-	tables.Globals.Insert(d.variable, &st.VarEntry{d.variable, d.ty, st.GLOBAL})
+	tables.Globals.Insert(d.variable, &st.VarEntry{Name: d.variable, Ty: d.ty, Scope: st.GLOBAL})
 }
 
 // Type checking for the declaration

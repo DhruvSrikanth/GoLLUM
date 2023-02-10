@@ -39,11 +39,11 @@ func (s *StructDecl) BuildSymbolTable(tables *st.SymbolTables) {
 	// Create fields for the struct entry
 	fields := make([]*st.FieldEntry, 0)
 	for _, decl := range s.decls {
-		fields = append(fields, &st.FieldEntry{decl.variable, decl.ty})
+		fields = append(fields, &st.FieldEntry{Name: decl.variable, Ty: decl.ty})
 	}
 
 	// Add the struct to the symbol table
-	tables.Structs.Insert(s.name, &st.StructEntry{s.name, fields})
+	tables.Structs.Insert(s.name, &st.StructEntry{Name: s.name, Fields: fields})
 }
 
 // Type check the struct declaration
