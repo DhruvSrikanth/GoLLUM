@@ -37,9 +37,9 @@ func (s *StructDecl) String() string {
 // Build the symbol table for the struct declaration
 func (s *StructDecl) BuildSymbolTable(tables *st.SymbolTables) {
 	// Create fields for the struct entry
-	fields := make([]*st.VarEntry, 0)
+	fields := make([]*st.FieldEntry, 0)
 	for _, decl := range s.decls {
-		fields = append(fields, &st.VarEntry{decl.variable, decl.ty, st.GLOBAL})
+		fields = append(fields, &st.FieldEntry{decl.variable, decl.ty})
 	}
 
 	// Add the struct to the symbol table

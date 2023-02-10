@@ -65,20 +65,12 @@ func (f *Function) BuildSymbolTable(tables *st.SymbolTables) {
 	}
 
 	// Function local symbol table
-	localTable := st.NewSymbolTable(tables.Funcs)
+	localTable := st.NewSymbolTable(tables.Globals)
 
 	// Build up the entries for the variables
 	for _, decl := range f.declarations {
 		localTable.Insert(decl.variable, &st.VarEntry{decl.variable, decl.ty, st.LOCAL})
 	}
-
-	// Build up the entries for the statements
-	// statements := make([]*st.VarEntry, 0)
-	// for _, stmt := range f.statements {
-	// 	var entry *st.VarEntry
-	// Not sure how to add statements to the symbol table
-	// variables = append(variables, &varEntry)
-	// }
 
 	// Add the function to the symbol table
 	tables.Funcs.Insert(f.name, &st.FuncEntry{f.name, f.returnType, params, localTable})
