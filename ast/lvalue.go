@@ -4,18 +4,20 @@ import (
 	"bytes"
 	st "golite/symboltable"
 	"golite/token"
+	"golite/types"
 )
 
 // LValue node in the AST
 type LValue struct {
 	*token.Token
-	identifier string   // The identifier of the variable
-	fields     []string // The field of the struct
+	identifier string     // The identifier of the variable
+	fields     []string   // The field of the struct
+	ty         types.Type // The type of the lvalue
 }
 
 // NewLValue node
-func NewLValue(tok *token.Token, identifier string, fields []string) *LValue {
-	return &LValue{tok, identifier, fields}
+func NewLValue(tok *token.Token, identifier string, fields []string, ty types.Type) *LValue {
+	return &LValue{tok, identifier, fields, ty}
 }
 
 // String representation of the lvalue node
@@ -40,4 +42,9 @@ func (l *LValue) BuildSymbolTable(tables *st.SymbolTables) {
 // Type check the lvalue node
 func (l *LValue) TypeCheck(errors []string, tables *st.SymbolTables) []string {
 	return errors
+}
+
+// Get the type of the lvalue node
+func (l *LValue) GetType() types.Type {
+	return l.ty
 }
