@@ -26,8 +26,7 @@ func (il *IntLiteral) String() string {
 
 // Get the inferred type of the string literal
 func (il *IntLiteral) GetType() types.Type {
-	//Exercise: You should think about what should be returned here.
-	return nil
+	return il.ty
 }
 
 // TypeCheck performs type checking for the integer literal
