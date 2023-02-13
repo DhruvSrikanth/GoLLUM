@@ -81,27 +81,37 @@ statements: statement*;
 
 statement: bl=block | asmt=assignment | prnt=print | del=delete | rd=read | cond=conditional | lp=loop | ret=returnRule | invoke=invocation;
 
-read: SCAN lValue SEMICOLON;
+read: SCAN lval=lValue SEMICOLON;
 
-block: LBRACE statements RBRACE;
+block: LBRACE stmts=statements RBRACE;
 
-delete: DELETE expression SEMICOLON;
+delete: DELETE expr=expression SEMICOLON;
 
-assignment: lValue ASSIGN expression SEMICOLON;
+assignment: lval=lValue ASSIGN expr=expression SEMICOLON;
 
-print: PRINTF LPAREN STRING_LIT (COMMA expression)* RPAREN SEMICOLON;
+print: PRINTF LPAREN str=STRING_LIT printPrime* RPAREN SEMICOLON;
 
-conditional: IF LPAREN expression RPAREN block (ELSE block)?;
+printPrime: COMMA expr=expression; // Split from print grammar rule
 
-loop: FOR LPAREN expression RPAREN block;
+conditional: IF LPAREN expr=expression RPAREN bl=block then=conditionalPrime?;
 
-returnRule: RET expression? SEMICOLON;
+conditionalPrime: ELSE bl=block; // Split from conditional grammar rule
 
-invocation: IDENT arguments SEMICOLON;
+loop: FOR LPAREN expr=expression RPAREN bl=block;
 
-arguments: LPAREN (expression (COMMA expression)*)? RPAREN;
+returnRule: RET expr=expression? SEMICOLON;
 
-lValue: IDENT (DOT IDENT)*;
+invocation: id=IDENT args=arguments SEMICOLON;
+
+arguments: LPAREN args=argumentsPrime? RPAREN; // Split from arguments grammar rule
+
+argumentsPrime: expr=expression argumentsPrimePrime*;
+
+argumentsPrimePrime: COMMA expr=expression; // Split from arguments grammar rule
+
+lValue: id=IDENT lValuePrime*;
+
+lValuePrime: DOT id=IDENT; // Split from lValue grammar rule
 
 expression: boolTerm (OR boolTerm)*;
 

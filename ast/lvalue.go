@@ -16,7 +16,7 @@ type LValue struct {
 }
 
 // NewLValue node
-func NewLValue(tok *token.Token, identifier string, fields []string, ty types.Type) *LValue {
+func NewLValue(identifier string, fields []string, ty types.Type, tok *token.Token) *LValue {
 	return &LValue{tok, identifier, fields, ty}
 }
 

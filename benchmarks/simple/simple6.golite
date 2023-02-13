@@ -26,10 +26,13 @@ func main() {
     var a, b int;
 
     // print something
-    printf("p1.x = %d\n", p1.x);
+    printf("p1.x = %d, p1.y = %d, p1.z = %d\n", p1.x, p1.y, p1.z);
 
     // Allocate memory for the struct.
     p1 = new Point;
+    scan a;
+    distance1D();
+    distance2D(p1, p2, p3 + p4);
 
 
     // Point values

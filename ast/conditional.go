@@ -10,13 +10,13 @@ import (
 type Conditional struct {
 	*token.Token
 	condition Expression // The condition for the if statement
-	thenStmt  Block      // The block to be executed if the condition is true
-	elseStmt  Block      // The block to be executed if the condition is false
+	thenBlock *Block     // The block to be executed if the condition is true
+	elseBlock *Block     // The block to be executed if the condition is false
 }
 
 // New Conditional node
-func NewConditional(condition Expression, thenStmt Block, elseStmt Block, token *token.Token) *Conditional {
-	return &Conditional{token, condition, thenStmt, elseStmt}
+func NewConditional(condition Expression, thenBlock *Block, elseBlock *Block, token *token.Token) *Conditional {
+	return &Conditional{token, condition, thenBlock, elseBlock}
 }
 
 // String representation of the conditional node
@@ -26,11 +26,13 @@ func (c *Conditional) String() string {
 	out.WriteString("if (")
 	out.WriteString(c.condition.String())
 	out.WriteString(") ")
-	out.WriteString(c.thenStmt.String())
+	then := *c.thenBlock
+	out.WriteString(then.String())
 
-	if &c.elseStmt != nil {
+	if c.elseBlock != nil {
 		out.WriteString(" else ")
-		out.WriteString(c.elseStmt.String())
+		elseBlock := *c.elseBlock
+		out.WriteString(elseBlock.String())
 	}
 
 	return out.String()

@@ -79,8 +79,14 @@ type GoliteParserListener interface {
 	// EnterPrint is called when entering the print production.
 	EnterPrint(c *PrintContext)
 
+	// EnterPrintPrime is called when entering the printPrime production.
+	EnterPrintPrime(c *PrintPrimeContext)
+
 	// EnterConditional is called when entering the conditional production.
 	EnterConditional(c *ConditionalContext)
+
+	// EnterConditionalPrime is called when entering the conditionalPrime production.
+	EnterConditionalPrime(c *ConditionalPrimeContext)
 
 	// EnterLoop is called when entering the loop production.
 	EnterLoop(c *LoopContext)
@@ -94,8 +100,17 @@ type GoliteParserListener interface {
 	// EnterArguments is called when entering the arguments production.
 	EnterArguments(c *ArgumentsContext)
 
+	// EnterArgumentsPrime is called when entering the argumentsPrime production.
+	EnterArgumentsPrime(c *ArgumentsPrimeContext)
+
+	// EnterArgumentsPrimePrime is called when entering the argumentsPrimePrime production.
+	EnterArgumentsPrimePrime(c *ArgumentsPrimePrimeContext)
+
 	// EnterLValue is called when entering the lValue production.
 	EnterLValue(c *LValueContext)
+
+	// EnterLValuePrime is called when entering the lValuePrime production.
+	EnterLValuePrime(c *LValuePrimeContext)
 
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
@@ -208,8 +223,14 @@ type GoliteParserListener interface {
 	// ExitPrint is called when exiting the print production.
 	ExitPrint(c *PrintContext)
 
+	// ExitPrintPrime is called when exiting the printPrime production.
+	ExitPrintPrime(c *PrintPrimeContext)
+
 	// ExitConditional is called when exiting the conditional production.
 	ExitConditional(c *ConditionalContext)
+
+	// ExitConditionalPrime is called when exiting the conditionalPrime production.
+	ExitConditionalPrime(c *ConditionalPrimeContext)
 
 	// ExitLoop is called when exiting the loop production.
 	ExitLoop(c *LoopContext)
@@ -223,8 +244,17 @@ type GoliteParserListener interface {
 	// ExitArguments is called when exiting the arguments production.
 	ExitArguments(c *ArgumentsContext)
 
+	// ExitArgumentsPrime is called when exiting the argumentsPrime production.
+	ExitArgumentsPrime(c *ArgumentsPrimeContext)
+
+	// ExitArgumentsPrimePrime is called when exiting the argumentsPrimePrime production.
+	ExitArgumentsPrimePrime(c *ArgumentsPrimePrimeContext)
+
 	// ExitLValue is called when exiting the lValue production.
 	ExitLValue(c *LValueContext)
+
+	// ExitLValuePrime is called when exiting the lValuePrime production.
+	ExitLValuePrime(c *LValuePrimeContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)

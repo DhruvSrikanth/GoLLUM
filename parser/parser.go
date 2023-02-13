@@ -271,6 +271,210 @@ func (gParser *goliteParser) ExitStatement(c *StatementContext) {
 	// gParser.nodes[key] = ast.NewStatement(stmtType, *expr, token.NewToken(line, col))
 }
 
+// ExitBlock is called when exiting the block production.
+func (gParser *goliteParser) ExitBlock(c *BlockContext) {
+	// Get the key for the block
+	line, col, key := GetTokenInfo(c)
+
+	// Get the statements of the block
+	var stmts []ast.Statement
+	for _, stmtCtx := range c.GetStmts().(*StatementsContext).AllStatement() {
+		// Get the statement key
+		_, _, stmtKey := GetTokenInfo(stmtCtx)
+		// Get the statement
+		stmt := gParser.nodes[stmtKey].(*ast.Statement)
+		// Add the statement to the list of statements
+		stmts = append(stmts, *stmt)
+	}
+
+	// Add the block node to the AST
+	gParser.nodes[key] = ast.NewBlock(stmts, token.NewToken(line, col))
+
+}
+
+// ExitAssignment is called when exiting the assignment production.
+func (gParser *goliteParser) ExitAssignment(c *AssignmentContext) {
+	// Get the key for the assignment
+	line, col, key := GetTokenInfo(c)
+
+	// Get the left hand side of the assignment
+	lhsCtx := c.GetLval().(*LValueContext)
+	_, _, lhsKey := GetTokenInfo(lhsCtx)
+	lhs := gParser.nodes[lhsKey].(*ast.LValue)
+
+	// Get the right hand side of the assignment
+	exprCtx := c.GetExpr()
+	_, _, exprKey := GetTokenInfo(exprCtx)
+	expr := gParser.nodes[exprKey].(*ast.Expression)
+
+	// Create the assignment
+	gParser.nodes[key] = ast.NewAssignment(*lhs, *expr, token.NewToken(line, col))
+}
+
+// ExitLValue is called when exiting the lValue production.
+func (gParser *goliteParser) ExitLValue(c *LValueContext) {
+	// Get the key for the lValue
+	line, col, key := GetTokenInfo(c)
+
+	varName := c.GetId().GetText()
+
+	// Get the lValue fields
+	var fields []string
+	for _, fieldCtx := range c.AllLValuePrime() {
+		field := fieldCtx.GetId().GetText()
+		fields = append(fields, field)
+	}
+
+	// Create the lValue
+	// Initialize the type to nil
+	// Type will be set in the semantic analysis
+	gParser.nodes[key] = ast.NewLValue(varName, fields, types.StringToType("nil"), token.NewToken(line, col))
+}
+
+// ExitPrint is called when exiting the print production.
+func (gParser *goliteParser) ExitPrint(c *PrintContext) {
+	// Get the key for the print statement
+	line, col, key := GetTokenInfo(c)
+
+	// Get the format string
+	formatString := c.GetStr().GetText()
+
+	// Get the expressions to print
+	var exprs []ast.Expression
+	for _, printPrimeCtx := range c.AllPrintPrime() {
+		exprCtx := printPrimeCtx.(*PrintPrimeContext).GetExpr()
+		_, _, exprKey := GetTokenInfo(exprCtx)
+		expr := gParser.nodes[exprKey].(*ast.Expression)
+		exprs = append(exprs, *expr)
+	}
+
+	// Add the print node to the AST
+	gParser.nodes[key] = ast.NewPrint(formatString, exprs, token.NewToken(line, col))
+}
+
+// ExitDelete is called when exiting the delete production.
+func (gParser *goliteParser) ExitDelete(c *DeleteContext) {
+	// Get the key for the delete statement
+	line, col, key := GetTokenInfo(c)
+
+	// Get the expression
+	exprCtx := c.GetExpr().(*ExpressionContext)
+	fmt.Println(exprCtx.GetText())
+	_, _, exprKey := GetTokenInfo(exprCtx)
+	expr := gParser.nodes[exprKey].(*ast.Expression)
+	// Create the delete statement
+	gParser.nodes[key] = ast.NewDelete(*expr, token.NewToken(line, col))
+}
+
+// ExitRead is called when exiting the read production.
+func (gParser *goliteParser) ExitRead(c *ReadContext) {
+	// Get the key for the read statement
+	line, col, key := GetTokenInfo(c)
+
+	// Get the lValue
+	lvalCtx := c.GetLval().(*LValueContext)
+	_, _, lvalKey := GetTokenInfo(lvalCtx)
+	lval := gParser.nodes[lvalKey].(*ast.LValue)
+
+	// Create the read statement
+	gParser.nodes[key] = ast.NewRead(*lval, token.NewToken(line, col))
+}
+
+// ExitConditional is called when exiting the conditional production.
+func (gParser *goliteParser) ExitConditional(c *ConditionalContext) {
+	// Get the key for the conditional
+	line, col, key := GetTokenInfo(c)
+
+	// Get the condition
+	condCtx := c.GetExpr().(*ExpressionContext)
+	_, _, condKey := GetTokenInfo(condCtx)
+	cond := gParser.nodes[condKey].(*ast.Expression)
+
+	// Get the true block
+	trueBlockCtx := c.GetBl().(*BlockContext)
+	_, _, trueBlockKey := GetTokenInfo(trueBlockCtx)
+	trueBlock := gParser.nodes[trueBlockKey].(*ast.Block)
+
+	var falseBlock *ast.Block
+
+	// Check for the false block
+	if elseCtx := c.GetThen(); elseCtx != nil {
+		// Get the false block
+		falseBlockCtx := elseCtx.(*ConditionalPrimeContext).GetBl().(*BlockContext)
+		_, _, falseBlockKey := GetTokenInfo(falseBlockCtx)
+		falseBlock = gParser.nodes[falseBlockKey].(*ast.Block)
+	}
+
+	// Create the conditional
+	gParser.nodes[key] = ast.NewConditional(*cond, trueBlock, falseBlock, token.NewToken(line, col))
+
+}
+
+// ExitLoop is called when exiting the loop production.
+func (gParser *goliteParser) ExitLoop(c *LoopContext) {
+	// Get the key for the loop
+	line, col, key := GetTokenInfo(c)
+
+	// Get the condition
+	condCtx := c.GetExpr().(*ExpressionContext)
+	_, _, condKey := GetTokenInfo(condCtx)
+	cond := gParser.nodes[condKey].(*ast.Expression)
+
+	// Get the block
+	blockCtx := c.GetBl().(*BlockContext)
+	_, _, blockKey := GetTokenInfo(blockCtx)
+	block := gParser.nodes[blockKey].(*ast.Block)
+
+	// Create the loop
+	gParser.nodes[key] = ast.NewLoop(*cond, *block, token.NewToken(line, col))
+
+}
+
+// ExitReturnRule is called when exiting the returnRule production.
+func (gParser *goliteParser) ExitReturnRule(c *ReturnRuleContext) {
+	// Get the key for the return statement
+	line, col, key := GetTokenInfo(c)
+
+	// Get the expression
+	exprCtx := c.GetExpr().(*ExpressionContext)
+	_, _, exprKey := GetTokenInfo(exprCtx)
+	expr := gParser.nodes[exprKey].(*ast.Expression)
+
+	// Create the return statement
+	gParser.nodes[key] = ast.NewReturn(*expr, token.NewToken(line, col))
+}
+
+// ExitInvocation is called when exiting the invocation production.
+func (gParser *goliteParser) ExitInvocation(c *InvocationContext) {
+	// Get the key for the invocation
+	line, col, key := GetTokenInfo(c)
+
+	// Get the function name
+	funcName := c.GetId().GetText()
+
+	// Get the arguments
+	var args []ast.Expression
+
+	if argsCtx := c.GetArgs().(*ArgumentsContext).GetArgs(); argsCtx != nil {
+		// First argument
+		exprCtx := argsCtx.GetExpr().(*ExpressionContext)
+		_, _, exprKey := GetTokenInfo(exprCtx)
+		expr := gParser.nodes[exprKey].(*ast.Expression)
+		args = append(args, *expr)
+
+		// Get the rest of the arguments (if any)
+		for _, exprWrapperCtx := range argsCtx.(*ArgumentsPrimeContext).AllArgumentsPrimePrime() {
+			exprCtx := exprWrapperCtx.(*ArgumentsPrimePrimeContext).GetExpr().(*ExpressionContext)
+			_, _, exprKey := GetTokenInfo(exprCtx)
+			expr := gParser.nodes[exprKey].(*ast.Expression)
+			args = append(args, *expr)
+		}
+	}
+
+	// Create the invocation
+	gParser.nodes[key] = ast.NewInvocation(funcName, args, token.NewToken(line, col))
+}
+
 // ExitSelectorTerm is called when exiting the selectorTerm production.
 func (gParser *goliteParser) ExitSelectorTerm(c *SelectorTermContext) {
 	_, _, key := GetTokenInfo(c)

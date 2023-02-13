@@ -164,11 +164,23 @@ func (s *BaseGoliteParserListener) EnterPrint(ctx *PrintContext) {}
 // ExitPrint is called when production print is exited.
 func (s *BaseGoliteParserListener) ExitPrint(ctx *PrintContext) {}
 
+// EnterPrintPrime is called when production printPrime is entered.
+func (s *BaseGoliteParserListener) EnterPrintPrime(ctx *PrintPrimeContext) {}
+
+// ExitPrintPrime is called when production printPrime is exited.
+func (s *BaseGoliteParserListener) ExitPrintPrime(ctx *PrintPrimeContext) {}
+
 // EnterConditional is called when production conditional is entered.
 func (s *BaseGoliteParserListener) EnterConditional(ctx *ConditionalContext) {}
 
 // ExitConditional is called when production conditional is exited.
 func (s *BaseGoliteParserListener) ExitConditional(ctx *ConditionalContext) {}
+
+// EnterConditionalPrime is called when production conditionalPrime is entered.
+func (s *BaseGoliteParserListener) EnterConditionalPrime(ctx *ConditionalPrimeContext) {}
+
+// ExitConditionalPrime is called when production conditionalPrime is exited.
+func (s *BaseGoliteParserListener) ExitConditionalPrime(ctx *ConditionalPrimeContext) {}
 
 // EnterLoop is called when production loop is entered.
 func (s *BaseGoliteParserListener) EnterLoop(ctx *LoopContext) {}
@@ -194,11 +206,29 @@ func (s *BaseGoliteParserListener) EnterArguments(ctx *ArgumentsContext) {}
 // ExitArguments is called when production arguments is exited.
 func (s *BaseGoliteParserListener) ExitArguments(ctx *ArgumentsContext) {}
 
+// EnterArgumentsPrime is called when production argumentsPrime is entered.
+func (s *BaseGoliteParserListener) EnterArgumentsPrime(ctx *ArgumentsPrimeContext) {}
+
+// ExitArgumentsPrime is called when production argumentsPrime is exited.
+func (s *BaseGoliteParserListener) ExitArgumentsPrime(ctx *ArgumentsPrimeContext) {}
+
+// EnterArgumentsPrimePrime is called when production argumentsPrimePrime is entered.
+func (s *BaseGoliteParserListener) EnterArgumentsPrimePrime(ctx *ArgumentsPrimePrimeContext) {}
+
+// ExitArgumentsPrimePrime is called when production argumentsPrimePrime is exited.
+func (s *BaseGoliteParserListener) ExitArgumentsPrimePrime(ctx *ArgumentsPrimePrimeContext) {}
+
 // EnterLValue is called when production lValue is entered.
 func (s *BaseGoliteParserListener) EnterLValue(ctx *LValueContext) {}
 
 // ExitLValue is called when production lValue is exited.
 func (s *BaseGoliteParserListener) ExitLValue(ctx *LValueContext) {}
+
+// EnterLValuePrime is called when production lValuePrime is entered.
+func (s *BaseGoliteParserListener) EnterLValuePrime(ctx *LValuePrimeContext) {}
+
+// ExitLValuePrime is called when production lValuePrime is exited.
+func (s *BaseGoliteParserListener) ExitLValuePrime(ctx *LValuePrimeContext) {}
 
 // EnterExpression is called when production expression is entered.
 func (s *BaseGoliteParserListener) EnterExpression(ctx *ExpressionContext) {}

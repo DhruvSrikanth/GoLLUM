@@ -50,14 +50,15 @@ func goliteparserParserInit() {
 		"type", "declarations", "declaration", "ids", "otherids", "functions",
 		"function", "parameters", "parametersPrime", "parametersPPrime", "returnType",
 		"statements", "statement", "read", "block", "delete", "assignment",
-		"print", "conditional", "loop", "returnRule", "invocation", "arguments",
-		"lValue", "expression", "boolTerm", "equalTerm", "relationTerm", "simpleTerm",
-		"term", "unaryTerm", "selectorTerm", "selectorTermPrime", "subfactor",
-		"functioncall", "allocation", "factor",
+		"print", "printPrime", "conditional", "conditionalPrime", "loop", "returnRule",
+		"invocation", "arguments", "argumentsPrime", "argumentsPrimePrime",
+		"lValue", "lValuePrime", "expression", "boolTerm", "equalTerm", "relationTerm",
+		"simpleTerm", "term", "unaryTerm", "selectorTerm", "selectorTermPrime",
+		"subfactor", "functioncall", "allocation", "factor",
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 42, 359, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 42, 378, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 2, 11, 7, 11, 2, 12, 7, 12, 2, 13, 7, 13, 2, 14, 7, 14, 2, 15, 7, 15,
 		2, 16, 7, 16, 2, 17, 7, 17, 2, 18, 7, 18, 2, 19, 7, 19, 2, 20, 7, 20, 2,
@@ -65,150 +66,156 @@ func goliteparserParserInit() {
 		7, 26, 2, 27, 7, 27, 2, 28, 7, 28, 2, 29, 7, 29, 2, 30, 7, 30, 2, 31, 7,
 		31, 2, 32, 7, 32, 2, 33, 7, 33, 2, 34, 7, 34, 2, 35, 7, 35, 2, 36, 7, 36,
 		2, 37, 7, 37, 2, 38, 7, 38, 2, 39, 7, 39, 2, 40, 7, 40, 2, 41, 7, 41, 2,
-		42, 7, 42, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 5, 1, 93, 8, 1, 10, 1, 12,
-		1, 96, 9, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3,
-		1, 3, 5, 3, 109, 8, 3, 10, 3, 12, 3, 112, 9, 3, 1, 4, 1, 4, 1, 4, 1, 5,
-		1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 1, 6, 3, 6, 124, 8, 6, 1, 7, 5, 7, 127, 8,
-		7, 10, 7, 12, 7, 130, 9, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 9, 1, 9, 5,
-		9, 139, 8, 9, 10, 9, 12, 9, 142, 9, 9, 1, 10, 1, 10, 1, 10, 1, 11, 5, 11,
-		148, 8, 11, 10, 11, 12, 11, 151, 9, 11, 1, 12, 1, 12, 1, 12, 1, 12, 3,
-		12, 157, 8, 12, 1, 12, 1, 12, 1, 12, 1, 12, 1, 12, 1, 13, 1, 13, 3, 13,
-		166, 8, 13, 1, 13, 1, 13, 1, 14, 1, 14, 5, 14, 172, 8, 14, 10, 14, 12,
-		14, 175, 9, 14, 1, 15, 1, 15, 1, 15, 1, 16, 1, 16, 1, 17, 5, 17, 183, 8,
-		17, 10, 17, 12, 17, 186, 9, 17, 1, 18, 1, 18, 1, 18, 1, 18, 1, 18, 1, 18,
-		1, 18, 1, 18, 1, 18, 3, 18, 197, 8, 18, 1, 19, 1, 19, 1, 19, 1, 19, 1,
-		20, 1, 20, 1, 20, 1, 20, 1, 21, 1, 21, 1, 21, 1, 21, 1, 22, 1, 22, 1, 22,
-		1, 22, 1, 22, 1, 23, 1, 23, 1, 23, 1, 23, 1, 23, 5, 23, 221, 8, 23, 10,
-		23, 12, 23, 224, 9, 23, 1, 23, 1, 23, 1, 23, 1, 24, 1, 24, 1, 24, 1, 24,
-		1, 24, 1, 24, 1, 24, 3, 24, 236, 8, 24, 1, 25, 1, 25, 1, 25, 1, 25, 1,
-		25, 1, 25, 1, 26, 1, 26, 3, 26, 246, 8, 26, 1, 26, 1, 26, 1, 27, 1, 27,
-		1, 27, 1, 27, 1, 28, 1, 28, 1, 28, 1, 28, 5, 28, 258, 8, 28, 10, 28, 12,
-		28, 261, 9, 28, 3, 28, 263, 8, 28, 1, 28, 1, 28, 1, 29, 1, 29, 1, 29, 5,
-		29, 270, 8, 29, 10, 29, 12, 29, 273, 9, 29, 1, 30, 1, 30, 1, 30, 5, 30,
-		278, 8, 30, 10, 30, 12, 30, 281, 9, 30, 1, 31, 1, 31, 1, 31, 5, 31, 286,
-		8, 31, 10, 31, 12, 31, 289, 9, 31, 1, 32, 1, 32, 1, 32, 5, 32, 294, 8,
-		32, 10, 32, 12, 32, 297, 9, 32, 1, 33, 1, 33, 1, 33, 5, 33, 302, 8, 33,
-		10, 33, 12, 33, 305, 9, 33, 1, 34, 1, 34, 1, 34, 5, 34, 310, 8, 34, 10,
-		34, 12, 34, 313, 9, 34, 1, 35, 1, 35, 1, 35, 5, 35, 318, 8, 35, 10, 35,
-		12, 35, 321, 9, 35, 1, 36, 1, 36, 1, 36, 1, 36, 1, 36, 3, 36, 328, 8, 36,
-		1, 37, 1, 37, 5, 37, 332, 8, 37, 10, 37, 12, 37, 335, 9, 37, 1, 38, 1,
-		38, 1, 38, 1, 39, 1, 39, 1, 39, 1, 39, 1, 40, 1, 40, 3, 40, 346, 8, 40,
-		1, 41, 1, 41, 1, 41, 1, 42, 1, 42, 1, 42, 1, 42, 1, 42, 1, 42, 3, 42, 357,
-		8, 42, 1, 42, 0, 0, 43, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24,
-		26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60,
-		62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 0, 4, 1, 0, 9, 10, 1, 0,
-		5, 8, 1, 0, 11, 12, 1, 0, 13, 14, 355, 0, 86, 1, 0, 0, 0, 2, 94, 1, 0,
-		0, 0, 4, 97, 1, 0, 0, 0, 6, 105, 1, 0, 0, 0, 8, 113, 1, 0, 0, 0, 10, 116,
-		1, 0, 0, 0, 12, 123, 1, 0, 0, 0, 14, 128, 1, 0, 0, 0, 16, 131, 1, 0, 0,
-		0, 18, 136, 1, 0, 0, 0, 20, 143, 1, 0, 0, 0, 22, 149, 1, 0, 0, 0, 24, 152,
-		1, 0, 0, 0, 26, 163, 1, 0, 0, 0, 28, 169, 1, 0, 0, 0, 30, 176, 1, 0, 0,
-		0, 32, 179, 1, 0, 0, 0, 34, 184, 1, 0, 0, 0, 36, 196, 1, 0, 0, 0, 38, 198,
-		1, 0, 0, 0, 40, 202, 1, 0, 0, 0, 42, 206, 1, 0, 0, 0, 44, 210, 1, 0, 0,
-		0, 46, 215, 1, 0, 0, 0, 48, 228, 1, 0, 0, 0, 50, 237, 1, 0, 0, 0, 52, 243,
-		1, 0, 0, 0, 54, 249, 1, 0, 0, 0, 56, 253, 1, 0, 0, 0, 58, 266, 1, 0, 0,
-		0, 60, 274, 1, 0, 0, 0, 62, 282, 1, 0, 0, 0, 64, 290, 1, 0, 0, 0, 66, 298,
-		1, 0, 0, 0, 68, 306, 1, 0, 0, 0, 70, 314, 1, 0, 0, 0, 72, 327, 1, 0, 0,
-		0, 74, 329, 1, 0, 0, 0, 76, 336, 1, 0, 0, 0, 78, 339, 1, 0, 0, 0, 80, 343,
-		1, 0, 0, 0, 82, 347, 1, 0, 0, 0, 84, 356, 1, 0, 0, 0, 86, 87, 3, 2, 1,
-		0, 87, 88, 3, 14, 7, 0, 88, 89, 3, 22, 11, 0, 89, 90, 5, 0, 0, 1, 90, 1,
-		1, 0, 0, 0, 91, 93, 3, 4, 2, 0, 92, 91, 1, 0, 0, 0, 93, 96, 1, 0, 0, 0,
-		94, 92, 1, 0, 0, 0, 94, 95, 1, 0, 0, 0, 95, 3, 1, 0, 0, 0, 96, 94, 1, 0,
-		0, 0, 97, 98, 5, 22, 0, 0, 98, 99, 5, 40, 0, 0, 99, 100, 5, 25, 0, 0, 100,
-		101, 5, 17, 0, 0, 101, 102, 3, 6, 3, 0, 102, 103, 5, 18, 0, 0, 103, 104,
-		5, 19, 0, 0, 104, 5, 1, 0, 0, 0, 105, 106, 3, 10, 5, 0, 106, 110, 5, 19,
-		0, 0, 107, 109, 3, 8, 4, 0, 108, 107, 1, 0, 0, 0, 109, 112, 1, 0, 0, 0,
-		110, 108, 1, 0, 0, 0, 110, 111, 1, 0, 0, 0, 111, 7, 1, 0, 0, 0, 112, 110,
-		1, 0, 0, 0, 113, 114, 3, 10, 5, 0, 114, 115, 5, 19, 0, 0, 115, 9, 1, 0,
-		0, 0, 116, 117, 5, 40, 0, 0, 117, 118, 3, 12, 6, 0, 118, 11, 1, 0, 0, 0,
-		119, 124, 5, 38, 0, 0, 120, 124, 5, 39, 0, 0, 121, 122, 5, 13, 0, 0, 122,
-		124, 5, 40, 0, 0, 123, 119, 1, 0, 0, 0, 123, 120, 1, 0, 0, 0, 123, 121,
-		1, 0, 0, 0, 124, 13, 1, 0, 0, 0, 125, 127, 3, 16, 8, 0, 126, 125, 1, 0,
-		0, 0, 127, 130, 1, 0, 0, 0, 128, 126, 1, 0, 0, 0, 128, 129, 1, 0, 0, 0,
-		129, 15, 1, 0, 0, 0, 130, 128, 1, 0, 0, 0, 131, 132, 5, 21, 0, 0, 132,
-		133, 3, 18, 9, 0, 133, 134, 3, 12, 6, 0, 134, 135, 5, 19, 0, 0, 135, 17,
-		1, 0, 0, 0, 136, 140, 5, 40, 0, 0, 137, 139, 3, 20, 10, 0, 138, 137, 1,
-		0, 0, 0, 139, 142, 1, 0, 0, 0, 140, 138, 1, 0, 0, 0, 140, 141, 1, 0, 0,
-		0, 141, 19, 1, 0, 0, 0, 142, 140, 1, 0, 0, 0, 143, 144, 5, 20, 0, 0, 144,
-		145, 5, 40, 0, 0, 145, 21, 1, 0, 0, 0, 146, 148, 3, 24, 12, 0, 147, 146,
-		1, 0, 0, 0, 148, 151, 1, 0, 0, 0, 149, 147, 1, 0, 0, 0, 149, 150, 1, 0,
-		0, 0, 150, 23, 1, 0, 0, 0, 151, 149, 1, 0, 0, 0, 152, 153, 5, 27, 0, 0,
-		153, 154, 5, 40, 0, 0, 154, 156, 3, 26, 13, 0, 155, 157, 3, 32, 16, 0,
-		156, 155, 1, 0, 0, 0, 156, 157, 1, 0, 0, 0, 157, 158, 1, 0, 0, 0, 158,
-		159, 5, 17, 0, 0, 159, 160, 3, 14, 7, 0, 160, 161, 3, 34, 17, 0, 161, 162,
-		5, 18, 0, 0, 162, 25, 1, 0, 0, 0, 163, 165, 5, 15, 0, 0, 164, 166, 3, 28,
-		14, 0, 165, 164, 1, 0, 0, 0, 165, 166, 1, 0, 0, 0, 166, 167, 1, 0, 0, 0,
-		167, 168, 5, 16, 0, 0, 168, 27, 1, 0, 0, 0, 169, 173, 3, 10, 5, 0, 170,
-		172, 3, 30, 15, 0, 171, 170, 1, 0, 0, 0, 172, 175, 1, 0, 0, 0, 173, 171,
-		1, 0, 0, 0, 173, 174, 1, 0, 0, 0, 174, 29, 1, 0, 0, 0, 175, 173, 1, 0,
-		0, 0, 176, 177, 5, 20, 0, 0, 177, 178, 3, 10, 5, 0, 178, 31, 1, 0, 0, 0,
-		179, 180, 3, 12, 6, 0, 180, 33, 1, 0, 0, 0, 181, 183, 3, 36, 18, 0, 182,
-		181, 1, 0, 0, 0, 183, 186, 1, 0, 0, 0, 184, 182, 1, 0, 0, 0, 184, 185,
-		1, 0, 0, 0, 185, 35, 1, 0, 0, 0, 186, 184, 1, 0, 0, 0, 187, 197, 3, 40,
-		20, 0, 188, 197, 3, 44, 22, 0, 189, 197, 3, 46, 23, 0, 190, 197, 3, 42,
-		21, 0, 191, 197, 3, 38, 19, 0, 192, 197, 3, 48, 24, 0, 193, 197, 3, 50,
-		25, 0, 194, 197, 3, 52, 26, 0, 195, 197, 3, 54, 27, 0, 196, 187, 1, 0,
-		0, 0, 196, 188, 1, 0, 0, 0, 196, 189, 1, 0, 0, 0, 196, 190, 1, 0, 0, 0,
-		196, 191, 1, 0, 0, 0, 196, 192, 1, 0, 0, 0, 196, 193, 1, 0, 0, 0, 196,
-		194, 1, 0, 0, 0, 196, 195, 1, 0, 0, 0, 197, 37, 1, 0, 0, 0, 198, 199, 5,
-		32, 0, 0, 199, 200, 3, 58, 29, 0, 200, 201, 5, 19, 0, 0, 201, 39, 1, 0,
-		0, 0, 202, 203, 5, 17, 0, 0, 203, 204, 3, 34, 17, 0, 204, 205, 5, 18, 0,
-		0, 205, 41, 1, 0, 0, 0, 206, 207, 5, 24, 0, 0, 207, 208, 3, 60, 30, 0,
-		208, 209, 5, 19, 0, 0, 209, 43, 1, 0, 0, 0, 210, 211, 3, 58, 29, 0, 211,
-		212, 5, 1, 0, 0, 212, 213, 3, 60, 30, 0, 213, 214, 5, 19, 0, 0, 214, 45,
-		1, 0, 0, 0, 215, 216, 5, 33, 0, 0, 216, 217, 5, 15, 0, 0, 217, 222, 5,
-		35, 0, 0, 218, 219, 5, 20, 0, 0, 219, 221, 3, 60, 30, 0, 220, 218, 1, 0,
-		0, 0, 221, 224, 1, 0, 0, 0, 222, 220, 1, 0, 0, 0, 222, 223, 1, 0, 0, 0,
-		223, 225, 1, 0, 0, 0, 224, 222, 1, 0, 0, 0, 225, 226, 5, 16, 0, 0, 226,
-		227, 5, 19, 0, 0, 227, 47, 1, 0, 0, 0, 228, 229, 5, 29, 0, 0, 229, 230,
-		5, 15, 0, 0, 230, 231, 3, 60, 30, 0, 231, 232, 5, 16, 0, 0, 232, 235, 3,
-		40, 20, 0, 233, 234, 5, 30, 0, 0, 234, 236, 3, 40, 20, 0, 235, 233, 1,
-		0, 0, 0, 235, 236, 1, 0, 0, 0, 236, 49, 1, 0, 0, 0, 237, 238, 5, 31, 0,
-		0, 238, 239, 5, 15, 0, 0, 239, 240, 3, 60, 30, 0, 240, 241, 5, 16, 0, 0,
-		241, 242, 3, 40, 20, 0, 242, 51, 1, 0, 0, 0, 243, 245, 5, 28, 0, 0, 244,
-		246, 3, 60, 30, 0, 245, 244, 1, 0, 0, 0, 245, 246, 1, 0, 0, 0, 246, 247,
-		1, 0, 0, 0, 247, 248, 5, 19, 0, 0, 248, 53, 1, 0, 0, 0, 249, 250, 5, 40,
-		0, 0, 250, 251, 3, 56, 28, 0, 251, 252, 5, 19, 0, 0, 252, 55, 1, 0, 0,
-		0, 253, 262, 5, 15, 0, 0, 254, 259, 3, 60, 30, 0, 255, 256, 5, 20, 0, 0,
-		256, 258, 3, 60, 30, 0, 257, 255, 1, 0, 0, 0, 258, 261, 1, 0, 0, 0, 259,
-		257, 1, 0, 0, 0, 259, 260, 1, 0, 0, 0, 260, 263, 1, 0, 0, 0, 261, 259,
-		1, 0, 0, 0, 262, 254, 1, 0, 0, 0, 262, 263, 1, 0, 0, 0, 263, 264, 1, 0,
-		0, 0, 264, 265, 5, 16, 0, 0, 265, 57, 1, 0, 0, 0, 266, 271, 5, 40, 0, 0,
-		267, 268, 5, 26, 0, 0, 268, 270, 5, 40, 0, 0, 269, 267, 1, 0, 0, 0, 270,
-		273, 1, 0, 0, 0, 271, 269, 1, 0, 0, 0, 271, 272, 1, 0, 0, 0, 272, 59, 1,
-		0, 0, 0, 273, 271, 1, 0, 0, 0, 274, 279, 3, 62, 31, 0, 275, 276, 5, 3,
-		0, 0, 276, 278, 3, 62, 31, 0, 277, 275, 1, 0, 0, 0, 278, 281, 1, 0, 0,
-		0, 279, 277, 1, 0, 0, 0, 279, 280, 1, 0, 0, 0, 280, 61, 1, 0, 0, 0, 281,
-		279, 1, 0, 0, 0, 282, 287, 3, 64, 32, 0, 283, 284, 5, 2, 0, 0, 284, 286,
-		3, 64, 32, 0, 285, 283, 1, 0, 0, 0, 286, 289, 1, 0, 0, 0, 287, 285, 1,
-		0, 0, 0, 287, 288, 1, 0, 0, 0, 288, 63, 1, 0, 0, 0, 289, 287, 1, 0, 0,
-		0, 290, 295, 3, 66, 33, 0, 291, 292, 7, 0, 0, 0, 292, 294, 3, 66, 33, 0,
-		293, 291, 1, 0, 0, 0, 294, 297, 1, 0, 0, 0, 295, 293, 1, 0, 0, 0, 295,
-		296, 1, 0, 0, 0, 296, 65, 1, 0, 0, 0, 297, 295, 1, 0, 0, 0, 298, 303, 3,
-		68, 34, 0, 299, 300, 7, 1, 0, 0, 300, 302, 3, 68, 34, 0, 301, 299, 1, 0,
-		0, 0, 302, 305, 1, 0, 0, 0, 303, 301, 1, 0, 0, 0, 303, 304, 1, 0, 0, 0,
-		304, 67, 1, 0, 0, 0, 305, 303, 1, 0, 0, 0, 306, 311, 3, 70, 35, 0, 307,
-		308, 7, 2, 0, 0, 308, 310, 3, 70, 35, 0, 309, 307, 1, 0, 0, 0, 310, 313,
-		1, 0, 0, 0, 311, 309, 1, 0, 0, 0, 311, 312, 1, 0, 0, 0, 312, 69, 1, 0,
-		0, 0, 313, 311, 1, 0, 0, 0, 314, 319, 3, 72, 36, 0, 315, 316, 7, 3, 0,
-		0, 316, 318, 3, 72, 36, 0, 317, 315, 1, 0, 0, 0, 318, 321, 1, 0, 0, 0,
-		319, 317, 1, 0, 0, 0, 319, 320, 1, 0, 0, 0, 320, 71, 1, 0, 0, 0, 321, 319,
-		1, 0, 0, 0, 322, 323, 5, 4, 0, 0, 323, 328, 3, 74, 37, 0, 324, 325, 5,
-		12, 0, 0, 325, 328, 3, 74, 37, 0, 326, 328, 3, 74, 37, 0, 327, 322, 1,
-		0, 0, 0, 327, 324, 1, 0, 0, 0, 327, 326, 1, 0, 0, 0, 328, 73, 1, 0, 0,
-		0, 329, 333, 3, 84, 42, 0, 330, 332, 3, 76, 38, 0, 331, 330, 1, 0, 0, 0,
-		332, 335, 1, 0, 0, 0, 333, 331, 1, 0, 0, 0, 333, 334, 1, 0, 0, 0, 334,
-		75, 1, 0, 0, 0, 335, 333, 1, 0, 0, 0, 336, 337, 5, 26, 0, 0, 337, 338,
-		5, 40, 0, 0, 338, 77, 1, 0, 0, 0, 339, 340, 5, 15, 0, 0, 340, 341, 3, 60,
-		30, 0, 341, 342, 5, 16, 0, 0, 342, 79, 1, 0, 0, 0, 343, 345, 5, 40, 0,
-		0, 344, 346, 3, 56, 28, 0, 345, 344, 1, 0, 0, 0, 345, 346, 1, 0, 0, 0,
-		346, 81, 1, 0, 0, 0, 347, 348, 5, 23, 0, 0, 348, 349, 5, 40, 0, 0, 349,
-		83, 1, 0, 0, 0, 350, 357, 3, 78, 39, 0, 351, 357, 3, 80, 40, 0, 352, 357,
-		5, 34, 0, 0, 353, 357, 3, 82, 41, 0, 354, 357, 5, 36, 0, 0, 355, 357, 5,
-		37, 0, 0, 356, 350, 1, 0, 0, 0, 356, 351, 1, 0, 0, 0, 356, 352, 1, 0, 0,
-		0, 356, 353, 1, 0, 0, 0, 356, 354, 1, 0, 0, 0, 356, 355, 1, 0, 0, 0, 357,
-		85, 1, 0, 0, 0, 27, 94, 110, 123, 128, 140, 149, 156, 165, 173, 184, 196,
-		222, 235, 245, 259, 262, 271, 279, 287, 295, 303, 311, 319, 327, 333, 345,
-		356,
+		42, 7, 42, 2, 43, 7, 43, 2, 44, 7, 44, 2, 45, 7, 45, 2, 46, 7, 46, 2, 47,
+		7, 47, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 5, 1, 103, 8, 1, 10, 1, 12,
+		1, 106, 9, 1, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1,
+		3, 1, 3, 5, 3, 119, 8, 3, 10, 3, 12, 3, 122, 9, 3, 1, 4, 1, 4, 1, 4, 1,
+		5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 1, 6, 3, 6, 134, 8, 6, 1, 7, 5, 7, 137,
+		8, 7, 10, 7, 12, 7, 140, 9, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 9, 1, 9,
+		5, 9, 149, 8, 9, 10, 9, 12, 9, 152, 9, 9, 1, 10, 1, 10, 1, 10, 1, 11, 5,
+		11, 158, 8, 11, 10, 11, 12, 11, 161, 9, 11, 1, 12, 1, 12, 1, 12, 1, 12,
+		3, 12, 167, 8, 12, 1, 12, 1, 12, 1, 12, 1, 12, 1, 12, 1, 13, 1, 13, 3,
+		13, 176, 8, 13, 1, 13, 1, 13, 1, 14, 1, 14, 5, 14, 182, 8, 14, 10, 14,
+		12, 14, 185, 9, 14, 1, 15, 1, 15, 1, 15, 1, 16, 1, 16, 1, 17, 5, 17, 193,
+		8, 17, 10, 17, 12, 17, 196, 9, 17, 1, 18, 1, 18, 1, 18, 1, 18, 1, 18, 1,
+		18, 1, 18, 1, 18, 1, 18, 3, 18, 207, 8, 18, 1, 19, 1, 19, 1, 19, 1, 19,
+		1, 20, 1, 20, 1, 20, 1, 20, 1, 21, 1, 21, 1, 21, 1, 21, 1, 22, 1, 22, 1,
+		22, 1, 22, 1, 22, 1, 23, 1, 23, 1, 23, 1, 23, 5, 23, 230, 8, 23, 10, 23,
+		12, 23, 233, 9, 23, 1, 23, 1, 23, 1, 23, 1, 24, 1, 24, 1, 24, 1, 25, 1,
+		25, 1, 25, 1, 25, 1, 25, 1, 25, 3, 25, 247, 8, 25, 1, 26, 1, 26, 1, 26,
+		1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 28, 1, 28, 3, 28, 260, 8,
+		28, 1, 28, 1, 28, 1, 29, 1, 29, 1, 29, 1, 29, 1, 30, 1, 30, 3, 30, 270,
+		8, 30, 1, 30, 1, 30, 1, 31, 1, 31, 5, 31, 276, 8, 31, 10, 31, 12, 31, 279,
+		9, 31, 1, 32, 1, 32, 1, 32, 1, 33, 1, 33, 5, 33, 286, 8, 33, 10, 33, 12,
+		33, 289, 9, 33, 1, 34, 1, 34, 1, 34, 1, 35, 1, 35, 1, 35, 5, 35, 297, 8,
+		35, 10, 35, 12, 35, 300, 9, 35, 1, 36, 1, 36, 1, 36, 5, 36, 305, 8, 36,
+		10, 36, 12, 36, 308, 9, 36, 1, 37, 1, 37, 1, 37, 5, 37, 313, 8, 37, 10,
+		37, 12, 37, 316, 9, 37, 1, 38, 1, 38, 1, 38, 5, 38, 321, 8, 38, 10, 38,
+		12, 38, 324, 9, 38, 1, 39, 1, 39, 1, 39, 5, 39, 329, 8, 39, 10, 39, 12,
+		39, 332, 9, 39, 1, 40, 1, 40, 1, 40, 5, 40, 337, 8, 40, 10, 40, 12, 40,
+		340, 9, 40, 1, 41, 1, 41, 1, 41, 1, 41, 1, 41, 3, 41, 347, 8, 41, 1, 42,
+		1, 42, 5, 42, 351, 8, 42, 10, 42, 12, 42, 354, 9, 42, 1, 43, 1, 43, 1,
+		43, 1, 44, 1, 44, 1, 44, 1, 44, 1, 45, 1, 45, 3, 45, 365, 8, 45, 1, 46,
+		1, 46, 1, 46, 1, 47, 1, 47, 1, 47, 1, 47, 1, 47, 1, 47, 3, 47, 376, 8,
+		47, 1, 47, 0, 0, 48, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26,
+		28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 62,
+		64, 66, 68, 70, 72, 74, 76, 78, 80, 82, 84, 86, 88, 90, 92, 94, 0, 4, 1,
+		0, 9, 10, 1, 0, 5, 8, 1, 0, 11, 12, 1, 0, 13, 14, 369, 0, 96, 1, 0, 0,
+		0, 2, 104, 1, 0, 0, 0, 4, 107, 1, 0, 0, 0, 6, 115, 1, 0, 0, 0, 8, 123,
+		1, 0, 0, 0, 10, 126, 1, 0, 0, 0, 12, 133, 1, 0, 0, 0, 14, 138, 1, 0, 0,
+		0, 16, 141, 1, 0, 0, 0, 18, 146, 1, 0, 0, 0, 20, 153, 1, 0, 0, 0, 22, 159,
+		1, 0, 0, 0, 24, 162, 1, 0, 0, 0, 26, 173, 1, 0, 0, 0, 28, 179, 1, 0, 0,
+		0, 30, 186, 1, 0, 0, 0, 32, 189, 1, 0, 0, 0, 34, 194, 1, 0, 0, 0, 36, 206,
+		1, 0, 0, 0, 38, 208, 1, 0, 0, 0, 40, 212, 1, 0, 0, 0, 42, 216, 1, 0, 0,
+		0, 44, 220, 1, 0, 0, 0, 46, 225, 1, 0, 0, 0, 48, 237, 1, 0, 0, 0, 50, 240,
+		1, 0, 0, 0, 52, 248, 1, 0, 0, 0, 54, 251, 1, 0, 0, 0, 56, 257, 1, 0, 0,
+		0, 58, 263, 1, 0, 0, 0, 60, 267, 1, 0, 0, 0, 62, 273, 1, 0, 0, 0, 64, 280,
+		1, 0, 0, 0, 66, 283, 1, 0, 0, 0, 68, 290, 1, 0, 0, 0, 70, 293, 1, 0, 0,
+		0, 72, 301, 1, 0, 0, 0, 74, 309, 1, 0, 0, 0, 76, 317, 1, 0, 0, 0, 78, 325,
+		1, 0, 0, 0, 80, 333, 1, 0, 0, 0, 82, 346, 1, 0, 0, 0, 84, 348, 1, 0, 0,
+		0, 86, 355, 1, 0, 0, 0, 88, 358, 1, 0, 0, 0, 90, 362, 1, 0, 0, 0, 92, 366,
+		1, 0, 0, 0, 94, 375, 1, 0, 0, 0, 96, 97, 3, 2, 1, 0, 97, 98, 3, 14, 7,
+		0, 98, 99, 3, 22, 11, 0, 99, 100, 5, 0, 0, 1, 100, 1, 1, 0, 0, 0, 101,
+		103, 3, 4, 2, 0, 102, 101, 1, 0, 0, 0, 103, 106, 1, 0, 0, 0, 104, 102,
+		1, 0, 0, 0, 104, 105, 1, 0, 0, 0, 105, 3, 1, 0, 0, 0, 106, 104, 1, 0, 0,
+		0, 107, 108, 5, 22, 0, 0, 108, 109, 5, 40, 0, 0, 109, 110, 5, 25, 0, 0,
+		110, 111, 5, 17, 0, 0, 111, 112, 3, 6, 3, 0, 112, 113, 5, 18, 0, 0, 113,
+		114, 5, 19, 0, 0, 114, 5, 1, 0, 0, 0, 115, 116, 3, 10, 5, 0, 116, 120,
+		5, 19, 0, 0, 117, 119, 3, 8, 4, 0, 118, 117, 1, 0, 0, 0, 119, 122, 1, 0,
+		0, 0, 120, 118, 1, 0, 0, 0, 120, 121, 1, 0, 0, 0, 121, 7, 1, 0, 0, 0, 122,
+		120, 1, 0, 0, 0, 123, 124, 3, 10, 5, 0, 124, 125, 5, 19, 0, 0, 125, 9,
+		1, 0, 0, 0, 126, 127, 5, 40, 0, 0, 127, 128, 3, 12, 6, 0, 128, 11, 1, 0,
+		0, 0, 129, 134, 5, 38, 0, 0, 130, 134, 5, 39, 0, 0, 131, 132, 5, 13, 0,
+		0, 132, 134, 5, 40, 0, 0, 133, 129, 1, 0, 0, 0, 133, 130, 1, 0, 0, 0, 133,
+		131, 1, 0, 0, 0, 134, 13, 1, 0, 0, 0, 135, 137, 3, 16, 8, 0, 136, 135,
+		1, 0, 0, 0, 137, 140, 1, 0, 0, 0, 138, 136, 1, 0, 0, 0, 138, 139, 1, 0,
+		0, 0, 139, 15, 1, 0, 0, 0, 140, 138, 1, 0, 0, 0, 141, 142, 5, 21, 0, 0,
+		142, 143, 3, 18, 9, 0, 143, 144, 3, 12, 6, 0, 144, 145, 5, 19, 0, 0, 145,
+		17, 1, 0, 0, 0, 146, 150, 5, 40, 0, 0, 147, 149, 3, 20, 10, 0, 148, 147,
+		1, 0, 0, 0, 149, 152, 1, 0, 0, 0, 150, 148, 1, 0, 0, 0, 150, 151, 1, 0,
+		0, 0, 151, 19, 1, 0, 0, 0, 152, 150, 1, 0, 0, 0, 153, 154, 5, 20, 0, 0,
+		154, 155, 5, 40, 0, 0, 155, 21, 1, 0, 0, 0, 156, 158, 3, 24, 12, 0, 157,
+		156, 1, 0, 0, 0, 158, 161, 1, 0, 0, 0, 159, 157, 1, 0, 0, 0, 159, 160,
+		1, 0, 0, 0, 160, 23, 1, 0, 0, 0, 161, 159, 1, 0, 0, 0, 162, 163, 5, 27,
+		0, 0, 163, 164, 5, 40, 0, 0, 164, 166, 3, 26, 13, 0, 165, 167, 3, 32, 16,
+		0, 166, 165, 1, 0, 0, 0, 166, 167, 1, 0, 0, 0, 167, 168, 1, 0, 0, 0, 168,
+		169, 5, 17, 0, 0, 169, 170, 3, 14, 7, 0, 170, 171, 3, 34, 17, 0, 171, 172,
+		5, 18, 0, 0, 172, 25, 1, 0, 0, 0, 173, 175, 5, 15, 0, 0, 174, 176, 3, 28,
+		14, 0, 175, 174, 1, 0, 0, 0, 175, 176, 1, 0, 0, 0, 176, 177, 1, 0, 0, 0,
+		177, 178, 5, 16, 0, 0, 178, 27, 1, 0, 0, 0, 179, 183, 3, 10, 5, 0, 180,
+		182, 3, 30, 15, 0, 181, 180, 1, 0, 0, 0, 182, 185, 1, 0, 0, 0, 183, 181,
+		1, 0, 0, 0, 183, 184, 1, 0, 0, 0, 184, 29, 1, 0, 0, 0, 185, 183, 1, 0,
+		0, 0, 186, 187, 5, 20, 0, 0, 187, 188, 3, 10, 5, 0, 188, 31, 1, 0, 0, 0,
+		189, 190, 3, 12, 6, 0, 190, 33, 1, 0, 0, 0, 191, 193, 3, 36, 18, 0, 192,
+		191, 1, 0, 0, 0, 193, 196, 1, 0, 0, 0, 194, 192, 1, 0, 0, 0, 194, 195,
+		1, 0, 0, 0, 195, 35, 1, 0, 0, 0, 196, 194, 1, 0, 0, 0, 197, 207, 3, 40,
+		20, 0, 198, 207, 3, 44, 22, 0, 199, 207, 3, 46, 23, 0, 200, 207, 3, 42,
+		21, 0, 201, 207, 3, 38, 19, 0, 202, 207, 3, 50, 25, 0, 203, 207, 3, 54,
+		27, 0, 204, 207, 3, 56, 28, 0, 205, 207, 3, 58, 29, 0, 206, 197, 1, 0,
+		0, 0, 206, 198, 1, 0, 0, 0, 206, 199, 1, 0, 0, 0, 206, 200, 1, 0, 0, 0,
+		206, 201, 1, 0, 0, 0, 206, 202, 1, 0, 0, 0, 206, 203, 1, 0, 0, 0, 206,
+		204, 1, 0, 0, 0, 206, 205, 1, 0, 0, 0, 207, 37, 1, 0, 0, 0, 208, 209, 5,
+		32, 0, 0, 209, 210, 3, 66, 33, 0, 210, 211, 5, 19, 0, 0, 211, 39, 1, 0,
+		0, 0, 212, 213, 5, 17, 0, 0, 213, 214, 3, 34, 17, 0, 214, 215, 5, 18, 0,
+		0, 215, 41, 1, 0, 0, 0, 216, 217, 5, 24, 0, 0, 217, 218, 3, 70, 35, 0,
+		218, 219, 5, 19, 0, 0, 219, 43, 1, 0, 0, 0, 220, 221, 3, 66, 33, 0, 221,
+		222, 5, 1, 0, 0, 222, 223, 3, 70, 35, 0, 223, 224, 5, 19, 0, 0, 224, 45,
+		1, 0, 0, 0, 225, 226, 5, 33, 0, 0, 226, 227, 5, 15, 0, 0, 227, 231, 5,
+		35, 0, 0, 228, 230, 3, 48, 24, 0, 229, 228, 1, 0, 0, 0, 230, 233, 1, 0,
+		0, 0, 231, 229, 1, 0, 0, 0, 231, 232, 1, 0, 0, 0, 232, 234, 1, 0, 0, 0,
+		233, 231, 1, 0, 0, 0, 234, 235, 5, 16, 0, 0, 235, 236, 5, 19, 0, 0, 236,
+		47, 1, 0, 0, 0, 237, 238, 5, 20, 0, 0, 238, 239, 3, 70, 35, 0, 239, 49,
+		1, 0, 0, 0, 240, 241, 5, 29, 0, 0, 241, 242, 5, 15, 0, 0, 242, 243, 3,
+		70, 35, 0, 243, 244, 5, 16, 0, 0, 244, 246, 3, 40, 20, 0, 245, 247, 3,
+		52, 26, 0, 246, 245, 1, 0, 0, 0, 246, 247, 1, 0, 0, 0, 247, 51, 1, 0, 0,
+		0, 248, 249, 5, 30, 0, 0, 249, 250, 3, 40, 20, 0, 250, 53, 1, 0, 0, 0,
+		251, 252, 5, 31, 0, 0, 252, 253, 5, 15, 0, 0, 253, 254, 3, 70, 35, 0, 254,
+		255, 5, 16, 0, 0, 255, 256, 3, 40, 20, 0, 256, 55, 1, 0, 0, 0, 257, 259,
+		5, 28, 0, 0, 258, 260, 3, 70, 35, 0, 259, 258, 1, 0, 0, 0, 259, 260, 1,
+		0, 0, 0, 260, 261, 1, 0, 0, 0, 261, 262, 5, 19, 0, 0, 262, 57, 1, 0, 0,
+		0, 263, 264, 5, 40, 0, 0, 264, 265, 3, 60, 30, 0, 265, 266, 5, 19, 0, 0,
+		266, 59, 1, 0, 0, 0, 267, 269, 5, 15, 0, 0, 268, 270, 3, 62, 31, 0, 269,
+		268, 1, 0, 0, 0, 269, 270, 1, 0, 0, 0, 270, 271, 1, 0, 0, 0, 271, 272,
+		5, 16, 0, 0, 272, 61, 1, 0, 0, 0, 273, 277, 3, 70, 35, 0, 274, 276, 3,
+		64, 32, 0, 275, 274, 1, 0, 0, 0, 276, 279, 1, 0, 0, 0, 277, 275, 1, 0,
+		0, 0, 277, 278, 1, 0, 0, 0, 278, 63, 1, 0, 0, 0, 279, 277, 1, 0, 0, 0,
+		280, 281, 5, 20, 0, 0, 281, 282, 3, 70, 35, 0, 282, 65, 1, 0, 0, 0, 283,
+		287, 5, 40, 0, 0, 284, 286, 3, 68, 34, 0, 285, 284, 1, 0, 0, 0, 286, 289,
+		1, 0, 0, 0, 287, 285, 1, 0, 0, 0, 287, 288, 1, 0, 0, 0, 288, 67, 1, 0,
+		0, 0, 289, 287, 1, 0, 0, 0, 290, 291, 5, 26, 0, 0, 291, 292, 5, 40, 0,
+		0, 292, 69, 1, 0, 0, 0, 293, 298, 3, 72, 36, 0, 294, 295, 5, 3, 0, 0, 295,
+		297, 3, 72, 36, 0, 296, 294, 1, 0, 0, 0, 297, 300, 1, 0, 0, 0, 298, 296,
+		1, 0, 0, 0, 298, 299, 1, 0, 0, 0, 299, 71, 1, 0, 0, 0, 300, 298, 1, 0,
+		0, 0, 301, 306, 3, 74, 37, 0, 302, 303, 5, 2, 0, 0, 303, 305, 3, 74, 37,
+		0, 304, 302, 1, 0, 0, 0, 305, 308, 1, 0, 0, 0, 306, 304, 1, 0, 0, 0, 306,
+		307, 1, 0, 0, 0, 307, 73, 1, 0, 0, 0, 308, 306, 1, 0, 0, 0, 309, 314, 3,
+		76, 38, 0, 310, 311, 7, 0, 0, 0, 311, 313, 3, 76, 38, 0, 312, 310, 1, 0,
+		0, 0, 313, 316, 1, 0, 0, 0, 314, 312, 1, 0, 0, 0, 314, 315, 1, 0, 0, 0,
+		315, 75, 1, 0, 0, 0, 316, 314, 1, 0, 0, 0, 317, 322, 3, 78, 39, 0, 318,
+		319, 7, 1, 0, 0, 319, 321, 3, 78, 39, 0, 320, 318, 1, 0, 0, 0, 321, 324,
+		1, 0, 0, 0, 322, 320, 1, 0, 0, 0, 322, 323, 1, 0, 0, 0, 323, 77, 1, 0,
+		0, 0, 324, 322, 1, 0, 0, 0, 325, 330, 3, 80, 40, 0, 326, 327, 7, 2, 0,
+		0, 327, 329, 3, 80, 40, 0, 328, 326, 1, 0, 0, 0, 329, 332, 1, 0, 0, 0,
+		330, 328, 1, 0, 0, 0, 330, 331, 1, 0, 0, 0, 331, 79, 1, 0, 0, 0, 332, 330,
+		1, 0, 0, 0, 333, 338, 3, 82, 41, 0, 334, 335, 7, 3, 0, 0, 335, 337, 3,
+		82, 41, 0, 336, 334, 1, 0, 0, 0, 337, 340, 1, 0, 0, 0, 338, 336, 1, 0,
+		0, 0, 338, 339, 1, 0, 0, 0, 339, 81, 1, 0, 0, 0, 340, 338, 1, 0, 0, 0,
+		341, 342, 5, 4, 0, 0, 342, 347, 3, 84, 42, 0, 343, 344, 5, 12, 0, 0, 344,
+		347, 3, 84, 42, 0, 345, 347, 3, 84, 42, 0, 346, 341, 1, 0, 0, 0, 346, 343,
+		1, 0, 0, 0, 346, 345, 1, 0, 0, 0, 347, 83, 1, 0, 0, 0, 348, 352, 3, 94,
+		47, 0, 349, 351, 3, 86, 43, 0, 350, 349, 1, 0, 0, 0, 351, 354, 1, 0, 0,
+		0, 352, 350, 1, 0, 0, 0, 352, 353, 1, 0, 0, 0, 353, 85, 1, 0, 0, 0, 354,
+		352, 1, 0, 0, 0, 355, 356, 5, 26, 0, 0, 356, 357, 5, 40, 0, 0, 357, 87,
+		1, 0, 0, 0, 358, 359, 5, 15, 0, 0, 359, 360, 3, 70, 35, 0, 360, 361, 5,
+		16, 0, 0, 361, 89, 1, 0, 0, 0, 362, 364, 5, 40, 0, 0, 363, 365, 3, 60,
+		30, 0, 364, 363, 1, 0, 0, 0, 364, 365, 1, 0, 0, 0, 365, 91, 1, 0, 0, 0,
+		366, 367, 5, 23, 0, 0, 367, 368, 5, 40, 0, 0, 368, 93, 1, 0, 0, 0, 369,
+		376, 3, 88, 44, 0, 370, 376, 3, 90, 45, 0, 371, 376, 5, 34, 0, 0, 372,
+		376, 3, 92, 46, 0, 373, 376, 5, 36, 0, 0, 374, 376, 5, 37, 0, 0, 375, 369,
+		1, 0, 0, 0, 375, 370, 1, 0, 0, 0, 375, 371, 1, 0, 0, 0, 375, 372, 1, 0,
+		0, 0, 375, 373, 1, 0, 0, 0, 375, 374, 1, 0, 0, 0, 376, 95, 1, 0, 0, 0,
+		27, 104, 120, 133, 138, 150, 159, 166, 175, 183, 194, 206, 231, 246, 259,
+		269, 277, 287, 298, 306, 314, 322, 330, 338, 346, 352, 364, 375,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -293,49 +300,54 @@ const (
 
 // GoliteParser rules.
 const (
-	GoliteParserRULE_program           = 0
-	GoliteParserRULE_types             = 1
-	GoliteParserRULE_typeDeclaration   = 2
-	GoliteParserRULE_fields            = 3
-	GoliteParserRULE_morefields        = 4
-	GoliteParserRULE_decl              = 5
-	GoliteParserRULE_type              = 6
-	GoliteParserRULE_declarations      = 7
-	GoliteParserRULE_declaration       = 8
-	GoliteParserRULE_ids               = 9
-	GoliteParserRULE_otherids          = 10
-	GoliteParserRULE_functions         = 11
-	GoliteParserRULE_function          = 12
-	GoliteParserRULE_parameters        = 13
-	GoliteParserRULE_parametersPrime   = 14
-	GoliteParserRULE_parametersPPrime  = 15
-	GoliteParserRULE_returnType        = 16
-	GoliteParserRULE_statements        = 17
-	GoliteParserRULE_statement         = 18
-	GoliteParserRULE_read              = 19
-	GoliteParserRULE_block             = 20
-	GoliteParserRULE_delete            = 21
-	GoliteParserRULE_assignment        = 22
-	GoliteParserRULE_print             = 23
-	GoliteParserRULE_conditional       = 24
-	GoliteParserRULE_loop              = 25
-	GoliteParserRULE_returnRule        = 26
-	GoliteParserRULE_invocation        = 27
-	GoliteParserRULE_arguments         = 28
-	GoliteParserRULE_lValue            = 29
-	GoliteParserRULE_expression        = 30
-	GoliteParserRULE_boolTerm          = 31
-	GoliteParserRULE_equalTerm         = 32
-	GoliteParserRULE_relationTerm      = 33
-	GoliteParserRULE_simpleTerm        = 34
-	GoliteParserRULE_term              = 35
-	GoliteParserRULE_unaryTerm         = 36
-	GoliteParserRULE_selectorTerm      = 37
-	GoliteParserRULE_selectorTermPrime = 38
-	GoliteParserRULE_subfactor         = 39
-	GoliteParserRULE_functioncall      = 40
-	GoliteParserRULE_allocation        = 41
-	GoliteParserRULE_factor            = 42
+	GoliteParserRULE_program             = 0
+	GoliteParserRULE_types               = 1
+	GoliteParserRULE_typeDeclaration     = 2
+	GoliteParserRULE_fields              = 3
+	GoliteParserRULE_morefields          = 4
+	GoliteParserRULE_decl                = 5
+	GoliteParserRULE_type                = 6
+	GoliteParserRULE_declarations        = 7
+	GoliteParserRULE_declaration         = 8
+	GoliteParserRULE_ids                 = 9
+	GoliteParserRULE_otherids            = 10
+	GoliteParserRULE_functions           = 11
+	GoliteParserRULE_function            = 12
+	GoliteParserRULE_parameters          = 13
+	GoliteParserRULE_parametersPrime     = 14
+	GoliteParserRULE_parametersPPrime    = 15
+	GoliteParserRULE_returnType          = 16
+	GoliteParserRULE_statements          = 17
+	GoliteParserRULE_statement           = 18
+	GoliteParserRULE_read                = 19
+	GoliteParserRULE_block               = 20
+	GoliteParserRULE_delete              = 21
+	GoliteParserRULE_assignment          = 22
+	GoliteParserRULE_print               = 23
+	GoliteParserRULE_printPrime          = 24
+	GoliteParserRULE_conditional         = 25
+	GoliteParserRULE_conditionalPrime    = 26
+	GoliteParserRULE_loop                = 27
+	GoliteParserRULE_returnRule          = 28
+	GoliteParserRULE_invocation          = 29
+	GoliteParserRULE_arguments           = 30
+	GoliteParserRULE_argumentsPrime      = 31
+	GoliteParserRULE_argumentsPrimePrime = 32
+	GoliteParserRULE_lValue              = 33
+	GoliteParserRULE_lValuePrime         = 34
+	GoliteParserRULE_expression          = 35
+	GoliteParserRULE_boolTerm            = 36
+	GoliteParserRULE_equalTerm           = 37
+	GoliteParserRULE_relationTerm        = 38
+	GoliteParserRULE_simpleTerm          = 39
+	GoliteParserRULE_term                = 40
+	GoliteParserRULE_unaryTerm           = 41
+	GoliteParserRULE_selectorTerm        = 42
+	GoliteParserRULE_selectorTermPrime   = 43
+	GoliteParserRULE_subfactor           = 44
+	GoliteParserRULE_functioncall        = 45
+	GoliteParserRULE_allocation          = 46
+	GoliteParserRULE_factor              = 47
 )
 
 // IProgramContext is an interface to support dynamic dispatch.
@@ -506,28 +518,28 @@ func (p *GoliteParser) Program() (localctx IProgramContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(86)
+		p.SetState(96)
 
 		var _x = p.Types()
 
 		localctx.(*ProgramContext).ty = _x
 	}
 	{
-		p.SetState(87)
+		p.SetState(97)
 
 		var _x = p.Declarations()
 
 		localctx.(*ProgramContext).dcls = _x
 	}
 	{
-		p.SetState(88)
+		p.SetState(98)
 
 		var _x = p.Functions()
 
 		localctx.(*ProgramContext).fns = _x
 	}
 	{
-		p.SetState(89)
+		p.SetState(99)
 		p.Match(GoliteParserEOF)
 	}
 
@@ -658,17 +670,17 @@ func (p *GoliteParser) Types() (localctx ITypesContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(94)
+	p.SetState(104)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserTYPE {
 		{
-			p.SetState(91)
+			p.SetState(101)
 			p.TypeDeclaration()
 		}
 
-		p.SetState(96)
+		p.SetState(106)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -821,37 +833,37 @@ func (p *GoliteParser) TypeDeclaration() (localctx ITypeDeclarationContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(97)
+		p.SetState(107)
 		p.Match(GoliteParserTYPE)
 	}
 	{
-		p.SetState(98)
+		p.SetState(108)
 
 		var _m = p.Match(GoliteParserIDENT)
 
 		localctx.(*TypeDeclarationContext).id = _m
 	}
 	{
-		p.SetState(99)
+		p.SetState(109)
 		p.Match(GoliteParserSTRUCT)
 	}
 	{
-		p.SetState(100)
+		p.SetState(110)
 		p.Match(GoliteParserLBRACE)
 	}
 	{
-		p.SetState(101)
+		p.SetState(111)
 
 		var _x = p.Fields()
 
 		localctx.(*TypeDeclarationContext).flds = _x
 	}
 	{
-		p.SetState(102)
+		p.SetState(112)
 		p.Match(GoliteParserRBRACE)
 	}
 	{
-		p.SetState(103)
+		p.SetState(113)
 		p.Match(GoliteParserSEMICOLON)
 	}
 
@@ -1014,27 +1026,27 @@ func (p *GoliteParser) Fields() (localctx IFieldsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(105)
+		p.SetState(115)
 
 		var _x = p.Decl()
 
 		localctx.(*FieldsContext).dcl = _x
 	}
 	{
-		p.SetState(106)
+		p.SetState(116)
 		p.Match(GoliteParserSEMICOLON)
 	}
-	p.SetState(110)
+	p.SetState(120)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserIDENT {
 		{
-			p.SetState(107)
+			p.SetState(117)
 			p.Morefields()
 		}
 
-		p.SetState(112)
+		p.SetState(122)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1156,14 +1168,14 @@ func (p *GoliteParser) Morefields() (localctx IMorefieldsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(113)
+		p.SetState(123)
 
 		var _x = p.Decl()
 
 		localctx.(*MorefieldsContext).dcl = _x
 	}
 	{
-		p.SetState(114)
+		p.SetState(124)
 		p.Match(GoliteParserSEMICOLON)
 	}
 
@@ -1295,14 +1307,14 @@ func (p *GoliteParser) Decl() (localctx IDeclContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(116)
+		p.SetState(126)
 
 		var _m = p.Match(GoliteParserIDENT)
 
 		localctx.(*DeclContext).id = _m
 	}
 	{
-		p.SetState(117)
+		p.SetState(127)
 
 		var _x = p.Type_()
 
@@ -1420,32 +1432,32 @@ func (p *GoliteParser) Type_() (localctx ITypeContext) {
 		}
 	}()
 
-	p.SetState(123)
+	p.SetState(133)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case GoliteParserINT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(119)
+			p.SetState(129)
 			p.Match(GoliteParserINT)
 		}
 
 	case GoliteParserBOOL:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(120)
+			p.SetState(130)
 			p.Match(GoliteParserBOOL)
 		}
 
 	case GoliteParserMULT:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(121)
+			p.SetState(131)
 			p.Match(GoliteParserMULT)
 		}
 		{
-			p.SetState(122)
+			p.SetState(132)
 
 			var _m = p.Match(GoliteParserIDENT)
 
@@ -1583,17 +1595,17 @@ func (p *GoliteParser) Declarations() (localctx IDeclarationsContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(128)
+	p.SetState(138)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserVAR {
 		{
-			p.SetState(125)
+			p.SetState(135)
 			p.Declaration()
 		}
 
-		p.SetState(130)
+		p.SetState(140)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1746,25 +1758,25 @@ func (p *GoliteParser) Declaration() (localctx IDeclarationContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(131)
+		p.SetState(141)
 		p.Match(GoliteParserVAR)
 	}
 	{
-		p.SetState(132)
+		p.SetState(142)
 
 		var _x = p.Ids()
 
 		localctx.(*DeclarationContext).idx = _x
 	}
 	{
-		p.SetState(133)
+		p.SetState(143)
 
 		var _x = p.Type_()
 
 		localctx.(*DeclarationContext).ty = _x
 	}
 	{
-		p.SetState(134)
+		p.SetState(144)
 		p.Match(GoliteParserSEMICOLON)
 	}
 
@@ -1911,23 +1923,23 @@ func (p *GoliteParser) Ids() (localctx IIdsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(136)
+		p.SetState(146)
 
 		var _m = p.Match(GoliteParserIDENT)
 
 		localctx.(*IdsContext).id = _m
 	}
-	p.SetState(140)
+	p.SetState(150)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserCOMMA {
 		{
-			p.SetState(137)
+			p.SetState(147)
 			p.Otherids()
 		}
 
-		p.SetState(142)
+		p.SetState(152)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2037,11 +2049,11 @@ func (p *GoliteParser) Otherids() (localctx IOtheridsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(143)
+		p.SetState(153)
 		p.Match(GoliteParserCOMMA)
 	}
 	{
-		p.SetState(144)
+		p.SetState(154)
 
 		var _m = p.Match(GoliteParserIDENT)
 
@@ -2175,17 +2187,17 @@ func (p *GoliteParser) Functions() (localctx IFunctionsContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(149)
+	p.SetState(159)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserFUNC {
 		{
-			p.SetState(146)
+			p.SetState(156)
 			p.Function()
 		}
 
-		p.SetState(151)
+		p.SetState(161)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2412,30 +2424,30 @@ func (p *GoliteParser) Function() (localctx IFunctionContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(152)
+		p.SetState(162)
 		p.Match(GoliteParserFUNC)
 	}
 	{
-		p.SetState(153)
+		p.SetState(163)
 
 		var _m = p.Match(GoliteParserIDENT)
 
 		localctx.(*FunctionContext).id = _m
 	}
 	{
-		p.SetState(154)
+		p.SetState(164)
 
 		var _x = p.Parameters()
 
 		localctx.(*FunctionContext).params = _x
 	}
-	p.SetState(156)
+	p.SetState(166)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&824633729024) != 0 {
 		{
-			p.SetState(155)
+			p.SetState(165)
 
 			var _x = p.ReturnType()
 
@@ -2444,25 +2456,25 @@ func (p *GoliteParser) Function() (localctx IFunctionContext) {
 
 	}
 	{
-		p.SetState(158)
+		p.SetState(168)
 		p.Match(GoliteParserLBRACE)
 	}
 	{
-		p.SetState(159)
+		p.SetState(169)
 
 		var _x = p.Declarations()
 
 		localctx.(*FunctionContext).dcls = _x
 	}
 	{
-		p.SetState(160)
+		p.SetState(170)
 
 		var _x = p.Statements()
 
 		localctx.(*FunctionContext).stmts = _x
 	}
 	{
-		p.SetState(161)
+		p.SetState(171)
 		p.Match(GoliteParserRBRACE)
 	}
 
@@ -2577,22 +2589,22 @@ func (p *GoliteParser) Parameters() (localctx IParametersContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(163)
+		p.SetState(173)
 		p.Match(GoliteParserLPAREN)
 	}
-	p.SetState(165)
+	p.SetState(175)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == GoliteParserIDENT {
 		{
-			p.SetState(164)
+			p.SetState(174)
 			p.ParametersPrime()
 		}
 
 	}
 	{
-		p.SetState(167)
+		p.SetState(177)
 		p.Match(GoliteParserRPAREN)
 	}
 
@@ -2751,23 +2763,23 @@ func (p *GoliteParser) ParametersPrime() (localctx IParametersPrimeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(169)
+		p.SetState(179)
 
 		var _x = p.Decl()
 
 		localctx.(*ParametersPrimeContext).dcl = _x
 	}
-	p.SetState(173)
+	p.SetState(183)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserCOMMA {
 		{
-			p.SetState(170)
+			p.SetState(180)
 			p.ParametersPPrime()
 		}
 
-		p.SetState(175)
+		p.SetState(185)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -2889,11 +2901,11 @@ func (p *GoliteParser) ParametersPPrime() (localctx IParametersPPrimeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(176)
+		p.SetState(186)
 		p.Match(GoliteParserCOMMA)
 	}
 	{
-		p.SetState(177)
+		p.SetState(187)
 
 		var _x = p.Decl()
 
@@ -3013,7 +3025,7 @@ func (p *GoliteParser) ReturnType() (localctx IReturnTypeContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(179)
+		p.SetState(189)
 
 		var _x = p.Type_()
 
@@ -3147,17 +3159,17 @@ func (p *GoliteParser) Statements() (localctx IStatementsContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(184)
+	p.SetState(194)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1115366227968) != 0 {
 		{
-			p.SetState(181)
+			p.SetState(191)
 			p.Statement()
 		}
 
-		p.SetState(186)
+		p.SetState(196)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -3489,13 +3501,13 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 		}
 	}()
 
-	p.SetState(196)
+	p.SetState(206)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 10, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(187)
+			p.SetState(197)
 
 			var _x = p.Block()
 
@@ -3505,7 +3517,7 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(188)
+			p.SetState(198)
 
 			var _x = p.Assignment()
 
@@ -3515,7 +3527,7 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(189)
+			p.SetState(199)
 
 			var _x = p.Print_()
 
@@ -3525,7 +3537,7 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(190)
+			p.SetState(200)
 
 			var _x = p.Delete_()
 
@@ -3535,7 +3547,7 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 	case 5:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(191)
+			p.SetState(201)
 
 			var _x = p.Read()
 
@@ -3545,7 +3557,7 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 	case 6:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(192)
+			p.SetState(202)
 
 			var _x = p.Conditional()
 
@@ -3555,7 +3567,7 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 	case 7:
 		p.EnterOuterAlt(localctx, 7)
 		{
-			p.SetState(193)
+			p.SetState(203)
 
 			var _x = p.Loop()
 
@@ -3565,7 +3577,7 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 	case 8:
 		p.EnterOuterAlt(localctx, 8)
 		{
-			p.SetState(194)
+			p.SetState(204)
 
 			var _x = p.ReturnRule()
 
@@ -3575,7 +3587,7 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 	case 9:
 		p.EnterOuterAlt(localctx, 9)
 		{
-			p.SetState(195)
+			p.SetState(205)
 
 			var _x = p.Invocation()
 
@@ -3594,6 +3606,12 @@ type IReadContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetLval returns the lval rule contexts.
+	GetLval() ILValueContext
+
+	// SetLval sets the lval rule contexts.
+	SetLval(ILValueContext)
+
 	// IsReadContext differentiates from other interfaces.
 	IsReadContext()
 }
@@ -3601,6 +3619,7 @@ type IReadContext interface {
 type ReadContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	lval   ILValueContext
 }
 
 func NewEmptyReadContext() *ReadContext {
@@ -3625,8 +3644,16 @@ func NewReadContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokin
 
 func (s *ReadContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *ReadContext) GetLval() ILValueContext { return s.lval }
+
+func (s *ReadContext) SetLval(v ILValueContext) { s.lval = v }
+
 func (s *ReadContext) SCAN() antlr.TerminalNode {
 	return s.GetToken(GoliteParserSCAN, 0)
+}
+
+func (s *ReadContext) SEMICOLON() antlr.TerminalNode {
+	return s.GetToken(GoliteParserSEMICOLON, 0)
 }
 
 func (s *ReadContext) LValue() ILValueContext {
@@ -3643,10 +3670,6 @@ func (s *ReadContext) LValue() ILValueContext {
 	}
 
 	return t.(ILValueContext)
-}
-
-func (s *ReadContext) SEMICOLON() antlr.TerminalNode {
-	return s.GetToken(GoliteParserSEMICOLON, 0)
 }
 
 func (s *ReadContext) GetRuleContext() antlr.RuleContext {
@@ -3694,15 +3717,18 @@ func (p *GoliteParser) Read() (localctx IReadContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(198)
+		p.SetState(208)
 		p.Match(GoliteParserSCAN)
 	}
 	{
-		p.SetState(199)
-		p.LValue()
+		p.SetState(209)
+
+		var _x = p.LValue()
+
+		localctx.(*ReadContext).lval = _x
 	}
 	{
-		p.SetState(200)
+		p.SetState(210)
 		p.Match(GoliteParserSEMICOLON)
 	}
 
@@ -3716,6 +3742,12 @@ type IBlockContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetStmts returns the stmts rule contexts.
+	GetStmts() IStatementsContext
+
+	// SetStmts sets the stmts rule contexts.
+	SetStmts(IStatementsContext)
+
 	// IsBlockContext differentiates from other interfaces.
 	IsBlockContext()
 }
@@ -3723,6 +3755,7 @@ type IBlockContext interface {
 type BlockContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	stmts  IStatementsContext
 }
 
 func NewEmptyBlockContext() *BlockContext {
@@ -3747,8 +3780,16 @@ func NewBlockContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 
 func (s *BlockContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *BlockContext) GetStmts() IStatementsContext { return s.stmts }
+
+func (s *BlockContext) SetStmts(v IStatementsContext) { s.stmts = v }
+
 func (s *BlockContext) LBRACE() antlr.TerminalNode {
 	return s.GetToken(GoliteParserLBRACE, 0)
+}
+
+func (s *BlockContext) RBRACE() antlr.TerminalNode {
+	return s.GetToken(GoliteParserRBRACE, 0)
 }
 
 func (s *BlockContext) Statements() IStatementsContext {
@@ -3765,10 +3806,6 @@ func (s *BlockContext) Statements() IStatementsContext {
 	}
 
 	return t.(IStatementsContext)
-}
-
-func (s *BlockContext) RBRACE() antlr.TerminalNode {
-	return s.GetToken(GoliteParserRBRACE, 0)
 }
 
 func (s *BlockContext) GetRuleContext() antlr.RuleContext {
@@ -3816,15 +3853,18 @@ func (p *GoliteParser) Block() (localctx IBlockContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(202)
+		p.SetState(212)
 		p.Match(GoliteParserLBRACE)
 	}
 	{
-		p.SetState(203)
-		p.Statements()
+		p.SetState(213)
+
+		var _x = p.Statements()
+
+		localctx.(*BlockContext).stmts = _x
 	}
 	{
-		p.SetState(204)
+		p.SetState(214)
 		p.Match(GoliteParserRBRACE)
 	}
 
@@ -3838,6 +3878,12 @@ type IDeleteContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetExpr returns the expr rule contexts.
+	GetExpr() IExpressionContext
+
+	// SetExpr sets the expr rule contexts.
+	SetExpr(IExpressionContext)
+
 	// IsDeleteContext differentiates from other interfaces.
 	IsDeleteContext()
 }
@@ -3845,6 +3891,7 @@ type IDeleteContext interface {
 type DeleteContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	expr   IExpressionContext
 }
 
 func NewEmptyDeleteContext() *DeleteContext {
@@ -3869,8 +3916,16 @@ func NewDeleteContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 
 func (s *DeleteContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *DeleteContext) GetExpr() IExpressionContext { return s.expr }
+
+func (s *DeleteContext) SetExpr(v IExpressionContext) { s.expr = v }
+
 func (s *DeleteContext) DELETE() antlr.TerminalNode {
 	return s.GetToken(GoliteParserDELETE, 0)
+}
+
+func (s *DeleteContext) SEMICOLON() antlr.TerminalNode {
+	return s.GetToken(GoliteParserSEMICOLON, 0)
 }
 
 func (s *DeleteContext) Expression() IExpressionContext {
@@ -3887,10 +3942,6 @@ func (s *DeleteContext) Expression() IExpressionContext {
 	}
 
 	return t.(IExpressionContext)
-}
-
-func (s *DeleteContext) SEMICOLON() antlr.TerminalNode {
-	return s.GetToken(GoliteParserSEMICOLON, 0)
 }
 
 func (s *DeleteContext) GetRuleContext() antlr.RuleContext {
@@ -3938,15 +3989,18 @@ func (p *GoliteParser) Delete_() (localctx IDeleteContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(206)
+		p.SetState(216)
 		p.Match(GoliteParserDELETE)
 	}
 	{
-		p.SetState(207)
-		p.Expression()
+		p.SetState(217)
+
+		var _x = p.Expression()
+
+		localctx.(*DeleteContext).expr = _x
 	}
 	{
-		p.SetState(208)
+		p.SetState(218)
 		p.Match(GoliteParserSEMICOLON)
 	}
 
@@ -3960,6 +4014,18 @@ type IAssignmentContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetLval returns the lval rule contexts.
+	GetLval() ILValueContext
+
+	// GetExpr returns the expr rule contexts.
+	GetExpr() IExpressionContext
+
+	// SetLval sets the lval rule contexts.
+	SetLval(ILValueContext)
+
+	// SetExpr sets the expr rule contexts.
+	SetExpr(IExpressionContext)
+
 	// IsAssignmentContext differentiates from other interfaces.
 	IsAssignmentContext()
 }
@@ -3967,6 +4033,8 @@ type IAssignmentContext interface {
 type AssignmentContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	lval   ILValueContext
+	expr   IExpressionContext
 }
 
 func NewEmptyAssignmentContext() *AssignmentContext {
@@ -3991,6 +4059,22 @@ func NewAssignmentContext(parser antlr.Parser, parent antlr.ParserRuleContext, i
 
 func (s *AssignmentContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *AssignmentContext) GetLval() ILValueContext { return s.lval }
+
+func (s *AssignmentContext) GetExpr() IExpressionContext { return s.expr }
+
+func (s *AssignmentContext) SetLval(v ILValueContext) { s.lval = v }
+
+func (s *AssignmentContext) SetExpr(v IExpressionContext) { s.expr = v }
+
+func (s *AssignmentContext) ASSIGN() antlr.TerminalNode {
+	return s.GetToken(GoliteParserASSIGN, 0)
+}
+
+func (s *AssignmentContext) SEMICOLON() antlr.TerminalNode {
+	return s.GetToken(GoliteParserSEMICOLON, 0)
+}
+
 func (s *AssignmentContext) LValue() ILValueContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
@@ -4007,10 +4091,6 @@ func (s *AssignmentContext) LValue() ILValueContext {
 	return t.(ILValueContext)
 }
 
-func (s *AssignmentContext) ASSIGN() antlr.TerminalNode {
-	return s.GetToken(GoliteParserASSIGN, 0)
-}
-
 func (s *AssignmentContext) Expression() IExpressionContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
@@ -4025,10 +4105,6 @@ func (s *AssignmentContext) Expression() IExpressionContext {
 	}
 
 	return t.(IExpressionContext)
-}
-
-func (s *AssignmentContext) SEMICOLON() antlr.TerminalNode {
-	return s.GetToken(GoliteParserSEMICOLON, 0)
 }
 
 func (s *AssignmentContext) GetRuleContext() antlr.RuleContext {
@@ -4076,19 +4152,25 @@ func (p *GoliteParser) Assignment() (localctx IAssignmentContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(210)
-		p.LValue()
+		p.SetState(220)
+
+		var _x = p.LValue()
+
+		localctx.(*AssignmentContext).lval = _x
 	}
 	{
-		p.SetState(211)
+		p.SetState(221)
 		p.Match(GoliteParserASSIGN)
 	}
 	{
-		p.SetState(212)
-		p.Expression()
+		p.SetState(222)
+
+		var _x = p.Expression()
+
+		localctx.(*AssignmentContext).expr = _x
 	}
 	{
-		p.SetState(213)
+		p.SetState(223)
 		p.Match(GoliteParserSEMICOLON)
 	}
 
@@ -4102,6 +4184,12 @@ type IPrintContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetStr returns the str token.
+	GetStr() antlr.Token
+
+	// SetStr sets the str token.
+	SetStr(antlr.Token)
+
 	// IsPrintContext differentiates from other interfaces.
 	IsPrintContext()
 }
@@ -4109,6 +4197,7 @@ type IPrintContext interface {
 type PrintContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	str    antlr.Token
 }
 
 func NewEmptyPrintContext() *PrintContext {
@@ -4133,16 +4222,16 @@ func NewPrintContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 
 func (s *PrintContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *PrintContext) GetStr() antlr.Token { return s.str }
+
+func (s *PrintContext) SetStr(v antlr.Token) { s.str = v }
+
 func (s *PrintContext) PRINTF() antlr.TerminalNode {
 	return s.GetToken(GoliteParserPRINTF, 0)
 }
 
 func (s *PrintContext) LPAREN() antlr.TerminalNode {
 	return s.GetToken(GoliteParserLPAREN, 0)
-}
-
-func (s *PrintContext) STRING_LIT() antlr.TerminalNode {
-	return s.GetToken(GoliteParserSTRING_LIT, 0)
 }
 
 func (s *PrintContext) RPAREN() antlr.TerminalNode {
@@ -4153,28 +4242,24 @@ func (s *PrintContext) SEMICOLON() antlr.TerminalNode {
 	return s.GetToken(GoliteParserSEMICOLON, 0)
 }
 
-func (s *PrintContext) AllCOMMA() []antlr.TerminalNode {
-	return s.GetTokens(GoliteParserCOMMA)
+func (s *PrintContext) STRING_LIT() antlr.TerminalNode {
+	return s.GetToken(GoliteParserSTRING_LIT, 0)
 }
 
-func (s *PrintContext) COMMA(i int) antlr.TerminalNode {
-	return s.GetToken(GoliteParserCOMMA, i)
-}
-
-func (s *PrintContext) AllExpression() []IExpressionContext {
+func (s *PrintContext) AllPrintPrime() []IPrintPrimeContext {
 	children := s.GetChildren()
 	len := 0
 	for _, ctx := range children {
-		if _, ok := ctx.(IExpressionContext); ok {
+		if _, ok := ctx.(IPrintPrimeContext); ok {
 			len++
 		}
 	}
 
-	tst := make([]IExpressionContext, len)
+	tst := make([]IPrintPrimeContext, len)
 	i := 0
 	for _, ctx := range children {
-		if t, ok := ctx.(IExpressionContext); ok {
-			tst[i] = t.(IExpressionContext)
+		if t, ok := ctx.(IPrintPrimeContext); ok {
+			tst[i] = t.(IPrintPrimeContext)
 			i++
 		}
 	}
@@ -4182,11 +4267,11 @@ func (s *PrintContext) AllExpression() []IExpressionContext {
 	return tst
 }
 
-func (s *PrintContext) Expression(i int) IExpressionContext {
+func (s *PrintContext) PrintPrime(i int) IPrintPrimeContext {
 	var t antlr.RuleContext
 	j := 0
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IExpressionContext); ok {
+		if _, ok := ctx.(IPrintPrimeContext); ok {
 			if j == i {
 				t = ctx.(antlr.RuleContext)
 				break
@@ -4199,7 +4284,7 @@ func (s *PrintContext) Expression(i int) IExpressionContext {
 		return nil
 	}
 
-	return t.(IExpressionContext)
+	return t.(IPrintPrimeContext)
 }
 
 func (s *PrintContext) GetRuleContext() antlr.RuleContext {
@@ -4248,42 +4333,169 @@ func (p *GoliteParser) Print_() (localctx IPrintContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(215)
+		p.SetState(225)
 		p.Match(GoliteParserPRINTF)
 	}
 	{
-		p.SetState(216)
+		p.SetState(226)
 		p.Match(GoliteParserLPAREN)
 	}
 	{
-		p.SetState(217)
-		p.Match(GoliteParserSTRING_LIT)
+		p.SetState(227)
+
+		var _m = p.Match(GoliteParserSTRING_LIT)
+
+		localctx.(*PrintContext).str = _m
 	}
-	p.SetState(222)
+	p.SetState(231)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserCOMMA {
 		{
-			p.SetState(218)
-			p.Match(GoliteParserCOMMA)
-		}
-		{
-			p.SetState(219)
-			p.Expression()
+			p.SetState(228)
+			p.PrintPrime()
 		}
 
-		p.SetState(224)
+		p.SetState(233)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(225)
+		p.SetState(234)
 		p.Match(GoliteParserRPAREN)
 	}
 	{
-		p.SetState(226)
+		p.SetState(235)
 		p.Match(GoliteParserSEMICOLON)
+	}
+
+	return localctx
+}
+
+// IPrintPrimeContext is an interface to support dynamic dispatch.
+type IPrintPrimeContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// GetExpr returns the expr rule contexts.
+	GetExpr() IExpressionContext
+
+	// SetExpr sets the expr rule contexts.
+	SetExpr(IExpressionContext)
+
+	// IsPrintPrimeContext differentiates from other interfaces.
+	IsPrintPrimeContext()
+}
+
+type PrintPrimeContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+	expr   IExpressionContext
+}
+
+func NewEmptyPrintPrimeContext() *PrintPrimeContext {
+	var p = new(PrintPrimeContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = GoliteParserRULE_printPrime
+	return p
+}
+
+func (*PrintPrimeContext) IsPrintPrimeContext() {}
+
+func NewPrintPrimeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *PrintPrimeContext {
+	var p = new(PrintPrimeContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = GoliteParserRULE_printPrime
+
+	return p
+}
+
+func (s *PrintPrimeContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *PrintPrimeContext) GetExpr() IExpressionContext { return s.expr }
+
+func (s *PrintPrimeContext) SetExpr(v IExpressionContext) { s.expr = v }
+
+func (s *PrintPrimeContext) COMMA() antlr.TerminalNode {
+	return s.GetToken(GoliteParserCOMMA, 0)
+}
+
+func (s *PrintPrimeContext) Expression() IExpressionContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IExpressionContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExpressionContext)
+}
+
+func (s *PrintPrimeContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *PrintPrimeContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *PrintPrimeContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.EnterPrintPrime(s)
+	}
+}
+
+func (s *PrintPrimeContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.ExitPrintPrime(s)
+	}
+}
+
+func (p *GoliteParser) PrintPrime() (localctx IPrintPrimeContext) {
+	this := p
+	_ = this
+
+	localctx = NewPrintPrimeContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 48, GoliteParserRULE_printPrime)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(237)
+		p.Match(GoliteParserCOMMA)
+	}
+	{
+		p.SetState(238)
+
+		var _x = p.Expression()
+
+		localctx.(*PrintPrimeContext).expr = _x
 	}
 
 	return localctx
@@ -4296,6 +4508,24 @@ type IConditionalContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetExpr returns the expr rule contexts.
+	GetExpr() IExpressionContext
+
+	// GetBl returns the bl rule contexts.
+	GetBl() IBlockContext
+
+	// GetThen returns the then rule contexts.
+	GetThen() IConditionalPrimeContext
+
+	// SetExpr sets the expr rule contexts.
+	SetExpr(IExpressionContext)
+
+	// SetBl sets the bl rule contexts.
+	SetBl(IBlockContext)
+
+	// SetThen sets the then rule contexts.
+	SetThen(IConditionalPrimeContext)
+
 	// IsConditionalContext differentiates from other interfaces.
 	IsConditionalContext()
 }
@@ -4303,6 +4533,9 @@ type IConditionalContext interface {
 type ConditionalContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	expr   IExpressionContext
+	bl     IBlockContext
+	then   IConditionalPrimeContext
 }
 
 func NewEmptyConditionalContext() *ConditionalContext {
@@ -4327,12 +4560,28 @@ func NewConditionalContext(parser antlr.Parser, parent antlr.ParserRuleContext, 
 
 func (s *ConditionalContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *ConditionalContext) GetExpr() IExpressionContext { return s.expr }
+
+func (s *ConditionalContext) GetBl() IBlockContext { return s.bl }
+
+func (s *ConditionalContext) GetThen() IConditionalPrimeContext { return s.then }
+
+func (s *ConditionalContext) SetExpr(v IExpressionContext) { s.expr = v }
+
+func (s *ConditionalContext) SetBl(v IBlockContext) { s.bl = v }
+
+func (s *ConditionalContext) SetThen(v IConditionalPrimeContext) { s.then = v }
+
 func (s *ConditionalContext) IF() antlr.TerminalNode {
 	return s.GetToken(GoliteParserIF, 0)
 }
 
 func (s *ConditionalContext) LPAREN() antlr.TerminalNode {
 	return s.GetToken(GoliteParserLPAREN, 0)
+}
+
+func (s *ConditionalContext) RPAREN() antlr.TerminalNode {
+	return s.GetToken(GoliteParserRPAREN, 0)
 }
 
 func (s *ConditionalContext) Expression() IExpressionContext {
@@ -4351,41 +4600,12 @@ func (s *ConditionalContext) Expression() IExpressionContext {
 	return t.(IExpressionContext)
 }
 
-func (s *ConditionalContext) RPAREN() antlr.TerminalNode {
-	return s.GetToken(GoliteParserRPAREN, 0)
-}
-
-func (s *ConditionalContext) AllBlock() []IBlockContext {
-	children := s.GetChildren()
-	len := 0
-	for _, ctx := range children {
-		if _, ok := ctx.(IBlockContext); ok {
-			len++
-		}
-	}
-
-	tst := make([]IBlockContext, len)
-	i := 0
-	for _, ctx := range children {
-		if t, ok := ctx.(IBlockContext); ok {
-			tst[i] = t.(IBlockContext)
-			i++
-		}
-	}
-
-	return tst
-}
-
-func (s *ConditionalContext) Block(i int) IBlockContext {
+func (s *ConditionalContext) Block() IBlockContext {
 	var t antlr.RuleContext
-	j := 0
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IBlockContext); ok {
-			if j == i {
-				t = ctx.(antlr.RuleContext)
-				break
-			}
-			j++
+			t = ctx.(antlr.RuleContext)
+			break
 		}
 	}
 
@@ -4396,8 +4616,20 @@ func (s *ConditionalContext) Block(i int) IBlockContext {
 	return t.(IBlockContext)
 }
 
-func (s *ConditionalContext) ELSE() antlr.TerminalNode {
-	return s.GetToken(GoliteParserELSE, 0)
+func (s *ConditionalContext) ConditionalPrime() IConditionalPrimeContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IConditionalPrimeContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IConditionalPrimeContext)
 }
 
 func (s *ConditionalContext) GetRuleContext() antlr.RuleContext {
@@ -4425,7 +4657,7 @@ func (p *GoliteParser) Conditional() (localctx IConditionalContext) {
 	_ = this
 
 	localctx = NewConditionalContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 48, GoliteParserRULE_conditional)
+	p.EnterRule(localctx, 50, GoliteParserRULE_conditional)
 	var _la int
 
 	defer func() {
@@ -4446,39 +4678,172 @@ func (p *GoliteParser) Conditional() (localctx IConditionalContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(228)
+		p.SetState(240)
 		p.Match(GoliteParserIF)
 	}
 	{
-		p.SetState(229)
+		p.SetState(241)
 		p.Match(GoliteParserLPAREN)
 	}
 	{
-		p.SetState(230)
-		p.Expression()
+		p.SetState(242)
+
+		var _x = p.Expression()
+
+		localctx.(*ConditionalContext).expr = _x
 	}
 	{
-		p.SetState(231)
+		p.SetState(243)
 		p.Match(GoliteParserRPAREN)
 	}
 	{
-		p.SetState(232)
-		p.Block()
+		p.SetState(244)
+
+		var _x = p.Block()
+
+		localctx.(*ConditionalContext).bl = _x
 	}
-	p.SetState(235)
+	p.SetState(246)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == GoliteParserELSE {
 		{
-			p.SetState(233)
-			p.Match(GoliteParserELSE)
-		}
-		{
-			p.SetState(234)
-			p.Block()
+			p.SetState(245)
+
+			var _x = p.ConditionalPrime()
+
+			localctx.(*ConditionalContext).then = _x
 		}
 
+	}
+
+	return localctx
+}
+
+// IConditionalPrimeContext is an interface to support dynamic dispatch.
+type IConditionalPrimeContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// GetBl returns the bl rule contexts.
+	GetBl() IBlockContext
+
+	// SetBl sets the bl rule contexts.
+	SetBl(IBlockContext)
+
+	// IsConditionalPrimeContext differentiates from other interfaces.
+	IsConditionalPrimeContext()
+}
+
+type ConditionalPrimeContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+	bl     IBlockContext
+}
+
+func NewEmptyConditionalPrimeContext() *ConditionalPrimeContext {
+	var p = new(ConditionalPrimeContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = GoliteParserRULE_conditionalPrime
+	return p
+}
+
+func (*ConditionalPrimeContext) IsConditionalPrimeContext() {}
+
+func NewConditionalPrimeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ConditionalPrimeContext {
+	var p = new(ConditionalPrimeContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = GoliteParserRULE_conditionalPrime
+
+	return p
+}
+
+func (s *ConditionalPrimeContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ConditionalPrimeContext) GetBl() IBlockContext { return s.bl }
+
+func (s *ConditionalPrimeContext) SetBl(v IBlockContext) { s.bl = v }
+
+func (s *ConditionalPrimeContext) ELSE() antlr.TerminalNode {
+	return s.GetToken(GoliteParserELSE, 0)
+}
+
+func (s *ConditionalPrimeContext) Block() IBlockContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IBlockContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IBlockContext)
+}
+
+func (s *ConditionalPrimeContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ConditionalPrimeContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *ConditionalPrimeContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.EnterConditionalPrime(s)
+	}
+}
+
+func (s *ConditionalPrimeContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.ExitConditionalPrime(s)
+	}
+}
+
+func (p *GoliteParser) ConditionalPrime() (localctx IConditionalPrimeContext) {
+	this := p
+	_ = this
+
+	localctx = NewConditionalPrimeContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 52, GoliteParserRULE_conditionalPrime)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(248)
+		p.Match(GoliteParserELSE)
+	}
+	{
+		p.SetState(249)
+
+		var _x = p.Block()
+
+		localctx.(*ConditionalPrimeContext).bl = _x
 	}
 
 	return localctx
@@ -4491,6 +4856,18 @@ type ILoopContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetExpr returns the expr rule contexts.
+	GetExpr() IExpressionContext
+
+	// GetBl returns the bl rule contexts.
+	GetBl() IBlockContext
+
+	// SetExpr sets the expr rule contexts.
+	SetExpr(IExpressionContext)
+
+	// SetBl sets the bl rule contexts.
+	SetBl(IBlockContext)
+
 	// IsLoopContext differentiates from other interfaces.
 	IsLoopContext()
 }
@@ -4498,6 +4875,8 @@ type ILoopContext interface {
 type LoopContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	expr   IExpressionContext
+	bl     IBlockContext
 }
 
 func NewEmptyLoopContext() *LoopContext {
@@ -4522,12 +4901,24 @@ func NewLoopContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokin
 
 func (s *LoopContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *LoopContext) GetExpr() IExpressionContext { return s.expr }
+
+func (s *LoopContext) GetBl() IBlockContext { return s.bl }
+
+func (s *LoopContext) SetExpr(v IExpressionContext) { s.expr = v }
+
+func (s *LoopContext) SetBl(v IBlockContext) { s.bl = v }
+
 func (s *LoopContext) FOR() antlr.TerminalNode {
 	return s.GetToken(GoliteParserFOR, 0)
 }
 
 func (s *LoopContext) LPAREN() antlr.TerminalNode {
 	return s.GetToken(GoliteParserLPAREN, 0)
+}
+
+func (s *LoopContext) RPAREN() antlr.TerminalNode {
+	return s.GetToken(GoliteParserRPAREN, 0)
 }
 
 func (s *LoopContext) Expression() IExpressionContext {
@@ -4544,10 +4935,6 @@ func (s *LoopContext) Expression() IExpressionContext {
 	}
 
 	return t.(IExpressionContext)
-}
-
-func (s *LoopContext) RPAREN() antlr.TerminalNode {
-	return s.GetToken(GoliteParserRPAREN, 0)
 }
 
 func (s *LoopContext) Block() IBlockContext {
@@ -4591,7 +4978,7 @@ func (p *GoliteParser) Loop() (localctx ILoopContext) {
 	_ = this
 
 	localctx = NewLoopContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 50, GoliteParserRULE_loop)
+	p.EnterRule(localctx, 54, GoliteParserRULE_loop)
 
 	defer func() {
 		p.ExitRule()
@@ -4611,24 +4998,30 @@ func (p *GoliteParser) Loop() (localctx ILoopContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(237)
+		p.SetState(251)
 		p.Match(GoliteParserFOR)
 	}
 	{
-		p.SetState(238)
+		p.SetState(252)
 		p.Match(GoliteParserLPAREN)
 	}
 	{
-		p.SetState(239)
-		p.Expression()
+		p.SetState(253)
+
+		var _x = p.Expression()
+
+		localctx.(*LoopContext).expr = _x
 	}
 	{
-		p.SetState(240)
+		p.SetState(254)
 		p.Match(GoliteParserRPAREN)
 	}
 	{
-		p.SetState(241)
-		p.Block()
+		p.SetState(255)
+
+		var _x = p.Block()
+
+		localctx.(*LoopContext).bl = _x
 	}
 
 	return localctx
@@ -4641,6 +5034,12 @@ type IReturnRuleContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetExpr returns the expr rule contexts.
+	GetExpr() IExpressionContext
+
+	// SetExpr sets the expr rule contexts.
+	SetExpr(IExpressionContext)
+
 	// IsReturnRuleContext differentiates from other interfaces.
 	IsReturnRuleContext()
 }
@@ -4648,6 +5047,7 @@ type IReturnRuleContext interface {
 type ReturnRuleContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	expr   IExpressionContext
 }
 
 func NewEmptyReturnRuleContext() *ReturnRuleContext {
@@ -4671,6 +5071,10 @@ func NewReturnRuleContext(parser antlr.Parser, parent antlr.ParserRuleContext, i
 }
 
 func (s *ReturnRuleContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ReturnRuleContext) GetExpr() IExpressionContext { return s.expr }
+
+func (s *ReturnRuleContext) SetExpr(v IExpressionContext) { s.expr = v }
 
 func (s *ReturnRuleContext) RET() antlr.TerminalNode {
 	return s.GetToken(GoliteParserRET, 0)
@@ -4721,7 +5125,7 @@ func (p *GoliteParser) ReturnRule() (localctx IReturnRuleContext) {
 	_ = this
 
 	localctx = NewReturnRuleContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 52, GoliteParserRULE_returnRule)
+	p.EnterRule(localctx, 56, GoliteParserRULE_returnRule)
 	var _la int
 
 	defer func() {
@@ -4742,22 +5146,25 @@ func (p *GoliteParser) ReturnRule() (localctx IReturnRuleContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(243)
+		p.SetState(257)
 		p.Match(GoliteParserRET)
 	}
-	p.SetState(245)
+	p.SetState(259)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1322858352656) != 0 {
 		{
-			p.SetState(244)
-			p.Expression()
+			p.SetState(258)
+
+			var _x = p.Expression()
+
+			localctx.(*ReturnRuleContext).expr = _x
 		}
 
 	}
 	{
-		p.SetState(247)
+		p.SetState(261)
 		p.Match(GoliteParserSEMICOLON)
 	}
 
@@ -4771,6 +5178,18 @@ type IInvocationContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetId returns the id token.
+	GetId() antlr.Token
+
+	// SetId sets the id token.
+	SetId(antlr.Token)
+
+	// GetArgs returns the args rule contexts.
+	GetArgs() IArgumentsContext
+
+	// SetArgs sets the args rule contexts.
+	SetArgs(IArgumentsContext)
+
 	// IsInvocationContext differentiates from other interfaces.
 	IsInvocationContext()
 }
@@ -4778,6 +5197,8 @@ type IInvocationContext interface {
 type InvocationContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	id     antlr.Token
+	args   IArgumentsContext
 }
 
 func NewEmptyInvocationContext() *InvocationContext {
@@ -4802,6 +5223,18 @@ func NewInvocationContext(parser antlr.Parser, parent antlr.ParserRuleContext, i
 
 func (s *InvocationContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *InvocationContext) GetId() antlr.Token { return s.id }
+
+func (s *InvocationContext) SetId(v antlr.Token) { s.id = v }
+
+func (s *InvocationContext) GetArgs() IArgumentsContext { return s.args }
+
+func (s *InvocationContext) SetArgs(v IArgumentsContext) { s.args = v }
+
+func (s *InvocationContext) SEMICOLON() antlr.TerminalNode {
+	return s.GetToken(GoliteParserSEMICOLON, 0)
+}
+
 func (s *InvocationContext) IDENT() antlr.TerminalNode {
 	return s.GetToken(GoliteParserIDENT, 0)
 }
@@ -4820,10 +5253,6 @@ func (s *InvocationContext) Arguments() IArgumentsContext {
 	}
 
 	return t.(IArgumentsContext)
-}
-
-func (s *InvocationContext) SEMICOLON() antlr.TerminalNode {
-	return s.GetToken(GoliteParserSEMICOLON, 0)
 }
 
 func (s *InvocationContext) GetRuleContext() antlr.RuleContext {
@@ -4851,7 +5280,7 @@ func (p *GoliteParser) Invocation() (localctx IInvocationContext) {
 	_ = this
 
 	localctx = NewInvocationContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 54, GoliteParserRULE_invocation)
+	p.EnterRule(localctx, 58, GoliteParserRULE_invocation)
 
 	defer func() {
 		p.ExitRule()
@@ -4871,15 +5300,21 @@ func (p *GoliteParser) Invocation() (localctx IInvocationContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(249)
-		p.Match(GoliteParserIDENT)
+		p.SetState(263)
+
+		var _m = p.Match(GoliteParserIDENT)
+
+		localctx.(*InvocationContext).id = _m
 	}
 	{
-		p.SetState(250)
-		p.Arguments()
+		p.SetState(264)
+
+		var _x = p.Arguments()
+
+		localctx.(*InvocationContext).args = _x
 	}
 	{
-		p.SetState(251)
+		p.SetState(265)
 		p.Match(GoliteParserSEMICOLON)
 	}
 
@@ -4893,6 +5328,12 @@ type IArgumentsContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetArgs returns the args rule contexts.
+	GetArgs() IArgumentsPrimeContext
+
+	// SetArgs sets the args rule contexts.
+	SetArgs(IArgumentsPrimeContext)
+
 	// IsArgumentsContext differentiates from other interfaces.
 	IsArgumentsContext()
 }
@@ -4900,6 +5341,7 @@ type IArgumentsContext interface {
 type ArgumentsContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	args   IArgumentsPrimeContext
 }
 
 func NewEmptyArgumentsContext() *ArgumentsContext {
@@ -4924,6 +5366,10 @@ func NewArgumentsContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 
 func (s *ArgumentsContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *ArgumentsContext) GetArgs() IArgumentsPrimeContext { return s.args }
+
+func (s *ArgumentsContext) SetArgs(v IArgumentsPrimeContext) { s.args = v }
+
 func (s *ArgumentsContext) LPAREN() antlr.TerminalNode {
 	return s.GetToken(GoliteParserLPAREN, 0)
 }
@@ -4932,37 +5378,12 @@ func (s *ArgumentsContext) RPAREN() antlr.TerminalNode {
 	return s.GetToken(GoliteParserRPAREN, 0)
 }
 
-func (s *ArgumentsContext) AllExpression() []IExpressionContext {
-	children := s.GetChildren()
-	len := 0
-	for _, ctx := range children {
-		if _, ok := ctx.(IExpressionContext); ok {
-			len++
-		}
-	}
-
-	tst := make([]IExpressionContext, len)
-	i := 0
-	for _, ctx := range children {
-		if t, ok := ctx.(IExpressionContext); ok {
-			tst[i] = t.(IExpressionContext)
-			i++
-		}
-	}
-
-	return tst
-}
-
-func (s *ArgumentsContext) Expression(i int) IExpressionContext {
+func (s *ArgumentsContext) ArgumentsPrime() IArgumentsPrimeContext {
 	var t antlr.RuleContext
-	j := 0
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IExpressionContext); ok {
-			if j == i {
-				t = ctx.(antlr.RuleContext)
-				break
-			}
-			j++
+		if _, ok := ctx.(IArgumentsPrimeContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
 		}
 	}
 
@@ -4970,15 +5391,7 @@ func (s *ArgumentsContext) Expression(i int) IExpressionContext {
 		return nil
 	}
 
-	return t.(IExpressionContext)
-}
-
-func (s *ArgumentsContext) AllCOMMA() []antlr.TerminalNode {
-	return s.GetTokens(GoliteParserCOMMA)
-}
-
-func (s *ArgumentsContext) COMMA(i int) antlr.TerminalNode {
-	return s.GetToken(GoliteParserCOMMA, i)
+	return t.(IArgumentsPrimeContext)
 }
 
 func (s *ArgumentsContext) GetRuleContext() antlr.RuleContext {
@@ -5006,7 +5419,7 @@ func (p *GoliteParser) Arguments() (localctx IArgumentsContext) {
 	_ = this
 
 	localctx = NewArgumentsContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 56, GoliteParserRULE_arguments)
+	p.EnterRule(localctx, 60, GoliteParserRULE_arguments)
 	var _la int
 
 	defer func() {
@@ -5027,41 +5440,330 @@ func (p *GoliteParser) Arguments() (localctx IArgumentsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(253)
+		p.SetState(267)
 		p.Match(GoliteParserLPAREN)
 	}
-	p.SetState(262)
+	p.SetState(269)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&1322858352656) != 0 {
 		{
-			p.SetState(254)
-			p.Expression()
-		}
-		p.SetState(259)
-		p.GetErrorHandler().Sync(p)
-		_la = p.GetTokenStream().LA(1)
+			p.SetState(268)
 
-		for _la == GoliteParserCOMMA {
-			{
-				p.SetState(255)
-				p.Match(GoliteParserCOMMA)
-			}
-			{
-				p.SetState(256)
-				p.Expression()
-			}
+			var _x = p.ArgumentsPrime()
 
-			p.SetState(261)
-			p.GetErrorHandler().Sync(p)
-			_la = p.GetTokenStream().LA(1)
+			localctx.(*ArgumentsContext).args = _x
 		}
 
 	}
 	{
-		p.SetState(264)
+		p.SetState(271)
 		p.Match(GoliteParserRPAREN)
+	}
+
+	return localctx
+}
+
+// IArgumentsPrimeContext is an interface to support dynamic dispatch.
+type IArgumentsPrimeContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// GetExpr returns the expr rule contexts.
+	GetExpr() IExpressionContext
+
+	// SetExpr sets the expr rule contexts.
+	SetExpr(IExpressionContext)
+
+	// IsArgumentsPrimeContext differentiates from other interfaces.
+	IsArgumentsPrimeContext()
+}
+
+type ArgumentsPrimeContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+	expr   IExpressionContext
+}
+
+func NewEmptyArgumentsPrimeContext() *ArgumentsPrimeContext {
+	var p = new(ArgumentsPrimeContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = GoliteParserRULE_argumentsPrime
+	return p
+}
+
+func (*ArgumentsPrimeContext) IsArgumentsPrimeContext() {}
+
+func NewArgumentsPrimeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ArgumentsPrimeContext {
+	var p = new(ArgumentsPrimeContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = GoliteParserRULE_argumentsPrime
+
+	return p
+}
+
+func (s *ArgumentsPrimeContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ArgumentsPrimeContext) GetExpr() IExpressionContext { return s.expr }
+
+func (s *ArgumentsPrimeContext) SetExpr(v IExpressionContext) { s.expr = v }
+
+func (s *ArgumentsPrimeContext) Expression() IExpressionContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IExpressionContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExpressionContext)
+}
+
+func (s *ArgumentsPrimeContext) AllArgumentsPrimePrime() []IArgumentsPrimePrimeContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(IArgumentsPrimePrimeContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]IArgumentsPrimePrimeContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(IArgumentsPrimePrimeContext); ok {
+			tst[i] = t.(IArgumentsPrimePrimeContext)
+			i++
+		}
+	}
+
+	return tst
+}
+
+func (s *ArgumentsPrimeContext) ArgumentsPrimePrime(i int) IArgumentsPrimePrimeContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IArgumentsPrimePrimeContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IArgumentsPrimePrimeContext)
+}
+
+func (s *ArgumentsPrimeContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ArgumentsPrimeContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *ArgumentsPrimeContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.EnterArgumentsPrime(s)
+	}
+}
+
+func (s *ArgumentsPrimeContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.ExitArgumentsPrime(s)
+	}
+}
+
+func (p *GoliteParser) ArgumentsPrime() (localctx IArgumentsPrimeContext) {
+	this := p
+	_ = this
+
+	localctx = NewArgumentsPrimeContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 62, GoliteParserRULE_argumentsPrime)
+	var _la int
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(273)
+
+		var _x = p.Expression()
+
+		localctx.(*ArgumentsPrimeContext).expr = _x
+	}
+	p.SetState(277)
+	p.GetErrorHandler().Sync(p)
+	_la = p.GetTokenStream().LA(1)
+
+	for _la == GoliteParserCOMMA {
+		{
+			p.SetState(274)
+			p.ArgumentsPrimePrime()
+		}
+
+		p.SetState(279)
+		p.GetErrorHandler().Sync(p)
+		_la = p.GetTokenStream().LA(1)
+	}
+
+	return localctx
+}
+
+// IArgumentsPrimePrimeContext is an interface to support dynamic dispatch.
+type IArgumentsPrimePrimeContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// GetExpr returns the expr rule contexts.
+	GetExpr() IExpressionContext
+
+	// SetExpr sets the expr rule contexts.
+	SetExpr(IExpressionContext)
+
+	// IsArgumentsPrimePrimeContext differentiates from other interfaces.
+	IsArgumentsPrimePrimeContext()
+}
+
+type ArgumentsPrimePrimeContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+	expr   IExpressionContext
+}
+
+func NewEmptyArgumentsPrimePrimeContext() *ArgumentsPrimePrimeContext {
+	var p = new(ArgumentsPrimePrimeContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = GoliteParserRULE_argumentsPrimePrime
+	return p
+}
+
+func (*ArgumentsPrimePrimeContext) IsArgumentsPrimePrimeContext() {}
+
+func NewArgumentsPrimePrimeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *ArgumentsPrimePrimeContext {
+	var p = new(ArgumentsPrimePrimeContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = GoliteParserRULE_argumentsPrimePrime
+
+	return p
+}
+
+func (s *ArgumentsPrimePrimeContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *ArgumentsPrimePrimeContext) GetExpr() IExpressionContext { return s.expr }
+
+func (s *ArgumentsPrimePrimeContext) SetExpr(v IExpressionContext) { s.expr = v }
+
+func (s *ArgumentsPrimePrimeContext) COMMA() antlr.TerminalNode {
+	return s.GetToken(GoliteParserCOMMA, 0)
+}
+
+func (s *ArgumentsPrimePrimeContext) Expression() IExpressionContext {
+	var t antlr.RuleContext
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(IExpressionContext); ok {
+			t = ctx.(antlr.RuleContext)
+			break
+		}
+	}
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExpressionContext)
+}
+
+func (s *ArgumentsPrimePrimeContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *ArgumentsPrimePrimeContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *ArgumentsPrimePrimeContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.EnterArgumentsPrimePrime(s)
+	}
+}
+
+func (s *ArgumentsPrimePrimeContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.ExitArgumentsPrimePrime(s)
+	}
+}
+
+func (p *GoliteParser) ArgumentsPrimePrime() (localctx IArgumentsPrimePrimeContext) {
+	this := p
+	_ = this
+
+	localctx = NewArgumentsPrimePrimeContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 64, GoliteParserRULE_argumentsPrimePrime)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(280)
+		p.Match(GoliteParserCOMMA)
+	}
+	{
+		p.SetState(281)
+
+		var _x = p.Expression()
+
+		localctx.(*ArgumentsPrimePrimeContext).expr = _x
 	}
 
 	return localctx
@@ -5074,6 +5776,12 @@ type ILValueContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetId returns the id token.
+	GetId() antlr.Token
+
+	// SetId sets the id token.
+	SetId(antlr.Token)
+
 	// IsLValueContext differentiates from other interfaces.
 	IsLValueContext()
 }
@@ -5081,6 +5789,7 @@ type ILValueContext interface {
 type LValueContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	id     antlr.Token
 }
 
 func NewEmptyLValueContext() *LValueContext {
@@ -5105,20 +5814,53 @@ func NewLValueContext(parser antlr.Parser, parent antlr.ParserRuleContext, invok
 
 func (s *LValueContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *LValueContext) AllIDENT() []antlr.TerminalNode {
-	return s.GetTokens(GoliteParserIDENT)
+func (s *LValueContext) GetId() antlr.Token { return s.id }
+
+func (s *LValueContext) SetId(v antlr.Token) { s.id = v }
+
+func (s *LValueContext) IDENT() antlr.TerminalNode {
+	return s.GetToken(GoliteParserIDENT, 0)
 }
 
-func (s *LValueContext) IDENT(i int) antlr.TerminalNode {
-	return s.GetToken(GoliteParserIDENT, i)
+func (s *LValueContext) AllLValuePrime() []ILValuePrimeContext {
+	children := s.GetChildren()
+	len := 0
+	for _, ctx := range children {
+		if _, ok := ctx.(ILValuePrimeContext); ok {
+			len++
+		}
+	}
+
+	tst := make([]ILValuePrimeContext, len)
+	i := 0
+	for _, ctx := range children {
+		if t, ok := ctx.(ILValuePrimeContext); ok {
+			tst[i] = t.(ILValuePrimeContext)
+			i++
+		}
+	}
+
+	return tst
 }
 
-func (s *LValueContext) AllDOT() []antlr.TerminalNode {
-	return s.GetTokens(GoliteParserDOT)
-}
+func (s *LValueContext) LValuePrime(i int) ILValuePrimeContext {
+	var t antlr.RuleContext
+	j := 0
+	for _, ctx := range s.GetChildren() {
+		if _, ok := ctx.(ILValuePrimeContext); ok {
+			if j == i {
+				t = ctx.(antlr.RuleContext)
+				break
+			}
+			j++
+		}
+	}
 
-func (s *LValueContext) DOT(i int) antlr.TerminalNode {
-	return s.GetToken(GoliteParserDOT, i)
+	if t == nil {
+		return nil
+	}
+
+	return t.(ILValuePrimeContext)
 }
 
 func (s *LValueContext) GetRuleContext() antlr.RuleContext {
@@ -5146,7 +5888,7 @@ func (p *GoliteParser) LValue() (localctx ILValueContext) {
 	_ = this
 
 	localctx = NewLValueContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 58, GoliteParserRULE_lValue)
+	p.EnterRule(localctx, 66, GoliteParserRULE_lValue)
 	var _la int
 
 	defer func() {
@@ -5167,26 +5909,141 @@ func (p *GoliteParser) LValue() (localctx ILValueContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(266)
-		p.Match(GoliteParserIDENT)
+		p.SetState(283)
+
+		var _m = p.Match(GoliteParserIDENT)
+
+		localctx.(*LValueContext).id = _m
 	}
-	p.SetState(271)
+	p.SetState(287)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserDOT {
 		{
-			p.SetState(267)
-			p.Match(GoliteParserDOT)
-		}
-		{
-			p.SetState(268)
-			p.Match(GoliteParserIDENT)
+			p.SetState(284)
+			p.LValuePrime()
 		}
 
-		p.SetState(273)
+		p.SetState(289)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
+	}
+
+	return localctx
+}
+
+// ILValuePrimeContext is an interface to support dynamic dispatch.
+type ILValuePrimeContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// GetId returns the id token.
+	GetId() antlr.Token
+
+	// SetId sets the id token.
+	SetId(antlr.Token)
+
+	// IsLValuePrimeContext differentiates from other interfaces.
+	IsLValuePrimeContext()
+}
+
+type LValuePrimeContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+	id     antlr.Token
+}
+
+func NewEmptyLValuePrimeContext() *LValuePrimeContext {
+	var p = new(LValuePrimeContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = GoliteParserRULE_lValuePrime
+	return p
+}
+
+func (*LValuePrimeContext) IsLValuePrimeContext() {}
+
+func NewLValuePrimeContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *LValuePrimeContext {
+	var p = new(LValuePrimeContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = GoliteParserRULE_lValuePrime
+
+	return p
+}
+
+func (s *LValuePrimeContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *LValuePrimeContext) GetId() antlr.Token { return s.id }
+
+func (s *LValuePrimeContext) SetId(v antlr.Token) { s.id = v }
+
+func (s *LValuePrimeContext) DOT() antlr.TerminalNode {
+	return s.GetToken(GoliteParserDOT, 0)
+}
+
+func (s *LValuePrimeContext) IDENT() antlr.TerminalNode {
+	return s.GetToken(GoliteParserIDENT, 0)
+}
+
+func (s *LValuePrimeContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *LValuePrimeContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *LValuePrimeContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.EnterLValuePrime(s)
+	}
+}
+
+func (s *LValuePrimeContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(GoliteParserListener); ok {
+		listenerT.ExitLValuePrime(s)
+	}
+}
+
+func (p *GoliteParser) LValuePrime() (localctx ILValuePrimeContext) {
+	this := p
+	_ = this
+
+	localctx = NewLValuePrimeContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 68, GoliteParserRULE_lValuePrime)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(290)
+		p.Match(GoliteParserDOT)
+	}
+	{
+		p.SetState(291)
+
+		var _m = p.Match(GoliteParserIDENT)
+
+		localctx.(*LValuePrimeContext).id = _m
 	}
 
 	return localctx
@@ -5304,7 +6161,7 @@ func (p *GoliteParser) Expression() (localctx IExpressionContext) {
 	_ = this
 
 	localctx = NewExpressionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 60, GoliteParserRULE_expression)
+	p.EnterRule(localctx, 70, GoliteParserRULE_expression)
 	var _la int
 
 	defer func() {
@@ -5325,24 +6182,24 @@ func (p *GoliteParser) Expression() (localctx IExpressionContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(274)
+		p.SetState(293)
 		p.BoolTerm()
 	}
-	p.SetState(279)
+	p.SetState(298)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserOR {
 		{
-			p.SetState(275)
+			p.SetState(294)
 			p.Match(GoliteParserOR)
 		}
 		{
-			p.SetState(276)
+			p.SetState(295)
 			p.BoolTerm()
 		}
 
-		p.SetState(281)
+		p.SetState(300)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -5462,7 +6319,7 @@ func (p *GoliteParser) BoolTerm() (localctx IBoolTermContext) {
 	_ = this
 
 	localctx = NewBoolTermContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 62, GoliteParserRULE_boolTerm)
+	p.EnterRule(localctx, 72, GoliteParserRULE_boolTerm)
 	var _la int
 
 	defer func() {
@@ -5483,24 +6340,24 @@ func (p *GoliteParser) BoolTerm() (localctx IBoolTermContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(282)
+		p.SetState(301)
 		p.EqualTerm()
 	}
-	p.SetState(287)
+	p.SetState(306)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserAND {
 		{
-			p.SetState(283)
+			p.SetState(302)
 			p.Match(GoliteParserAND)
 		}
 		{
-			p.SetState(284)
+			p.SetState(303)
 			p.EqualTerm()
 		}
 
-		p.SetState(289)
+		p.SetState(308)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -5628,7 +6485,7 @@ func (p *GoliteParser) EqualTerm() (localctx IEqualTermContext) {
 	_ = this
 
 	localctx = NewEqualTermContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 64, GoliteParserRULE_equalTerm)
+	p.EnterRule(localctx, 74, GoliteParserRULE_equalTerm)
 	var _la int
 
 	defer func() {
@@ -5649,16 +6506,16 @@ func (p *GoliteParser) EqualTerm() (localctx IEqualTermContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(290)
+		p.SetState(309)
 		p.RelationTerm()
 	}
-	p.SetState(295)
+	p.SetState(314)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserEQ || _la == GoliteParserNE {
 		{
-			p.SetState(291)
+			p.SetState(310)
 			_la = p.GetTokenStream().LA(1)
 
 			if !(_la == GoliteParserEQ || _la == GoliteParserNE) {
@@ -5669,11 +6526,11 @@ func (p *GoliteParser) EqualTerm() (localctx IEqualTermContext) {
 			}
 		}
 		{
-			p.SetState(292)
+			p.SetState(311)
 			p.RelationTerm()
 		}
 
-		p.SetState(297)
+		p.SetState(316)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -5817,7 +6674,7 @@ func (p *GoliteParser) RelationTerm() (localctx IRelationTermContext) {
 	_ = this
 
 	localctx = NewRelationTermContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 66, GoliteParserRULE_relationTerm)
+	p.EnterRule(localctx, 76, GoliteParserRULE_relationTerm)
 	var _la int
 
 	defer func() {
@@ -5838,16 +6695,16 @@ func (p *GoliteParser) RelationTerm() (localctx IRelationTermContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(298)
+		p.SetState(317)
 		p.SimpleTerm()
 	}
-	p.SetState(303)
+	p.SetState(322)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&480) != 0 {
 		{
-			p.SetState(299)
+			p.SetState(318)
 			_la = p.GetTokenStream().LA(1)
 
 			if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&480) != 0) {
@@ -5858,11 +6715,11 @@ func (p *GoliteParser) RelationTerm() (localctx IRelationTermContext) {
 			}
 		}
 		{
-			p.SetState(300)
+			p.SetState(319)
 			p.SimpleTerm()
 		}
 
-		p.SetState(305)
+		p.SetState(324)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -5990,7 +6847,7 @@ func (p *GoliteParser) SimpleTerm() (localctx ISimpleTermContext) {
 	_ = this
 
 	localctx = NewSimpleTermContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 68, GoliteParserRULE_simpleTerm)
+	p.EnterRule(localctx, 78, GoliteParserRULE_simpleTerm)
 	var _la int
 
 	defer func() {
@@ -6011,16 +6868,16 @@ func (p *GoliteParser) SimpleTerm() (localctx ISimpleTermContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(306)
+		p.SetState(325)
 		p.Term()
 	}
-	p.SetState(311)
+	p.SetState(330)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserPLUS || _la == GoliteParserMINUS {
 		{
-			p.SetState(307)
+			p.SetState(326)
 			_la = p.GetTokenStream().LA(1)
 
 			if !(_la == GoliteParserPLUS || _la == GoliteParserMINUS) {
@@ -6031,11 +6888,11 @@ func (p *GoliteParser) SimpleTerm() (localctx ISimpleTermContext) {
 			}
 		}
 		{
-			p.SetState(308)
+			p.SetState(327)
 			p.Term()
 		}
 
-		p.SetState(313)
+		p.SetState(332)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -6163,7 +7020,7 @@ func (p *GoliteParser) Term() (localctx ITermContext) {
 	_ = this
 
 	localctx = NewTermContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 70, GoliteParserRULE_term)
+	p.EnterRule(localctx, 80, GoliteParserRULE_term)
 	var _la int
 
 	defer func() {
@@ -6184,16 +7041,16 @@ func (p *GoliteParser) Term() (localctx ITermContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(314)
+		p.SetState(333)
 		p.UnaryTerm()
 	}
-	p.SetState(319)
+	p.SetState(338)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserMULT || _la == GoliteParserDIV {
 		{
-			p.SetState(315)
+			p.SetState(334)
 			_la = p.GetTokenStream().LA(1)
 
 			if !(_la == GoliteParserMULT || _la == GoliteParserDIV) {
@@ -6204,11 +7061,11 @@ func (p *GoliteParser) Term() (localctx ITermContext) {
 			}
 		}
 		{
-			p.SetState(316)
+			p.SetState(335)
 			p.UnaryTerm()
 		}
 
-		p.SetState(321)
+		p.SetState(340)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -6303,7 +7160,7 @@ func (p *GoliteParser) UnaryTerm() (localctx IUnaryTermContext) {
 	_ = this
 
 	localctx = NewUnaryTermContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 72, GoliteParserRULE_unaryTerm)
+	p.EnterRule(localctx, 82, GoliteParserRULE_unaryTerm)
 
 	defer func() {
 		p.ExitRule()
@@ -6321,36 +7178,36 @@ func (p *GoliteParser) UnaryTerm() (localctx IUnaryTermContext) {
 		}
 	}()
 
-	p.SetState(327)
+	p.SetState(346)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case GoliteParserNOT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(322)
+			p.SetState(341)
 			p.Match(GoliteParserNOT)
 		}
 		{
-			p.SetState(323)
+			p.SetState(342)
 			p.SelectorTerm()
 		}
 
 	case GoliteParserMINUS:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(324)
+			p.SetState(343)
 			p.Match(GoliteParserMINUS)
 		}
 		{
-			p.SetState(325)
+			p.SetState(344)
 			p.SelectorTerm()
 		}
 
 	case GoliteParserLPAREN, GoliteParserNEW, GoliteParserINT_LIT, GoliteParserBOOL_LIT, GoliteParserNIL_LIT, GoliteParserIDENT:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(326)
+			p.SetState(345)
 			p.SelectorTerm()
 		}
 
@@ -6481,7 +7338,7 @@ func (p *GoliteParser) SelectorTerm() (localctx ISelectorTermContext) {
 	_ = this
 
 	localctx = NewSelectorTermContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 74, GoliteParserRULE_selectorTerm)
+	p.EnterRule(localctx, 84, GoliteParserRULE_selectorTerm)
 	var _la int
 
 	defer func() {
@@ -6502,20 +7359,20 @@ func (p *GoliteParser) SelectorTerm() (localctx ISelectorTermContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(329)
+		p.SetState(348)
 		p.Factor()
 	}
-	p.SetState(333)
+	p.SetState(352)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	for _la == GoliteParserDOT {
 		{
-			p.SetState(330)
+			p.SetState(349)
 			p.SelectorTermPrime()
 		}
 
-		p.SetState(335)
+		p.SetState(354)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -6594,7 +7451,7 @@ func (p *GoliteParser) SelectorTermPrime() (localctx ISelectorTermPrimeContext) 
 	_ = this
 
 	localctx = NewSelectorTermPrimeContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 76, GoliteParserRULE_selectorTermPrime)
+	p.EnterRule(localctx, 86, GoliteParserRULE_selectorTermPrime)
 
 	defer func() {
 		p.ExitRule()
@@ -6614,11 +7471,11 @@ func (p *GoliteParser) SelectorTermPrime() (localctx ISelectorTermPrimeContext) 
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(336)
+		p.SetState(355)
 		p.Match(GoliteParserDOT)
 	}
 	{
-		p.SetState(337)
+		p.SetState(356)
 		p.Match(GoliteParserIDENT)
 	}
 
@@ -6712,7 +7569,7 @@ func (p *GoliteParser) Subfactor() (localctx ISubfactorContext) {
 	_ = this
 
 	localctx = NewSubfactorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 78, GoliteParserRULE_subfactor)
+	p.EnterRule(localctx, 88, GoliteParserRULE_subfactor)
 
 	defer func() {
 		p.ExitRule()
@@ -6732,15 +7589,15 @@ func (p *GoliteParser) Subfactor() (localctx ISubfactorContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(339)
+		p.SetState(358)
 		p.Match(GoliteParserLPAREN)
 	}
 	{
-		p.SetState(340)
+		p.SetState(359)
 		p.Expression()
 	}
 	{
-		p.SetState(341)
+		p.SetState(360)
 		p.Match(GoliteParserRPAREN)
 	}
 
@@ -6830,7 +7687,7 @@ func (p *GoliteParser) Functioncall() (localctx IFunctioncallContext) {
 	_ = this
 
 	localctx = NewFunctioncallContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 80, GoliteParserRULE_functioncall)
+	p.EnterRule(localctx, 90, GoliteParserRULE_functioncall)
 	var _la int
 
 	defer func() {
@@ -6851,16 +7708,16 @@ func (p *GoliteParser) Functioncall() (localctx IFunctioncallContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(343)
+		p.SetState(362)
 		p.Match(GoliteParserIDENT)
 	}
-	p.SetState(345)
+	p.SetState(364)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == GoliteParserLPAREN {
 		{
-			p.SetState(344)
+			p.SetState(363)
 			p.Arguments()
 		}
 
@@ -6951,7 +7808,7 @@ func (p *GoliteParser) Allocation() (localctx IAllocationContext) {
 	_ = this
 
 	localctx = NewAllocationContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 82, GoliteParserRULE_allocation)
+	p.EnterRule(localctx, 92, GoliteParserRULE_allocation)
 
 	defer func() {
 		p.ExitRule()
@@ -6971,11 +7828,11 @@ func (p *GoliteParser) Allocation() (localctx IAllocationContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(347)
+		p.SetState(366)
 		p.Match(GoliteParserNEW)
 	}
 	{
-		p.SetState(348)
+		p.SetState(367)
 
 		var _m = p.Match(GoliteParserIDENT)
 
@@ -7108,7 +7965,7 @@ func (p *GoliteParser) Factor() (localctx IFactorContext) {
 	_ = this
 
 	localctx = NewFactorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 84, GoliteParserRULE_factor)
+	p.EnterRule(localctx, 94, GoliteParserRULE_factor)
 
 	defer func() {
 		p.ExitRule()
@@ -7126,49 +7983,49 @@ func (p *GoliteParser) Factor() (localctx IFactorContext) {
 		}
 	}()
 
-	p.SetState(356)
+	p.SetState(375)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case GoliteParserLPAREN:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(350)
+			p.SetState(369)
 			p.Subfactor()
 		}
 
 	case GoliteParserIDENT:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(351)
+			p.SetState(370)
 			p.Functioncall()
 		}
 
 	case GoliteParserINT_LIT:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(352)
+			p.SetState(371)
 			p.Match(GoliteParserINT_LIT)
 		}
 
 	case GoliteParserNEW:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(353)
+			p.SetState(372)
 			p.Allocation()
 		}
 
 	case GoliteParserBOOL_LIT:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(354)
+			p.SetState(373)
 			p.Match(GoliteParserBOOL_LIT)
 		}
 
 	case GoliteParserNIL_LIT:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(355)
+			p.SetState(374)
 			p.Match(GoliteParserNIL_LIT)
 		}
 

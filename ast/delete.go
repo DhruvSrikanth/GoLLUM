@@ -9,12 +9,12 @@ import (
 // Delete node in the AST
 type Delete struct {
 	*token.Token
-	lval LValue
+	expr Expression // Expression to be deleted
 }
 
 // New Delete node
-func NewDelete(lval LValue, token *token.Token) *Delete {
-	return &Delete{token, lval}
+func NewDelete(expr Expression, token *token.Token) *Delete {
+	return &Delete{token, expr}
 }
 
 // String representation of the delete node
@@ -22,7 +22,7 @@ func (d *Delete) String() string {
 	var out bytes.Buffer
 
 	out.WriteString("delete ")
-	out.WriteString(d.lval.String())
+	out.WriteString(d.expr.String())
 	out.WriteString(";")
 
 	return out.String()
