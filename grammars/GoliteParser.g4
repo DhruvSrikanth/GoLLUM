@@ -43,31 +43,39 @@ SelectorTerm = Factor {'.' 'id'}                                                
 Factor = '(' Expression ')' | 'id' [Arguments] | 'number' | 'new' 'id' | 'true' | 'false' | 'nil'  ;
 */
 
-program: types declarations functions EOF;
+program: ty=types dcls=declarations fns=functions EOF;
 
 types: typeDeclaration*;
 
-typeDeclaration: TYPE IDENT STRUCT LBRACE fields RBRACE SEMICOLON;
+typeDeclaration: TYPE id=IDENT STRUCT LBRACE flds=fields RBRACE SEMICOLON;
 
-fields: decl SEMICOLON (decl SEMICOLON)*;
+fields: dcl=decl SEMICOLON morefields*;
 
-decl: IDENT type;
+morefields: dcl=decl SEMICOLON; // Split fields rule
 
-type: INT | BOOL | (MULT IDENT);
+decl: id=IDENT ty=type;
+
+type: INT | BOOL | (MULT id=IDENT);
 
 declarations: declaration*;
 
-declaration: VAR ids type SEMICOLON;
+declaration: VAR idx=ids ty=type SEMICOLON;
 
-ids: IDENT (COMMA IDENT)*;
+ids: id=IDENT otherids*;
+
+otherids: COMMA id=IDENT; // Split from ids grammar rule
 
 functions: function*;
 
-function: FUNC IDENT parameters returnType? LBRACE declarations statements RBRACE;
+function: FUNC id=IDENT params=parameters rty=returnType? LBRACE dcls=declarations stmts=statements RBRACE;
 
-parameters: LPAREN (decl (COMMA decl)*)? RPAREN;
+parameters: LPAREN parametersPrime? RPAREN;
 
-returnType: type;
+parametersPrime: dcl=decl parametersPPrime*; // Split from parameters grammar rule
+
+parametersPPrime: COMMA dcl=decl; // Split from parameters grammar rule
+
+returnType: ty=type;
 
 statements: statement*;
 
@@ -109,7 +117,14 @@ term: unaryTerm ((MULT | DIV) unaryTerm)*;
 
 unaryTerm: NOT selectorTerm | MINUS selectorTerm | selectorTerm;
 
-selectorTerm: factor (DOT IDENT)*;
+selectorTerm: factor selectorTermPrime*;
 
-factor: LPAREN expression RPAREN | IDENT arguments? | INT_LIT | NEW IDENT | BOOL_LIT | NIL_LIT;
+selectorTermPrime: DOT IDENT; // Split from selectorTerm grammer
 
+subfactor: LPAREN expression RPAREN; // Split from factor grammer
+
+functioncall: IDENT arguments?; // Split from factor grammer, not sure if this is a function call
+
+allocation: NEW key=IDENT; // Split from factor grammer
+
+factor: subfactor | functioncall | INT_LIT | allocation | BOOL_LIT | NIL_LIT;
