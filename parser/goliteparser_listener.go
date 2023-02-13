@@ -19,6 +19,9 @@ type GoliteParserListener interface {
 	// EnterFields is called when entering the fields production.
 	EnterFields(c *FieldsContext)
 
+	// EnterMorefields is called when entering the morefields production.
+	EnterMorefields(c *MorefieldsContext)
+
 	// EnterDecl is called when entering the decl production.
 	EnterDecl(c *DeclContext)
 
@@ -34,6 +37,9 @@ type GoliteParserListener interface {
 	// EnterIds is called when entering the ids production.
 	EnterIds(c *IdsContext)
 
+	// EnterOtherids is called when entering the otherids production.
+	EnterOtherids(c *OtheridsContext)
+
 	// EnterFunctions is called when entering the functions production.
 	EnterFunctions(c *FunctionsContext)
 
@@ -42,6 +48,12 @@ type GoliteParserListener interface {
 
 	// EnterParameters is called when entering the parameters production.
 	EnterParameters(c *ParametersContext)
+
+	// EnterParametersPrime is called when entering the parametersPrime production.
+	EnterParametersPrime(c *ParametersPrimeContext)
+
+	// EnterParametersPPrime is called when entering the parametersPPrime production.
+	EnterParametersPPrime(c *ParametersPPrimeContext)
 
 	// EnterReturnType is called when entering the returnType production.
 	EnterReturnType(c *ReturnTypeContext)
@@ -109,6 +121,18 @@ type GoliteParserListener interface {
 	// EnterSelectorTerm is called when entering the selectorTerm production.
 	EnterSelectorTerm(c *SelectorTermContext)
 
+	// EnterSelectorTermPrime is called when entering the selectorTermPrime production.
+	EnterSelectorTermPrime(c *SelectorTermPrimeContext)
+
+	// EnterSubfactor is called when entering the subfactor production.
+	EnterSubfactor(c *SubfactorContext)
+
+	// EnterFunctioncall is called when entering the functioncall production.
+	EnterFunctioncall(c *FunctioncallContext)
+
+	// EnterAllocation is called when entering the allocation production.
+	EnterAllocation(c *AllocationContext)
+
 	// EnterFactor is called when entering the factor production.
 	EnterFactor(c *FactorContext)
 
@@ -123,6 +147,9 @@ type GoliteParserListener interface {
 
 	// ExitFields is called when exiting the fields production.
 	ExitFields(c *FieldsContext)
+
+	// ExitMorefields is called when exiting the morefields production.
+	ExitMorefields(c *MorefieldsContext)
 
 	// ExitDecl is called when exiting the decl production.
 	ExitDecl(c *DeclContext)
@@ -139,6 +166,9 @@ type GoliteParserListener interface {
 	// ExitIds is called when exiting the ids production.
 	ExitIds(c *IdsContext)
 
+	// ExitOtherids is called when exiting the otherids production.
+	ExitOtherids(c *OtheridsContext)
+
 	// ExitFunctions is called when exiting the functions production.
 	ExitFunctions(c *FunctionsContext)
 
@@ -147,6 +177,12 @@ type GoliteParserListener interface {
 
 	// ExitParameters is called when exiting the parameters production.
 	ExitParameters(c *ParametersContext)
+
+	// ExitParametersPrime is called when exiting the parametersPrime production.
+	ExitParametersPrime(c *ParametersPrimeContext)
+
+	// ExitParametersPPrime is called when exiting the parametersPPrime production.
+	ExitParametersPPrime(c *ParametersPPrimeContext)
 
 	// ExitReturnType is called when exiting the returnType production.
 	ExitReturnType(c *ReturnTypeContext)
@@ -213,6 +249,18 @@ type GoliteParserListener interface {
 
 	// ExitSelectorTerm is called when exiting the selectorTerm production.
 	ExitSelectorTerm(c *SelectorTermContext)
+
+	// ExitSelectorTermPrime is called when exiting the selectorTermPrime production.
+	ExitSelectorTermPrime(c *SelectorTermPrimeContext)
+
+	// ExitSubfactor is called when exiting the subfactor production.
+	ExitSubfactor(c *SubfactorContext)
+
+	// ExitFunctioncall is called when exiting the functioncall production.
+	ExitFunctioncall(c *FunctioncallContext)
+
+	// ExitAllocation is called when exiting the allocation production.
+	ExitAllocation(c *AllocationContext)
 
 	// ExitFactor is called when exiting the factor production.
 	ExitFactor(c *FactorContext)
