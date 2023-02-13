@@ -3172,6 +3172,60 @@ type IStatementContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// GetBl returns the bl rule contexts.
+	GetBl() IBlockContext
+
+	// GetAsmt returns the asmt rule contexts.
+	GetAsmt() IAssignmentContext
+
+	// GetPrnt returns the prnt rule contexts.
+	GetPrnt() IPrintContext
+
+	// GetDel returns the del rule contexts.
+	GetDel() IDeleteContext
+
+	// GetRd returns the rd rule contexts.
+	GetRd() IReadContext
+
+	// GetCond returns the cond rule contexts.
+	GetCond() IConditionalContext
+
+	// GetLp returns the lp rule contexts.
+	GetLp() ILoopContext
+
+	// GetRet returns the ret rule contexts.
+	GetRet() IReturnRuleContext
+
+	// GetInvoke returns the invoke rule contexts.
+	GetInvoke() IInvocationContext
+
+	// SetBl sets the bl rule contexts.
+	SetBl(IBlockContext)
+
+	// SetAsmt sets the asmt rule contexts.
+	SetAsmt(IAssignmentContext)
+
+	// SetPrnt sets the prnt rule contexts.
+	SetPrnt(IPrintContext)
+
+	// SetDel sets the del rule contexts.
+	SetDel(IDeleteContext)
+
+	// SetRd sets the rd rule contexts.
+	SetRd(IReadContext)
+
+	// SetCond sets the cond rule contexts.
+	SetCond(IConditionalContext)
+
+	// SetLp sets the lp rule contexts.
+	SetLp(ILoopContext)
+
+	// SetRet sets the ret rule contexts.
+	SetRet(IReturnRuleContext)
+
+	// SetInvoke sets the invoke rule contexts.
+	SetInvoke(IInvocationContext)
+
 	// IsStatementContext differentiates from other interfaces.
 	IsStatementContext()
 }
@@ -3179,6 +3233,15 @@ type IStatementContext interface {
 type StatementContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
+	bl     IBlockContext
+	asmt   IAssignmentContext
+	prnt   IPrintContext
+	del    IDeleteContext
+	rd     IReadContext
+	cond   IConditionalContext
+	lp     ILoopContext
+	ret    IReturnRuleContext
+	invoke IInvocationContext
 }
 
 func NewEmptyStatementContext() *StatementContext {
@@ -3202,6 +3265,42 @@ func NewStatementContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 }
 
 func (s *StatementContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *StatementContext) GetBl() IBlockContext { return s.bl }
+
+func (s *StatementContext) GetAsmt() IAssignmentContext { return s.asmt }
+
+func (s *StatementContext) GetPrnt() IPrintContext { return s.prnt }
+
+func (s *StatementContext) GetDel() IDeleteContext { return s.del }
+
+func (s *StatementContext) GetRd() IReadContext { return s.rd }
+
+func (s *StatementContext) GetCond() IConditionalContext { return s.cond }
+
+func (s *StatementContext) GetLp() ILoopContext { return s.lp }
+
+func (s *StatementContext) GetRet() IReturnRuleContext { return s.ret }
+
+func (s *StatementContext) GetInvoke() IInvocationContext { return s.invoke }
+
+func (s *StatementContext) SetBl(v IBlockContext) { s.bl = v }
+
+func (s *StatementContext) SetAsmt(v IAssignmentContext) { s.asmt = v }
+
+func (s *StatementContext) SetPrnt(v IPrintContext) { s.prnt = v }
+
+func (s *StatementContext) SetDel(v IDeleteContext) { s.del = v }
+
+func (s *StatementContext) SetRd(v IReadContext) { s.rd = v }
+
+func (s *StatementContext) SetCond(v IConditionalContext) { s.cond = v }
+
+func (s *StatementContext) SetLp(v ILoopContext) { s.lp = v }
+
+func (s *StatementContext) SetRet(v IReturnRuleContext) { s.ret = v }
+
+func (s *StatementContext) SetInvoke(v IInvocationContext) { s.invoke = v }
 
 func (s *StatementContext) Block() IBlockContext {
 	var t antlr.RuleContext
@@ -3397,63 +3496,90 @@ func (p *GoliteParser) Statement() (localctx IStatementContext) {
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(187)
-			p.Block()
+
+			var _x = p.Block()
+
+			localctx.(*StatementContext).bl = _x
 		}
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(188)
-			p.Assignment()
+
+			var _x = p.Assignment()
+
+			localctx.(*StatementContext).asmt = _x
 		}
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
 			p.SetState(189)
-			p.Print_()
+
+			var _x = p.Print_()
+
+			localctx.(*StatementContext).prnt = _x
 		}
 
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
 			p.SetState(190)
-			p.Delete_()
+
+			var _x = p.Delete_()
+
+			localctx.(*StatementContext).del = _x
 		}
 
 	case 5:
 		p.EnterOuterAlt(localctx, 5)
 		{
 			p.SetState(191)
-			p.Read()
+
+			var _x = p.Read()
+
+			localctx.(*StatementContext).rd = _x
 		}
 
 	case 6:
 		p.EnterOuterAlt(localctx, 6)
 		{
 			p.SetState(192)
-			p.Conditional()
+
+			var _x = p.Conditional()
+
+			localctx.(*StatementContext).cond = _x
 		}
 
 	case 7:
 		p.EnterOuterAlt(localctx, 7)
 		{
 			p.SetState(193)
-			p.Loop()
+
+			var _x = p.Loop()
+
+			localctx.(*StatementContext).lp = _x
 		}
 
 	case 8:
 		p.EnterOuterAlt(localctx, 8)
 		{
 			p.SetState(194)
-			p.ReturnRule()
+
+			var _x = p.ReturnRule()
+
+			localctx.(*StatementContext).ret = _x
 		}
 
 	case 9:
 		p.EnterOuterAlt(localctx, 9)
 		{
 			p.SetState(195)
-			p.Invocation()
+
+			var _x = p.Invocation()
+
+			localctx.(*StatementContext).invoke = _x
 		}
 
 	}

@@ -25,6 +25,9 @@ func main() {
     var p2 *Point;
     var a, b int;
 
+    // print something
+    printf("p1.x = %d\n", p1.x);
+
     // Allocate memory for the struct.
     p1 = new Point;
 
@@ -42,5 +45,4 @@ func main() {
 func other(o int, l int) int {
     var a int;
     var c, d bool;
-    return ;
 }

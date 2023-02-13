@@ -957,6 +957,15 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class StatementContext extends ParserRuleContext {
+		public BlockContext bl;
+		public AssignmentContext asmt;
+		public PrintContext prnt;
+		public DeleteContext del;
+		public ReadContext rd;
+		public ConditionalContext cond;
+		public LoopContext lp;
+		public ReturnRuleContext ret;
+		public InvocationContext invoke;
 		public BlockContext block() {
 			return getRuleContext(BlockContext.class,0);
 		}
@@ -1001,63 +1010,63 @@ public class GoliteParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(187);
-				block();
+				((StatementContext)_localctx).bl = block();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(188);
-				assignment();
+				((StatementContext)_localctx).asmt = assignment();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(189);
-				print();
+				((StatementContext)_localctx).prnt = print();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(190);
-				delete();
+				((StatementContext)_localctx).del = delete();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(191);
-				read();
+				((StatementContext)_localctx).rd = read();
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(192);
-				conditional();
+				((StatementContext)_localctx).cond = conditional();
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
 				setState(193);
-				loop();
+				((StatementContext)_localctx).lp = loop();
 				}
 				break;
 			case 8:
 				enterOuterAlt(_localctx, 8);
 				{
 				setState(194);
-				returnRule();
+				((StatementContext)_localctx).ret = returnRule();
 				}
 				break;
 			case 9:
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(195);
-				invocation();
+				((StatementContext)_localctx).invoke = invocation();
 				}
 				break;
 			}

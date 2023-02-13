@@ -79,7 +79,7 @@ returnType: ty=type;
 
 statements: statement*;
 
-statement: block | assignment | print | delete | read | conditional | loop | returnRule | invocation;
+statement: bl=block | asmt=assignment | prnt=print | del=delete | rd=read | cond=conditional | lp=loop | ret=returnRule | invoke=invocation;
 
 read: SCAN lValue SEMICOLON;
 

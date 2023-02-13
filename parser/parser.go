@@ -235,9 +235,31 @@ func (gParser *goliteParser) ExitFunction(c *FunctionContext) {
 
 // ExitStatement is called when exiting the statement production.
 func (gParser *goliteParser) ExitStatement(c *StatementContext) {
-	fmt.Println(c.GetText())
 	// Get the key for the statement
 	// line, col, key := GetTokenInfo(c)
+	// Get the statement type
+	if blockStatement := c.GetBl(); blockStatement != nil {
+		fmt.Println("block statement")
+	} else if assignStatement := c.GetAsmt(); assignStatement != nil {
+		fmt.Println("assign statement")
+	} else if printStatement := c.GetPrnt(); printStatement != nil {
+		fmt.Println("print statement")
+	} else if delStatement := c.GetDel(); delStatement != nil {
+		fmt.Println("delete statement")
+	} else if rdStatement := c.GetRd(); rdStatement != nil {
+		fmt.Println("read statement")
+	} else if condStatement := c.GetCond(); condStatement != nil {
+		fmt.Println("conditional statement")
+	} else if lpStatement := c.GetLp(); lpStatement != nil {
+		fmt.Println("loop statement")
+	} else if returnStatement := c.GetRet(); returnStatement != nil {
+		fmt.Println("return statement")
+	} else if invokeStatement := c.GetInvoke(); invokeStatement != nil {
+		fmt.Println("invoke statement")
+	} else {
+		panic(fmt.Sprintf("Unknown statement - %s", c.GetText()))
+	}
+
 	// // Get the statement type
 	// stmtType := c.GetStmtType().GetText()
 	// // Get the statement expression
