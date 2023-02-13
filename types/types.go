@@ -1,6 +1,7 @@
 package types
 
 import (
+	"strings"
 	"sync"
 )
 
@@ -24,6 +25,8 @@ func StringToType(ty string) Type {
 		return getVoidInstance()
 	} else if ty == "nil" {
 		return getNilInstance()
+	} else if strings.Contains(ty, "*") {
+		return getPointerInstance(ty) // Need to check
 	}
 	panic("Type not found.")
 }
