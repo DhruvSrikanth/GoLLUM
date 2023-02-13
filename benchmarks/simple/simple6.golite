@@ -1,0 +1,46 @@
+type Point struct {
+    x int;
+    y int;
+    z int;
+};
+
+type A struct {
+    p int;
+    q int;
+    r int;
+};
+
+type B struct {
+    p int;
+    q int;
+    r int;
+};
+
+var a *A;
+var x, y, z int;
+
+func main() {
+    // Create a struct that represents a point in 2D space.
+    var p1 *Point;
+    var p2 *Point;
+    var a, b int;
+
+    // Allocate memory for the struct.
+    p1 = new Point;
+
+
+    // Point values
+    p1.x = 10;
+    
+    // Free the memory allocated for the struct.
+    delete p1;
+    delete p2;
+
+    return ;    
+}
+
+func other(o int, l int) int {
+    var a int;
+    var c, d bool;
+    return ;
+}
