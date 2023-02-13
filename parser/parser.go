@@ -222,9 +222,31 @@ func (gParser *goliteParser) ExitFunction(c *FunctionContext) {
 
 	// Get the statements of the function body
 	var bodyStmts []ast.Statement
+	// for _, stmtCtx := range c.GetStmts().(*StatementsContext).AllStatement() {
+	// 	// Get the first statement
+	// 	_, _, stmtKey := GetTokenInfo(stmtCtx)
+	// 	stmt := gParser.nodes[stmtKey].(*ast.Statement)
+	// 	bodyStmts = append(bodyStmts, *stmt)
+	// }
 
 	// Add the function node to the AST
 	gParser.nodes[key] = ast.NewFunction(funcName, params, bodyDecls, bodyStmts, types.StringToType(returnType), token.NewToken(line, col))
+}
+
+// ExitStatement is called when exiting the statement production.
+func (gParser *goliteParser) ExitStatement(c *StatementContext) {
+	fmt.Println(c.GetText())
+	// Get the key for the statement
+	// line, col, key := GetTokenInfo(c)
+	// // Get the statement type
+	// stmtType := c.GetStmtType().GetText()
+	// // Get the statement expression
+	// exprCtx := c.GetExpr().(*ExpressionContext)
+	// _, _, exprKey := GetTokenInfo(exprCtx)
+	// expr := gParser.nodes[exprKey].(*ast.Expression)
+
+	// // Create the statement
+	// gParser.nodes[key] = ast.NewStatement(stmtType, *expr, token.NewToken(line, col))
 }
 
 // ExitSelectorTerm is called when exiting the selectorTerm production.
