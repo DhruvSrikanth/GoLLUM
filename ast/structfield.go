@@ -23,9 +23,9 @@ func NewDeclStm(variable string, ty types.Type, token *token.Token) *Decl {
 func (d *Decl) String() string {
 	var out bytes.Buffer
 
-	out.WriteString(d.ty.String())
-	out.WriteString(" ")
 	out.WriteString(d.variable)
+	out.WriteString(" ")
+	out.WriteString(d.ty.String())
 	return out.String()
 }
 

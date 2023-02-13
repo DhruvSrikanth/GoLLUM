@@ -15,7 +15,7 @@ type BoolLiteral struct {
 }
 
 // Creates a new instance of a booleal literal
-func NewBoolLit(token *token.Token, value bool) *BoolLiteral {
+func NewBoolLit(value bool, token *token.Token) *BoolLiteral {
 	return &BoolLiteral{token, value, types.StringToType("bool")}
 }
 

@@ -9,13 +9,13 @@ import (
 // Program production rule for the AST
 type Program struct {
 	*token.Token
-	structTypes  []StructTypeList
-	declarations []DeclarationList
-	funcs        []FunctionList
+	structTypes  []StructTypeStatement
+	declarations []DeclarationStatement
+	funcs        []FunctionStatement
 }
 
 // Create a new program node
-func NewProgram(structTypes []StructTypeList, declarations []DeclarationList, funcs []FunctionList, token *token.Token) *Program {
+func NewProgram(structTypes []StructTypeStatement, declarations []DeclarationStatement, funcs []FunctionStatement, token *token.Token) *Program {
 	return &Program{token, structTypes, declarations, funcs}
 }
 

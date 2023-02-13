@@ -14,7 +14,7 @@ type StructDecl struct {
 }
 
 // Returns an instance to a new struct declaration
-func NewStructDecl(token *token.Token, name string, decls []Decl) *StructDecl {
+func NewStructDecl(name string, decls []Decl, token *token.Token) *StructDecl {
 	return &StructDecl{token, name, decls}
 }
 
