@@ -21,7 +21,7 @@ func NewBoolLit(value bool, token *token.Token) *BoolLiteral {
 
 // String representation of the bool literal
 func (bl *BoolLiteral) String() string {
-	return fmt.Sprintf("%d", bl.Value)
+	return fmt.Sprintf("%t", bl.Value)
 }
 
 // Get the inferred type of the literal

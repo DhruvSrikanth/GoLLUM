@@ -222,12 +222,12 @@ func (gParser *goliteParser) ExitFunction(c *FunctionContext) {
 
 	// Get the statements of the function body
 	var bodyStmts []ast.Statement
-	// for _, stmtCtx := range c.GetStmts().(*StatementsContext).AllStatement() {
-	// 	// Get the first statement
-	// 	_, _, stmtKey := GetTokenInfo(stmtCtx)
-	// 	stmt := gParser.nodes[stmtKey].(*ast.Statement)
-	// 	bodyStmts = append(bodyStmts, *stmt)
-	// }
+	for _, stmtCtx := range c.GetStmts().(*StatementsContext).AllStatement() {
+		// Get the first statement
+		_, _, stmtKey := GetTokenInfo(stmtCtx)
+		stmt := gParser.nodes[stmtKey].(*ast.Statement)
+		bodyStmts = append(bodyStmts, *stmt)
+	}
 
 	// Add the function node to the AST
 	gParser.nodes[key] = ast.NewFunction(funcName, params, bodyDecls, bodyStmts, types.StringToType(returnType), token.NewToken(line, col))
@@ -441,7 +441,7 @@ func (gParser *goliteParser) ExitReturnRule(c *ReturnRuleContext) {
 	expr := gParser.nodes[exprKey].(*ast.Expression)
 
 	// Create the return statement
-	gParser.nodes[key] = ast.NewReturn(*expr, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewReturn(expr, token.NewToken(line, col))
 }
 
 // ExitInvocation is called when exiting the invocation production.

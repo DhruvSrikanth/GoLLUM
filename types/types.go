@@ -26,7 +26,7 @@ func StringToType(ty string) Type {
 	} else if ty == "nil" {
 		return getNilInstance()
 	} else if strings.Contains(ty, "*") {
-		return getPointerInstance(ty) // Need to check
+		return getPointerInstance(ty)
 	}
 	panic("Type not found.")
 }

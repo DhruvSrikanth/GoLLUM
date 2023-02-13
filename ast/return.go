@@ -9,11 +9,11 @@ import (
 // Return production rule node in the AST
 type Return struct {
 	*token.Token
-	expression Expression // The expression to be returned
+	expression *Expression // The expression to be returned
 }
 
 // NewReturn node
-func NewReturn(expression Expression, token *token.Token) *Return {
+func NewReturn(expression *Expression, token *token.Token) *Return {
 	return &Return{token, expression}
 }
 
@@ -22,8 +22,8 @@ func (r *Return) String() string {
 	var out bytes.Buffer
 
 	out.WriteString("return ")
-	if &r.expression != nil {
-		out.WriteString(r.expression.String())
+	if r.expression != nil {
+		out.WriteString((*r.expression).String())
 	}
 	out.WriteString(";")
 

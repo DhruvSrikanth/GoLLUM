@@ -113,27 +113,43 @@ lValue: id=IDENT lValuePrime*;
 
 lValuePrime: DOT id=IDENT; // Split from lValue grammar rule
 
-expression: boolTerm (OR boolTerm)*;
+expression: bt=boolTerm expressionPrime*;
 
-boolTerm: equalTerm (AND equalTerm)*;
+expressionPrime: op=OR bt=boolTerm; // Split from expression grammar rule
 
-equalTerm: relationTerm ((EQ | NE) relationTerm)*;
+boolTerm: eq=equalTerm boolTermPrime*;
 
-relationTerm: simpleTerm ((GE | LT | LE | GT) simpleTerm)*;
+boolTermPrime: op=AND eq=equalTerm; // Split from boolTerm grammar rule
 
-simpleTerm: term ((PLUS | MINUS) term)*;
+equalTerm: rt=relationTerm equalTermPrime*;
 
-term: unaryTerm ((MULT | DIV) unaryTerm)*;
+equalTermPrime: op=(EQ | NE) rt=relationTerm; // Split from equalTerm grammar rule
 
-unaryTerm: NOT selectorTerm | MINUS selectorTerm | selectorTerm;
+relationTerm: st=simpleTerm relationTermPrime*;
 
-selectorTerm: factor selectorTermPrime*;
+relationTermPrime: op=(GE | LT | LE | GT) st=simpleTerm; // Split from relationTerm grammar rule
 
-selectorTermPrime: DOT IDENT; // Split from selectorTerm grammer
+simpleTerm: t=term simpleTermPrime*;
 
-subfactor: LPAREN expression RPAREN; // Split from factor grammer
+simpleTermPrime: op=(PLUS | MINUS) t=term; // Split from simpleTerm grammar rule
 
-functioncall: IDENT arguments?; // Split from factor grammer, not sure if this is a function call
+term: ut=unaryTerm termPrime*;
+
+termPrime: op=(MULT | DIV) ut=unaryTerm; // Split from term grammar rule
+
+unaryTerm: unaryTermBool | unaryTermInt | selectorTerm;
+
+unaryTermBool: op=NOT st=selectorTerm;
+
+unaryTermInt: op=MINUS st=selectorTerm;
+
+selectorTerm: f=factor selectorTermPrime*;
+
+selectorTermPrime: DOT id=IDENT; // Split from selectorTerm grammer
+
+subfactor: LPAREN expr=expression RPAREN; // Split from factor grammer
+
+functioncall: id=IDENT args=arguments?; // Split from factor grammer, not sure if this is a function call
 
 allocation: NEW key=IDENT; // Split from factor grammer
 

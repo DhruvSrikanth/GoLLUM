@@ -32,10 +32,13 @@ public class GoliteParser extends Parser {
 		RULE_printPrime = 24, RULE_conditional = 25, RULE_conditionalPrime = 26, 
 		RULE_loop = 27, RULE_returnRule = 28, RULE_invocation = 29, RULE_arguments = 30, 
 		RULE_argumentsPrime = 31, RULE_argumentsPrimePrime = 32, RULE_lValue = 33, 
-		RULE_lValuePrime = 34, RULE_expression = 35, RULE_boolTerm = 36, RULE_equalTerm = 37, 
-		RULE_relationTerm = 38, RULE_simpleTerm = 39, RULE_term = 40, RULE_unaryTerm = 41, 
-		RULE_selectorTerm = 42, RULE_selectorTermPrime = 43, RULE_subfactor = 44, 
-		RULE_functioncall = 45, RULE_allocation = 46, RULE_factor = 47;
+		RULE_lValuePrime = 34, RULE_expression = 35, RULE_expressionPrime = 36, 
+		RULE_boolTerm = 37, RULE_boolTermPrime = 38, RULE_equalTerm = 39, RULE_equalTermPrime = 40, 
+		RULE_relationTerm = 41, RULE_relationTermPrime = 42, RULE_simpleTerm = 43, 
+		RULE_simpleTermPrime = 44, RULE_term = 45, RULE_termPrime = 46, RULE_unaryTerm = 47, 
+		RULE_unaryTermBool = 48, RULE_unaryTermInt = 49, RULE_selectorTerm = 50, 
+		RULE_selectorTermPrime = 51, RULE_subfactor = 52, RULE_functioncall = 53, 
+		RULE_allocation = 54, RULE_factor = 55;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"program", "types", "typeDeclaration", "fields", "morefields", "decl", 
@@ -44,9 +47,11 @@ public class GoliteParser extends Parser {
 			"statements", "statement", "read", "block", "delete", "assignment", "print", 
 			"printPrime", "conditional", "conditionalPrime", "loop", "returnRule", 
 			"invocation", "arguments", "argumentsPrime", "argumentsPrimePrime", "lValue", 
-			"lValuePrime", "expression", "boolTerm", "equalTerm", "relationTerm", 
-			"simpleTerm", "term", "unaryTerm", "selectorTerm", "selectorTermPrime", 
-			"subfactor", "functioncall", "allocation", "factor"
+			"lValuePrime", "expression", "expressionPrime", "boolTerm", "boolTermPrime", 
+			"equalTerm", "equalTermPrime", "relationTerm", "relationTermPrime", "simpleTerm", 
+			"simpleTermPrime", "term", "termPrime", "unaryTerm", "unaryTermBool", 
+			"unaryTermInt", "selectorTerm", "selectorTermPrime", "subfactor", "functioncall", 
+			"allocation", "factor"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -147,13 +152,13 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(96);
+			setState(112);
 			((ProgramContext)_localctx).ty = types();
-			setState(97);
+			setState(113);
 			((ProgramContext)_localctx).dcls = declarations();
-			setState(98);
+			setState(114);
 			((ProgramContext)_localctx).fns = functions();
-			setState(99);
+			setState(115);
 			match(EOF);
 			}
 		}
@@ -188,17 +193,17 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(104);
+			setState(120);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==TYPE) {
 				{
 				{
-				setState(101);
+				setState(117);
 				typeDeclaration();
 				}
 				}
-				setState(106);
+				setState(122);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -239,19 +244,19 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(107);
+			setState(123);
 			match(TYPE);
-			setState(108);
+			setState(124);
 			((TypeDeclarationContext)_localctx).id = match(IDENT);
-			setState(109);
+			setState(125);
 			match(STRUCT);
-			setState(110);
+			setState(126);
 			match(LBRACE);
-			setState(111);
+			setState(127);
 			((TypeDeclarationContext)_localctx).flds = fields();
-			setState(112);
+			setState(128);
 			match(RBRACE);
-			setState(113);
+			setState(129);
 			match(SEMICOLON);
 			}
 		}
@@ -291,21 +296,21 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(115);
+			setState(131);
 			((FieldsContext)_localctx).dcl = decl();
-			setState(116);
+			setState(132);
 			match(SEMICOLON);
-			setState(120);
+			setState(136);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==IDENT) {
 				{
 				{
-				setState(117);
+				setState(133);
 				morefields();
 				}
 				}
-				setState(122);
+				setState(138);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -340,9 +345,9 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(123);
+			setState(139);
 			((MorefieldsContext)_localctx).dcl = decl();
-			setState(124);
+			setState(140);
 			match(SEMICOLON);
 			}
 		}
@@ -376,9 +381,9 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(126);
+			setState(142);
 			((DeclContext)_localctx).id = match(IDENT);
-			setState(127);
+			setState(143);
 			((DeclContext)_localctx).ty = type();
 			}
 		}
@@ -409,20 +414,20 @@ public class GoliteParser extends Parser {
 		TypeContext _localctx = new TypeContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_type);
 		try {
-			setState(133);
+			setState(149);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case INT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(129);
+				setState(145);
 				match(INT);
 				}
 				break;
 			case BOOL:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(130);
+				setState(146);
 				match(BOOL);
 				}
 				break;
@@ -430,9 +435,9 @@ public class GoliteParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				{
-				setState(131);
+				setState(147);
 				match(MULT);
-				setState(132);
+				setState(148);
 				((TypeContext)_localctx).id = match(IDENT);
 				}
 				}
@@ -472,17 +477,17 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(138);
+			setState(154);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==VAR) {
 				{
 				{
-				setState(135);
+				setState(151);
 				declaration();
 				}
 				}
-				setState(140);
+				setState(156);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -522,13 +527,13 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(141);
+			setState(157);
 			match(VAR);
-			setState(142);
+			setState(158);
 			((DeclarationContext)_localctx).idx = ids();
-			setState(143);
+			setState(159);
 			((DeclarationContext)_localctx).ty = type();
-			setState(144);
+			setState(160);
 			match(SEMICOLON);
 			}
 		}
@@ -565,19 +570,19 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(146);
+			setState(162);
 			((IdsContext)_localctx).id = match(IDENT);
-			setState(150);
+			setState(166);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(147);
+				setState(163);
 				otherids();
 				}
 				}
-				setState(152);
+				setState(168);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -610,9 +615,9 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(153);
+			setState(169);
 			match(COMMA);
-			setState(154);
+			setState(170);
 			((OtheridsContext)_localctx).id = match(IDENT);
 			}
 		}
@@ -647,17 +652,17 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(159);
+			setState(175);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==FUNC) {
 				{
 				{
-				setState(156);
+				setState(172);
 				function();
 				}
 				}
-				setState(161);
+				setState(177);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -709,29 +714,29 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(162);
+			setState(178);
 			match(FUNC);
-			setState(163);
+			setState(179);
 			((FunctionContext)_localctx).id = match(IDENT);
-			setState(164);
+			setState(180);
 			((FunctionContext)_localctx).params = parameters();
-			setState(166);
+			setState(182);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MULT) | (1L << INT) | (1L << BOOL))) != 0)) {
 				{
-				setState(165);
+				setState(181);
 				((FunctionContext)_localctx).rty = returnType();
 				}
 			}
 
-			setState(168);
+			setState(184);
 			match(LBRACE);
-			setState(169);
+			setState(185);
 			((FunctionContext)_localctx).dcls = declarations();
-			setState(170);
+			setState(186);
 			((FunctionContext)_localctx).stmts = statements();
-			setState(171);
+			setState(187);
 			match(RBRACE);
 			}
 		}
@@ -765,19 +770,19 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(173);
+			setState(189);
 			match(LPAREN);
-			setState(175);
+			setState(191);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==IDENT) {
 				{
-				setState(174);
+				setState(190);
 				parametersPrime();
 				}
 			}
 
-			setState(177);
+			setState(193);
 			match(RPAREN);
 			}
 		}
@@ -816,19 +821,19 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(179);
+			setState(195);
 			((ParametersPrimeContext)_localctx).dcl = decl();
-			setState(183);
+			setState(199);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(180);
+				setState(196);
 				parametersPPrime();
 				}
 				}
-				setState(185);
+				setState(201);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -863,9 +868,9 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(186);
+			setState(202);
 			match(COMMA);
-			setState(187);
+			setState(203);
 			((ParametersPPrimeContext)_localctx).dcl = decl();
 			}
 		}
@@ -897,7 +902,7 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(189);
+			setState(205);
 			((ReturnTypeContext)_localctx).ty = type();
 			}
 		}
@@ -932,17 +937,17 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(194);
+			setState(210);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LBRACE) | (1L << DELETE) | (1L << RET) | (1L << IF) | (1L << FOR) | (1L << SCAN) | (1L << PRINTF) | (1L << IDENT))) != 0)) {
 				{
 				{
-				setState(191);
+				setState(207);
 				statement();
 				}
 				}
-				setState(196);
+				setState(212);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1006,69 +1011,69 @@ public class GoliteParser extends Parser {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
 		enterRule(_localctx, 36, RULE_statement);
 		try {
-			setState(206);
+			setState(222);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,10,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(197);
+				setState(213);
 				((StatementContext)_localctx).bl = block();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(198);
+				setState(214);
 				((StatementContext)_localctx).asmt = assignment();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(199);
+				setState(215);
 				((StatementContext)_localctx).prnt = print();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(200);
+				setState(216);
 				((StatementContext)_localctx).del = delete();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(201);
+				setState(217);
 				((StatementContext)_localctx).rd = read();
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(202);
+				setState(218);
 				((StatementContext)_localctx).cond = conditional();
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(203);
+				setState(219);
 				((StatementContext)_localctx).lp = loop();
 				}
 				break;
 			case 8:
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(204);
+				setState(220);
 				((StatementContext)_localctx).ret = returnRule();
 				}
 				break;
 			case 9:
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(205);
+				setState(221);
 				((StatementContext)_localctx).invoke = invocation();
 				}
 				break;
@@ -1104,11 +1109,11 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(208);
+			setState(224);
 			match(SCAN);
-			setState(209);
+			setState(225);
 			((ReadContext)_localctx).lval = lValue();
-			setState(210);
+			setState(226);
 			match(SEMICOLON);
 			}
 		}
@@ -1142,11 +1147,11 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(212);
+			setState(228);
 			match(LBRACE);
-			setState(213);
+			setState(229);
 			((BlockContext)_localctx).stmts = statements();
-			setState(214);
+			setState(230);
 			match(RBRACE);
 			}
 		}
@@ -1180,11 +1185,11 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(216);
+			setState(232);
 			match(DELETE);
-			setState(217);
+			setState(233);
 			((DeleteContext)_localctx).expr = expression();
-			setState(218);
+			setState(234);
 			match(SEMICOLON);
 			}
 		}
@@ -1222,13 +1227,13 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(220);
+			setState(236);
 			((AssignmentContext)_localctx).lval = lValue();
-			setState(221);
+			setState(237);
 			match(ASSIGN);
-			setState(222);
+			setState(238);
 			((AssignmentContext)_localctx).expr = expression();
-			setState(223);
+			setState(239);
 			match(SEMICOLON);
 			}
 		}
@@ -1269,29 +1274,29 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(225);
+			setState(241);
 			match(PRINTF);
-			setState(226);
+			setState(242);
 			match(LPAREN);
-			setState(227);
+			setState(243);
 			((PrintContext)_localctx).str = match(STRING_LIT);
-			setState(231);
+			setState(247);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(228);
+				setState(244);
 				printPrime();
 				}
 				}
-				setState(233);
+				setState(249);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			setState(234);
+			setState(250);
 			match(RPAREN);
-			setState(235);
+			setState(251);
 			match(SEMICOLON);
 			}
 		}
@@ -1324,9 +1329,9 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(237);
+			setState(253);
 			match(COMMA);
-			setState(238);
+			setState(254);
 			((PrintPrimeContext)_localctx).expr = expression();
 			}
 		}
@@ -1370,22 +1375,22 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(240);
+			setState(256);
 			match(IF);
-			setState(241);
+			setState(257);
 			match(LPAREN);
-			setState(242);
+			setState(258);
 			((ConditionalContext)_localctx).expr = expression();
-			setState(243);
+			setState(259);
 			match(RPAREN);
-			setState(244);
+			setState(260);
 			((ConditionalContext)_localctx).bl = block();
-			setState(246);
+			setState(262);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==ELSE) {
 				{
-				setState(245);
+				setState(261);
 				((ConditionalContext)_localctx).then = conditionalPrime();
 				}
 			}
@@ -1421,9 +1426,9 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(248);
+			setState(264);
 			match(ELSE);
-			setState(249);
+			setState(265);
 			((ConditionalPrimeContext)_localctx).bl = block();
 			}
 		}
@@ -1462,15 +1467,15 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(251);
+			setState(267);
 			match(FOR);
-			setState(252);
+			setState(268);
 			match(LPAREN);
-			setState(253);
+			setState(269);
 			((LoopContext)_localctx).expr = expression();
-			setState(254);
+			setState(270);
 			match(RPAREN);
-			setState(255);
+			setState(271);
 			((LoopContext)_localctx).bl = block();
 			}
 		}
@@ -1505,19 +1510,19 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(257);
+			setState(273);
 			match(RET);
-			setState(259);
+			setState(275);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NOT) | (1L << MINUS) | (1L << LPAREN) | (1L << NEW) | (1L << INT_LIT) | (1L << BOOL_LIT) | (1L << NIL_LIT) | (1L << IDENT))) != 0)) {
 				{
-				setState(258);
+				setState(274);
 				((ReturnRuleContext)_localctx).expr = expression();
 				}
 			}
 
-			setState(261);
+			setState(277);
 			match(SEMICOLON);
 			}
 		}
@@ -1552,11 +1557,11 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(263);
+			setState(279);
 			((InvocationContext)_localctx).id = match(IDENT);
-			setState(264);
+			setState(280);
 			((InvocationContext)_localctx).args = arguments();
-			setState(265);
+			setState(281);
 			match(SEMICOLON);
 			}
 		}
@@ -1591,19 +1596,19 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(267);
+			setState(283);
 			match(LPAREN);
-			setState(269);
+			setState(285);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << NOT) | (1L << MINUS) | (1L << LPAREN) | (1L << NEW) | (1L << INT_LIT) | (1L << BOOL_LIT) | (1L << NIL_LIT) | (1L << IDENT))) != 0)) {
 				{
-				setState(268);
+				setState(284);
 				((ArgumentsContext)_localctx).args = argumentsPrime();
 				}
 			}
 
-			setState(271);
+			setState(287);
 			match(RPAREN);
 			}
 		}
@@ -1642,19 +1647,19 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(273);
+			setState(289);
 			((ArgumentsPrimeContext)_localctx).expr = expression();
-			setState(277);
+			setState(293);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(274);
+				setState(290);
 				argumentsPrimePrime();
 				}
 				}
-				setState(279);
+				setState(295);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1689,9 +1694,9 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(280);
+			setState(296);
 			match(COMMA);
-			setState(281);
+			setState(297);
 			((ArgumentsPrimePrimeContext)_localctx).expr = expression();
 			}
 		}
@@ -1728,19 +1733,19 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(283);
+			setState(299);
 			((LValueContext)_localctx).id = match(IDENT);
-			setState(287);
+			setState(303);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DOT) {
 				{
 				{
-				setState(284);
+				setState(300);
 				lValuePrime();
 				}
 				}
-				setState(289);
+				setState(305);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1773,9 +1778,9 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(290);
+			setState(306);
 			match(DOT);
-			setState(291);
+			setState(307);
 			((LValuePrimeContext)_localctx).id = match(IDENT);
 			}
 		}
@@ -1791,15 +1796,15 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class ExpressionContext extends ParserRuleContext {
-		public List<BoolTermContext> boolTerm() {
-			return getRuleContexts(BoolTermContext.class);
+		public BoolTermContext bt;
+		public BoolTermContext boolTerm() {
+			return getRuleContext(BoolTermContext.class,0);
 		}
-		public BoolTermContext boolTerm(int i) {
-			return getRuleContext(BoolTermContext.class,i);
+		public List<ExpressionPrimeContext> expressionPrime() {
+			return getRuleContexts(ExpressionPrimeContext.class);
 		}
-		public List<TerminalNode> OR() { return getTokens(GoliteParser.OR); }
-		public TerminalNode OR(int i) {
-			return getToken(GoliteParser.OR, i);
+		public ExpressionPrimeContext expressionPrime(int i) {
+			return getRuleContext(ExpressionPrimeContext.class,i);
 		}
 		public ExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1814,24 +1819,58 @@ public class GoliteParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(293);
-			boolTerm();
-			setState(298);
+			setState(309);
+			((ExpressionContext)_localctx).bt = boolTerm();
+			setState(313);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==OR) {
 				{
 				{
-				setState(294);
-				match(OR);
-				setState(295);
-				boolTerm();
+				setState(310);
+				expressionPrime();
 				}
 				}
-				setState(300);
+				setState(315);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ExpressionPrimeContext extends ParserRuleContext {
+		public Token op;
+		public BoolTermContext bt;
+		public TerminalNode OR() { return getToken(GoliteParser.OR, 0); }
+		public BoolTermContext boolTerm() {
+			return getRuleContext(BoolTermContext.class,0);
+		}
+		public ExpressionPrimeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_expressionPrime; }
+	}
+
+	public final ExpressionPrimeContext expressionPrime() throws RecognitionException {
+		ExpressionPrimeContext _localctx = new ExpressionPrimeContext(_ctx, getState());
+		enterRule(_localctx, 72, RULE_expressionPrime);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(316);
+			((ExpressionPrimeContext)_localctx).op = match(OR);
+			setState(317);
+			((ExpressionPrimeContext)_localctx).bt = boolTerm();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1846,15 +1885,15 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class BoolTermContext extends ParserRuleContext {
-		public List<EqualTermContext> equalTerm() {
-			return getRuleContexts(EqualTermContext.class);
+		public EqualTermContext eq;
+		public EqualTermContext equalTerm() {
+			return getRuleContext(EqualTermContext.class,0);
 		}
-		public EqualTermContext equalTerm(int i) {
-			return getRuleContext(EqualTermContext.class,i);
+		public List<BoolTermPrimeContext> boolTermPrime() {
+			return getRuleContexts(BoolTermPrimeContext.class);
 		}
-		public List<TerminalNode> AND() { return getTokens(GoliteParser.AND); }
-		public TerminalNode AND(int i) {
-			return getToken(GoliteParser.AND, i);
+		public BoolTermPrimeContext boolTermPrime(int i) {
+			return getRuleContext(BoolTermPrimeContext.class,i);
 		}
 		public BoolTermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1864,29 +1903,63 @@ public class GoliteParser extends Parser {
 
 	public final BoolTermContext boolTerm() throws RecognitionException {
 		BoolTermContext _localctx = new BoolTermContext(_ctx, getState());
-		enterRule(_localctx, 72, RULE_boolTerm);
+		enterRule(_localctx, 74, RULE_boolTerm);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(301);
-			equalTerm();
-			setState(306);
+			setState(319);
+			((BoolTermContext)_localctx).eq = equalTerm();
+			setState(323);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==AND) {
 				{
 				{
-				setState(302);
-				match(AND);
-				setState(303);
-				equalTerm();
+				setState(320);
+				boolTermPrime();
 				}
 				}
-				setState(308);
+				setState(325);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class BoolTermPrimeContext extends ParserRuleContext {
+		public Token op;
+		public EqualTermContext eq;
+		public TerminalNode AND() { return getToken(GoliteParser.AND, 0); }
+		public EqualTermContext equalTerm() {
+			return getRuleContext(EqualTermContext.class,0);
+		}
+		public BoolTermPrimeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_boolTermPrime; }
+	}
+
+	public final BoolTermPrimeContext boolTermPrime() throws RecognitionException {
+		BoolTermPrimeContext _localctx = new BoolTermPrimeContext(_ctx, getState());
+		enterRule(_localctx, 76, RULE_boolTermPrime);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(326);
+			((BoolTermPrimeContext)_localctx).op = match(AND);
+			setState(327);
+			((BoolTermPrimeContext)_localctx).eq = equalTerm();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1901,19 +1974,15 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class EqualTermContext extends ParserRuleContext {
-		public List<RelationTermContext> relationTerm() {
-			return getRuleContexts(RelationTermContext.class);
+		public RelationTermContext rt;
+		public RelationTermContext relationTerm() {
+			return getRuleContext(RelationTermContext.class,0);
 		}
-		public RelationTermContext relationTerm(int i) {
-			return getRuleContext(RelationTermContext.class,i);
+		public List<EqualTermPrimeContext> equalTermPrime() {
+			return getRuleContexts(EqualTermPrimeContext.class);
 		}
-		public List<TerminalNode> EQ() { return getTokens(GoliteParser.EQ); }
-		public TerminalNode EQ(int i) {
-			return getToken(GoliteParser.EQ, i);
-		}
-		public List<TerminalNode> NE() { return getTokens(GoliteParser.NE); }
-		public TerminalNode NE(int i) {
-			return getToken(GoliteParser.NE, i);
+		public EqualTermPrimeContext equalTermPrime(int i) {
+			return getRuleContext(EqualTermPrimeContext.class,i);
 		}
 		public EqualTermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1923,37 +1992,74 @@ public class GoliteParser extends Parser {
 
 	public final EqualTermContext equalTerm() throws RecognitionException {
 		EqualTermContext _localctx = new EqualTermContext(_ctx, getState());
-		enterRule(_localctx, 74, RULE_equalTerm);
+		enterRule(_localctx, 78, RULE_equalTerm);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(309);
-			relationTerm();
-			setState(314);
+			setState(329);
+			((EqualTermContext)_localctx).rt = relationTerm();
+			setState(333);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==EQ || _la==NE) {
 				{
 				{
-				setState(310);
-				_la = _input.LA(1);
-				if ( !(_la==EQ || _la==NE) ) {
-				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(311);
-				relationTerm();
+				setState(330);
+				equalTermPrime();
 				}
 				}
-				setState(316);
+				setState(335);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class EqualTermPrimeContext extends ParserRuleContext {
+		public Token op;
+		public RelationTermContext rt;
+		public RelationTermContext relationTerm() {
+			return getRuleContext(RelationTermContext.class,0);
+		}
+		public TerminalNode EQ() { return getToken(GoliteParser.EQ, 0); }
+		public TerminalNode NE() { return getToken(GoliteParser.NE, 0); }
+		public EqualTermPrimeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_equalTermPrime; }
+	}
+
+	public final EqualTermPrimeContext equalTermPrime() throws RecognitionException {
+		EqualTermPrimeContext _localctx = new EqualTermPrimeContext(_ctx, getState());
+		enterRule(_localctx, 80, RULE_equalTermPrime);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(336);
+			((EqualTermPrimeContext)_localctx).op = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !(_la==EQ || _la==NE) ) {
+				((EqualTermPrimeContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
+			setState(337);
+			((EqualTermPrimeContext)_localctx).rt = relationTerm();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1968,27 +2074,15 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class RelationTermContext extends ParserRuleContext {
-		public List<SimpleTermContext> simpleTerm() {
-			return getRuleContexts(SimpleTermContext.class);
+		public SimpleTermContext st;
+		public SimpleTermContext simpleTerm() {
+			return getRuleContext(SimpleTermContext.class,0);
 		}
-		public SimpleTermContext simpleTerm(int i) {
-			return getRuleContext(SimpleTermContext.class,i);
+		public List<RelationTermPrimeContext> relationTermPrime() {
+			return getRuleContexts(RelationTermPrimeContext.class);
 		}
-		public List<TerminalNode> GE() { return getTokens(GoliteParser.GE); }
-		public TerminalNode GE(int i) {
-			return getToken(GoliteParser.GE, i);
-		}
-		public List<TerminalNode> LT() { return getTokens(GoliteParser.LT); }
-		public TerminalNode LT(int i) {
-			return getToken(GoliteParser.LT, i);
-		}
-		public List<TerminalNode> LE() { return getTokens(GoliteParser.LE); }
-		public TerminalNode LE(int i) {
-			return getToken(GoliteParser.LE, i);
-		}
-		public List<TerminalNode> GT() { return getTokens(GoliteParser.GT); }
-		public TerminalNode GT(int i) {
-			return getToken(GoliteParser.GT, i);
+		public RelationTermPrimeContext relationTermPrime(int i) {
+			return getRuleContext(RelationTermPrimeContext.class,i);
 		}
 		public RelationTermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1998,37 +2092,76 @@ public class GoliteParser extends Parser {
 
 	public final RelationTermContext relationTerm() throws RecognitionException {
 		RelationTermContext _localctx = new RelationTermContext(_ctx, getState());
-		enterRule(_localctx, 76, RULE_relationTerm);
+		enterRule(_localctx, 82, RULE_relationTerm);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(317);
-			simpleTerm();
-			setState(322);
+			setState(339);
+			((RelationTermContext)_localctx).st = simpleTerm();
+			setState(343);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << GT) | (1L << LE) | (1L << GE))) != 0)) {
 				{
 				{
-				setState(318);
-				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << GT) | (1L << LE) | (1L << GE))) != 0)) ) {
-				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(319);
-				simpleTerm();
+				setState(340);
+				relationTermPrime();
 				}
 				}
-				setState(324);
+				setState(345);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class RelationTermPrimeContext extends ParserRuleContext {
+		public Token op;
+		public SimpleTermContext st;
+		public SimpleTermContext simpleTerm() {
+			return getRuleContext(SimpleTermContext.class,0);
+		}
+		public TerminalNode GE() { return getToken(GoliteParser.GE, 0); }
+		public TerminalNode LT() { return getToken(GoliteParser.LT, 0); }
+		public TerminalNode LE() { return getToken(GoliteParser.LE, 0); }
+		public TerminalNode GT() { return getToken(GoliteParser.GT, 0); }
+		public RelationTermPrimeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_relationTermPrime; }
+	}
+
+	public final RelationTermPrimeContext relationTermPrime() throws RecognitionException {
+		RelationTermPrimeContext _localctx = new RelationTermPrimeContext(_ctx, getState());
+		enterRule(_localctx, 84, RULE_relationTermPrime);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(346);
+			((RelationTermPrimeContext)_localctx).op = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LT) | (1L << GT) | (1L << LE) | (1L << GE))) != 0)) ) {
+				((RelationTermPrimeContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
+			setState(347);
+			((RelationTermPrimeContext)_localctx).st = simpleTerm();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2043,19 +2176,15 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class SimpleTermContext extends ParserRuleContext {
-		public List<TermContext> term() {
-			return getRuleContexts(TermContext.class);
+		public TermContext t;
+		public TermContext term() {
+			return getRuleContext(TermContext.class,0);
 		}
-		public TermContext term(int i) {
-			return getRuleContext(TermContext.class,i);
+		public List<SimpleTermPrimeContext> simpleTermPrime() {
+			return getRuleContexts(SimpleTermPrimeContext.class);
 		}
-		public List<TerminalNode> PLUS() { return getTokens(GoliteParser.PLUS); }
-		public TerminalNode PLUS(int i) {
-			return getToken(GoliteParser.PLUS, i);
-		}
-		public List<TerminalNode> MINUS() { return getTokens(GoliteParser.MINUS); }
-		public TerminalNode MINUS(int i) {
-			return getToken(GoliteParser.MINUS, i);
+		public SimpleTermPrimeContext simpleTermPrime(int i) {
+			return getRuleContext(SimpleTermPrimeContext.class,i);
 		}
 		public SimpleTermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2065,37 +2194,74 @@ public class GoliteParser extends Parser {
 
 	public final SimpleTermContext simpleTerm() throws RecognitionException {
 		SimpleTermContext _localctx = new SimpleTermContext(_ctx, getState());
-		enterRule(_localctx, 78, RULE_simpleTerm);
+		enterRule(_localctx, 86, RULE_simpleTerm);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(325);
-			term();
-			setState(330);
+			setState(349);
+			((SimpleTermContext)_localctx).t = term();
+			setState(353);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==PLUS || _la==MINUS) {
 				{
 				{
-				setState(326);
-				_la = _input.LA(1);
-				if ( !(_la==PLUS || _la==MINUS) ) {
-				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(327);
-				term();
+				setState(350);
+				simpleTermPrime();
 				}
 				}
-				setState(332);
+				setState(355);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class SimpleTermPrimeContext extends ParserRuleContext {
+		public Token op;
+		public TermContext t;
+		public TermContext term() {
+			return getRuleContext(TermContext.class,0);
+		}
+		public TerminalNode PLUS() { return getToken(GoliteParser.PLUS, 0); }
+		public TerminalNode MINUS() { return getToken(GoliteParser.MINUS, 0); }
+		public SimpleTermPrimeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_simpleTermPrime; }
+	}
+
+	public final SimpleTermPrimeContext simpleTermPrime() throws RecognitionException {
+		SimpleTermPrimeContext _localctx = new SimpleTermPrimeContext(_ctx, getState());
+		enterRule(_localctx, 88, RULE_simpleTermPrime);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(356);
+			((SimpleTermPrimeContext)_localctx).op = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !(_la==PLUS || _la==MINUS) ) {
+				((SimpleTermPrimeContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
+			setState(357);
+			((SimpleTermPrimeContext)_localctx).t = term();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2110,19 +2276,15 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class TermContext extends ParserRuleContext {
-		public List<UnaryTermContext> unaryTerm() {
-			return getRuleContexts(UnaryTermContext.class);
+		public UnaryTermContext ut;
+		public UnaryTermContext unaryTerm() {
+			return getRuleContext(UnaryTermContext.class,0);
 		}
-		public UnaryTermContext unaryTerm(int i) {
-			return getRuleContext(UnaryTermContext.class,i);
+		public List<TermPrimeContext> termPrime() {
+			return getRuleContexts(TermPrimeContext.class);
 		}
-		public List<TerminalNode> MULT() { return getTokens(GoliteParser.MULT); }
-		public TerminalNode MULT(int i) {
-			return getToken(GoliteParser.MULT, i);
-		}
-		public List<TerminalNode> DIV() { return getTokens(GoliteParser.DIV); }
-		public TerminalNode DIV(int i) {
-			return getToken(GoliteParser.DIV, i);
+		public TermPrimeContext termPrime(int i) {
+			return getRuleContext(TermPrimeContext.class,i);
 		}
 		public TermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2132,34 +2294,24 @@ public class GoliteParser extends Parser {
 
 	public final TermContext term() throws RecognitionException {
 		TermContext _localctx = new TermContext(_ctx, getState());
-		enterRule(_localctx, 80, RULE_term);
+		enterRule(_localctx, 90, RULE_term);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(333);
-			unaryTerm();
-			setState(338);
+			setState(359);
+			((TermContext)_localctx).ut = unaryTerm();
+			setState(363);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==MULT || _la==DIV) {
 				{
 				{
-				setState(334);
-				_la = _input.LA(1);
-				if ( !(_la==MULT || _la==DIV) ) {
-				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(335);
-				unaryTerm();
+				setState(360);
+				termPrime();
 				}
 				}
-				setState(340);
+				setState(365);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -2176,12 +2328,63 @@ public class GoliteParser extends Parser {
 		return _localctx;
 	}
 
+	public static class TermPrimeContext extends ParserRuleContext {
+		public Token op;
+		public UnaryTermContext ut;
+		public UnaryTermContext unaryTerm() {
+			return getRuleContext(UnaryTermContext.class,0);
+		}
+		public TerminalNode MULT() { return getToken(GoliteParser.MULT, 0); }
+		public TerminalNode DIV() { return getToken(GoliteParser.DIV, 0); }
+		public TermPrimeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_termPrime; }
+	}
+
+	public final TermPrimeContext termPrime() throws RecognitionException {
+		TermPrimeContext _localctx = new TermPrimeContext(_ctx, getState());
+		enterRule(_localctx, 92, RULE_termPrime);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(366);
+			((TermPrimeContext)_localctx).op = _input.LT(1);
+			_la = _input.LA(1);
+			if ( !(_la==MULT || _la==DIV) ) {
+				((TermPrimeContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+			}
+			else {
+				if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+				_errHandler.reportMatch(this);
+				consume();
+			}
+			setState(367);
+			((TermPrimeContext)_localctx).ut = unaryTerm();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static class UnaryTermContext extends ParserRuleContext {
-		public TerminalNode NOT() { return getToken(GoliteParser.NOT, 0); }
+		public UnaryTermBoolContext unaryTermBool() {
+			return getRuleContext(UnaryTermBoolContext.class,0);
+		}
+		public UnaryTermIntContext unaryTermInt() {
+			return getRuleContext(UnaryTermIntContext.class,0);
+		}
 		public SelectorTermContext selectorTerm() {
 			return getRuleContext(SelectorTermContext.class,0);
 		}
-		public TerminalNode MINUS() { return getToken(GoliteParser.MINUS, 0); }
 		public UnaryTermContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2190,27 +2393,23 @@ public class GoliteParser extends Parser {
 
 	public final UnaryTermContext unaryTerm() throws RecognitionException {
 		UnaryTermContext _localctx = new UnaryTermContext(_ctx, getState());
-		enterRule(_localctx, 82, RULE_unaryTerm);
+		enterRule(_localctx, 94, RULE_unaryTerm);
 		try {
-			setState(346);
+			setState(372);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NOT:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(341);
-				match(NOT);
-				setState(342);
-				selectorTerm();
+				setState(369);
+				unaryTermBool();
 				}
 				break;
 			case MINUS:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(343);
-				match(MINUS);
-				setState(344);
-				selectorTerm();
+				setState(370);
+				unaryTermInt();
 				}
 				break;
 			case LPAREN:
@@ -2221,7 +2420,7 @@ public class GoliteParser extends Parser {
 			case IDENT:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(345);
+				setState(371);
 				selectorTerm();
 				}
 				break;
@@ -2240,7 +2439,80 @@ public class GoliteParser extends Parser {
 		return _localctx;
 	}
 
+	public static class UnaryTermBoolContext extends ParserRuleContext {
+		public Token op;
+		public SelectorTermContext st;
+		public TerminalNode NOT() { return getToken(GoliteParser.NOT, 0); }
+		public SelectorTermContext selectorTerm() {
+			return getRuleContext(SelectorTermContext.class,0);
+		}
+		public UnaryTermBoolContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_unaryTermBool; }
+	}
+
+	public final UnaryTermBoolContext unaryTermBool() throws RecognitionException {
+		UnaryTermBoolContext _localctx = new UnaryTermBoolContext(_ctx, getState());
+		enterRule(_localctx, 96, RULE_unaryTermBool);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(374);
+			((UnaryTermBoolContext)_localctx).op = match(NOT);
+			setState(375);
+			((UnaryTermBoolContext)_localctx).st = selectorTerm();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class UnaryTermIntContext extends ParserRuleContext {
+		public Token op;
+		public SelectorTermContext st;
+		public TerminalNode MINUS() { return getToken(GoliteParser.MINUS, 0); }
+		public SelectorTermContext selectorTerm() {
+			return getRuleContext(SelectorTermContext.class,0);
+		}
+		public UnaryTermIntContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_unaryTermInt; }
+	}
+
+	public final UnaryTermIntContext unaryTermInt() throws RecognitionException {
+		UnaryTermIntContext _localctx = new UnaryTermIntContext(_ctx, getState());
+		enterRule(_localctx, 98, RULE_unaryTermInt);
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(377);
+			((UnaryTermIntContext)_localctx).op = match(MINUS);
+			setState(378);
+			((UnaryTermIntContext)_localctx).st = selectorTerm();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static class SelectorTermContext extends ParserRuleContext {
+		public FactorContext f;
 		public FactorContext factor() {
 			return getRuleContext(FactorContext.class,0);
 		}
@@ -2258,24 +2530,24 @@ public class GoliteParser extends Parser {
 
 	public final SelectorTermContext selectorTerm() throws RecognitionException {
 		SelectorTermContext _localctx = new SelectorTermContext(_ctx, getState());
-		enterRule(_localctx, 84, RULE_selectorTerm);
+		enterRule(_localctx, 100, RULE_selectorTerm);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(348);
-			factor();
-			setState(352);
+			setState(380);
+			((SelectorTermContext)_localctx).f = factor();
+			setState(384);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==DOT) {
 				{
 				{
-				setState(349);
+				setState(381);
 				selectorTermPrime();
 				}
 				}
-				setState(354);
+				setState(386);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -2293,6 +2565,7 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class SelectorTermPrimeContext extends ParserRuleContext {
+		public Token id;
 		public TerminalNode DOT() { return getToken(GoliteParser.DOT, 0); }
 		public TerminalNode IDENT() { return getToken(GoliteParser.IDENT, 0); }
 		public SelectorTermPrimeContext(ParserRuleContext parent, int invokingState) {
@@ -2303,14 +2576,14 @@ public class GoliteParser extends Parser {
 
 	public final SelectorTermPrimeContext selectorTermPrime() throws RecognitionException {
 		SelectorTermPrimeContext _localctx = new SelectorTermPrimeContext(_ctx, getState());
-		enterRule(_localctx, 86, RULE_selectorTermPrime);
+		enterRule(_localctx, 102, RULE_selectorTermPrime);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(355);
+			setState(387);
 			match(DOT);
-			setState(356);
-			match(IDENT);
+			setState(388);
+			((SelectorTermPrimeContext)_localctx).id = match(IDENT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2325,11 +2598,12 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class SubfactorContext extends ParserRuleContext {
+		public ExpressionContext expr;
 		public TerminalNode LPAREN() { return getToken(GoliteParser.LPAREN, 0); }
+		public TerminalNode RPAREN() { return getToken(GoliteParser.RPAREN, 0); }
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public TerminalNode RPAREN() { return getToken(GoliteParser.RPAREN, 0); }
 		public SubfactorContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2338,15 +2612,15 @@ public class GoliteParser extends Parser {
 
 	public final SubfactorContext subfactor() throws RecognitionException {
 		SubfactorContext _localctx = new SubfactorContext(_ctx, getState());
-		enterRule(_localctx, 88, RULE_subfactor);
+		enterRule(_localctx, 104, RULE_subfactor);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(358);
+			setState(390);
 			match(LPAREN);
-			setState(359);
-			expression();
-			setState(360);
+			setState(391);
+			((SubfactorContext)_localctx).expr = expression();
+			setState(392);
 			match(RPAREN);
 			}
 		}
@@ -2362,6 +2636,8 @@ public class GoliteParser extends Parser {
 	}
 
 	public static class FunctioncallContext extends ParserRuleContext {
+		public Token id;
+		public ArgumentsContext args;
 		public TerminalNode IDENT() { return getToken(GoliteParser.IDENT, 0); }
 		public ArgumentsContext arguments() {
 			return getRuleContext(ArgumentsContext.class,0);
@@ -2374,20 +2650,20 @@ public class GoliteParser extends Parser {
 
 	public final FunctioncallContext functioncall() throws RecognitionException {
 		FunctioncallContext _localctx = new FunctioncallContext(_ctx, getState());
-		enterRule(_localctx, 90, RULE_functioncall);
+		enterRule(_localctx, 106, RULE_functioncall);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(362);
-			match(IDENT);
-			setState(364);
+			setState(394);
+			((FunctioncallContext)_localctx).id = match(IDENT);
+			setState(396);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAREN) {
 				{
-				setState(363);
-				arguments();
+				setState(395);
+				((FunctioncallContext)_localctx).args = arguments();
 				}
 			}
 
@@ -2416,13 +2692,13 @@ public class GoliteParser extends Parser {
 
 	public final AllocationContext allocation() throws RecognitionException {
 		AllocationContext _localctx = new AllocationContext(_ctx, getState());
-		enterRule(_localctx, 92, RULE_allocation);
+		enterRule(_localctx, 108, RULE_allocation);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(366);
+			setState(398);
 			match(NEW);
-			setState(367);
+			setState(399);
 			((AllocationContext)_localctx).key = match(IDENT);
 			}
 		}
@@ -2458,50 +2734,50 @@ public class GoliteParser extends Parser {
 
 	public final FactorContext factor() throws RecognitionException {
 		FactorContext _localctx = new FactorContext(_ctx, getState());
-		enterRule(_localctx, 94, RULE_factor);
+		enterRule(_localctx, 110, RULE_factor);
 		try {
-			setState(375);
+			setState(407);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LPAREN:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(369);
+				setState(401);
 				subfactor();
 				}
 				break;
 			case IDENT:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(370);
+				setState(402);
 				functioncall();
 				}
 				break;
 			case INT_LIT:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(371);
+				setState(403);
 				match(INT_LIT);
 				}
 				break;
 			case NEW:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(372);
+				setState(404);
 				allocation();
 				}
 				break;
 			case BOOL_LIT:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(373);
+				setState(405);
 				match(BOOL_LIT);
 				}
 				break;
 			case NIL_LIT:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(374);
+				setState(406);
 				match(NIL_LIT);
 				}
 				break;
@@ -2521,132 +2797,143 @@ public class GoliteParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3,\u017c\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3,\u019c\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
 		"\t!\4\"\t\"\4#\t#\4$\t$\4%\t%\4&\t&\4\'\t\'\4(\t(\4)\t)\4*\t*\4+\t+\4"+
-		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\3\2\3\2\3\2\3\2\3\2\3\3\7\3"+
-		"i\n\3\f\3\16\3l\13\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\7\5y"+
-		"\n\5\f\5\16\5|\13\5\3\6\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b\3\b\5\b\u0088"+
-		"\n\b\3\t\7\t\u008b\n\t\f\t\16\t\u008e\13\t\3\n\3\n\3\n\3\n\3\n\3\13\3"+
-		"\13\7\13\u0097\n\13\f\13\16\13\u009a\13\13\3\f\3\f\3\f\3\r\7\r\u00a0\n"+
-		"\r\f\r\16\r\u00a3\13\r\3\16\3\16\3\16\3\16\5\16\u00a9\n\16\3\16\3\16\3"+
-		"\16\3\16\3\16\3\17\3\17\5\17\u00b2\n\17\3\17\3\17\3\20\3\20\7\20\u00b8"+
-		"\n\20\f\20\16\20\u00bb\13\20\3\21\3\21\3\21\3\22\3\22\3\23\7\23\u00c3"+
-		"\n\23\f\23\16\23\u00c6\13\23\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3"+
-		"\24\5\24\u00d1\n\24\3\25\3\25\3\25\3\25\3\26\3\26\3\26\3\26\3\27\3\27"+
-		"\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\31\3\31\3\31\3\31\7\31\u00e8\n\31"+
-		"\f\31\16\31\u00eb\13\31\3\31\3\31\3\31\3\32\3\32\3\32\3\33\3\33\3\33\3"+
-		"\33\3\33\3\33\5\33\u00f9\n\33\3\34\3\34\3\34\3\35\3\35\3\35\3\35\3\35"+
-		"\3\35\3\36\3\36\5\36\u0106\n\36\3\36\3\36\3\37\3\37\3\37\3\37\3 \3 \5"+
-		" \u0110\n \3 \3 \3!\3!\7!\u0116\n!\f!\16!\u0119\13!\3\"\3\"\3\"\3#\3#"+
-		"\7#\u0120\n#\f#\16#\u0123\13#\3$\3$\3$\3%\3%\3%\7%\u012b\n%\f%\16%\u012e"+
-		"\13%\3&\3&\3&\7&\u0133\n&\f&\16&\u0136\13&\3\'\3\'\3\'\7\'\u013b\n\'\f"+
-		"\'\16\'\u013e\13\'\3(\3(\3(\7(\u0143\n(\f(\16(\u0146\13(\3)\3)\3)\7)\u014b"+
-		"\n)\f)\16)\u014e\13)\3*\3*\3*\7*\u0153\n*\f*\16*\u0156\13*\3+\3+\3+\3"+
-		"+\3+\5+\u015d\n+\3,\3,\7,\u0161\n,\f,\16,\u0164\13,\3-\3-\3-\3.\3.\3."+
-		"\3.\3/\3/\5/\u016f\n/\3\60\3\60\3\60\3\61\3\61\3\61\3\61\3\61\3\61\5\61"+
-		"\u017a\n\61\3\61\2\2\62\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*"+
-		",.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`\2\6\3\2\13\f\3\2\7\n\3\2\r\16\3\2"+
-		"\17\20\2\u0173\2b\3\2\2\2\4j\3\2\2\2\6m\3\2\2\2\bu\3\2\2\2\n}\3\2\2\2"+
-		"\f\u0080\3\2\2\2\16\u0087\3\2\2\2\20\u008c\3\2\2\2\22\u008f\3\2\2\2\24"+
-		"\u0094\3\2\2\2\26\u009b\3\2\2\2\30\u00a1\3\2\2\2\32\u00a4\3\2\2\2\34\u00af"+
-		"\3\2\2\2\36\u00b5\3\2\2\2 \u00bc\3\2\2\2\"\u00bf\3\2\2\2$\u00c4\3\2\2"+
-		"\2&\u00d0\3\2\2\2(\u00d2\3\2\2\2*\u00d6\3\2\2\2,\u00da\3\2\2\2.\u00de"+
-		"\3\2\2\2\60\u00e3\3\2\2\2\62\u00ef\3\2\2\2\64\u00f2\3\2\2\2\66\u00fa\3"+
-		"\2\2\28\u00fd\3\2\2\2:\u0103\3\2\2\2<\u0109\3\2\2\2>\u010d\3\2\2\2@\u0113"+
-		"\3\2\2\2B\u011a\3\2\2\2D\u011d\3\2\2\2F\u0124\3\2\2\2H\u0127\3\2\2\2J"+
-		"\u012f\3\2\2\2L\u0137\3\2\2\2N\u013f\3\2\2\2P\u0147\3\2\2\2R\u014f\3\2"+
-		"\2\2T\u015c\3\2\2\2V\u015e\3\2\2\2X\u0165\3\2\2\2Z\u0168\3\2\2\2\\\u016c"+
-		"\3\2\2\2^\u0170\3\2\2\2`\u0179\3\2\2\2bc\5\4\3\2cd\5\20\t\2de\5\30\r\2"+
-		"ef\7\2\2\3f\3\3\2\2\2gi\5\6\4\2hg\3\2\2\2il\3\2\2\2jh\3\2\2\2jk\3\2\2"+
-		"\2k\5\3\2\2\2lj\3\2\2\2mn\7\30\2\2no\7*\2\2op\7\33\2\2pq\7\23\2\2qr\5"+
-		"\b\5\2rs\7\24\2\2st\7\25\2\2t\7\3\2\2\2uv\5\f\7\2vz\7\25\2\2wy\5\n\6\2"+
-		"xw\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{\t\3\2\2\2|z\3\2\2\2}~\5\f\7"+
-		"\2~\177\7\25\2\2\177\13\3\2\2\2\u0080\u0081\7*\2\2\u0081\u0082\5\16\b"+
-		"\2\u0082\r\3\2\2\2\u0083\u0088\7(\2\2\u0084\u0088\7)\2\2\u0085\u0086\7"+
-		"\17\2\2\u0086\u0088\7*\2\2\u0087\u0083\3\2\2\2\u0087\u0084\3\2\2\2\u0087"+
-		"\u0085\3\2\2\2\u0088\17\3\2\2\2\u0089\u008b\5\22\n\2\u008a\u0089\3\2\2"+
-		"\2\u008b\u008e\3\2\2\2\u008c\u008a\3\2\2\2\u008c\u008d\3\2\2\2\u008d\21"+
-		"\3\2\2\2\u008e\u008c\3\2\2\2\u008f\u0090\7\27\2\2\u0090\u0091\5\24\13"+
-		"\2\u0091\u0092\5\16\b\2\u0092\u0093\7\25\2\2\u0093\23\3\2\2\2\u0094\u0098"+
-		"\7*\2\2\u0095\u0097\5\26\f\2\u0096\u0095\3\2\2\2\u0097\u009a\3\2\2\2\u0098"+
-		"\u0096\3\2\2\2\u0098\u0099\3\2\2\2\u0099\25\3\2\2\2\u009a\u0098\3\2\2"+
-		"\2\u009b\u009c\7\26\2\2\u009c\u009d\7*\2\2\u009d\27\3\2\2\2\u009e\u00a0"+
-		"\5\32\16\2\u009f\u009e\3\2\2\2\u00a0\u00a3\3\2\2\2\u00a1\u009f\3\2\2\2"+
-		"\u00a1\u00a2\3\2\2\2\u00a2\31\3\2\2\2\u00a3\u00a1\3\2\2\2\u00a4\u00a5"+
-		"\7\35\2\2\u00a5\u00a6\7*\2\2\u00a6\u00a8\5\34\17\2\u00a7\u00a9\5\"\22"+
-		"\2\u00a8\u00a7\3\2\2\2\u00a8\u00a9\3\2\2\2\u00a9\u00aa\3\2\2\2\u00aa\u00ab"+
-		"\7\23\2\2\u00ab\u00ac\5\20\t\2\u00ac\u00ad\5$\23\2\u00ad\u00ae\7\24\2"+
-		"\2\u00ae\33\3\2\2\2\u00af\u00b1\7\21\2\2\u00b0\u00b2\5\36\20\2\u00b1\u00b0"+
-		"\3\2\2\2\u00b1\u00b2\3\2\2\2\u00b2\u00b3\3\2\2\2\u00b3\u00b4\7\22\2\2"+
-		"\u00b4\35\3\2\2\2\u00b5\u00b9\5\f\7\2\u00b6\u00b8\5 \21\2\u00b7\u00b6"+
-		"\3\2\2\2\u00b8\u00bb\3\2\2\2\u00b9\u00b7\3\2\2\2\u00b9\u00ba\3\2\2\2\u00ba"+
-		"\37\3\2\2\2\u00bb\u00b9\3\2\2\2\u00bc\u00bd\7\26\2\2\u00bd\u00be\5\f\7"+
-		"\2\u00be!\3\2\2\2\u00bf\u00c0\5\16\b\2\u00c0#\3\2\2\2\u00c1\u00c3\5&\24"+
-		"\2\u00c2\u00c1\3\2\2\2\u00c3\u00c6\3\2\2\2\u00c4\u00c2\3\2\2\2\u00c4\u00c5"+
-		"\3\2\2\2\u00c5%\3\2\2\2\u00c6\u00c4\3\2\2\2\u00c7\u00d1\5*\26\2\u00c8"+
-		"\u00d1\5.\30\2\u00c9\u00d1\5\60\31\2\u00ca\u00d1\5,\27\2\u00cb\u00d1\5"+
-		"(\25\2\u00cc\u00d1\5\64\33\2\u00cd\u00d1\58\35\2\u00ce\u00d1\5:\36\2\u00cf"+
-		"\u00d1\5<\37\2\u00d0\u00c7\3\2\2\2\u00d0\u00c8\3\2\2\2\u00d0\u00c9\3\2"+
-		"\2\2\u00d0\u00ca\3\2\2\2\u00d0\u00cb\3\2\2\2\u00d0\u00cc\3\2\2\2\u00d0"+
-		"\u00cd\3\2\2\2\u00d0\u00ce\3\2\2\2\u00d0\u00cf\3\2\2\2\u00d1\'\3\2\2\2"+
-		"\u00d2\u00d3\7\"\2\2\u00d3\u00d4\5D#\2\u00d4\u00d5\7\25\2\2\u00d5)\3\2"+
-		"\2\2\u00d6\u00d7\7\23\2\2\u00d7\u00d8\5$\23\2\u00d8\u00d9\7\24\2\2\u00d9"+
-		"+\3\2\2\2\u00da\u00db\7\32\2\2\u00db\u00dc\5H%\2\u00dc\u00dd\7\25\2\2"+
-		"\u00dd-\3\2\2\2\u00de\u00df\5D#\2\u00df\u00e0\7\3\2\2\u00e0\u00e1\5H%"+
-		"\2\u00e1\u00e2\7\25\2\2\u00e2/\3\2\2\2\u00e3\u00e4\7#\2\2\u00e4\u00e5"+
-		"\7\21\2\2\u00e5\u00e9\7%\2\2\u00e6\u00e8\5\62\32\2\u00e7\u00e6\3\2\2\2"+
-		"\u00e8\u00eb\3\2\2\2\u00e9\u00e7\3\2\2\2\u00e9\u00ea\3\2\2\2\u00ea\u00ec"+
-		"\3\2\2\2\u00eb\u00e9\3\2\2\2\u00ec\u00ed\7\22\2\2\u00ed\u00ee\7\25\2\2"+
-		"\u00ee\61\3\2\2\2\u00ef\u00f0\7\26\2\2\u00f0\u00f1\5H%\2\u00f1\63\3\2"+
-		"\2\2\u00f2\u00f3\7\37\2\2\u00f3\u00f4\7\21\2\2\u00f4\u00f5\5H%\2\u00f5"+
-		"\u00f6\7\22\2\2\u00f6\u00f8\5*\26\2\u00f7\u00f9\5\66\34\2\u00f8\u00f7"+
-		"\3\2\2\2\u00f8\u00f9\3\2\2\2\u00f9\65\3\2\2\2\u00fa\u00fb\7 \2\2\u00fb"+
-		"\u00fc\5*\26\2\u00fc\67\3\2\2\2\u00fd\u00fe\7!\2\2\u00fe\u00ff\7\21\2"+
-		"\2\u00ff\u0100\5H%\2\u0100\u0101\7\22\2\2\u0101\u0102\5*\26\2\u01029\3"+
-		"\2\2\2\u0103\u0105\7\36\2\2\u0104\u0106\5H%\2\u0105\u0104\3\2\2\2\u0105"+
-		"\u0106\3\2\2\2\u0106\u0107\3\2\2\2\u0107\u0108\7\25\2\2\u0108;\3\2\2\2"+
-		"\u0109\u010a\7*\2\2\u010a\u010b\5> \2\u010b\u010c\7\25\2\2\u010c=\3\2"+
-		"\2\2\u010d\u010f\7\21\2\2\u010e\u0110\5@!\2\u010f\u010e\3\2\2\2\u010f"+
-		"\u0110\3\2\2\2\u0110\u0111\3\2\2\2\u0111\u0112\7\22\2\2\u0112?\3\2\2\2"+
-		"\u0113\u0117\5H%\2\u0114\u0116\5B\"\2\u0115\u0114\3\2\2\2\u0116\u0119"+
-		"\3\2\2\2\u0117\u0115\3\2\2\2\u0117\u0118\3\2\2\2\u0118A\3\2\2\2\u0119"+
-		"\u0117\3\2\2\2\u011a\u011b\7\26\2\2\u011b\u011c\5H%\2\u011cC\3\2\2\2\u011d"+
-		"\u0121\7*\2\2\u011e\u0120\5F$\2\u011f\u011e\3\2\2\2\u0120\u0123\3\2\2"+
-		"\2\u0121\u011f\3\2\2\2\u0121\u0122\3\2\2\2\u0122E\3\2\2\2\u0123\u0121"+
-		"\3\2\2\2\u0124\u0125\7\34\2\2\u0125\u0126\7*\2\2\u0126G\3\2\2\2\u0127"+
-		"\u012c\5J&\2\u0128\u0129\7\5\2\2\u0129\u012b\5J&\2\u012a\u0128\3\2\2\2"+
-		"\u012b\u012e\3\2\2\2\u012c\u012a\3\2\2\2\u012c\u012d\3\2\2\2\u012dI\3"+
-		"\2\2\2\u012e\u012c\3\2\2\2\u012f\u0134\5L\'\2\u0130\u0131\7\4\2\2\u0131"+
-		"\u0133\5L\'\2\u0132\u0130\3\2\2\2\u0133\u0136\3\2\2\2\u0134\u0132\3\2"+
-		"\2\2\u0134\u0135\3\2\2\2\u0135K\3\2\2\2\u0136\u0134\3\2\2\2\u0137\u013c"+
-		"\5N(\2\u0138\u0139\t\2\2\2\u0139\u013b\5N(\2\u013a\u0138\3\2\2\2\u013b"+
-		"\u013e\3\2\2\2\u013c\u013a\3\2\2\2\u013c\u013d\3\2\2\2\u013dM\3\2\2\2"+
-		"\u013e\u013c\3\2\2\2\u013f\u0144\5P)\2\u0140\u0141\t\3\2\2\u0141\u0143"+
-		"\5P)\2\u0142\u0140\3\2\2\2\u0143\u0146\3\2\2\2\u0144\u0142\3\2\2\2\u0144"+
-		"\u0145\3\2\2\2\u0145O\3\2\2\2\u0146\u0144\3\2\2\2\u0147\u014c\5R*\2\u0148"+
-		"\u0149\t\4\2\2\u0149\u014b\5R*\2\u014a\u0148\3\2\2\2\u014b\u014e\3\2\2"+
-		"\2\u014c\u014a\3\2\2\2\u014c\u014d\3\2\2\2\u014dQ\3\2\2\2\u014e\u014c"+
-		"\3\2\2\2\u014f\u0154\5T+\2\u0150\u0151\t\5\2\2\u0151\u0153\5T+\2\u0152"+
-		"\u0150\3\2\2\2\u0153\u0156\3\2\2\2\u0154\u0152\3\2\2\2\u0154\u0155\3\2"+
-		"\2\2\u0155S\3\2\2\2\u0156\u0154\3\2\2\2\u0157\u0158\7\6\2\2\u0158\u015d"+
-		"\5V,\2\u0159\u015a\7\16\2\2\u015a\u015d\5V,\2\u015b\u015d\5V,\2\u015c"+
-		"\u0157\3\2\2\2\u015c\u0159\3\2\2\2\u015c\u015b\3\2\2\2\u015dU\3\2\2\2"+
-		"\u015e\u0162\5`\61\2\u015f\u0161\5X-\2\u0160\u015f\3\2\2\2\u0161\u0164"+
-		"\3\2\2\2\u0162\u0160\3\2\2\2\u0162\u0163\3\2\2\2\u0163W\3\2\2\2\u0164"+
-		"\u0162\3\2\2\2\u0165\u0166\7\34\2\2\u0166\u0167\7*\2\2\u0167Y\3\2\2\2"+
-		"\u0168\u0169\7\21\2\2\u0169\u016a\5H%\2\u016a\u016b\7\22\2\2\u016b[\3"+
-		"\2\2\2\u016c\u016e\7*\2\2\u016d\u016f\5> \2\u016e\u016d\3\2\2\2\u016e"+
-		"\u016f\3\2\2\2\u016f]\3\2\2\2\u0170\u0171\7\31\2\2\u0171\u0172\7*\2\2"+
-		"\u0172_\3\2\2\2\u0173\u017a\5Z.\2\u0174\u017a\5\\/\2\u0175\u017a\7$\2"+
-		"\2\u0176\u017a\5^\60\2\u0177\u017a\7&\2\2\u0178\u017a\7\'\2\2\u0179\u0173"+
-		"\3\2\2\2\u0179\u0174\3\2\2\2\u0179\u0175\3\2\2\2\u0179\u0176\3\2\2\2\u0179"+
-		"\u0177\3\2\2\2\u0179\u0178\3\2\2\2\u017aa\3\2\2\2\35jz\u0087\u008c\u0098"+
-		"\u00a1\u00a8\u00b1\u00b9\u00c4\u00d0\u00e9\u00f8\u0105\u010f\u0117\u0121"+
-		"\u012c\u0134\u013c\u0144\u014c\u0154\u015c\u0162\u016e\u0179";
+		",\t,\4-\t-\4.\t.\4/\t/\4\60\t\60\4\61\t\61\4\62\t\62\4\63\t\63\4\64\t"+
+		"\64\4\65\t\65\4\66\t\66\4\67\t\67\48\t8\49\t9\3\2\3\2\3\2\3\2\3\2\3\3"+
+		"\7\3y\n\3\f\3\16\3|\13\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\7"+
+		"\5\u0089\n\5\f\5\16\5\u008c\13\5\3\6\3\6\3\6\3\7\3\7\3\7\3\b\3\b\3\b\3"+
+		"\b\5\b\u0098\n\b\3\t\7\t\u009b\n\t\f\t\16\t\u009e\13\t\3\n\3\n\3\n\3\n"+
+		"\3\n\3\13\3\13\7\13\u00a7\n\13\f\13\16\13\u00aa\13\13\3\f\3\f\3\f\3\r"+
+		"\7\r\u00b0\n\r\f\r\16\r\u00b3\13\r\3\16\3\16\3\16\3\16\5\16\u00b9\n\16"+
+		"\3\16\3\16\3\16\3\16\3\16\3\17\3\17\5\17\u00c2\n\17\3\17\3\17\3\20\3\20"+
+		"\7\20\u00c8\n\20\f\20\16\20\u00cb\13\20\3\21\3\21\3\21\3\22\3\22\3\23"+
+		"\7\23\u00d3\n\23\f\23\16\23\u00d6\13\23\3\24\3\24\3\24\3\24\3\24\3\24"+
+		"\3\24\3\24\3\24\5\24\u00e1\n\24\3\25\3\25\3\25\3\25\3\26\3\26\3\26\3\26"+
+		"\3\27\3\27\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\31\3\31\3\31\3\31\7\31"+
+		"\u00f8\n\31\f\31\16\31\u00fb\13\31\3\31\3\31\3\31\3\32\3\32\3\32\3\33"+
+		"\3\33\3\33\3\33\3\33\3\33\5\33\u0109\n\33\3\34\3\34\3\34\3\35\3\35\3\35"+
+		"\3\35\3\35\3\35\3\36\3\36\5\36\u0116\n\36\3\36\3\36\3\37\3\37\3\37\3\37"+
+		"\3 \3 \5 \u0120\n \3 \3 \3!\3!\7!\u0126\n!\f!\16!\u0129\13!\3\"\3\"\3"+
+		"\"\3#\3#\7#\u0130\n#\f#\16#\u0133\13#\3$\3$\3$\3%\3%\7%\u013a\n%\f%\16"+
+		"%\u013d\13%\3&\3&\3&\3\'\3\'\7\'\u0144\n\'\f\'\16\'\u0147\13\'\3(\3(\3"+
+		"(\3)\3)\7)\u014e\n)\f)\16)\u0151\13)\3*\3*\3*\3+\3+\7+\u0158\n+\f+\16"+
+		"+\u015b\13+\3,\3,\3,\3-\3-\7-\u0162\n-\f-\16-\u0165\13-\3.\3.\3.\3/\3"+
+		"/\7/\u016c\n/\f/\16/\u016f\13/\3\60\3\60\3\60\3\61\3\61\3\61\5\61\u0177"+
+		"\n\61\3\62\3\62\3\62\3\63\3\63\3\63\3\64\3\64\7\64\u0181\n\64\f\64\16"+
+		"\64\u0184\13\64\3\65\3\65\3\65\3\66\3\66\3\66\3\66\3\67\3\67\5\67\u018f"+
+		"\n\67\38\38\38\39\39\39\39\39\39\59\u019a\n9\39\2\2:\2\4\6\b\n\f\16\20"+
+		"\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhj"+
+		"lnp\2\6\3\2\13\f\3\2\7\n\3\2\r\16\3\2\17\20\2\u018b\2r\3\2\2\2\4z\3\2"+
+		"\2\2\6}\3\2\2\2\b\u0085\3\2\2\2\n\u008d\3\2\2\2\f\u0090\3\2\2\2\16\u0097"+
+		"\3\2\2\2\20\u009c\3\2\2\2\22\u009f\3\2\2\2\24\u00a4\3\2\2\2\26\u00ab\3"+
+		"\2\2\2\30\u00b1\3\2\2\2\32\u00b4\3\2\2\2\34\u00bf\3\2\2\2\36\u00c5\3\2"+
+		"\2\2 \u00cc\3\2\2\2\"\u00cf\3\2\2\2$\u00d4\3\2\2\2&\u00e0\3\2\2\2(\u00e2"+
+		"\3\2\2\2*\u00e6\3\2\2\2,\u00ea\3\2\2\2.\u00ee\3\2\2\2\60\u00f3\3\2\2\2"+
+		"\62\u00ff\3\2\2\2\64\u0102\3\2\2\2\66\u010a\3\2\2\28\u010d\3\2\2\2:\u0113"+
+		"\3\2\2\2<\u0119\3\2\2\2>\u011d\3\2\2\2@\u0123\3\2\2\2B\u012a\3\2\2\2D"+
+		"\u012d\3\2\2\2F\u0134\3\2\2\2H\u0137\3\2\2\2J\u013e\3\2\2\2L\u0141\3\2"+
+		"\2\2N\u0148\3\2\2\2P\u014b\3\2\2\2R\u0152\3\2\2\2T\u0155\3\2\2\2V\u015c"+
+		"\3\2\2\2X\u015f\3\2\2\2Z\u0166\3\2\2\2\\\u0169\3\2\2\2^\u0170\3\2\2\2"+
+		"`\u0176\3\2\2\2b\u0178\3\2\2\2d\u017b\3\2\2\2f\u017e\3\2\2\2h\u0185\3"+
+		"\2\2\2j\u0188\3\2\2\2l\u018c\3\2\2\2n\u0190\3\2\2\2p\u0199\3\2\2\2rs\5"+
+		"\4\3\2st\5\20\t\2tu\5\30\r\2uv\7\2\2\3v\3\3\2\2\2wy\5\6\4\2xw\3\2\2\2"+
+		"y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{\5\3\2\2\2|z\3\2\2\2}~\7\30\2\2~\177\7"+
+		"*\2\2\177\u0080\7\33\2\2\u0080\u0081\7\23\2\2\u0081\u0082\5\b\5\2\u0082"+
+		"\u0083\7\24\2\2\u0083\u0084\7\25\2\2\u0084\7\3\2\2\2\u0085\u0086\5\f\7"+
+		"\2\u0086\u008a\7\25\2\2\u0087\u0089\5\n\6\2\u0088\u0087\3\2\2\2\u0089"+
+		"\u008c\3\2\2\2\u008a\u0088\3\2\2\2\u008a\u008b\3\2\2\2\u008b\t\3\2\2\2"+
+		"\u008c\u008a\3\2\2\2\u008d\u008e\5\f\7\2\u008e\u008f\7\25\2\2\u008f\13"+
+		"\3\2\2\2\u0090\u0091\7*\2\2\u0091\u0092\5\16\b\2\u0092\r\3\2\2\2\u0093"+
+		"\u0098\7(\2\2\u0094\u0098\7)\2\2\u0095\u0096\7\17\2\2\u0096\u0098\7*\2"+
+		"\2\u0097\u0093\3\2\2\2\u0097\u0094\3\2\2\2\u0097\u0095\3\2\2\2\u0098\17"+
+		"\3\2\2\2\u0099\u009b\5\22\n\2\u009a\u0099\3\2\2\2\u009b\u009e\3\2\2\2"+
+		"\u009c\u009a\3\2\2\2\u009c\u009d\3\2\2\2\u009d\21\3\2\2\2\u009e\u009c"+
+		"\3\2\2\2\u009f\u00a0\7\27\2\2\u00a0\u00a1\5\24\13\2\u00a1\u00a2\5\16\b"+
+		"\2\u00a2\u00a3\7\25\2\2\u00a3\23\3\2\2\2\u00a4\u00a8\7*\2\2\u00a5\u00a7"+
+		"\5\26\f\2\u00a6\u00a5\3\2\2\2\u00a7\u00aa\3\2\2\2\u00a8\u00a6\3\2\2\2"+
+		"\u00a8\u00a9\3\2\2\2\u00a9\25\3\2\2\2\u00aa\u00a8\3\2\2\2\u00ab\u00ac"+
+		"\7\26\2\2\u00ac\u00ad\7*\2\2\u00ad\27\3\2\2\2\u00ae\u00b0\5\32\16\2\u00af"+
+		"\u00ae\3\2\2\2\u00b0\u00b3\3\2\2\2\u00b1\u00af\3\2\2\2\u00b1\u00b2\3\2"+
+		"\2\2\u00b2\31\3\2\2\2\u00b3\u00b1\3\2\2\2\u00b4\u00b5\7\35\2\2\u00b5\u00b6"+
+		"\7*\2\2\u00b6\u00b8\5\34\17\2\u00b7\u00b9\5\"\22\2\u00b8\u00b7\3\2\2\2"+
+		"\u00b8\u00b9\3\2\2\2\u00b9\u00ba\3\2\2\2\u00ba\u00bb\7\23\2\2\u00bb\u00bc"+
+		"\5\20\t\2\u00bc\u00bd\5$\23\2\u00bd\u00be\7\24\2\2\u00be\33\3\2\2\2\u00bf"+
+		"\u00c1\7\21\2\2\u00c0\u00c2\5\36\20\2\u00c1\u00c0\3\2\2\2\u00c1\u00c2"+
+		"\3\2\2\2\u00c2\u00c3\3\2\2\2\u00c3\u00c4\7\22\2\2\u00c4\35\3\2\2\2\u00c5"+
+		"\u00c9\5\f\7\2\u00c6\u00c8\5 \21\2\u00c7\u00c6\3\2\2\2\u00c8\u00cb\3\2"+
+		"\2\2\u00c9\u00c7\3\2\2\2\u00c9\u00ca\3\2\2\2\u00ca\37\3\2\2\2\u00cb\u00c9"+
+		"\3\2\2\2\u00cc\u00cd\7\26\2\2\u00cd\u00ce\5\f\7\2\u00ce!\3\2\2\2\u00cf"+
+		"\u00d0\5\16\b\2\u00d0#\3\2\2\2\u00d1\u00d3\5&\24\2\u00d2\u00d1\3\2\2\2"+
+		"\u00d3\u00d6\3\2\2\2\u00d4\u00d2\3\2\2\2\u00d4\u00d5\3\2\2\2\u00d5%\3"+
+		"\2\2\2\u00d6\u00d4\3\2\2\2\u00d7\u00e1\5*\26\2\u00d8\u00e1\5.\30\2\u00d9"+
+		"\u00e1\5\60\31\2\u00da\u00e1\5,\27\2\u00db\u00e1\5(\25\2\u00dc\u00e1\5"+
+		"\64\33\2\u00dd\u00e1\58\35\2\u00de\u00e1\5:\36\2\u00df\u00e1\5<\37\2\u00e0"+
+		"\u00d7\3\2\2\2\u00e0\u00d8\3\2\2\2\u00e0\u00d9\3\2\2\2\u00e0\u00da\3\2"+
+		"\2\2\u00e0\u00db\3\2\2\2\u00e0\u00dc\3\2\2\2\u00e0\u00dd\3\2\2\2\u00e0"+
+		"\u00de\3\2\2\2\u00e0\u00df\3\2\2\2\u00e1\'\3\2\2\2\u00e2\u00e3\7\"\2\2"+
+		"\u00e3\u00e4\5D#\2\u00e4\u00e5\7\25\2\2\u00e5)\3\2\2\2\u00e6\u00e7\7\23"+
+		"\2\2\u00e7\u00e8\5$\23\2\u00e8\u00e9\7\24\2\2\u00e9+\3\2\2\2\u00ea\u00eb"+
+		"\7\32\2\2\u00eb\u00ec\5H%\2\u00ec\u00ed\7\25\2\2\u00ed-\3\2\2\2\u00ee"+
+		"\u00ef\5D#\2\u00ef\u00f0\7\3\2\2\u00f0\u00f1\5H%\2\u00f1\u00f2\7\25\2"+
+		"\2\u00f2/\3\2\2\2\u00f3\u00f4\7#\2\2\u00f4\u00f5\7\21\2\2\u00f5\u00f9"+
+		"\7%\2\2\u00f6\u00f8\5\62\32\2\u00f7\u00f6\3\2\2\2\u00f8\u00fb\3\2\2\2"+
+		"\u00f9\u00f7\3\2\2\2\u00f9\u00fa\3\2\2\2\u00fa\u00fc\3\2\2\2\u00fb\u00f9"+
+		"\3\2\2\2\u00fc\u00fd\7\22\2\2\u00fd\u00fe\7\25\2\2\u00fe\61\3\2\2\2\u00ff"+
+		"\u0100\7\26\2\2\u0100\u0101\5H%\2\u0101\63\3\2\2\2\u0102\u0103\7\37\2"+
+		"\2\u0103\u0104\7\21\2\2\u0104\u0105\5H%\2\u0105\u0106\7\22\2\2\u0106\u0108"+
+		"\5*\26\2\u0107\u0109\5\66\34\2\u0108\u0107\3\2\2\2\u0108\u0109\3\2\2\2"+
+		"\u0109\65\3\2\2\2\u010a\u010b\7 \2\2\u010b\u010c\5*\26\2\u010c\67\3\2"+
+		"\2\2\u010d\u010e\7!\2\2\u010e\u010f\7\21\2\2\u010f\u0110\5H%\2\u0110\u0111"+
+		"\7\22\2\2\u0111\u0112\5*\26\2\u01129\3\2\2\2\u0113\u0115\7\36\2\2\u0114"+
+		"\u0116\5H%\2\u0115\u0114\3\2\2\2\u0115\u0116\3\2\2\2\u0116\u0117\3\2\2"+
+		"\2\u0117\u0118\7\25\2\2\u0118;\3\2\2\2\u0119\u011a\7*\2\2\u011a\u011b"+
+		"\5> \2\u011b\u011c\7\25\2\2\u011c=\3\2\2\2\u011d\u011f\7\21\2\2\u011e"+
+		"\u0120\5@!\2\u011f\u011e\3\2\2\2\u011f\u0120\3\2\2\2\u0120\u0121\3\2\2"+
+		"\2\u0121\u0122\7\22\2\2\u0122?\3\2\2\2\u0123\u0127\5H%\2\u0124\u0126\5"+
+		"B\"\2\u0125\u0124\3\2\2\2\u0126\u0129\3\2\2\2\u0127\u0125\3\2\2\2\u0127"+
+		"\u0128\3\2\2\2\u0128A\3\2\2\2\u0129\u0127\3\2\2\2\u012a\u012b\7\26\2\2"+
+		"\u012b\u012c\5H%\2\u012cC\3\2\2\2\u012d\u0131\7*\2\2\u012e\u0130\5F$\2"+
+		"\u012f\u012e\3\2\2\2\u0130\u0133\3\2\2\2\u0131\u012f\3\2\2\2\u0131\u0132"+
+		"\3\2\2\2\u0132E\3\2\2\2\u0133\u0131\3\2\2\2\u0134\u0135\7\34\2\2\u0135"+
+		"\u0136\7*\2\2\u0136G\3\2\2\2\u0137\u013b\5L\'\2\u0138\u013a\5J&\2\u0139"+
+		"\u0138\3\2\2\2\u013a\u013d\3\2\2\2\u013b\u0139\3\2\2\2\u013b\u013c\3\2"+
+		"\2\2\u013cI\3\2\2\2\u013d\u013b\3\2\2\2\u013e\u013f\7\5\2\2\u013f\u0140"+
+		"\5L\'\2\u0140K\3\2\2\2\u0141\u0145\5P)\2\u0142\u0144\5N(\2\u0143\u0142"+
+		"\3\2\2\2\u0144\u0147\3\2\2\2\u0145\u0143\3\2\2\2\u0145\u0146\3\2\2\2\u0146"+
+		"M\3\2\2\2\u0147\u0145\3\2\2\2\u0148\u0149\7\4\2\2\u0149\u014a\5P)\2\u014a"+
+		"O\3\2\2\2\u014b\u014f\5T+\2\u014c\u014e\5R*\2\u014d\u014c\3\2\2\2\u014e"+
+		"\u0151\3\2\2\2\u014f\u014d\3\2\2\2\u014f\u0150\3\2\2\2\u0150Q\3\2\2\2"+
+		"\u0151\u014f\3\2\2\2\u0152\u0153\t\2\2\2\u0153\u0154\5T+\2\u0154S\3\2"+
+		"\2\2\u0155\u0159\5X-\2\u0156\u0158\5V,\2\u0157\u0156\3\2\2\2\u0158\u015b"+
+		"\3\2\2\2\u0159\u0157\3\2\2\2\u0159\u015a\3\2\2\2\u015aU\3\2\2\2\u015b"+
+		"\u0159\3\2\2\2\u015c\u015d\t\3\2\2\u015d\u015e\5X-\2\u015eW\3\2\2\2\u015f"+
+		"\u0163\5\\/\2\u0160\u0162\5Z.\2\u0161\u0160\3\2\2\2\u0162\u0165\3\2\2"+
+		"\2\u0163\u0161\3\2\2\2\u0163\u0164\3\2\2\2\u0164Y\3\2\2\2\u0165\u0163"+
+		"\3\2\2\2\u0166\u0167\t\4\2\2\u0167\u0168\5\\/\2\u0168[\3\2\2\2\u0169\u016d"+
+		"\5`\61\2\u016a\u016c\5^\60\2\u016b\u016a\3\2\2\2\u016c\u016f\3\2\2\2\u016d"+
+		"\u016b\3\2\2\2\u016d\u016e\3\2\2\2\u016e]\3\2\2\2\u016f\u016d\3\2\2\2"+
+		"\u0170\u0171\t\5\2\2\u0171\u0172\5`\61\2\u0172_\3\2\2\2\u0173\u0177\5"+
+		"b\62\2\u0174\u0177\5d\63\2\u0175\u0177\5f\64\2\u0176\u0173\3\2\2\2\u0176"+
+		"\u0174\3\2\2\2\u0176\u0175\3\2\2\2\u0177a\3\2\2\2\u0178\u0179\7\6\2\2"+
+		"\u0179\u017a\5f\64\2\u017ac\3\2\2\2\u017b\u017c\7\16\2\2\u017c\u017d\5"+
+		"f\64\2\u017de\3\2\2\2\u017e\u0182\5p9\2\u017f\u0181\5h\65\2\u0180\u017f"+
+		"\3\2\2\2\u0181\u0184\3\2\2\2\u0182\u0180\3\2\2\2\u0182\u0183\3\2\2\2\u0183"+
+		"g\3\2\2\2\u0184\u0182\3\2\2\2\u0185\u0186\7\34\2\2\u0186\u0187\7*\2\2"+
+		"\u0187i\3\2\2\2\u0188\u0189\7\21\2\2\u0189\u018a\5H%\2\u018a\u018b\7\22"+
+		"\2\2\u018bk\3\2\2\2\u018c\u018e\7*\2\2\u018d\u018f\5> \2\u018e\u018d\3"+
+		"\2\2\2\u018e\u018f\3\2\2\2\u018fm\3\2\2\2\u0190\u0191\7\31\2\2\u0191\u0192"+
+		"\7*\2\2\u0192o\3\2\2\2\u0193\u019a\5j\66\2\u0194\u019a\5l\67\2\u0195\u019a"+
+		"\7$\2\2\u0196\u019a\5n8\2\u0197\u019a\7&\2\2\u0198\u019a\7\'\2\2\u0199"+
+		"\u0193\3\2\2\2\u0199\u0194\3\2\2\2\u0199\u0195\3\2\2\2\u0199\u0196\3\2"+
+		"\2\2\u0199\u0197\3\2\2\2\u0199\u0198\3\2\2\2\u019aq\3\2\2\2\35z\u008a"+
+		"\u0097\u009c\u00a8\u00b1\u00b8\u00c1\u00c9\u00d4\u00e0\u00f9\u0108\u0115"+
+		"\u011f\u0127\u0131\u013b\u0145\u014f\u0159\u0163\u016d\u0176\u0182\u018e"+
+		"\u0199";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

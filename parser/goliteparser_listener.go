@@ -115,23 +115,47 @@ type GoliteParserListener interface {
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
+	// EnterExpressionPrime is called when entering the expressionPrime production.
+	EnterExpressionPrime(c *ExpressionPrimeContext)
+
 	// EnterBoolTerm is called when entering the boolTerm production.
 	EnterBoolTerm(c *BoolTermContext)
+
+	// EnterBoolTermPrime is called when entering the boolTermPrime production.
+	EnterBoolTermPrime(c *BoolTermPrimeContext)
 
 	// EnterEqualTerm is called when entering the equalTerm production.
 	EnterEqualTerm(c *EqualTermContext)
 
+	// EnterEqualTermPrime is called when entering the equalTermPrime production.
+	EnterEqualTermPrime(c *EqualTermPrimeContext)
+
 	// EnterRelationTerm is called when entering the relationTerm production.
 	EnterRelationTerm(c *RelationTermContext)
+
+	// EnterRelationTermPrime is called when entering the relationTermPrime production.
+	EnterRelationTermPrime(c *RelationTermPrimeContext)
 
 	// EnterSimpleTerm is called when entering the simpleTerm production.
 	EnterSimpleTerm(c *SimpleTermContext)
 
+	// EnterSimpleTermPrime is called when entering the simpleTermPrime production.
+	EnterSimpleTermPrime(c *SimpleTermPrimeContext)
+
 	// EnterTerm is called when entering the term production.
 	EnterTerm(c *TermContext)
 
+	// EnterTermPrime is called when entering the termPrime production.
+	EnterTermPrime(c *TermPrimeContext)
+
 	// EnterUnaryTerm is called when entering the unaryTerm production.
 	EnterUnaryTerm(c *UnaryTermContext)
+
+	// EnterUnaryTermBool is called when entering the unaryTermBool production.
+	EnterUnaryTermBool(c *UnaryTermBoolContext)
+
+	// EnterUnaryTermInt is called when entering the unaryTermInt production.
+	EnterUnaryTermInt(c *UnaryTermIntContext)
 
 	// EnterSelectorTerm is called when entering the selectorTerm production.
 	EnterSelectorTerm(c *SelectorTermContext)
@@ -259,23 +283,47 @@ type GoliteParserListener interface {
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)
 
+	// ExitExpressionPrime is called when exiting the expressionPrime production.
+	ExitExpressionPrime(c *ExpressionPrimeContext)
+
 	// ExitBoolTerm is called when exiting the boolTerm production.
 	ExitBoolTerm(c *BoolTermContext)
+
+	// ExitBoolTermPrime is called when exiting the boolTermPrime production.
+	ExitBoolTermPrime(c *BoolTermPrimeContext)
 
 	// ExitEqualTerm is called when exiting the equalTerm production.
 	ExitEqualTerm(c *EqualTermContext)
 
+	// ExitEqualTermPrime is called when exiting the equalTermPrime production.
+	ExitEqualTermPrime(c *EqualTermPrimeContext)
+
 	// ExitRelationTerm is called when exiting the relationTerm production.
 	ExitRelationTerm(c *RelationTermContext)
+
+	// ExitRelationTermPrime is called when exiting the relationTermPrime production.
+	ExitRelationTermPrime(c *RelationTermPrimeContext)
 
 	// ExitSimpleTerm is called when exiting the simpleTerm production.
 	ExitSimpleTerm(c *SimpleTermContext)
 
+	// ExitSimpleTermPrime is called when exiting the simpleTermPrime production.
+	ExitSimpleTermPrime(c *SimpleTermPrimeContext)
+
 	// ExitTerm is called when exiting the term production.
 	ExitTerm(c *TermContext)
 
+	// ExitTermPrime is called when exiting the termPrime production.
+	ExitTermPrime(c *TermPrimeContext)
+
 	// ExitUnaryTerm is called when exiting the unaryTerm production.
 	ExitUnaryTerm(c *UnaryTermContext)
+
+	// ExitUnaryTermBool is called when exiting the unaryTermBool production.
+	ExitUnaryTermBool(c *UnaryTermBoolContext)
+
+	// ExitUnaryTermInt is called when exiting the unaryTermInt production.
+	ExitUnaryTermInt(c *UnaryTermIntContext)
 
 	// ExitSelectorTerm is called when exiting the selectorTerm production.
 	ExitSelectorTerm(c *SelectorTermContext)
