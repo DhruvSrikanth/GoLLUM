@@ -236,39 +236,52 @@ func (gParser *goliteParser) ExitFunction(c *FunctionContext) {
 // ExitStatement is called when exiting the statement production.
 func (gParser *goliteParser) ExitStatement(c *StatementContext) {
 	// Get the key for the statement
-	// line, col, key := GetTokenInfo(c)
+	line, col, key := GetTokenInfo(c)
 	// Get the statement type
+	var stmt *ast.Statement
+
 	if blockStatement := c.GetBl(); blockStatement != nil {
-		fmt.Println("block statement")
+		// Get the block statement
+		_, _, blockKey := GetTokenInfo(blockStatement)
+		stmt = gParser.nodes[blockKey].(*ast.Statement)
 	} else if assignStatement := c.GetAsmt(); assignStatement != nil {
-		fmt.Println("assign statement")
+		// Get the assignment statement
+		_, _, assignKey := GetTokenInfo(assignStatement)
+		stmt = gParser.nodes[assignKey].(*ast.Statement)
 	} else if printStatement := c.GetPrnt(); printStatement != nil {
-		fmt.Println("print statement")
+		// Get the print statement
+		_, _, printKey := GetTokenInfo(printStatement)
+		stmt = gParser.nodes[printKey].(*ast.Statement)
 	} else if delStatement := c.GetDel(); delStatement != nil {
-		fmt.Println("delete statement")
+		// Get the delete statement
+		_, _, delKey := GetTokenInfo(delStatement)
+		stmt = gParser.nodes[delKey].(*ast.Statement)
 	} else if rdStatement := c.GetRd(); rdStatement != nil {
-		fmt.Println("read statement")
+		// Get the read statement
+		_, _, rdKey := GetTokenInfo(rdStatement)
+		stmt = gParser.nodes[rdKey].(*ast.Statement)
 	} else if condStatement := c.GetCond(); condStatement != nil {
-		fmt.Println("conditional statement")
+		// Get the conditional statement
+		_, _, condKey := GetTokenInfo(condStatement)
+		stmt = gParser.nodes[condKey].(*ast.Statement)
 	} else if lpStatement := c.GetLp(); lpStatement != nil {
-		fmt.Println("loop statement")
+		// Get the loop statement
+		_, _, lpKey := GetTokenInfo(lpStatement)
+		stmt = gParser.nodes[lpKey].(*ast.Statement)
 	} else if returnStatement := c.GetRet(); returnStatement != nil {
-		fmt.Println("return statement")
+		// Get the return statement
+		_, _, returnKey := GetTokenInfo(returnStatement)
+		stmt = gParser.nodes[returnKey].(*ast.Statement)
 	} else if invokeStatement := c.GetInvoke(); invokeStatement != nil {
-		fmt.Println("invoke statement")
+		// Get the invoke statement
+		_, _, invokeKey := GetTokenInfo(invokeStatement)
+		stmt = gParser.nodes[invokeKey].(*ast.Statement)
 	} else {
 		panic(fmt.Sprintf("Unknown statement - %s", c.GetText()))
 	}
 
-	// // Get the statement type
-	// stmtType := c.GetStmtType().GetText()
-	// // Get the statement expression
-	// exprCtx := c.GetExpr().(*ExpressionContext)
-	// _, _, exprKey := GetTokenInfo(exprCtx)
-	// expr := gParser.nodes[exprKey].(*ast.Expression)
-
-	// // Create the statement
-	// gParser.nodes[key] = ast.NewStatement(stmtType, *expr, token.NewToken(line, col))
+	// Create the statement
+	gParser.nodes[key] = stmt
 }
 
 // ExitBlock is called when exiting the block production.
