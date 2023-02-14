@@ -9,11 +9,11 @@ import (
 
 // Binary operation struct for rhs evaluation
 type BinOpExpr struct {
-	*token.Token            // The token information
-	operator     Operator   // The operator for the binary expression
-	right        Expression // The right operand expression
-	left         Expression // The left operand expression
-	ty           types.Type // The inferred type of the expression
+	*token.Token             // The token information
+	left         *Expression // The left operand expression
+	operator     *Operator   // The operator for the binary expression
+	right        *Expression // The right operand expression
+	ty           types.Type  // The inferred type of the expression
 }
 
 // Is the binary operation an integer operation
@@ -42,8 +42,8 @@ func isBoolOp(op Operator) bool {
 }
 
 // Return a new binary operation expression
-func NewBinOp(op Operator, right, left Expression, token *token.Token) *BinOpExpr {
-	return &BinOpExpr{token, op, right, left, nil}
+func NewBinOp(left *Expression, op *Operator, right *Expression, token *token.Token) *BinOpExpr {
+	return &BinOpExpr{token, left, op, right, nil}
 }
 
 // String representation of the binary operation
@@ -52,9 +52,13 @@ func (binOp *BinOpExpr) String() string {
 	var out bytes.Buffer
 
 	out.WriteString("(")
-	out.WriteString(binOp.left.String())
-	out.WriteString(" " + OpToStr(binOp.operator) + " ")
-	out.WriteString(binOp.right.String())
+	if binOp.left != nil {
+		out.WriteString((*binOp.left).String())
+	}
+	if binOp.operator != nil {
+		out.WriteString(" " + OpToStr(*binOp.operator) + " ")
+	}
+	out.WriteString((*binOp.right).String())
 	out.WriteString(")")
 
 	return out.String()
