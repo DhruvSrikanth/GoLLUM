@@ -139,18 +139,18 @@ termPrime: op=(MULT | DIV) ut=unaryTerm; // Split from term grammar rule
 
 unaryTerm: unaryTermBool | unaryTermInt | selectorTerm;
 
-unaryTermBool: op=NOT st=selectorTerm;
+unaryTermBool: op=NOT st=selectorTerm; // Split from unaryTerm grammar rule
 
-unaryTermInt: op=MINUS st=selectorTerm;
+unaryTermInt: op=MINUS st=selectorTerm; // Split from unaryTerm grammar rule
 
 selectorTerm: f=factor selectorTermPrime*;
 
 selectorTermPrime: DOT id=IDENT; // Split from selectorTerm grammer
+
+factor: subfactor | functioncall | INT_LIT | allocation | BOOL_LIT | NIL_LIT;
 
 subfactor: LPAREN expr=expression RPAREN; // Split from factor grammer
 
 functioncall: id=IDENT args=arguments?; // Split from factor grammer, not sure if this is a function call
 
 allocation: NEW key=IDENT; // Split from factor grammer
-
-factor: subfactor | functioncall | INT_LIT | allocation | BOOL_LIT | NIL_LIT;

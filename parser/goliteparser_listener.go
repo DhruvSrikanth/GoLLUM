@@ -163,6 +163,9 @@ type GoliteParserListener interface {
 	// EnterSelectorTermPrime is called when entering the selectorTermPrime production.
 	EnterSelectorTermPrime(c *SelectorTermPrimeContext)
 
+	// EnterFactor is called when entering the factor production.
+	EnterFactor(c *FactorContext)
+
 	// EnterSubfactor is called when entering the subfactor production.
 	EnterSubfactor(c *SubfactorContext)
 
@@ -171,9 +174,6 @@ type GoliteParserListener interface {
 
 	// EnterAllocation is called when entering the allocation production.
 	EnterAllocation(c *AllocationContext)
-
-	// EnterFactor is called when entering the factor production.
-	EnterFactor(c *FactorContext)
 
 	// ExitProgram is called when exiting the program production.
 	ExitProgram(c *ProgramContext)
@@ -331,6 +331,9 @@ type GoliteParserListener interface {
 	// ExitSelectorTermPrime is called when exiting the selectorTermPrime production.
 	ExitSelectorTermPrime(c *SelectorTermPrimeContext)
 
+	// ExitFactor is called when exiting the factor production.
+	ExitFactor(c *FactorContext)
+
 	// ExitSubfactor is called when exiting the subfactor production.
 	ExitSubfactor(c *SubfactorContext)
 
@@ -339,7 +342,4 @@ type GoliteParserListener interface {
 
 	// ExitAllocation is called when exiting the allocation production.
 	ExitAllocation(c *AllocationContext)
-
-	// ExitFactor is called when exiting the factor production.
-	ExitFactor(c *FactorContext)
 }

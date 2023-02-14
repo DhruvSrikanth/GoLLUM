@@ -475,16 +475,68 @@ func (gParser *goliteParser) ExitInvocation(c *InvocationContext) {
 	gParser.nodes[key] = ast.NewInvocation(funcName, args, token.NewToken(line, col))
 }
 
+// ExitUnaryTerm is called when exiting the unary production.
+func (gParser *goliteParser) ExitUnaryTerm(c *UnaryTermContext) {
+	// Get the key for the unary expression
+	line, col, key := GetTokenInfo(c)
+
+	var op string
+	var selector *ast.SelectorTerm
+	if boolCtx := c.UnaryTermBool(); boolCtx != nil {
+		op = boolCtx.GetOp().GetText()
+		// Get the selector
+		selectorCtx := boolCtx.GetSt().(*SelectorTermContext)
+		_, _, selectorKey := GetTokenInfo(selectorCtx)
+		selector = gParser.nodes[selectorKey].(*ast.SelectorTerm)
+	} else if intCtx := c.UnaryTermInt(); intCtx != nil {
+		op = intCtx.GetText()
+		// Get the selector
+		selectorCtx := intCtx.GetSt().(*SelectorTermContext)
+		_, _, selectorKey := GetTokenInfo(selectorCtx)
+		selector = gParser.nodes[selectorKey].(*ast.SelectorTerm)
+	} else if selectCtx := c.SelectorTerm(); selectCtx != nil {
+		op = ""
+		// Get the selector
+		selectorCtx := selectCtx.(*SelectorTermContext)
+		_, _, selectorKey := GetTokenInfo(selectorCtx)
+		selector = gParser.nodes[selectorKey].(*ast.SelectorTerm)
+	} else {
+		panic("Invalid unary term")
+	}
+
+	// Get the operator
+	var optPtr *ast.Operator
+	if op != "" {
+		operator := ast.StrToOp(op)
+		optPtr = &operator
+	} else {
+		// Create a nil pointer
+		optPtr = nil
+	}
+
+	// Create the unary expression
+	gParser.nodes[key] = ast.NewUnaryTerm(*selector, optPtr, types.StringToType("nil"), token.NewToken(line, col))
+
+}
+
 // ExitSelectorTerm is called when exiting the selectorTerm production.
 func (gParser *goliteParser) ExitSelectorTerm(c *SelectorTermContext) {
-	_, _, key := GetTokenInfo(c)
+	// Get the key for the selector
+	line, col, key := GetTokenInfo(c)
+
+	// Get the factor expression
 	_, _, factorKey := GetTokenInfo(c.Factor())
-	// fmt.Println(c.Factor().GetText())
-	factor := gParser.nodes[factorKey]
-	// Check if factor is an instance of ast.Allocate
-	if _, ok := factor.(*ast.Allocate); ok {
-		gParser.nodes[key] = factor
+	factor := gParser.nodes[factorKey].(*ast.Expression)
+
+	// Get the fields
+	var fields []string
+	for _, fieldCtx := range c.AllSelectorTermPrime() {
+		field := fieldCtx.(*SelectorTermPrimeContext).GetId().GetText()
+		fields = append(fields, field)
 	}
+
+	// Create the selector term
+	gParser.nodes[key] = ast.NewSelectorTerm(*factor, fields, types.StringToType("nil"), token.NewToken(line, col))
 }
 
 // ExitFactor is called when exiting the factor production.
@@ -520,17 +572,55 @@ func (gParser *goliteParser) ExitFactor(c *FactorContext) {
 		gParser.nodes[key] = ast.NewNilLit(newToken)
 	} else if funcCallFactor := c.Functioncall(); funcCallFactor != nil {
 		// Function call
+		// Get the key for the function call
+		_, _, funcCallKey := GetTokenInfo(funcCallFactor)
+		// Get the function call
+		funcCall := gParser.nodes[funcCallKey].(*ast.Invocation)
 		// Add node to the ast
-		// gParser.nodes[key] =
+		gParser.nodes[key] = funcCall
 	} else if allocationFactor := c.Allocation(); allocationFactor != nil {
 		// Allocation
 		// Add the node to the ast
 		gParser.nodes[key] = ast.NewAllocate(allocationFactor.GetKey().GetText(), newToken)
 	} else if subfactorFactor := c.Subfactor(); subfactorFactor != nil {
 		// Subfactor
+		// Get the expression
+		// exprCtx := subfactorFactor.GetExpr().(*ExpressionContext)
+		// _, _, exprKey := GetTokenInfo(exprCtx)
 		// Add the node to the ast
 		// gParser.nodes[key] =
 	} else {
 		panic("Invalid factor in factor production rule")
 	}
+}
+
+// ExitFunctioncall is called when exiting the functionCall production.
+func (gParser *goliteParser) ExitFunctioncall(c *FunctioncallContext) {
+	// Get the key for the invocation
+	line, col, key := GetTokenInfo(c)
+
+	// Get the function name
+	funcName := c.GetId().GetText()
+
+	// Get the arguments
+	var args []ast.Expression
+	// If there are arguments
+	if argsCtx := c.GetArgs().(*ArgumentsContext).GetArgs(); argsCtx != nil {
+		// First argument
+		exprCtx := argsCtx.GetExpr().(*ExpressionContext)
+		_, _, exprKey := GetTokenInfo(exprCtx)
+		expr := gParser.nodes[exprKey].(*ast.Expression)
+		args = append(args, *expr)
+
+		// Get the rest of the arguments (if any)
+		for _, exprWrapperCtx := range argsCtx.(*ArgumentsPrimeContext).AllArgumentsPrimePrime() {
+			exprCtx := exprWrapperCtx.(*ArgumentsPrimePrimeContext).GetExpr().(*ExpressionContext)
+			_, _, exprKey := GetTokenInfo(exprCtx)
+			expr := gParser.nodes[exprKey].(*ast.Expression)
+			args = append(args, *expr)
+		}
+	}
+
+	// Create the invocation
+	gParser.nodes[key] = ast.NewInvocation(funcName, args, token.NewToken(line, col))
 }

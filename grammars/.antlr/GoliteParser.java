@@ -37,8 +37,8 @@ public class GoliteParser extends Parser {
 		RULE_relationTerm = 41, RULE_relationTermPrime = 42, RULE_simpleTerm = 43, 
 		RULE_simpleTermPrime = 44, RULE_term = 45, RULE_termPrime = 46, RULE_unaryTerm = 47, 
 		RULE_unaryTermBool = 48, RULE_unaryTermInt = 49, RULE_selectorTerm = 50, 
-		RULE_selectorTermPrime = 51, RULE_subfactor = 52, RULE_functioncall = 53, 
-		RULE_allocation = 54, RULE_factor = 55;
+		RULE_selectorTermPrime = 51, RULE_factor = 52, RULE_subfactor = 53, RULE_functioncall = 54, 
+		RULE_allocation = 55;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"program", "types", "typeDeclaration", "fields", "morefields", "decl", 
@@ -50,8 +50,8 @@ public class GoliteParser extends Parser {
 			"lValuePrime", "expression", "expressionPrime", "boolTerm", "boolTermPrime", 
 			"equalTerm", "equalTermPrime", "relationTerm", "relationTermPrime", "simpleTerm", 
 			"simpleTermPrime", "term", "termPrime", "unaryTerm", "unaryTermBool", 
-			"unaryTermInt", "selectorTerm", "selectorTermPrime", "subfactor", "functioncall", 
-			"allocation", "factor"
+			"unaryTermInt", "selectorTerm", "selectorTermPrime", "factor", "subfactor", 
+			"functioncall", "allocation"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -2597,6 +2597,89 @@ public class GoliteParser extends Parser {
 		return _localctx;
 	}
 
+	public static class FactorContext extends ParserRuleContext {
+		public SubfactorContext subfactor() {
+			return getRuleContext(SubfactorContext.class,0);
+		}
+		public FunctioncallContext functioncall() {
+			return getRuleContext(FunctioncallContext.class,0);
+		}
+		public TerminalNode INT_LIT() { return getToken(GoliteParser.INT_LIT, 0); }
+		public AllocationContext allocation() {
+			return getRuleContext(AllocationContext.class,0);
+		}
+		public TerminalNode BOOL_LIT() { return getToken(GoliteParser.BOOL_LIT, 0); }
+		public TerminalNode NIL_LIT() { return getToken(GoliteParser.NIL_LIT, 0); }
+		public FactorContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_factor; }
+	}
+
+	public final FactorContext factor() throws RecognitionException {
+		FactorContext _localctx = new FactorContext(_ctx, getState());
+		enterRule(_localctx, 104, RULE_factor);
+		try {
+			setState(396);
+			_errHandler.sync(this);
+			switch (_input.LA(1)) {
+			case LPAREN:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(390);
+				subfactor();
+				}
+				break;
+			case IDENT:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(391);
+				functioncall();
+				}
+				break;
+			case INT_LIT:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(392);
+				match(INT_LIT);
+				}
+				break;
+			case NEW:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(393);
+				allocation();
+				}
+				break;
+			case BOOL_LIT:
+				enterOuterAlt(_localctx, 5);
+				{
+				setState(394);
+				match(BOOL_LIT);
+				}
+				break;
+			case NIL_LIT:
+				enterOuterAlt(_localctx, 6);
+				{
+				setState(395);
+				match(NIL_LIT);
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static class SubfactorContext extends ParserRuleContext {
 		public ExpressionContext expr;
 		public TerminalNode LPAREN() { return getToken(GoliteParser.LPAREN, 0); }
@@ -2612,15 +2695,15 @@ public class GoliteParser extends Parser {
 
 	public final SubfactorContext subfactor() throws RecognitionException {
 		SubfactorContext _localctx = new SubfactorContext(_ctx, getState());
-		enterRule(_localctx, 104, RULE_subfactor);
+		enterRule(_localctx, 106, RULE_subfactor);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(390);
+			setState(398);
 			match(LPAREN);
-			setState(391);
+			setState(399);
 			((SubfactorContext)_localctx).expr = expression();
-			setState(392);
+			setState(400);
 			match(RPAREN);
 			}
 		}
@@ -2650,19 +2733,19 @@ public class GoliteParser extends Parser {
 
 	public final FunctioncallContext functioncall() throws RecognitionException {
 		FunctioncallContext _localctx = new FunctioncallContext(_ctx, getState());
-		enterRule(_localctx, 106, RULE_functioncall);
+		enterRule(_localctx, 108, RULE_functioncall);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(394);
+			setState(402);
 			((FunctioncallContext)_localctx).id = match(IDENT);
-			setState(396);
+			setState(404);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAREN) {
 				{
-				setState(395);
+				setState(403);
 				((FunctioncallContext)_localctx).args = arguments();
 				}
 			}
@@ -2692,97 +2775,14 @@ public class GoliteParser extends Parser {
 
 	public final AllocationContext allocation() throws RecognitionException {
 		AllocationContext _localctx = new AllocationContext(_ctx, getState());
-		enterRule(_localctx, 108, RULE_allocation);
+		enterRule(_localctx, 110, RULE_allocation);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(398);
+			setState(406);
 			match(NEW);
-			setState(399);
-			((AllocationContext)_localctx).key = match(IDENT);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class FactorContext extends ParserRuleContext {
-		public SubfactorContext subfactor() {
-			return getRuleContext(SubfactorContext.class,0);
-		}
-		public FunctioncallContext functioncall() {
-			return getRuleContext(FunctioncallContext.class,0);
-		}
-		public TerminalNode INT_LIT() { return getToken(GoliteParser.INT_LIT, 0); }
-		public AllocationContext allocation() {
-			return getRuleContext(AllocationContext.class,0);
-		}
-		public TerminalNode BOOL_LIT() { return getToken(GoliteParser.BOOL_LIT, 0); }
-		public TerminalNode NIL_LIT() { return getToken(GoliteParser.NIL_LIT, 0); }
-		public FactorContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_factor; }
-	}
-
-	public final FactorContext factor() throws RecognitionException {
-		FactorContext _localctx = new FactorContext(_ctx, getState());
-		enterRule(_localctx, 110, RULE_factor);
-		try {
 			setState(407);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case LPAREN:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(401);
-				subfactor();
-				}
-				break;
-			case IDENT:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(402);
-				functioncall();
-				}
-				break;
-			case INT_LIT:
-				enterOuterAlt(_localctx, 3);
-				{
-				setState(403);
-				match(INT_LIT);
-				}
-				break;
-			case NEW:
-				enterOuterAlt(_localctx, 4);
-				{
-				setState(404);
-				allocation();
-				}
-				break;
-			case BOOL_LIT:
-				enterOuterAlt(_localctx, 5);
-				{
-				setState(405);
-				match(BOOL_LIT);
-				}
-				break;
-			case NIL_LIT:
-				enterOuterAlt(_localctx, 6);
-				{
-				setState(406);
-				match(NIL_LIT);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			((AllocationContext)_localctx).key = match(IDENT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2825,30 +2825,30 @@ public class GoliteParser extends Parser {
 		"+\u015b\13+\3,\3,\3,\3-\3-\7-\u0162\n-\f-\16-\u0165\13-\3.\3.\3.\3/\3"+
 		"/\7/\u016c\n/\f/\16/\u016f\13/\3\60\3\60\3\60\3\61\3\61\3\61\5\61\u0177"+
 		"\n\61\3\62\3\62\3\62\3\63\3\63\3\63\3\64\3\64\7\64\u0181\n\64\f\64\16"+
-		"\64\u0184\13\64\3\65\3\65\3\65\3\66\3\66\3\66\3\66\3\67\3\67\5\67\u018f"+
-		"\n\67\38\38\38\39\39\39\39\39\39\59\u019a\n9\39\2\2:\2\4\6\b\n\f\16\20"+
-		"\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\^`bdfhj"+
-		"lnp\2\6\3\2\13\f\3\2\7\n\3\2\r\16\3\2\17\20\2\u018b\2r\3\2\2\2\4z\3\2"+
-		"\2\2\6}\3\2\2\2\b\u0085\3\2\2\2\n\u008d\3\2\2\2\f\u0090\3\2\2\2\16\u0097"+
-		"\3\2\2\2\20\u009c\3\2\2\2\22\u009f\3\2\2\2\24\u00a4\3\2\2\2\26\u00ab\3"+
-		"\2\2\2\30\u00b1\3\2\2\2\32\u00b4\3\2\2\2\34\u00bf\3\2\2\2\36\u00c5\3\2"+
-		"\2\2 \u00cc\3\2\2\2\"\u00cf\3\2\2\2$\u00d4\3\2\2\2&\u00e0\3\2\2\2(\u00e2"+
-		"\3\2\2\2*\u00e6\3\2\2\2,\u00ea\3\2\2\2.\u00ee\3\2\2\2\60\u00f3\3\2\2\2"+
-		"\62\u00ff\3\2\2\2\64\u0102\3\2\2\2\66\u010a\3\2\2\28\u010d\3\2\2\2:\u0113"+
-		"\3\2\2\2<\u0119\3\2\2\2>\u011d\3\2\2\2@\u0123\3\2\2\2B\u012a\3\2\2\2D"+
-		"\u012d\3\2\2\2F\u0134\3\2\2\2H\u0137\3\2\2\2J\u013e\3\2\2\2L\u0141\3\2"+
-		"\2\2N\u0148\3\2\2\2P\u014b\3\2\2\2R\u0152\3\2\2\2T\u0155\3\2\2\2V\u015c"+
-		"\3\2\2\2X\u015f\3\2\2\2Z\u0166\3\2\2\2\\\u0169\3\2\2\2^\u0170\3\2\2\2"+
-		"`\u0176\3\2\2\2b\u0178\3\2\2\2d\u017b\3\2\2\2f\u017e\3\2\2\2h\u0185\3"+
-		"\2\2\2j\u0188\3\2\2\2l\u018c\3\2\2\2n\u0190\3\2\2\2p\u0199\3\2\2\2rs\5"+
-		"\4\3\2st\5\20\t\2tu\5\30\r\2uv\7\2\2\3v\3\3\2\2\2wy\5\6\4\2xw\3\2\2\2"+
-		"y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{\5\3\2\2\2|z\3\2\2\2}~\7\30\2\2~\177\7"+
-		"*\2\2\177\u0080\7\33\2\2\u0080\u0081\7\23\2\2\u0081\u0082\5\b\5\2\u0082"+
-		"\u0083\7\24\2\2\u0083\u0084\7\25\2\2\u0084\7\3\2\2\2\u0085\u0086\5\f\7"+
-		"\2\u0086\u008a\7\25\2\2\u0087\u0089\5\n\6\2\u0088\u0087\3\2\2\2\u0089"+
-		"\u008c\3\2\2\2\u008a\u0088\3\2\2\2\u008a\u008b\3\2\2\2\u008b\t\3\2\2\2"+
-		"\u008c\u008a\3\2\2\2\u008d\u008e\5\f\7\2\u008e\u008f\7\25\2\2\u008f\13"+
-		"\3\2\2\2\u0090\u0091\7*\2\2\u0091\u0092\5\16\b\2\u0092\r\3\2\2\2\u0093"+
+		"\64\u0184\13\64\3\65\3\65\3\65\3\66\3\66\3\66\3\66\3\66\3\66\5\66\u018f"+
+		"\n\66\3\67\3\67\3\67\3\67\38\38\58\u0197\n8\39\39\39\39\2\2:\2\4\6\b\n"+
+		"\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@BDFHJLNPRTVXZ\\"+
+		"^`bdfhjlnp\2\6\3\2\13\f\3\2\7\n\3\2\r\16\3\2\17\20\2\u018b\2r\3\2\2\2"+
+		"\4z\3\2\2\2\6}\3\2\2\2\b\u0085\3\2\2\2\n\u008d\3\2\2\2\f\u0090\3\2\2\2"+
+		"\16\u0097\3\2\2\2\20\u009c\3\2\2\2\22\u009f\3\2\2\2\24\u00a4\3\2\2\2\26"+
+		"\u00ab\3\2\2\2\30\u00b1\3\2\2\2\32\u00b4\3\2\2\2\34\u00bf\3\2\2\2\36\u00c5"+
+		"\3\2\2\2 \u00cc\3\2\2\2\"\u00cf\3\2\2\2$\u00d4\3\2\2\2&\u00e0\3\2\2\2"+
+		"(\u00e2\3\2\2\2*\u00e6\3\2\2\2,\u00ea\3\2\2\2.\u00ee\3\2\2\2\60\u00f3"+
+		"\3\2\2\2\62\u00ff\3\2\2\2\64\u0102\3\2\2\2\66\u010a\3\2\2\28\u010d\3\2"+
+		"\2\2:\u0113\3\2\2\2<\u0119\3\2\2\2>\u011d\3\2\2\2@\u0123\3\2\2\2B\u012a"+
+		"\3\2\2\2D\u012d\3\2\2\2F\u0134\3\2\2\2H\u0137\3\2\2\2J\u013e\3\2\2\2L"+
+		"\u0141\3\2\2\2N\u0148\3\2\2\2P\u014b\3\2\2\2R\u0152\3\2\2\2T\u0155\3\2"+
+		"\2\2V\u015c\3\2\2\2X\u015f\3\2\2\2Z\u0166\3\2\2\2\\\u0169\3\2\2\2^\u0170"+
+		"\3\2\2\2`\u0176\3\2\2\2b\u0178\3\2\2\2d\u017b\3\2\2\2f\u017e\3\2\2\2h"+
+		"\u0185\3\2\2\2j\u018e\3\2\2\2l\u0190\3\2\2\2n\u0194\3\2\2\2p\u0198\3\2"+
+		"\2\2rs\5\4\3\2st\5\20\t\2tu\5\30\r\2uv\7\2\2\3v\3\3\2\2\2wy\5\6\4\2xw"+
+		"\3\2\2\2y|\3\2\2\2zx\3\2\2\2z{\3\2\2\2{\5\3\2\2\2|z\3\2\2\2}~\7\30\2\2"+
+		"~\177\7*\2\2\177\u0080\7\33\2\2\u0080\u0081\7\23\2\2\u0081\u0082\5\b\5"+
+		"\2\u0082\u0083\7\24\2\2\u0083\u0084\7\25\2\2\u0084\7\3\2\2\2\u0085\u0086"+
+		"\5\f\7\2\u0086\u008a\7\25\2\2\u0087\u0089\5\n\6\2\u0088\u0087\3\2\2\2"+
+		"\u0089\u008c\3\2\2\2\u008a\u0088\3\2\2\2\u008a\u008b\3\2\2\2\u008b\t\3"+
+		"\2\2\2\u008c\u008a\3\2\2\2\u008d\u008e\5\f\7\2\u008e\u008f\7\25\2\2\u008f"+
+		"\13\3\2\2\2\u0090\u0091\7*\2\2\u0091\u0092\5\16\b\2\u0092\r\3\2\2\2\u0093"+
 		"\u0098\7(\2\2\u0094\u0098\7)\2\2\u0095\u0096\7\17\2\2\u0096\u0098\7*\2"+
 		"\2\u0097\u0093\3\2\2\2\u0097\u0094\3\2\2\2\u0097\u0095\3\2\2\2\u0098\17"+
 		"\3\2\2\2\u0099\u009b\5\22\n\2\u009a\u0099\3\2\2\2\u009b\u009e\3\2\2\2"+
@@ -2921,19 +2921,19 @@ public class GoliteParser extends Parser {
 		"b\62\2\u0174\u0177\5d\63\2\u0175\u0177\5f\64\2\u0176\u0173\3\2\2\2\u0176"+
 		"\u0174\3\2\2\2\u0176\u0175\3\2\2\2\u0177a\3\2\2\2\u0178\u0179\7\6\2\2"+
 		"\u0179\u017a\5f\64\2\u017ac\3\2\2\2\u017b\u017c\7\16\2\2\u017c\u017d\5"+
-		"f\64\2\u017de\3\2\2\2\u017e\u0182\5p9\2\u017f\u0181\5h\65\2\u0180\u017f"+
+		"f\64\2\u017de\3\2\2\2\u017e\u0182\5j\66\2\u017f\u0181\5h\65\2\u0180\u017f"+
 		"\3\2\2\2\u0181\u0184\3\2\2\2\u0182\u0180\3\2\2\2\u0182\u0183\3\2\2\2\u0183"+
 		"g\3\2\2\2\u0184\u0182\3\2\2\2\u0185\u0186\7\34\2\2\u0186\u0187\7*\2\2"+
-		"\u0187i\3\2\2\2\u0188\u0189\7\21\2\2\u0189\u018a\5H%\2\u018a\u018b\7\22"+
-		"\2\2\u018bk\3\2\2\2\u018c\u018e\7*\2\2\u018d\u018f\5> \2\u018e\u018d\3"+
-		"\2\2\2\u018e\u018f\3\2\2\2\u018fm\3\2\2\2\u0190\u0191\7\31\2\2\u0191\u0192"+
-		"\7*\2\2\u0192o\3\2\2\2\u0193\u019a\5j\66\2\u0194\u019a\5l\67\2\u0195\u019a"+
-		"\7$\2\2\u0196\u019a\5n8\2\u0197\u019a\7&\2\2\u0198\u019a\7\'\2\2\u0199"+
-		"\u0193\3\2\2\2\u0199\u0194\3\2\2\2\u0199\u0195\3\2\2\2\u0199\u0196\3\2"+
-		"\2\2\u0199\u0197\3\2\2\2\u0199\u0198\3\2\2\2\u019aq\3\2\2\2\35z\u008a"+
+		"\u0187i\3\2\2\2\u0188\u018f\5l\67\2\u0189\u018f\5n8\2\u018a\u018f\7$\2"+
+		"\2\u018b\u018f\5p9\2\u018c\u018f\7&\2\2\u018d\u018f\7\'\2\2\u018e\u0188"+
+		"\3\2\2\2\u018e\u0189\3\2\2\2\u018e\u018a\3\2\2\2\u018e\u018b\3\2\2\2\u018e"+
+		"\u018c\3\2\2\2\u018e\u018d\3\2\2\2\u018fk\3\2\2\2\u0190\u0191\7\21\2\2"+
+		"\u0191\u0192\5H%\2\u0192\u0193\7\22\2\2\u0193m\3\2\2\2\u0194\u0196\7*"+
+		"\2\2\u0195\u0197\5> \2\u0196\u0195\3\2\2\2\u0196\u0197\3\2\2\2\u0197o"+
+		"\3\2\2\2\u0198\u0199\7\31\2\2\u0199\u019a\7*\2\2\u019aq\3\2\2\2\35z\u008a"+
 		"\u0097\u009c\u00a8\u00b1\u00b8\u00c1\u00c9\u00d4\u00e0\u00f9\u0108\u0115"+
 		"\u011f\u0127\u0131\u013b\u0145\u014f\u0159\u0163\u016d\u0176\u0182\u018e"+
-		"\u0199";
+		"\u0196";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

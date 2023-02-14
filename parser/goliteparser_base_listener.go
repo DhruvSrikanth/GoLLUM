@@ -332,6 +332,12 @@ func (s *BaseGoliteParserListener) EnterSelectorTermPrime(ctx *SelectorTermPrime
 // ExitSelectorTermPrime is called when production selectorTermPrime is exited.
 func (s *BaseGoliteParserListener) ExitSelectorTermPrime(ctx *SelectorTermPrimeContext) {}
 
+// EnterFactor is called when production factor is entered.
+func (s *BaseGoliteParserListener) EnterFactor(ctx *FactorContext) {}
+
+// ExitFactor is called when production factor is exited.
+func (s *BaseGoliteParserListener) ExitFactor(ctx *FactorContext) {}
+
 // EnterSubfactor is called when production subfactor is entered.
 func (s *BaseGoliteParserListener) EnterSubfactor(ctx *SubfactorContext) {}
 
@@ -349,9 +355,3 @@ func (s *BaseGoliteParserListener) EnterAllocation(ctx *AllocationContext) {}
 
 // ExitAllocation is called when production allocation is exited.
 func (s *BaseGoliteParserListener) ExitAllocation(ctx *AllocationContext) {}
-
-// EnterFactor is called when production factor is entered.
-func (s *BaseGoliteParserListener) EnterFactor(ctx *FactorContext) {}
-
-// ExitFactor is called when production factor is exited.
-func (s *BaseGoliteParserListener) ExitFactor(ctx *FactorContext) {}
