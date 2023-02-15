@@ -147,11 +147,14 @@ func main() {
 go run golite/main.go benchmarks/bad/bad1.golite 
 ```
 
-This runs both the `lexer` and `parser`. If you want to only run the `lexer` and print the tokens (along with errors found along the way) lexed, use the `-lex` flag. For example - 
+This runs both the `lexer` and `parser`. 
 
-```bash
-go run golite/main.go -lex benchmarks/simple/simple1.golite 
-```
+## Flags
+
+| Flag | Description | Example |
+| --- | --- | --- |
+| -lex | Runs the lexer | `go run golite/main.go -lex benchmarks/simple/simple1.golite` |
+| -ast | Print the parser produced by the parser | `go run golite/main.go -ast benchmarks/simple/simple1.golite` |
 
 Check out the `benchmarks` folder for more examples.
 
