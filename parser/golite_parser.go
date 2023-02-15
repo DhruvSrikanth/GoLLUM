@@ -56,7 +56,7 @@ func goliteparserParserInit() {
 		"boolTermPrime", "equalTerm", "equalTermPrime", "relationTerm", "relationTermPrime",
 		"simpleTerm", "simpleTermPrime", "term", "termPrime", "unaryTerm", "unaryTermBool",
 		"unaryTermInt", "selectorTerm", "selectorTermPrime", "factor", "subfactor",
-		"functioncall", "allocation",
+		"variableInvocation", "allocation",
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
@@ -368,7 +368,7 @@ const (
 	GoliteParserRULE_selectorTermPrime   = 51
 	GoliteParserRULE_factor              = 52
 	GoliteParserRULE_subfactor           = 53
-	GoliteParserRULE_functioncall        = 54
+	GoliteParserRULE_variableInvocation  = 54
 	GoliteParserRULE_allocation          = 55
 )
 
@@ -8842,10 +8842,10 @@ func (s *FactorContext) Subfactor() ISubfactorContext {
 	return t.(ISubfactorContext)
 }
 
-func (s *FactorContext) Functioncall() IFunctioncallContext {
+func (s *FactorContext) VariableInvocation() IVariableInvocationContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
-		if _, ok := ctx.(IFunctioncallContext); ok {
+		if _, ok := ctx.(IVariableInvocationContext); ok {
 			t = ctx.(antlr.RuleContext)
 			break
 		}
@@ -8855,7 +8855,7 @@ func (s *FactorContext) Functioncall() IFunctioncallContext {
 		return nil
 	}
 
-	return t.(IFunctioncallContext)
+	return t.(IVariableInvocationContext)
 }
 
 func (s *FactorContext) INT_LIT() antlr.TerminalNode {
@@ -8944,7 +8944,7 @@ func (p *GoliteParser) Factor() (localctx IFactorContext) {
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(391)
-			p.Functioncall()
+			p.VariableInvocation()
 		}
 
 	case GoliteParserINT_LIT:
@@ -9118,8 +9118,8 @@ func (p *GoliteParser) Subfactor() (localctx ISubfactorContext) {
 	return localctx
 }
 
-// IFunctioncallContext is an interface to support dynamic dispatch.
-type IFunctioncallContext interface {
+// IVariableInvocationContext is an interface to support dynamic dispatch.
+type IVariableInvocationContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
@@ -9137,52 +9137,52 @@ type IFunctioncallContext interface {
 	// SetArgs sets the args rule contexts.
 	SetArgs(IArgumentsContext)
 
-	// IsFunctioncallContext differentiates from other interfaces.
-	IsFunctioncallContext()
+	// IsVariableInvocationContext differentiates from other interfaces.
+	IsVariableInvocationContext()
 }
 
-type FunctioncallContext struct {
+type VariableInvocationContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 	id     antlr.Token
 	args   IArgumentsContext
 }
 
-func NewEmptyFunctioncallContext() *FunctioncallContext {
-	var p = new(FunctioncallContext)
+func NewEmptyVariableInvocationContext() *VariableInvocationContext {
+	var p = new(VariableInvocationContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = GoliteParserRULE_functioncall
+	p.RuleIndex = GoliteParserRULE_variableInvocation
 	return p
 }
 
-func (*FunctioncallContext) IsFunctioncallContext() {}
+func (*VariableInvocationContext) IsVariableInvocationContext() {}
 
-func NewFunctioncallContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *FunctioncallContext {
-	var p = new(FunctioncallContext)
+func NewVariableInvocationContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *VariableInvocationContext {
+	var p = new(VariableInvocationContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = GoliteParserRULE_functioncall
+	p.RuleIndex = GoliteParserRULE_variableInvocation
 
 	return p
 }
 
-func (s *FunctioncallContext) GetParser() antlr.Parser { return s.parser }
+func (s *VariableInvocationContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *FunctioncallContext) GetId() antlr.Token { return s.id }
+func (s *VariableInvocationContext) GetId() antlr.Token { return s.id }
 
-func (s *FunctioncallContext) SetId(v antlr.Token) { s.id = v }
+func (s *VariableInvocationContext) SetId(v antlr.Token) { s.id = v }
 
-func (s *FunctioncallContext) GetArgs() IArgumentsContext { return s.args }
+func (s *VariableInvocationContext) GetArgs() IArgumentsContext { return s.args }
 
-func (s *FunctioncallContext) SetArgs(v IArgumentsContext) { s.args = v }
+func (s *VariableInvocationContext) SetArgs(v IArgumentsContext) { s.args = v }
 
-func (s *FunctioncallContext) IDENT() antlr.TerminalNode {
+func (s *VariableInvocationContext) IDENT() antlr.TerminalNode {
 	return s.GetToken(GoliteParserIDENT, 0)
 }
 
-func (s *FunctioncallContext) Arguments() IArgumentsContext {
+func (s *VariableInvocationContext) Arguments() IArgumentsContext {
 	var t antlr.RuleContext
 	for _, ctx := range s.GetChildren() {
 		if _, ok := ctx.(IArgumentsContext); ok {
@@ -9198,32 +9198,32 @@ func (s *FunctioncallContext) Arguments() IArgumentsContext {
 	return t.(IArgumentsContext)
 }
 
-func (s *FunctioncallContext) GetRuleContext() antlr.RuleContext {
+func (s *VariableInvocationContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *FunctioncallContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *VariableInvocationContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *FunctioncallContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *VariableInvocationContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(GoliteParserListener); ok {
-		listenerT.EnterFunctioncall(s)
+		listenerT.EnterVariableInvocation(s)
 	}
 }
 
-func (s *FunctioncallContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *VariableInvocationContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(GoliteParserListener); ok {
-		listenerT.ExitFunctioncall(s)
+		listenerT.ExitVariableInvocation(s)
 	}
 }
 
-func (p *GoliteParser) Functioncall() (localctx IFunctioncallContext) {
+func (p *GoliteParser) VariableInvocation() (localctx IVariableInvocationContext) {
 	this := p
 	_ = this
 
-	localctx = NewFunctioncallContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 108, GoliteParserRULE_functioncall)
+	localctx = NewVariableInvocationContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 108, GoliteParserRULE_variableInvocation)
 	var _la int
 
 	defer func() {
@@ -9248,7 +9248,7 @@ func (p *GoliteParser) Functioncall() (localctx IFunctioncallContext) {
 
 		var _m = p.Match(GoliteParserIDENT)
 
-		localctx.(*FunctioncallContext).id = _m
+		localctx.(*VariableInvocationContext).id = _m
 	}
 	p.SetState(404)
 	p.GetErrorHandler().Sync(p)
@@ -9260,7 +9260,7 @@ func (p *GoliteParser) Functioncall() (localctx IFunctioncallContext) {
 
 			var _x = p.Arguments()
 
-			localctx.(*FunctioncallContext).args = _x
+			localctx.(*VariableInvocationContext).args = _x
 		}
 
 	}

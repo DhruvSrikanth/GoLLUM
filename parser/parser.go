@@ -177,6 +177,7 @@ func (gParser *goliteParser) ExitFunction(c *FunctionContext) {
 	line, col, key := GetTokenInfo(c)
 	// Get the function name
 	funcName := c.GetId().GetText()
+
 	// Get the return type (if nil, cast to void)
 	var returnType string
 	if c.GetRty() != nil {
@@ -184,6 +185,7 @@ func (gParser *goliteParser) ExitFunction(c *FunctionContext) {
 	} else {
 		returnType = "void"
 	}
+
 	// Get the function parameters (if nil, cast to empty list)
 	paramsCtx := c.GetParams().(*ParametersContext).ParametersPrime()
 	var params []ast.Decl
@@ -225,8 +227,8 @@ func (gParser *goliteParser) ExitFunction(c *FunctionContext) {
 	for _, stmtCtx := range c.GetStmts().(*StatementsContext).AllStatement() {
 		// Get the first statement
 		_, _, stmtKey := GetTokenInfo(stmtCtx)
-		stmt := gParser.nodes[stmtKey].(*ast.Statement)
-		bodyStmts = append(bodyStmts, *stmt)
+		stmt := gParser.nodes[stmtKey].(ast.Statement)
+		bodyStmts = append(bodyStmts, stmt)
 	}
 
 	// Add the function node to the AST
@@ -236,46 +238,46 @@ func (gParser *goliteParser) ExitFunction(c *FunctionContext) {
 // ExitStatement is called when exiting the statement production.
 func (gParser *goliteParser) ExitStatement(c *StatementContext) {
 	// Get the key for the statement
-	line, col, key := GetTokenInfo(c)
+	_, _, key := GetTokenInfo(c)
 	// Get the statement type
-	var stmt *ast.Statement
+	var stmt ast.Statement
 
 	if blockStatement := c.GetBl(); blockStatement != nil {
 		// Get the block statement
 		_, _, blockKey := GetTokenInfo(blockStatement)
-		stmt = gParser.nodes[blockKey].(*ast.Statement)
+		stmt = gParser.nodes[blockKey].(ast.Statement)
 	} else if assignStatement := c.GetAsmt(); assignStatement != nil {
 		// Get the assignment statement
 		_, _, assignKey := GetTokenInfo(assignStatement)
-		stmt = gParser.nodes[assignKey].(*ast.Statement)
+		stmt = gParser.nodes[assignKey].(ast.Statement)
 	} else if printStatement := c.GetPrnt(); printStatement != nil {
 		// Get the print statement
 		_, _, printKey := GetTokenInfo(printStatement)
-		stmt = gParser.nodes[printKey].(*ast.Statement)
+		stmt = gParser.nodes[printKey].(ast.Statement)
 	} else if delStatement := c.GetDel(); delStatement != nil {
 		// Get the delete statement
 		_, _, delKey := GetTokenInfo(delStatement)
-		stmt = gParser.nodes[delKey].(*ast.Statement)
+		stmt = gParser.nodes[delKey].(ast.Statement)
 	} else if rdStatement := c.GetRd(); rdStatement != nil {
 		// Get the read statement
 		_, _, rdKey := GetTokenInfo(rdStatement)
-		stmt = gParser.nodes[rdKey].(*ast.Statement)
+		stmt = gParser.nodes[rdKey].(ast.Statement)
 	} else if condStatement := c.GetCond(); condStatement != nil {
 		// Get the conditional statement
 		_, _, condKey := GetTokenInfo(condStatement)
-		stmt = gParser.nodes[condKey].(*ast.Statement)
+		stmt = gParser.nodes[condKey].(ast.Statement)
 	} else if lpStatement := c.GetLp(); lpStatement != nil {
 		// Get the loop statement
 		_, _, lpKey := GetTokenInfo(lpStatement)
-		stmt = gParser.nodes[lpKey].(*ast.Statement)
+		stmt = gParser.nodes[lpKey].(ast.Statement)
 	} else if returnStatement := c.GetRet(); returnStatement != nil {
 		// Get the return statement
 		_, _, returnKey := GetTokenInfo(returnStatement)
-		stmt = gParser.nodes[returnKey].(*ast.Statement)
+		stmt = gParser.nodes[returnKey].(ast.Statement)
 	} else if invokeStatement := c.GetInvoke(); invokeStatement != nil {
 		// Get the invoke statement
 		_, _, invokeKey := GetTokenInfo(invokeStatement)
-		stmt = gParser.nodes[invokeKey].(*ast.Statement)
+		stmt = gParser.nodes[invokeKey].(ast.Statement)
 	} else {
 		panic(fmt.Sprintf("Unknown statement - %s", c.GetText()))
 	}
@@ -295,9 +297,9 @@ func (gParser *goliteParser) ExitBlock(c *BlockContext) {
 		// Get the statement key
 		_, _, stmtKey := GetTokenInfo(stmtCtx)
 		// Get the statement
-		stmt := gParser.nodes[stmtKey].(*ast.Statement)
+		stmt := gParser.nodes[stmtKey].(ast.Statement)
 		// Add the statement to the list of statements
-		stmts = append(stmts, *stmt)
+		stmts = append(stmts, stmt)
 	}
 
 	// Add the block node to the AST
@@ -318,10 +320,10 @@ func (gParser *goliteParser) ExitAssignment(c *AssignmentContext) {
 	// Get the right hand side of the assignment
 	exprCtx := c.GetExpr()
 	_, _, exprKey := GetTokenInfo(exprCtx)
-	expr := gParser.nodes[exprKey].(*ast.Expression)
+	expr := gParser.nodes[exprKey].(ast.Expression)
 
 	// Create the assignment
-	gParser.nodes[key] = ast.NewAssignment(*lhs, *expr, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewAssignment(*lhs, expr, token.NewToken(line, col))
 }
 
 // ExitLValue is called when exiting the lValue production.
@@ -357,8 +359,8 @@ func (gParser *goliteParser) ExitPrint(c *PrintContext) {
 	for _, printPrimeCtx := range c.AllPrintPrime() {
 		exprCtx := printPrimeCtx.(*PrintPrimeContext).GetExpr()
 		_, _, exprKey := GetTokenInfo(exprCtx)
-		expr := gParser.nodes[exprKey].(*ast.Expression)
-		exprs = append(exprs, *expr)
+		expr := gParser.nodes[exprKey].(ast.Expression)
+		exprs = append(exprs, expr)
 	}
 
 	// Add the print node to the AST
@@ -372,11 +374,10 @@ func (gParser *goliteParser) ExitDelete(c *DeleteContext) {
 
 	// Get the expression
 	exprCtx := c.GetExpr().(*ExpressionContext)
-	fmt.Println(exprCtx.GetText())
 	_, _, exprKey := GetTokenInfo(exprCtx)
-	expr := gParser.nodes[exprKey].(*ast.Expression)
+	expr := gParser.nodes[exprKey].(ast.Expression)
 	// Create the delete statement
-	gParser.nodes[key] = ast.NewDelete(*expr, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewDelete(expr, token.NewToken(line, col))
 }
 
 // ExitRead is called when exiting the read production.
@@ -401,7 +402,7 @@ func (gParser *goliteParser) ExitConditional(c *ConditionalContext) {
 	// Get the condition
 	condCtx := c.GetExpr().(*ExpressionContext)
 	_, _, condKey := GetTokenInfo(condCtx)
-	cond := gParser.nodes[condKey].(*ast.Expression)
+	cond := gParser.nodes[condKey].(ast.Expression)
 
 	// Get the true block
 	trueBlockCtx := c.GetBl().(*BlockContext)
@@ -419,7 +420,7 @@ func (gParser *goliteParser) ExitConditional(c *ConditionalContext) {
 	}
 
 	// Create the conditional
-	gParser.nodes[key] = ast.NewConditional(*cond, trueBlock, falseBlock, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewConditional(cond, trueBlock, falseBlock, token.NewToken(line, col))
 
 }
 
@@ -431,15 +432,15 @@ func (gParser *goliteParser) ExitLoop(c *LoopContext) {
 	// Get the condition
 	condCtx := c.GetExpr().(*ExpressionContext)
 	_, _, condKey := GetTokenInfo(condCtx)
-	cond := gParser.nodes[condKey].(*ast.Expression)
+	cond := gParser.nodes[condKey].(ast.Expression)
 
 	// Get the block
 	blockCtx := c.GetBl().(*BlockContext)
 	_, _, blockKey := GetTokenInfo(blockCtx)
-	block := gParser.nodes[blockKey].(*ast.Block)
+	block := gParser.nodes[blockKey].(ast.Block)
 
 	// Create the loop
-	gParser.nodes[key] = ast.NewLoop(*cond, *block, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewLoop(cond, block, token.NewToken(line, col))
 
 }
 
@@ -449,12 +450,16 @@ func (gParser *goliteParser) ExitReturnRule(c *ReturnRuleContext) {
 	line, col, key := GetTokenInfo(c)
 
 	// Get the expression
-	exprCtx := c.GetExpr().(*ExpressionContext)
-	_, _, exprKey := GetTokenInfo(exprCtx)
-	expr := gParser.nodes[exprKey].(*ast.Expression)
+	var expr ast.Expression
+	if exprCtx := c.GetExpr(); exprCtx != nil {
+		_, _, exprKey := GetTokenInfo(exprCtx)
+		expr = gParser.nodes[exprKey].(ast.Expression)
+	} else {
+		expr = nil
+	}
 
 	// Create the return statement
-	gParser.nodes[key] = ast.NewReturn(expr, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewReturn(&expr, token.NewToken(line, col))
 }
 
 // ExitInvocation is called when exiting the invocation production.
@@ -472,15 +477,15 @@ func (gParser *goliteParser) ExitInvocation(c *InvocationContext) {
 		// First argument
 		exprCtx := argsCtx.GetExpr().(*ExpressionContext)
 		_, _, exprKey := GetTokenInfo(exprCtx)
-		expr := gParser.nodes[exprKey].(*ast.Expression)
-		args = append(args, *expr)
+		expr := gParser.nodes[exprKey].(ast.Expression)
+		args = append(args, expr)
 
 		// Get the rest of the arguments (if any)
 		for _, exprWrapperCtx := range argsCtx.(*ArgumentsPrimeContext).AllArgumentsPrimePrime() {
 			exprCtx := exprWrapperCtx.(*ArgumentsPrimePrimeContext).GetExpr().(*ExpressionContext)
 			_, _, exprKey := GetTokenInfo(exprCtx)
-			expr := gParser.nodes[exprKey].(*ast.Expression)
-			args = append(args, *expr)
+			expr := gParser.nodes[exprKey].(ast.Expression)
+			args = append(args, expr)
 		}
 	}
 
@@ -496,21 +501,21 @@ func (gParser *goliteParser) ExitExpression(c *ExpressionContext) {
 	// Get the left expression
 	leftExprCtx := c.GetBt()
 	_, _, leftExprKey := GetTokenInfo(leftExprCtx)
-	leftExpr := gParser.nodes[leftExprKey].(*ast.Expression)
+	leftExpr := gParser.nodes[leftExprKey].(ast.Expression)
 	allRightExpr := c.AllExpressionPrime()
 	if len(allRightExpr) != 0 {
 		for _, rightExprCtx := range allRightExpr {
 			// Get the right expression
 			_, _, rightExprKey := GetTokenInfo(rightExprCtx)
-			rightExpr := gParser.nodes[rightExprKey].(*ast.Expression)
+			rightExpr := gParser.nodes[rightExprKey].(ast.Expression)
 
 			// Get the operator
 			op := rightExprCtx.(*ExpressionPrimeContext).GetOp().GetText()
 			opTerm := ast.StrToOp(op)
 
 			// Create the expression
-			mergedExpr := ast.NewBinOp(leftExpr, &opTerm, rightExpr, token.NewToken(line, col))
-			leftExpr = mergedExpr.(*ast.Expression)
+			mergedExpr := ast.NewBinOp(&leftExpr, &opTerm, &rightExpr, token.NewToken(line, col))
+			leftExpr = mergedExpr
 		}
 	}
 	gParser.nodes[key] = leftExpr
@@ -525,22 +530,22 @@ func (gParser *goliteParser) ExitBoolTerm(c *BoolTermContext) {
 	// Get the first expression
 	exprCtx := c.GetEq()
 	_, _, exprKey := GetTokenInfo(exprCtx)
-	expr := gParser.nodes[exprKey].(*ast.Expression)
+	expr := gParser.nodes[exprKey].(ast.Expression)
 	allOtherExpr := c.AllBoolTermPrime()
 	if len(allOtherExpr) != 0 {
 		// Get the rest of the expressions
 		for _, exprWrapperCtx := range allOtherExpr {
 			exprCtx := exprWrapperCtx.(*BoolTermPrimeContext).GetEq()
 			_, _, exprKey := GetTokenInfo(exprCtx)
-			otherExpr := gParser.nodes[exprKey].(*ast.Expression)
+			otherExpr := gParser.nodes[exprKey].(ast.Expression)
 
 			// Get the operator
 			op := exprWrapperCtx.(*BoolTermPrimeContext).GetOp().GetText()
 			opTerm := ast.StrToOp(op)
 
 			// Create the new expression
-			mergedTerm := ast.NewBinOp(expr, &opTerm, otherExpr, token.NewToken(line, col))
-			expr = mergedTerm.(*ast.Expression)
+			mergedTerm := ast.NewBinOp(&expr, &opTerm, &otherExpr, token.NewToken(line, col))
+			expr = mergedTerm
 		}
 	}
 	gParser.nodes[key] = expr
@@ -554,7 +559,7 @@ func (gParser *goliteParser) ExitEqualTerm(c *EqualTermContext) {
 	// Get the left expression
 	leftExprCtx := c.GetRt()
 	_, _, leftExprKey := GetTokenInfo(leftExprCtx)
-	leftExpr := gParser.nodes[leftExprKey].(*ast.Expression)
+	leftExpr := gParser.nodes[leftExprKey].(ast.Expression)
 	allRightExpr := c.AllEqualTermPrime()
 	if len(allRightExpr) != 0 {
 		for _, rightExprCtx := range allRightExpr {
@@ -562,15 +567,15 @@ func (gParser *goliteParser) ExitEqualTerm(c *EqualTermContext) {
 
 			// Get the right expression
 			_, _, rightExprKey := GetTokenInfo(rightExprPrimeCtx.GetRt())
-			rightExpr := gParser.nodes[rightExprKey].(*ast.Expression)
+			rightExpr := gParser.nodes[rightExprKey].(ast.Expression)
 
 			// Get the operator
 			op := rightExprCtx.GetOp().GetText()
 			opTerm := ast.StrToOp(op)
 
 			// Create the equal term
-			mergedTerm := ast.NewBinOp(leftExpr, &opTerm, rightExpr, token.NewToken(line, col))
-			leftExpr = mergedTerm.(*ast.Expression)
+			mergedTerm := ast.NewBinOp(&leftExpr, &opTerm, &rightExpr, token.NewToken(line, col))
+			leftExpr = mergedTerm
 		}
 	}
 	gParser.nodes[key] = leftExpr
@@ -585,7 +590,7 @@ func (gParser *goliteParser) ExitRelationTerm(c *RelationTermContext) {
 	// Get the relationTerm
 	relTermCtx := c.GetSt()
 	_, _, relTermKey := GetTokenInfo(relTermCtx)
-	relTerm := gParser.nodes[relTermKey].(*ast.Expression)
+	relTerm := gParser.nodes[relTermKey].(ast.Expression)
 	allRelationTermCtx := c.AllRelationTermPrime()
 	if len(allRelationTermCtx) != 0 {
 		for _, relTermPrimeCtx := range allRelationTermCtx {
@@ -595,11 +600,11 @@ func (gParser *goliteParser) ExitRelationTerm(c *RelationTermContext) {
 			// Get the relationTerm
 			relTermCtx := relTermPrime.GetSt()
 			_, _, relTermKey := GetTokenInfo(relTermCtx)
-			otherRelTerm := gParser.nodes[relTermKey].(*ast.Expression)
+			otherRelTerm := gParser.nodes[relTermKey].(ast.Expression)
 			// Create the relation term
 			opTerm := ast.StrToOp(op)
-			mergedTerm := ast.NewBinOp(relTerm, &opTerm, otherRelTerm, token.NewToken(line, col))
-			relTerm = mergedTerm.(*ast.Expression)
+			mergedTerm := ast.NewBinOp(&relTerm, &opTerm, &otherRelTerm, token.NewToken(line, col))
+			relTerm = mergedTerm
 		}
 	}
 	gParser.nodes[key] = relTerm
@@ -614,7 +619,7 @@ func (gParser *goliteParser) ExitSimpleTerm(c *SimpleTermContext) {
 	// Get the term
 	termCtx := c.GetT().(*TermContext)
 	_, _, termKey := GetTokenInfo(termCtx)
-	term := gParser.nodes[termKey].(*ast.Expression)
+	term := gParser.nodes[termKey].(ast.Expression)
 	allTermPrimeCtx := c.AllSimpleTermPrime()
 	if len(allTermPrimeCtx) != 0 {
 		// Get the rest of the terms
@@ -624,10 +629,10 @@ func (gParser *goliteParser) ExitSimpleTerm(c *SimpleTermContext) {
 			op := ctx.GetOp().GetText()
 
 			_, _, termPrimeKey := GetTokenInfo(ctx.GetT().(*TermContext))
-			termPrime := gParser.nodes[termPrimeKey].(*ast.Expression)
+			termPrime := gParser.nodes[termPrimeKey].(ast.Expression)
 			opTerm := ast.StrToOp(op)
-			mergedTerm := ast.NewBinOp(term, &opTerm, termPrime, token.NewToken(line, col))
-			term = mergedTerm.(*ast.Expression)
+			mergedTerm := ast.NewBinOp(&term, &opTerm, &termPrime, token.NewToken(line, col))
+			term = mergedTerm
 		}
 	}
 	gParser.nodes[key] = term
@@ -642,7 +647,7 @@ func (gParser *goliteParser) ExitTerm(c *TermContext) {
 	unaryTermCtx := c.GetUt().(*UnaryTermContext)
 	// Get all other terms
 	_, _, unaryTermKey := GetTokenInfo(unaryTermCtx)
-	unaryTerm := gParser.nodes[unaryTermKey].(*ast.Expression)
+	unaryTerm := gParser.nodes[unaryTermKey].(ast.Expression)
 	allTermPrimeCtx := c.AllTermPrime()
 	if len(allTermPrimeCtx) != 0 {
 		// Build nested binary terms
@@ -653,12 +658,12 @@ func (gParser *goliteParser) ExitTerm(c *TermContext) {
 			// Get the unary term
 			unaryTermCtx := termPrimeCtx.GetUt().(*UnaryTermContext)
 			_, _, unaryTermKey := GetTokenInfo(unaryTermCtx)
-			unaryTerm2 := gParser.nodes[unaryTermKey].(*ast.Expression)
+			unaryTerm2 := gParser.nodes[unaryTermKey].(ast.Expression)
 			// Cast to the correct
 			// Create the binary term
 			opTerm := ast.StrToOp(op)
-			mergedTerm := ast.NewBinOp(unaryTerm, &opTerm, unaryTerm2, token.NewToken(line, col))
-			unaryTerm = mergedTerm.(*ast.Expression)
+			mergedTerm := ast.NewBinOp(&unaryTerm, &opTerm, &unaryTerm2, token.NewToken(line, col))
+			unaryTerm = mergedTerm
 		}
 	}
 	gParser.nodes[key] = unaryTerm
@@ -671,25 +676,25 @@ func (gParser *goliteParser) ExitUnaryTerm(c *UnaryTermContext) {
 	line, col, key := GetTokenInfo(c)
 
 	var op string
-	var selector *ast.SelectorTerm
+	var selector ast.Expression
 	if boolCtx := c.UnaryTermBool(); boolCtx != nil {
 		op = boolCtx.GetOp().GetText()
 		// Get the selector
 		selectorCtx := boolCtx.GetSt().(*SelectorTermContext)
 		_, _, selectorKey := GetTokenInfo(selectorCtx)
-		selector = gParser.nodes[selectorKey].(*ast.SelectorTerm)
+		selector = gParser.nodes[selectorKey].(ast.Expression)
 	} else if intCtx := c.UnaryTermInt(); intCtx != nil {
 		op = intCtx.GetText()
 		// Get the selector
 		selectorCtx := intCtx.GetSt().(*SelectorTermContext)
 		_, _, selectorKey := GetTokenInfo(selectorCtx)
-		selector = gParser.nodes[selectorKey].(*ast.SelectorTerm)
+		selector = gParser.nodes[selectorKey].(ast.Expression)
 	} else if selectCtx := c.SelectorTerm(); selectCtx != nil {
 		op = ""
 		// Get the selector
 		selectorCtx := selectCtx.(*SelectorTermContext)
 		_, _, selectorKey := GetTokenInfo(selectorCtx)
-		selector = gParser.nodes[selectorKey].(*ast.SelectorTerm)
+		selector = gParser.nodes[selectorKey].(ast.Expression)
 	} else {
 		panic("Invalid unary term")
 	}
@@ -705,7 +710,7 @@ func (gParser *goliteParser) ExitUnaryTerm(c *UnaryTermContext) {
 	}
 
 	// Create the unary expression
-	gParser.nodes[key] = ast.NewBinOp(nil, optPtr, selector, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewBinOp(nil, optPtr, &selector, token.NewToken(line, col))
 }
 
 // ExitSelectorTerm is called when exiting the selectorTerm production.
@@ -715,7 +720,7 @@ func (gParser *goliteParser) ExitSelectorTerm(c *SelectorTermContext) {
 
 	// Get the factor expression
 	_, _, factorKey := GetTokenInfo(c.Factor())
-	factor := gParser.nodes[factorKey].(*ast.Expression)
+	factor := gParser.nodes[factorKey].(ast.Expression)
 
 	// Get the fields
 	var fields []string
@@ -725,7 +730,7 @@ func (gParser *goliteParser) ExitSelectorTerm(c *SelectorTermContext) {
 	}
 
 	// Create the selector term
-	gParser.nodes[key] = ast.NewSelectorTerm(*factor, fields, types.StringToType("nil"), token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewSelectorTerm(factor, fields, types.StringToType("nil"), token.NewToken(line, col))
 }
 
 // ExitFactor is called when exiting the factor production.
@@ -759,14 +764,14 @@ func (gParser *goliteParser) ExitFactor(c *FactorContext) {
 	} else if nilFactor := c.NIL_LIT(); nilFactor != nil {
 		// Nil literal
 		gParser.nodes[key] = ast.NewNilLit(newToken)
-	} else if funcCallFactor := c.Functioncall(); funcCallFactor != nil {
-		// Function call
-		// Get the key for the function call
-		_, _, funcCallKey := GetTokenInfo(funcCallFactor)
-		// Get the function call
-		funcCall := gParser.nodes[funcCallKey].(*ast.Invocation)
+	} else if varInvokeFactor := c.VariableInvocation(); varInvokeFactor != nil {
+		// Variable invocation
+		// Get the key for the variable invocation
+		_, _, varInvokeKey := GetTokenInfo(varInvokeFactor)
+		// Get the variable invocation
+		varInvoke := gParser.nodes[varInvokeKey].(*ast.VariableInvocation)
 		// Add node to the ast
-		gParser.nodes[key] = funcCall
+		gParser.nodes[key] = varInvoke
 	} else if allocationFactor := c.Allocation(); allocationFactor != nil {
 		// Allocation
 		// Add the node to the ast
@@ -774,17 +779,19 @@ func (gParser *goliteParser) ExitFactor(c *FactorContext) {
 	} else if subfactorFactor := c.Subfactor(); subfactorFactor != nil {
 		// Subfactor
 		// Get the expression
-		// exprCtx := subfactorFactor.GetExpr().(*ExpressionContext)
-		// _, _, exprKey := GetTokenInfo(exprCtx)
+		exprCtx := subfactorFactor.GetExpr().(*ExpressionContext)
+		_, _, exprKey := GetTokenInfo(exprCtx)
+		// Get the node
+		expr := gParser.nodes[exprKey].(ast.Expression)
 		// Add the node to the ast
-		// gParser.nodes[key] =
+		gParser.nodes[key] = expr
 	} else {
 		panic("Invalid factor in factor production rule")
 	}
 }
 
-// ExitFunctioncall is called when exiting the functionCall production.
-func (gParser *goliteParser) ExitFunctioncall(c *FunctioncallContext) {
+// ExitVariableInvocation is called when exiting the variableInvocation production.
+func (gParser *goliteParser) ExitVariableInvocation(c *VariableInvocationContext) {
 	// Get the key for the invocation
 	line, col, key := GetTokenInfo(c)
 
@@ -794,22 +801,24 @@ func (gParser *goliteParser) ExitFunctioncall(c *FunctioncallContext) {
 	// Get the arguments
 	var args []ast.Expression
 	// If there are arguments
-	if argsCtx := c.GetArgs().(*ArgumentsContext).GetArgs(); argsCtx != nil {
-		// First argument
-		exprCtx := argsCtx.GetExpr().(*ExpressionContext)
-		_, _, exprKey := GetTokenInfo(exprCtx)
-		expr := gParser.nodes[exprKey].(*ast.Expression)
-		args = append(args, *expr)
-
-		// Get the rest of the arguments (if any)
-		for _, exprWrapperCtx := range argsCtx.(*ArgumentsPrimeContext).AllArgumentsPrimePrime() {
-			exprCtx := exprWrapperCtx.(*ArgumentsPrimePrimeContext).GetExpr().(*ExpressionContext)
+	if argsCtx := c.GetArgs(); argsCtx != nil {
+		if argsCtxPrime := argsCtx.GetArgs(); argsCtxPrime != nil {
+			// First argument
+			exprCtx := argsCtxPrime.GetExpr().(*ExpressionContext)
 			_, _, exprKey := GetTokenInfo(exprCtx)
-			expr := gParser.nodes[exprKey].(*ast.Expression)
-			args = append(args, *expr)
+			expr := gParser.nodes[exprKey].(ast.Expression)
+			args = append(args, expr)
+
+			// Get the rest of the arguments (if any)
+			for _, exprWrapperCtx := range argsCtxPrime.(*ArgumentsPrimeContext).AllArgumentsPrimePrime() {
+				exprCtx := exprWrapperCtx.(*ArgumentsPrimePrimeContext).GetExpr().(*ExpressionContext)
+				_, _, exprKey := GetTokenInfo(exprCtx)
+				expr := gParser.nodes[exprKey].(ast.Expression)
+				args = append(args, expr)
+			}
 		}
 	}
 
 	// Create the invocation
-	gParser.nodes[key] = ast.NewInvocation(funcName, args, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewVariableInvocation(funcName, args, token.NewToken(line, col))
 }

@@ -169,8 +169,8 @@ type GoliteParserListener interface {
 	// EnterSubfactor is called when entering the subfactor production.
 	EnterSubfactor(c *SubfactorContext)
 
-	// EnterFunctioncall is called when entering the functioncall production.
-	EnterFunctioncall(c *FunctioncallContext)
+	// EnterVariableInvocation is called when entering the variableInvocation production.
+	EnterVariableInvocation(c *VariableInvocationContext)
 
 	// EnterAllocation is called when entering the allocation production.
 	EnterAllocation(c *AllocationContext)
@@ -337,8 +337,8 @@ type GoliteParserListener interface {
 	// ExitSubfactor is called when exiting the subfactor production.
 	ExitSubfactor(c *SubfactorContext)
 
-	// ExitFunctioncall is called when exiting the functioncall production.
-	ExitFunctioncall(c *FunctioncallContext)
+	// ExitVariableInvocation is called when exiting the variableInvocation production.
+	ExitVariableInvocation(c *VariableInvocationContext)
 
 	// ExitAllocation is called when exiting the allocation production.
 	ExitAllocation(c *AllocationContext)

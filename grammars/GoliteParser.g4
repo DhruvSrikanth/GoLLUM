@@ -21,10 +21,10 @@ Parameters = '(' [ Decl {',' Decl}] ')'                                         
 ReturnType = type                                                                                  ;
 Statements = {Statement}                                                                           ;
 Statement = Block | Assignment | Print | Delete | Conditional | Loop | Return | Read | Invocation  ;
-Read =  'scan' LValue ';'                                                                      ;
+Read =  'scan' LValue ';'                                                                          ;
 Block = '{' Statements '}'                                                                         ;
 Delete = 'delete' Expression ';'                                                                   ;
-Assignment = LValue '=' Expression ';'                                                  ;
+Assignment = LValue '=' Expression ';'                                                             ;
 Print = 'printf' '(' 'string' { ',' Expression} ')'  ';'                                           ;
 Conditional = 'if' '(' Expression ')' Block ['else' Block]                                         ;
 Loop = 'for' '(' Expression ')' Block                                                              ;
@@ -147,10 +147,10 @@ selectorTerm: f=factor selectorTermPrime*;
 
 selectorTermPrime: DOT id=IDENT; // Split from selectorTerm grammer
 
-factor: subfactor | functioncall | INT_LIT | allocation | BOOL_LIT | NIL_LIT;
+factor: subfactor | variableInvocation | INT_LIT | allocation | BOOL_LIT | NIL_LIT;
 
 subfactor: LPAREN expr=expression RPAREN; // Split from factor grammer
 
-functioncall: id=IDENT args=arguments?; // Split from factor grammer, not sure if this is a function call
+variableInvocation: id=IDENT args=arguments?; // Split from factor grammer, not sure if this is a function call
 
 allocation: NEW key=IDENT; // Split from factor grammer

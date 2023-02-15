@@ -344,11 +344,11 @@ func (s *BaseGoliteParserListener) EnterSubfactor(ctx *SubfactorContext) {}
 // ExitSubfactor is called when production subfactor is exited.
 func (s *BaseGoliteParserListener) ExitSubfactor(ctx *SubfactorContext) {}
 
-// EnterFunctioncall is called when production functioncall is entered.
-func (s *BaseGoliteParserListener) EnterFunctioncall(ctx *FunctioncallContext) {}
+// EnterVariableInvocation is called when production variableInvocation is entered.
+func (s *BaseGoliteParserListener) EnterVariableInvocation(ctx *VariableInvocationContext) {}
 
-// ExitFunctioncall is called when production functioncall is exited.
-func (s *BaseGoliteParserListener) ExitFunctioncall(ctx *FunctioncallContext) {}
+// ExitVariableInvocation is called when production variableInvocation is exited.
+func (s *BaseGoliteParserListener) ExitVariableInvocation(ctx *VariableInvocationContext) {}
 
 // EnterAllocation is called when production allocation is entered.
 func (s *BaseGoliteParserListener) EnterAllocation(ctx *AllocationContext) {}

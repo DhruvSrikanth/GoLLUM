@@ -4,6 +4,7 @@ import (
 	"bytes"
 	st "golite/symboltable"
 	"golite/token"
+	"golite/types"
 )
 
 // Invocation node for the AST
@@ -11,11 +12,12 @@ type Invocation struct {
 	*token.Token
 	identifier string       // The identifier of the function being invoked
 	arguments  []Expression // The arguments to the function
+	ty         types.Type
 }
 
 // NewInvocation node
 func NewInvocation(identifier string, arguments []Expression, token *token.Token) *Invocation {
-	return &Invocation{token, identifier, arguments}
+	return &Invocation{token, identifier, arguments, nil}
 }
 
 // String representation of the invocation node
@@ -43,4 +45,9 @@ func (i *Invocation) BuildSymbolTable(tables *st.SymbolTables) {
 // Type checking for the invocation node
 func (i *Invocation) TypeCheck(errors []string, tables *st.SymbolTables) []string {
 	return errors
+}
+
+// Get the type of the invocation node
+func (i *Invocation) GetType() types.Type {
+	return i.ty
 }

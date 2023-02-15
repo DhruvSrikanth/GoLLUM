@@ -22,7 +22,7 @@ func (r *Return) String() string {
 	var out bytes.Buffer
 
 	out.WriteString("return ")
-	if r.expression != nil {
+	if *r.expression != nil {
 		out.WriteString((*r.expression).String())
 	}
 	out.WriteString(";")

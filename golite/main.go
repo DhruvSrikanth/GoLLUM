@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"golite/cmdline"
 	"golite/lexer"
 	"golite/parser"
@@ -28,9 +27,9 @@ func main() {
 	} else {
 		// Get a new parser
 		parser := parser.NewParser(lexer)
-		ast := parser.Parse()
-		fmt.Print("\nAST: \n")
-		fmt.Print(ast)
+		_ = parser.Parse()
+		// fmt.Print("\nAST: \n")
+		// fmt.Print(ast)
 
 		// Parse the input source file (lexes and parses)
 		// and get the AST

@@ -37,7 +37,7 @@ public class GoliteParser extends Parser {
 		RULE_relationTerm = 41, RULE_relationTermPrime = 42, RULE_simpleTerm = 43, 
 		RULE_simpleTermPrime = 44, RULE_term = 45, RULE_termPrime = 46, RULE_unaryTerm = 47, 
 		RULE_unaryTermBool = 48, RULE_unaryTermInt = 49, RULE_selectorTerm = 50, 
-		RULE_selectorTermPrime = 51, RULE_factor = 52, RULE_subfactor = 53, RULE_functioncall = 54, 
+		RULE_selectorTermPrime = 51, RULE_factor = 52, RULE_subfactor = 53, RULE_variableInvocation = 54, 
 		RULE_allocation = 55;
 	private static String[] makeRuleNames() {
 		return new String[] {
@@ -51,7 +51,7 @@ public class GoliteParser extends Parser {
 			"equalTerm", "equalTermPrime", "relationTerm", "relationTermPrime", "simpleTerm", 
 			"simpleTermPrime", "term", "termPrime", "unaryTerm", "unaryTermBool", 
 			"unaryTermInt", "selectorTerm", "selectorTermPrime", "factor", "subfactor", 
-			"functioncall", "allocation"
+			"variableInvocation", "allocation"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -2601,8 +2601,8 @@ public class GoliteParser extends Parser {
 		public SubfactorContext subfactor() {
 			return getRuleContext(SubfactorContext.class,0);
 		}
-		public FunctioncallContext functioncall() {
-			return getRuleContext(FunctioncallContext.class,0);
+		public VariableInvocationContext variableInvocation() {
+			return getRuleContext(VariableInvocationContext.class,0);
 		}
 		public TerminalNode INT_LIT() { return getToken(GoliteParser.INT_LIT, 0); }
 		public AllocationContext allocation() {
@@ -2634,7 +2634,7 @@ public class GoliteParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(391);
-				functioncall();
+				variableInvocation();
 				}
 				break;
 			case INT_LIT:
@@ -2718,35 +2718,35 @@ public class GoliteParser extends Parser {
 		return _localctx;
 	}
 
-	public static class FunctioncallContext extends ParserRuleContext {
+	public static class VariableInvocationContext extends ParserRuleContext {
 		public Token id;
 		public ArgumentsContext args;
 		public TerminalNode IDENT() { return getToken(GoliteParser.IDENT, 0); }
 		public ArgumentsContext arguments() {
 			return getRuleContext(ArgumentsContext.class,0);
 		}
-		public FunctioncallContext(ParserRuleContext parent, int invokingState) {
+		public VariableInvocationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_functioncall; }
+		@Override public int getRuleIndex() { return RULE_variableInvocation; }
 	}
 
-	public final FunctioncallContext functioncall() throws RecognitionException {
-		FunctioncallContext _localctx = new FunctioncallContext(_ctx, getState());
-		enterRule(_localctx, 108, RULE_functioncall);
+	public final VariableInvocationContext variableInvocation() throws RecognitionException {
+		VariableInvocationContext _localctx = new VariableInvocationContext(_ctx, getState());
+		enterRule(_localctx, 108, RULE_variableInvocation);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(402);
-			((FunctioncallContext)_localctx).id = match(IDENT);
+			((VariableInvocationContext)_localctx).id = match(IDENT);
 			setState(404);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			if (_la==LPAREN) {
 				{
 				setState(403);
-				((FunctioncallContext)_localctx).args = arguments();
+				((VariableInvocationContext)_localctx).args = arguments();
 				}
 			}
 

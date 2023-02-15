@@ -27,12 +27,26 @@ func main() {
 
     // print something
     printf("p1.x = %d, p1.y = %d, p1.z = %d\n", p1.x, p1.y, p1.z);
+    {
+        printf("something", a);
+        delete b;
+        scan c;
+    }
+
+    a = nil;
+    b = true;
+    n = 1;
+    if (n == 0) {
+        return 0;
+    } else {
+        return 1;
+    }
 
     // Allocate memory for the struct.
     p1 = new Point;
     scan a;
     distance1D();
-    distance2D(p1, p2, p3 + p4);
+    distance2D(p1, p2, p3);
 
 
     // Point values
@@ -45,7 +59,7 @@ func main() {
     return ;    
 }
 
-func other(o int, l int) int {
+func other(o int, l int, t bool) int {
     var a int;
     var c, d bool;
 }
