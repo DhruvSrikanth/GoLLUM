@@ -33,6 +33,7 @@ func (i *Invocation) String() string {
 		}
 	}
 	out.WriteString(")")
+	out.WriteString(";")
 
 	return out.String()
 }

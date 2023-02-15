@@ -21,7 +21,7 @@ func NewRead(lval LValue, token *token.Token) *Read {
 func (r *Read) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("read ")
+	out.WriteString("scan ")
 	out.WriteString(r.lval.String())
 	out.WriteString(";")
 

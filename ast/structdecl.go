@@ -22,11 +22,12 @@ func NewStructDecl(name string, decls []Decl, token *token.Token) *StructDecl {
 func (s *StructDecl) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("struct ")
+	out.WriteString("type ")
 	out.WriteString(s.name)
-	out.WriteString(" {\n")
+	out.WriteString(" struct {\n")
 	for _, decl := range s.decls {
 		out.WriteString(decl.String())
+		out.WriteString(";")
 		out.WriteString("\n")
 	}
 	out.WriteString("}")

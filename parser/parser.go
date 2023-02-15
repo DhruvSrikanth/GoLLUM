@@ -437,10 +437,10 @@ func (gParser *goliteParser) ExitLoop(c *LoopContext) {
 	// Get the block
 	blockCtx := c.GetBl().(*BlockContext)
 	_, _, blockKey := GetTokenInfo(blockCtx)
-	block := gParser.nodes[blockKey].(ast.Block)
+	block := gParser.nodes[blockKey].(*ast.Block)
 
 	// Create the loop
-	gParser.nodes[key] = ast.NewLoop(cond, block, token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewLoop(cond, *block, token.NewToken(line, col))
 
 }
 
