@@ -24,14 +24,101 @@ make compiler
 Example of code that will work:
 
 ```Go
-func main() {
-    
-    var a int;
-    
-    a = 3 + 4 + 5;
-    
-    printf("%d", a);
+type Node struct { 
 
+    value int; 
+    left  *Node;
+    right *Node;  
+}; 
+
+var  root *Node; 
+
+func compare(cur int,neuw int) int {
+
+    if (cur < neuw) {
+		return 1;
+	} else {  
+		if (cur > neuw) {
+		   return -1;
+		} else {
+		   return 0;
+		}
+	}
+}
+func addNode (numAdd int, curr *Node) { 
+	var compVal int;
+    var newNode *Node;
+
+	if( curr == nil ){
+		newNode = new Node;
+		newNode.value = numAdd;
+		root = newNode;
+	} else {
+		compVal = compare (curr.value, numAdd);
+		
+		if( compVal == -1) {
+			if(curr.left == nil) {
+				newNode = new Node;
+				newNode.value = numAdd;
+				curr.left = newNode;
+			} else {
+				addNode ( numAdd, curr.left);
+			}
+		} else {
+			if(compVal == 1) {
+				if(curr.right == nil) {
+					newNode = new Node;
+					newNode.value = numAdd;
+					curr.right = newNode;
+				} else {
+					addNode ( numAdd, curr.right);
+				}
+			}
+		}
+	}
+}
+func printDepthTree (curr *Node)  {
+    var temp int;
+	if( curr != nil ) {
+		if( curr.left != nil) {
+			printDepthTree(curr.left);
+		}
+        temp = curr.value;
+		printf("%d",temp);
+
+		if(curr.right !=nil) {
+			printDepthTree(curr.right);
+		}
+	}
+}
+func deleteLeavesTree (curr *Node) {
+	if( curr != nil ) {
+		if( curr.left != nil) {
+			deleteLeavesTree(curr.left);
+		}
+
+		if(curr.right !=nil) {
+			deleteLeavesTree(curr.right);
+		}
+		delete(curr);
+	}
+}
+
+func main() {
+	var input, temp int;
+
+	root = nil;
+	input = 0;
+
+	scan input; 
+
+	for (input!=0) {
+		addNode (input, root);
+		scan input; 
+	}
+	
+	printDepthTree(root);	
+	deleteLeavesTree(root);
 }
 ```
 
