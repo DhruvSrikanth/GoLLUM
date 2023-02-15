@@ -87,7 +87,7 @@ SCAN: 'scan';
 PRINTF: 'printf';
 
 // Literals
-INT_LIT: [-]?[1-9][0-9]* | [-]?[0];
+INT_LIT: [1-9][0-9]* | [0];
 
 STRING_LIT: '"'.*?'"';
 

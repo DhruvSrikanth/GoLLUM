@@ -59,7 +59,16 @@ func ReadCmdline() *Cmdline {
 
 // Check if the arguments are valid
 func checkArgs() bool {
-	return !(len(os.Args) < 2 || len(os.Args) > 3 || (len(os.Args) == 3 && os.Args[1] != "-lex")) || (len(os.Args) == 3 && os.Args[1] != "-ast")
+	if len(os.Args) < 2 {
+		return false
+	} else if len(os.Args) > 3 {
+		return false
+	} else if len(os.Args) == 3 {
+		if os.Args[1] != "-lex" && os.Args[1] != "-ast" {
+			return false
+		}
+	}
+	return true
 }
 
 // Check if the file is a golite file
@@ -70,5 +79,5 @@ func isGoliteFile() bool {
 
 // usage of the program
 func usage() {
-	fmt.Println("Usage: go run golite/main.go [-lex] <input source file>\nArguments: <input source file> - path to the input source file\nFlags: -lex - Print the lexed tokens.")
+	fmt.Println("Usage: go run golite/main.go [-lex || -ast] <input source file>\nArguments: <input source file> - path to the input source file\nFlags: \n-lex - Print the lexed tokens.\n-ast - Print the abstract syntax tree.")
 }
