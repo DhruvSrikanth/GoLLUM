@@ -9,14 +9,16 @@ import (
 type Cmdline struct {
 	Program string
 	LexFlag bool
+	ASTFlag bool
 	Args    []string
 }
 
 // Returns a new Cmdline struct with the program name and arguments
-func newCmdline(program string, lexFlag bool, args []string) *Cmdline {
+func newCmdline(program string, lexFlag, astFlag bool, args []string) *Cmdline {
 	return &Cmdline{
 		Program: program,
 		LexFlag: lexFlag,
+		ASTFlag: astFlag,
 		Args:    args,
 	}
 }
@@ -33,23 +35,31 @@ func ReadCmdline() *Cmdline {
 
 	programFile := os.Args[0]
 	var lexFlag bool
+	var astFlag bool
 	var args []string
 	if len(os.Args) == 2 {
 		lexFlag = false
 		args = os.Args[1:]
 	} else if len(os.Args) == 3 {
-		lexFlag = true
+		if os.Args[1] == "-lex" {
+			lexFlag = true
+		} else if os.Args[1] == "-ast" {
+			astFlag = true
+		} else {
+			usage()
+			return nil
+		}
 		args = os.Args[2:]
 	}
 
-	cmdline := newCmdline(programFile, lexFlag, args)
+	cmdline := newCmdline(programFile, lexFlag, astFlag, args)
 
 	return cmdline
 }
 
 // Check if the arguments are valid
 func checkArgs() bool {
-	return !(len(os.Args) < 2 || len(os.Args) > 3 || (len(os.Args) == 3 && os.Args[1] != "-lex"))
+	return !(len(os.Args) < 2 || len(os.Args) > 3 || (len(os.Args) == 3 && os.Args[1] != "-lex")) || (len(os.Args) == 3 && os.Args[1] != "-ast")
 }
 
 // Check if the file is a golite file
