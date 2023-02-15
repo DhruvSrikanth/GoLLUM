@@ -35,7 +35,7 @@ LValue = 'id' {'.' id}                                                          
 Expression = BoolTerm {'||' BoolTerm}                                                              ;
 BoolTerm = EqualTerm {'&&' EqualTerm}                                                              ;
 EqualTerm =  RelationTerm {('=='| '!=') RelationTerm}                                              ;
-RelationTerm = SimpleTerm {('>'| '<' | '<=' | '>=') SimpleTerm}                                    ;
+RelationTerm = SimpleTerm {('>' | '<' | '<=' | '>=') SimpleTerm}                                   ;
 SimpleTerm = Term {('+'| '-') Term}                                                                ;
 Term = UnaryTerm {('*'| '/') UnaryTerm}                                                            ;
 UnaryTerm = '!' SelectorTerm | '-' SelectorTerm | SelectorTerm                                     ;

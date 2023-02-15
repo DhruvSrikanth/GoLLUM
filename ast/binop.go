@@ -41,6 +41,31 @@ func isBoolOp(op Operator) bool {
 		op == NOT
 }
 
+// Create nested binary operation expressions in a tree form
+func MergeBinOps(terms []Expression, ops []Operator, tok *token.Token) Expression {
+	var finalTerm Expression
+	if len(terms) == 1 {
+		finalTerm = terms[0]
+	} else {
+		op_idx := 0
+		term_idx := 0
+		for {
+			if term_idx == len(terms)-1 {
+				break
+			}
+			term1 := terms[term_idx]
+			term2 := terms[term_idx+1]
+			op := ops[op_idx]
+			term := NewBinOp(&term1, &op, &term2, tok)
+			terms[term_idx+1] = term
+			term_idx++
+			op_idx++
+		}
+		finalTerm = terms[len(terms)-1]
+	}
+	return finalTerm
+}
+
 // Return a new binary operation expression
 func NewBinOp(left *Expression, op *Operator, right *Expression, token *token.Token) *BinOpExpr {
 	return &BinOpExpr{token, left, op, right, nil}
@@ -48,10 +73,11 @@ func NewBinOp(left *Expression, op *Operator, right *Expression, token *token.To
 
 // String representation of the binary operation
 func (binOp *BinOpExpr) String() string {
-
 	var out bytes.Buffer
 
-	out.WriteString("(")
+	if binOp.operator != nil {
+		out.WriteString("(")
+	}
 	if binOp.left != nil {
 		out.WriteString((*binOp.left).String())
 	}
@@ -59,7 +85,9 @@ func (binOp *BinOpExpr) String() string {
 		out.WriteString(" " + OpToStr(*binOp.operator) + " ")
 	}
 	out.WriteString((*binOp.right).String())
-	out.WriteString(")")
+	if binOp.operator != nil {
+		out.WriteString(")")
+	}
 
 	return out.String()
 }

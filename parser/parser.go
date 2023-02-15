@@ -498,28 +498,33 @@ func (gParser *goliteParser) ExitExpression(c *ExpressionContext) {
 	// Get the key for the expression
 	line, col, key := GetTokenInfo(c)
 
+	var terms []ast.Expression
+	var ops []ast.Operator
+
 	// Get the left expression
 	leftExprCtx := c.GetBt()
 	_, _, leftExprKey := GetTokenInfo(leftExprCtx)
 	leftExpr := gParser.nodes[leftExprKey].(ast.Expression)
+	terms = append(terms, leftExpr)
+
 	allRightExpr := c.AllExpressionPrime()
 	if len(allRightExpr) != 0 {
 		for _, rightExprCtx := range allRightExpr {
 			// Get the right expression
-			_, _, rightExprKey := GetTokenInfo(rightExprCtx)
+			_, _, rightExprKey := GetTokenInfo(rightExprCtx.GetBt())
 			rightExpr := gParser.nodes[rightExprKey].(ast.Expression)
+			terms = append(terms, rightExpr)
 
 			// Get the operator
 			op := rightExprCtx.(*ExpressionPrimeContext).GetOp().GetText()
 			opTerm := ast.StrToOp(op)
-
-			// Create the expression
-			mergedExpr := ast.NewBinOp(&leftExpr, &opTerm, &rightExpr, token.NewToken(line, col))
-			leftExpr = mergedExpr
+			ops = append(ops, opTerm)
 		}
 	}
-	gParser.nodes[key] = leftExpr
 
+	// Merge the terms
+	finalTerm := ast.MergeBinOps(terms, ops, token.NewToken(line, col))
+	gParser.nodes[key] = finalTerm
 }
 
 // ExitBoolTerm is called when exiting the boolTerm production.
@@ -527,10 +532,15 @@ func (gParser *goliteParser) ExitBoolTerm(c *BoolTermContext) {
 	// Get the key for the bool term
 	line, col, key := GetTokenInfo(c)
 
+	var terms []ast.Expression
+	var ops []ast.Operator
+
 	// Get the first expression
 	exprCtx := c.GetEq()
 	_, _, exprKey := GetTokenInfo(exprCtx)
 	expr := gParser.nodes[exprKey].(ast.Expression)
+	terms = append(terms, expr)
+
 	allOtherExpr := c.AllBoolTermPrime()
 	if len(allOtherExpr) != 0 {
 		// Get the rest of the expressions
@@ -538,17 +548,22 @@ func (gParser *goliteParser) ExitBoolTerm(c *BoolTermContext) {
 			exprCtx := exprWrapperCtx.(*BoolTermPrimeContext).GetEq()
 			_, _, exprKey := GetTokenInfo(exprCtx)
 			otherExpr := gParser.nodes[exprKey].(ast.Expression)
+			terms = append(terms, otherExpr)
 
 			// Get the operator
 			op := exprWrapperCtx.(*BoolTermPrimeContext).GetOp().GetText()
 			opTerm := ast.StrToOp(op)
+			ops = append(ops, opTerm)
 
 			// Create the new expression
 			mergedTerm := ast.NewBinOp(&expr, &opTerm, &otherExpr, token.NewToken(line, col))
 			expr = mergedTerm
 		}
 	}
-	gParser.nodes[key] = expr
+
+	// Merge the terms
+	finalTerm := ast.MergeBinOps(terms, ops, token.NewToken(line, col))
+	gParser.nodes[key] = finalTerm
 }
 
 // ExitEqualTerm is called when exiting the equalTerm production.
@@ -556,10 +571,15 @@ func (gParser *goliteParser) ExitEqualTerm(c *EqualTermContext) {
 	// Get the key for the equal term
 	line, col, key := GetTokenInfo(c)
 
+	var terms []ast.Expression
+	var ops []ast.Operator
+
 	// Get the left expression
 	leftExprCtx := c.GetRt()
 	_, _, leftExprKey := GetTokenInfo(leftExprCtx)
 	leftExpr := gParser.nodes[leftExprKey].(ast.Expression)
+	terms = append(terms, leftExpr)
+
 	allRightExpr := c.AllEqualTermPrime()
 	if len(allRightExpr) != 0 {
 		for _, rightExprCtx := range allRightExpr {
@@ -568,18 +588,18 @@ func (gParser *goliteParser) ExitEqualTerm(c *EqualTermContext) {
 			// Get the right expression
 			_, _, rightExprKey := GetTokenInfo(rightExprPrimeCtx.GetRt())
 			rightExpr := gParser.nodes[rightExprKey].(ast.Expression)
+			terms = append(terms, rightExpr)
 
 			// Get the operator
 			op := rightExprCtx.GetOp().GetText()
 			opTerm := ast.StrToOp(op)
-
-			// Create the equal term
-			mergedTerm := ast.NewBinOp(&leftExpr, &opTerm, &rightExpr, token.NewToken(line, col))
-			leftExpr = mergedTerm
+			ops = append(ops, opTerm)
 		}
 	}
-	gParser.nodes[key] = leftExpr
 
+	// Merge the terms
+	finalTerm := ast.MergeBinOps(terms, ops, token.NewToken(line, col))
+	gParser.nodes[key] = finalTerm
 }
 
 // ExitRelationTerm is called when exiting the relationTerm production.
@@ -587,28 +607,35 @@ func (gParser *goliteParser) ExitRelationTerm(c *RelationTermContext) {
 	// Get the key for the relation term
 	line, col, key := GetTokenInfo(c)
 
+	var terms []ast.Expression
+	var ops []ast.Operator
+
 	// Get the relationTerm
 	relTermCtx := c.GetSt()
 	_, _, relTermKey := GetTokenInfo(relTermCtx)
 	relTerm := gParser.nodes[relTermKey].(ast.Expression)
+	terms = append(terms, relTerm)
+
 	allRelationTermCtx := c.AllRelationTermPrime()
 	if len(allRelationTermCtx) != 0 {
 		for _, relTermPrimeCtx := range allRelationTermCtx {
 			relTermPrime := relTermPrimeCtx.(*RelationTermPrimeContext)
 			// Get the operator
 			op := relTermPrime.GetOp().GetText()
+			opTerm := ast.StrToOp(op)
+			ops = append(ops, opTerm)
+
 			// Get the relationTerm
 			relTermCtx := relTermPrime.GetSt()
 			_, _, relTermKey := GetTokenInfo(relTermCtx)
 			otherRelTerm := gParser.nodes[relTermKey].(ast.Expression)
-			// Create the relation term
-			opTerm := ast.StrToOp(op)
-			mergedTerm := ast.NewBinOp(&relTerm, &opTerm, &otherRelTerm, token.NewToken(line, col))
-			relTerm = mergedTerm
+			terms = append(terms, otherRelTerm)
 		}
 	}
-	gParser.nodes[key] = relTerm
 
+	// Merge the terms
+	finalTerm := ast.MergeBinOps(terms, ops, token.NewToken(line, col))
+	gParser.nodes[key] = finalTerm
 }
 
 // ExitSimpleTerm is called when exiting the simpleTerm production.
@@ -616,10 +643,15 @@ func (gParser *goliteParser) ExitSimpleTerm(c *SimpleTermContext) {
 	// Get the key for the term
 	line, col, key := GetTokenInfo(c)
 
+	var terms []ast.Expression
+	var ops []ast.Operator
+
 	// Get the term
 	termCtx := c.GetT().(*TermContext)
 	_, _, termKey := GetTokenInfo(termCtx)
 	term := gParser.nodes[termKey].(ast.Expression)
+	terms = append(terms, term)
+
 	allTermPrimeCtx := c.AllSimpleTermPrime()
 	if len(allTermPrimeCtx) != 0 {
 		// Get the rest of the terms
@@ -627,16 +659,19 @@ func (gParser *goliteParser) ExitSimpleTerm(c *SimpleTermContext) {
 			ctx := termPrimeCtx.(*SimpleTermPrimeContext)
 			// Get the operator
 			op := ctx.GetOp().GetText()
+			opTerm := ast.StrToOp(op)
+			ops = append(ops, opTerm)
 
 			_, _, termPrimeKey := GetTokenInfo(ctx.GetT().(*TermContext))
 			termPrime := gParser.nodes[termPrimeKey].(ast.Expression)
-			opTerm := ast.StrToOp(op)
-			mergedTerm := ast.NewBinOp(&term, &opTerm, &termPrime, token.NewToken(line, col))
-			term = mergedTerm
+			terms = append(terms, termPrime)
 		}
 	}
-	gParser.nodes[key] = term
 
+	// Merge the terms
+	finalTerm := ast.MergeBinOps(terms, ops, token.NewToken(line, col))
+
+	gParser.nodes[key] = finalTerm
 }
 
 // ExitTerm is called when exiting the term production.
@@ -647,7 +682,13 @@ func (gParser *goliteParser) ExitTerm(c *TermContext) {
 	unaryTermCtx := c.GetUt().(*UnaryTermContext)
 	// Get all other terms
 	_, _, unaryTermKey := GetTokenInfo(unaryTermCtx)
+
+	var terms []ast.Expression
+	var ops []ast.Operator
+
 	unaryTerm := gParser.nodes[unaryTermKey].(ast.Expression)
+	terms = append(terms, unaryTerm)
+
 	allTermPrimeCtx := c.AllTermPrime()
 	if len(allTermPrimeCtx) != 0 {
 		// Build nested binary terms
@@ -655,19 +696,20 @@ func (gParser *goliteParser) ExitTerm(c *TermContext) {
 			termPrimeCtx := termPrimeWrapperCtx.(*TermPrimeContext)
 			// Get the operator
 			op := termPrimeCtx.GetOp().GetText()
+			opTerm := ast.StrToOp(op)
+			ops = append(ops, opTerm)
+
 			// Get the unary term
 			unaryTermCtx := termPrimeCtx.GetUt().(*UnaryTermContext)
 			_, _, unaryTermKey := GetTokenInfo(unaryTermCtx)
 			unaryTerm2 := gParser.nodes[unaryTermKey].(ast.Expression)
-			// Cast to the correct
-			// Create the binary term
-			opTerm := ast.StrToOp(op)
-			mergedTerm := ast.NewBinOp(&unaryTerm, &opTerm, &unaryTerm2, token.NewToken(line, col))
-			unaryTerm = mergedTerm
+			terms = append(terms, unaryTerm2)
 		}
 	}
-	gParser.nodes[key] = unaryTerm
 
+	// Created nested binary terms
+	finalTerm := ast.MergeBinOps(terms, ops, token.NewToken(line, col))
+	gParser.nodes[key] = finalTerm
 }
 
 // ExitUnaryTerm is called when exiting the unary production.

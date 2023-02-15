@@ -24,24 +24,12 @@ func main() {
     var p1 *Point;
     var p2 *Point;
     var a, b int;
+    var c int;
 
     // print something
     printf("p1.x = %d, p1.y = %d, p1.z = %d\n", p1.x, p1.y, p1.z);
-    {
-        printf("something", a);
-        delete b;
-        scan c;
-    }
 
-    a = nil;
-    b = true;
-    n = 1;
-    if (n == 0) {
-        return 0;
-    } else {
-        return 1;
-    }
-
+    c = (x + y - a * b / d) > 0 >= 2 == t && f || t;
     // Allocate memory for the struct.
     p1 = new Point;
     scan a;
