@@ -24,13 +24,13 @@ func Execute(program *ast.Program) *st.SymbolTables {
 	tables := st.NewSymbolTables()
 
 	// Collect all the errors
-	errors := make([]ast.SemanticAnalysisError, 0)
+	errors := make([]*ast.SemanticAnalysisError, 0)
 
-	//First Build the Symbol Table(s) for all global declarations
+	// First Build the Symbol Table(s) for all global declarations
 	errors = program.BuildSymbolTable(tables, errors)
 
 	//Second perform type checking.
-	errors = program.TypeCheck(errors, tables)
+	// errors = program.TypeCheck(errors, tables)
 	if hasErrors(errors) {
 		reportErrors(errors)
 		return nil

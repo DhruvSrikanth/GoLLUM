@@ -5,6 +5,7 @@ import (
 	"golite/cmdline"
 	"golite/lexer"
 	"golite/parser"
+	sa "golite/semanticanalysis"
 )
 
 func main() {
@@ -36,11 +37,11 @@ func main() {
 				// Print the AST
 				fmt.Println(ast)
 			}
-			// 	if tables := sa.Execute(ast); tables != nil {
-			// 		fmt.Println("Passed semantic analysis (view console for errors at lexing and parsing stages)")
-			// 	} else {
-			// 		fmt.Println("Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)")
-			// 	}
+			if tables := sa.Execute(ast); tables != nil {
+				fmt.Println("Passed semantic analysis (view console for errors at lexing and parsing stages)")
+			} else {
+				fmt.Println("Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)")
+			}
 		}
 	}
 }
