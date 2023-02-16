@@ -25,10 +25,13 @@ type StructEntry struct {
 // String representation of a struct entry in the symbol table
 func (entry *StructEntry) String() string {
 	fields := ""
-	for _, f := range entry.Fields {
+	for i, f := range entry.Fields {
 		field := *f
-		fields += fmt.Sprintf("%s, ", field.String())
+		if i < len(entry.Fields)-1 {
+			fields += fmt.Sprintf("%s, ", field.String())
+		} else {
+			fields += field.String()
+		}
 	}
-	fields = fields[:len(fields)-2]
 	return fmt.Sprintf("%s {Fields: %s}", entry.Name, fields)
 }

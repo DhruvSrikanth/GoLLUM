@@ -16,18 +16,25 @@ type FuncEntry struct {
 // String representation of a function entry in the symbol table
 func (entry *FuncEntry) String() string {
 	parameters := ""
-	for _, param := range entry.Parameters {
-		parameters += fmt.Sprintf("%s, ", param.String())
+	for i, param := range entry.Parameters {
+		if i < len(entry.Parameters)-1 {
+			parameters += fmt.Sprintf("%s, ", param.String())
+		} else {
+			parameters += param.String()
+		}
 	}
-	parameters = parameters[:len(parameters)-2]
 
 	vars := *entry.Variables
 	variables := ""
+	i := 0
 	for k, v := range vars.table {
 		variable := *v
-		variables += fmt.Sprintf("%s: %s, ", k, variable.String())
+		if i < len(vars.table)-1 {
+			variables += fmt.Sprintf("%s: %s, ", k, variable.String())
+		} else {
+			variables += fmt.Sprintf("%s: %s", k, variable.String())
+		}
 	}
-	variables = variables[:len(variables)-2]
 
 	return fmt.Sprintf("%s {Return Type: %s} {Parameters: %s} {Variables: %v}", entry.Name, entry.RetTy, parameters, variables)
 }
