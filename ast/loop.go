@@ -31,11 +31,12 @@ func (l *Loop) String() string {
 }
 
 // Build the symbol table for the loop node
-func (l *Loop) BuildSymbolTable(tables *st.SymbolTables) {
+func (l *Loop) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since the body is already in the symbol table
+	return errors
 }
 
 // Type checking for the loop node
-func (l *Loop) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (l *Loop) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

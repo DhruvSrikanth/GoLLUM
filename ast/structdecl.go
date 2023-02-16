@@ -36,7 +36,7 @@ func (s *StructDecl) String() string {
 }
 
 // Build the symbol table for the struct declaration
-func (s *StructDecl) BuildSymbolTable(tables *st.SymbolTables) {
+func (s *StructDecl) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Create fields for the struct entry
 	fields := make([]*st.FieldEntry, 0)
 	for _, decl := range s.decls {
@@ -44,7 +44,11 @@ func (s *StructDecl) BuildSymbolTable(tables *st.SymbolTables) {
 	}
 
 	// Add the struct to the symbol table
-	tables.Structs.Insert(s.name, &st.StructEntry{Name: s.name, Fields: fields})
+	if !tables.Structs.Insert(s.name, &st.StructEntry{Name: s.name, Fields: fields}) {
+		errors = append(errors, NewSemanticAnalysisError("Struct '"+s.name+"'redeclared.", "redeclaration"))
+	}
+
+	return errors
 }
 
 // Type check the struct declaration

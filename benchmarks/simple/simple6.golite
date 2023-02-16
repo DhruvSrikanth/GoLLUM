@@ -1,43 +1,96 @@
-type nums struct {
+type Node struct { 
 
-    a int;
-    b int;
-};
+    value int; 
+    left  *Node;
+    right *Node;  
+}; 
 
-func fib1(f1 int) int {
-    if( f1 < 2 ) {
-        return f1;
-    } else {
-        return fib1(f1-1) + fib1(f1-2);
-    }
+var  root *Node; 
+
+func compare(cur int,neuw int) int {
+
+    if (cur < neuw) {
+		return 1;
+	} else {  
+		if (cur > neuw) {
+		   return -1;
+		} else {
+		   return 0;
+		}
+	}
 }
-func fib2(f2 int) int {
-    var fir int;
-    var sec int;
+func addNode (numAdd int, curr *Node) { 
+	var compVal int;
+    var newNode *Node;
+
+	if( curr == nil ){
+		newNode = new Node;
+		newNode.value = numAdd;
+		root = newNode;
+	} else {
+		compVal = compare (curr.value, numAdd);
+		
+		if( compVal == -1) {
+			if(curr.left == nil) {
+				newNode = new Node;
+				newNode.value = numAdd;
+				curr.left = newNode;
+			} else {
+				addNode ( numAdd, curr.left);
+			}
+		} else {
+			if(compVal == 1) {
+				if(curr.right == nil) {
+					newNode = new Node;
+					newNode.value = numAdd;
+					curr.right = newNode;
+				} else {
+					addNode ( numAdd, curr.right);
+				}
+			}
+		}
+	}
+}
+func printDepthTree (curr *Node)  {
     var temp int;
-    fir = 0;
-    sec = 1;
-    for (f2 != 0) {
-	f2=f2-1;
-	temp = fir+sec;
-	fir = sec;
-	sec = temp;
-    }
-    return fir;
+	if( curr != nil ) {
+		if( curr.left != nil) {
+			printDepthTree(curr.left);
+		}
+        temp = curr.value;
+		printf("%d",temp);
+
+		if(curr.right !=nil) {
+			printDepthTree(curr.right);
+		}
+	}
 }
+func deleteLeavesTree (curr *Node) {
+	if( curr != nil ) {
+		if( curr.left != nil) {
+			deleteLeavesTree(curr.left);
+		}
+
+		if(curr.right !=nil) {
+			deleteLeavesTree(curr.right);
+		}
+		delete(curr);
+	}
+}
+
 func main() {
-    var x *nums;
-    var  c, d, temp int;
-    x = new nums;
-    scan temp; 
-    x.a = temp;  
-    scan temp; 
-    x.b = temp;  
+	var input, temp int;
 
-    c = fib1(x.a);
-    d = fib2(x.b);
+	root = nil;
+	input = 0;
 
-    delete x;
+	scan input; 
 
-    printf("c=%d\nd=%d",c,d); 
+	for (input!=0) {
+		addNode (input, root);
+		scan input; 
+	}
+	
+	printDepthTree(root);	
+	deleteLeavesTree(root);
 }

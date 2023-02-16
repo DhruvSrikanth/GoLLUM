@@ -31,11 +31,12 @@ func (r *Return) String() string {
 }
 
 // Build the symbol table for the return node
-func (r *Return) BuildSymbolTable(tables *st.SymbolTables) {
+func (r *Return) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since the expression variables are already in the symbol table
+	return errors
 }
 
 // Type checking for the return node
-func (r *Return) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (r *Return) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

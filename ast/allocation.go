@@ -14,7 +14,7 @@ type Allocate struct {
 	ty         types.Type
 }
 
-// New Delete node
+// New Allocate node
 func NewAllocate(structType string, token *token.Token) *Allocate {
 	return &Allocate{token, structType, nil}
 }
@@ -30,16 +30,18 @@ func (d *Allocate) String() string {
 }
 
 // Build the symbol table for the allocate node
-func (d *Allocate) BuildSymbolTable(tables *st.SymbolTables) {
+func (d *Allocate) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since allocate is on a variable thats already been declared and added to the symbol table
+	return errors
 }
 
 // Type check the allocate node
-func (d *Allocate) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (d *Allocate) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }
 
 // Get the type of the allocate node
 func (d *Allocate) GetType() types.Type {
+	// Search for the struct type in the symbol table
 	return d.ty
 }

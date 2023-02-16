@@ -57,7 +57,7 @@ func (f *Function) String() string {
 }
 
 // Build the symbol table for the function
-func (f *Function) BuildSymbolTable(tables *st.SymbolTables) {
+func (f *Function) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Build up the entries for the parameters
 	params := make([]*st.VarEntry, 0)
 	for _, param := range f.parameters {
@@ -69,16 +69,20 @@ func (f *Function) BuildSymbolTable(tables *st.SymbolTables) {
 
 	// Build up the entries for the variables
 	for _, decl := range f.declarations {
-		localTable.Insert(decl.variable, &st.VarEntry{Name: decl.variable, Ty: decl.ty, Scope: st.LOCAL})
+		if !localTable.Insert(decl.variable, &st.VarEntry{Name: decl.variable, Ty: decl.ty, Scope: st.LOCAL}) {
+			errors = append(errors, NewSemanticAnalysisError("Variable '"+decl.variable+"' redeclared.", "redeclaration"))
+		}
 	}
 
 	// Add the function to the symbol table
-	tables.Funcs.Insert(f.name, &st.FuncEntry{Name: f.name, RetTy: f.returnType, Parameters: params, Variables: localTable})
-
+	if !tables.Funcs.Insert(f.name, &st.FuncEntry{Name: f.name, RetTy: f.returnType, Parameters: params, Variables: localTable}) {
+		errors = append(errors, NewSemanticAnalysisError("Function '"+f.name+"' redeclared.", "redeclaration"))
+	}
+	return errors
 }
 
 // Type checking for the function
-func (f *Function) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (f *Function) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	// // Check the parameters
 	// for _, param := range f.parameters {
 	// 	errors = param.TypeCheck(errors, tables)

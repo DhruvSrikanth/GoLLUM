@@ -33,11 +33,12 @@ func (a *Assignment) String() string {
 }
 
 // Build the symbol table for the assignment
-func (a *Assignment) BuildSymbolTable(tables *st.SymbolTables) {
+func (a *Assignment) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since an assignment is not added to the symbol table
+	return errors
 }
 
 // Type checking for the assignment
-func (a *Assignment) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (a *Assignment) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

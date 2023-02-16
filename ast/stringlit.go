@@ -29,6 +29,6 @@ func (sl *StringLiteral) GetType() types.Type {
 }
 
 // TypeCheck performs type checking for the string literal
-func (sl *StringLiteral) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (sl *StringLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

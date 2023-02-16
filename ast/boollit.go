@@ -29,7 +29,7 @@ func (bl *BoolLiteral) GetType() types.Type {
 	return bl.ty
 }
 
-// TypeCheck performs type checking for the nil literal
-func (bl *BoolLiteral) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+// TypeCheck performs type checking for the bool literal
+func (bl *BoolLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

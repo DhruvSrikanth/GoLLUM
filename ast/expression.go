@@ -9,6 +9,6 @@ import (
 // interface)
 type Expression interface {
 	String() string
-	TypeCheck([]string, *st.SymbolTables) []string
+	TypeCheck([]*SemanticAnalysisError, *st.SymbolTables) []*SemanticAnalysisError
 	GetType() types.Type
 }

@@ -30,6 +30,6 @@ func (il *IntLiteral) GetType() types.Type {
 }
 
 // TypeCheck performs type checking for the integer literal
-func (il *IntLiteral) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (il *IntLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

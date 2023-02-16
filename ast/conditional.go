@@ -39,11 +39,12 @@ func (c *Conditional) String() string {
 }
 
 // Build the symbol table for the conditional node
-func (c *Conditional) BuildSymbolTable(tables *st.SymbolTables) {
+func (c *Conditional) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since any statements made are added to the symbol table at the function node level
+	return errors
 }
 
 // Type checking for the conditional node
-func (c *Conditional) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (c *Conditional) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

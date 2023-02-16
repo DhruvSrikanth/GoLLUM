@@ -29,11 +29,12 @@ func (d *Delete) String() string {
 }
 
 // Build the symbol table for the delete node
-func (d *Delete) BuildSymbolTable(tables *st.SymbolTables) {
+func (d *Delete) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since a delete is not added to the symbol table
+	return errors
 }
 
 // Type check the delete node
-func (d *Delete) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (d *Delete) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

@@ -29,11 +29,12 @@ func (r *Read) String() string {
 }
 
 // Build the symbol table for the read node
-func (r *Read) BuildSymbolTable(tables *st.SymbolTables) {
+func (r *Read) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since a read statement uses a variable already declared in the symbol table
+	return errors
 }
 
-// Type check the read node
-func (r *Read) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+// Type check the read node*SemanticAnalysisError
+func (r *Read) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

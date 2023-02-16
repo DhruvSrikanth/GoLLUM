@@ -30,11 +30,12 @@ func (d *Decl) String() string {
 }
 
 // Build the symbol table for the declaration
-func (d *Decl) BuildSymbolTable(tables *st.SymbolTables) {
+func (d *Decl) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do since we add the decls to the symbol table in the struct decl BuildSymbolTable function
+	return errors
 }
 
-func (d *Decl) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (d *Decl) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	//When you reach a declaration you want to make sure you add the variable declaration to the symbol table.
 	return errors
 }

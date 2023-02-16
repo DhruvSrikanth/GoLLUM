@@ -6,6 +6,6 @@ import st "golite/symboltable"
 // i.e. structs, functions, declarations
 type Statement interface {
 	String() string
-	BuildSymbolTable(tables *st.SymbolTables)
-	TypeCheck([]string, *st.SymbolTables) []string
+	BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError
+	TypeCheck([]*SemanticAnalysisError, *st.SymbolTables) []*SemanticAnalysisError
 }

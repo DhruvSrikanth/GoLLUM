@@ -31,11 +31,23 @@ func (d *Declaration) String() string {
 }
 
 // Build the symbol table for the declaration
-func (d *Declaration) BuildSymbolTable(tables *st.SymbolTables) {
-	tables.Globals.Insert(d.variable, &st.VarEntry{Name: d.variable, Ty: d.ty, Scope: st.GLOBAL})
+func (d *Declaration) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
+	// No need to add things to the symbol table here because declarations are added to the symbol table in the program
+	// for global declarations and in the function for local declarations
+	return errors
 }
 
 // Type checking for the declaration
-func (d *Declaration) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (d *Declaration) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
+}
+
+// Get the type of the declaration
+func (d *Declaration) GetType() types.Type {
+	return d.ty
+}
+
+// Get the variable name of the declaration
+func (d *Declaration) GetVariable() string {
+	return d.variable
 }

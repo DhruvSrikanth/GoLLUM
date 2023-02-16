@@ -45,25 +45,29 @@ func (p *Program) String() string {
 }
 
 // Build the symbol table for the program
-func (p *Program) BuildSymbolTable(tables *st.SymbolTables) {
+func (p *Program) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Struct types
 	for _, strct := range p.structTypes {
-		strct.BuildSymbolTable(tables)
+		errors = strct.BuildSymbolTable(tables, errors)
 	}
 
 	// Declarations
 	for _, decl := range p.declarations {
-		decl.BuildSymbolTable(tables)
+		if !tables.Globals.Insert(decl.GetVariable(), &st.VarEntry{Name: decl.GetVariable(), Ty: decl.GetType(), Scope: st.GLOBAL}) {
+			errors = append(errors, NewSemanticAnalysisError("Variable '"+decl.GetVariable()+"' redeclared.", "redeclaration"))
+		}
 	}
 
 	// Functions
 	for _, fn := range p.funcs {
-		fn.BuildSymbolTable(tables)
+		errors = fn.BuildSymbolTable(tables, errors)
 	}
+
+	return errors
 }
 
 // Type Check using the symbol tables
-func (p *Program) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (p *Program) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	// Struct types
 	for _, strct := range p.structTypes {
 		errors = strct.TypeCheck(errors, tables)

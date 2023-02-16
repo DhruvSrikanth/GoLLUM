@@ -34,11 +34,12 @@ func (b *Block) String() string {
 }
 
 // Build the symbol table for the block
-func (b *Block) BuildSymbolTable(tables *st.SymbolTables) {
+func (b *Block) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since we build up the symbol table in the function node
+	return errors
 }
 
 // Type check the block
-func (b *Block) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (b *Block) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

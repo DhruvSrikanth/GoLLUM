@@ -98,11 +98,12 @@ func (binOp *BinOpExpr) GetType() types.Type {
 }
 
 // Build the symbol table for the binary operation
-func (binOp *BinOpExpr) BuildSymbolTable(tables *st.SymbolTables) {
+func (binOp *BinOpExpr) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since the expression does not introduce any new symbols
+	return errors
 }
 
 // Type check the binary operation
-func (binOp *BinOpExpr) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

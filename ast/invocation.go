@@ -39,12 +39,13 @@ func (i *Invocation) String() string {
 }
 
 // Build the symbol table for the invocation node
-func (i *Invocation) BuildSymbolTable(tables *st.SymbolTables) {
+func (i *Invocation) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since the function is already in the symbol table and the invocation is not a declaration
+	return errors
 }
 
 // Type checking for the invocation node
-func (i *Invocation) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (i *Invocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }
 

@@ -40,12 +40,13 @@ func (v *VariableInvocation) String() string {
 }
 
 // Build the symbol table for the VariableInvocation node
-func (v *VariableInvocation) BuildSymbolTable(tables *st.SymbolTables) {
+func (v *VariableInvocation) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since the function is already in the symbol table and the VariableInvocation is not a declaration
+	return errors
 }
 
 // Type checking for the VariableInvocation node
-func (v *VariableInvocation) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (v *VariableInvocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }
 

@@ -35,12 +35,13 @@ func (l *LValue) String() string {
 }
 
 // Build the symbol table for the lvalue node
-func (l *LValue) BuildSymbolTable(tables *st.SymbolTables) {
+func (l *LValue) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since a lvalue is not added to the symbol table since it is already declared
+	return errors
 }
 
 // Type check the lvalue node
-func (l *LValue) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }
 

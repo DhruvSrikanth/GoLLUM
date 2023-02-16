@@ -36,11 +36,12 @@ func (p *Print) String() string {
 }
 
 // Build the symbol table for the print
-func (p *Print) BuildSymbolTable(tables *st.SymbolTables) {
+func (p *Print) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since a print is not added to the symbol table
+	return errors
 }
 
 // Type checking for the print
-func (p *Print) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (p *Print) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

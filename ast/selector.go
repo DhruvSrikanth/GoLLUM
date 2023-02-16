@@ -34,12 +34,13 @@ func (s *SelectorTerm) String() string {
 }
 
 // Build the symbol table for the SelectorTerm node
-func (s *SelectorTerm) BuildSymbolTable(tables *st.SymbolTables) {
+func (s *SelectorTerm) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since a SelectorTerm is not added to the symbol table since it is already declared
+	return errors
 }
 
 // Type check the SelectorTerm node
-func (s *SelectorTerm) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }
 

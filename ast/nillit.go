@@ -29,6 +29,6 @@ func (nl *NilLiteral) GetType() types.Type {
 }
 
 // TypeCheck performs type checking for the nil literal
-func (nl *NilLiteral) TypeCheck(errors []string, tables *st.SymbolTables) []string {
+func (nl *NilLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	return errors
 }

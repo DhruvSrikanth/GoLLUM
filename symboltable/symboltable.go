@@ -35,12 +35,16 @@ func NewSymbolTable[T fmt.Stringer](parent *SymbolTable[T]) *SymbolTable[T] {
 }
 
 // Add an entry to the symbol table
-func (st *SymbolTable[T]) Insert(id string, entry T) {
+func (st *SymbolTable[T]) Insert(id string, entry T) bool {
+	redeclaration := true
+
 	// Sanity check
 	if _, ok := st.table[id]; ok {
 		fmt.Printf("Symbol %s already exists.", id)
+		redeclaration = false
 	}
 	st.table[id] = entry
+	return redeclaration
 }
 
 // Lookup an entry in the symbol table
