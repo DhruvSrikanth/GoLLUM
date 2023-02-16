@@ -726,7 +726,7 @@ func (gParser *goliteParser) ExitUnaryTerm(c *UnaryTermContext) {
 		_, _, selectorKey := GetTokenInfo(selectorCtx)
 		selector = gParser.nodes[selectorKey].(ast.Expression)
 	} else if intCtx := c.UnaryTermInt(); intCtx != nil {
-		op = intCtx.GetText()
+		op = intCtx.GetOp().GetText()
 		// Get the selector
 		selectorCtx := intCtx.GetSt().(*SelectorTermContext)
 		_, _, selectorKey := GetTokenInfo(selectorCtx)

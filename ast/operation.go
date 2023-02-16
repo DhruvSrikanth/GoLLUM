@@ -1,5 +1,7 @@
 package ast
 
+import "fmt"
+
 // Alias for the operator type
 type Operator int
 
@@ -61,7 +63,10 @@ func StrToOp(op string) Operator {
 	case "!":
 		return NOT
 	}
+
+	fmt.Println(op)
 	panic("Error: Could not determine operator")
+
 }
 
 // Convert an operator to a string representation
