@@ -52,7 +52,10 @@ func (s *StructDecl) BuildSymbolTable(tables *st.SymbolTables, errors []*Semanti
 }
 
 // Type check the struct declaration
-func (d *StructDecl) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (d *StructDecl) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Nothing to type check because only lvalues are allowed in struct declarations
+	for _, decl := range d.decls {
+		errors = decl.TypeCheck(errors, tables, funcEntry)
+	}
 	return errors
 }

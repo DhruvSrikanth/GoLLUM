@@ -37,7 +37,7 @@ func (d *Allocate) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticA
 }
 
 // Type check the allocate node
-func (d *Allocate) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (d *Allocate) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	entry := tables.Structs.Contains(d.structType)
 	if entry == nil {
 		errors = append(errors, NewSemanticAnalysisError("Struct "+d.structType+" not declared.", "undeclared", d.Token))

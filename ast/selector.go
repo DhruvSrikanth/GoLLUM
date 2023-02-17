@@ -40,7 +40,7 @@ func (s *SelectorTerm) BuildSymbolTable(tables *st.SymbolTables, errors []*Seman
 }
 
 // Type check the SelectorTerm node
-func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Check if the selector is a struct field or a variable/function
 	// if len(s.fields) > 0 {
 	// 	// Struct field

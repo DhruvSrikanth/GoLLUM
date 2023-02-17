@@ -40,9 +40,9 @@ func (b *Block) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnal
 }
 
 // Type check the block
-func (b *Block) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (b *Block) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	for _, stmt := range b.statements {
-		errors = stmt.TypeCheck(errors, tables)
+		errors = stmt.TypeCheck(errors, tables, funcEntry)
 	}
 	return errors
 }

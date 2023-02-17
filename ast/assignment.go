@@ -38,13 +38,21 @@ func (a *Assignment) BuildSymbolTable(tables *st.SymbolTables, errors []*Semanti
 }
 
 // Type checking for the assignment
-func (a *Assignment) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (a *Assignment) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Type check the expression on the right hand side of the assignment
 	// Also ensures that GetType() on expression is the correct predictive type
-	errors = a.right.TypeCheck(errors, tables)
+	errors = a.right.TypeCheck(errors, tables, funcEntry)
 
 	// Type check the lvalue on the left hand side of the assignment
-	errors = a.variable.TypeCheck(errors, tables)
+	errors = a.variable.TypeCheck(errors, tables, funcEntry)
+
+	if a.variable.GetType() == nil {
+		// Use inferred data type from rhs to continue using predictive type checking
+		// This ensures that the compiler can continue type checking to find more errors
+		// Error for this nil type will be added in the type checking of the lvalue so all errors can be accounted for
+		a.variable.ty = a.right.GetType()
+		errors = append(errors, NewSemanticAnalysisError("Type mismatch in assignment", "type mistmatch", a.GetToken()))
+	}
 
 	// Check that the type of the lvalue is the same as the type of the expression
 	if a.variable.GetType() != a.right.GetType() {

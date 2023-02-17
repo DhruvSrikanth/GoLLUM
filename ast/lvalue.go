@@ -41,9 +41,9 @@ func (l *LValue) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAna
 }
 
 // Type check the lvalue node
-func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Check if the identifer is declared
-	entry := tables.Funcs.Contains(l.identifier)
+	entry := funcEntry.Variables.Contains(l.identifier)
 	if entry == nil {
 		errors = append(errors, NewSemanticAnalysisError("Undeclared variable "+l.identifier+".", "undeclared variable", l.Token))
 	} else {

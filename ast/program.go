@@ -67,20 +67,20 @@ func (p *Program) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAn
 }
 
 // Type Check using the symbol tables
-func (p *Program) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (p *Program) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Struct types
 	for _, strct := range p.structTypes {
-		errors = strct.TypeCheck(errors, tables)
+		errors = strct.TypeCheck(errors, tables, funcEntry)
 	}
 
 	// Declarations
 	for _, decl := range p.declarations {
-		errors = decl.TypeCheck(errors, tables)
+		errors = decl.TypeCheck(errors, tables, funcEntry)
 	}
 
 	// Functions
 	for _, fn := range p.funcs {
-		errors = fn.TypeCheck(errors, tables)
+		errors = fn.TypeCheck(errors, tables, funcEntry)
 	}
 
 	return errors

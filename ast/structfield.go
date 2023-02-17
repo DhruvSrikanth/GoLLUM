@@ -35,7 +35,7 @@ func (d *Decl) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnaly
 	return errors
 }
 
-func (d *Decl) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (d *Decl) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	//When you reach a declaration you want to make sure you add the variable declaration to the symbol table.
 	return errors
 }

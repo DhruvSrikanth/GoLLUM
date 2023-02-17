@@ -38,7 +38,7 @@ func (d *Declaration) BuildSymbolTable(tables *st.SymbolTables, errors []*Semant
 }
 
 // Type checking for the declaration
-func (d *Declaration) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (d *Declaration) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	return errors
 }
 

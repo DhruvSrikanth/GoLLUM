@@ -46,7 +46,7 @@ func (v *VariableInvocation) BuildSymbolTable(tables *st.SymbolTables, errors []
 }
 
 // Type checking for the VariableInvocation node
-func (v *VariableInvocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (v *VariableInvocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Check if its a variable or function call
 	entry := tables.Funcs.Contains(v.identifier)
 	if len(v.arguments) != 0 {
@@ -62,7 +62,7 @@ func (v *VariableInvocation) TypeCheck(errors []*SemanticAnalysisError, tables *
 				// Call type check on each argument
 				// to ensure the GetTypes() method returns the correct type even if there are errors
 				for _, arg := range v.arguments {
-					errors = arg.TypeCheck(errors, tables)
+					errors = arg.TypeCheck(errors, tables, funcEntry)
 				}
 				// Check if the types of the arguments are correct
 				for i, arg := range v.arguments {

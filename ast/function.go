@@ -15,11 +15,12 @@ type Function struct {
 	returnType   types.Type
 	declarations []Declaration
 	statements   []Statement
+	funcEntry    *st.FuncEntry
 }
 
 // New Function node
 func NewFunction(name string, parameters []Decl, declarations []Declaration, statements []Statement, returnType types.Type, token *token.Token) *Function {
-	return &Function{token, name, parameters, returnType, declarations, statements}
+	return &Function{token, name, parameters, returnType, declarations, statements, nil}
 }
 
 // String representation of the function node
@@ -74,28 +75,35 @@ func (f *Function) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticA
 		}
 	}
 
+	// Set the funcEntry for the function
+	f.funcEntry = &st.FuncEntry{Name: f.name, RetTy: f.returnType, Parameters: params, Variables: localTable}
+
 	// Add the function to the symbol table
-	if !tables.Funcs.Insert(f.name, &st.FuncEntry{Name: f.name, RetTy: f.returnType, Parameters: params, Variables: localTable}) {
+	if !tables.Funcs.Insert(f.name, f.funcEntry) {
 		errors = append(errors, NewSemanticAnalysisError("Function '"+f.name+"' redeclared.", "redeclaration", f.Token))
 	}
+
 	return errors
 }
 
 // Type checking for the function
-func (f *Function) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
-	// // Check the parameters
+func (f *Function) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Pass funcEntry formed in the function AST node to the children nodes to provide context
+	// for type checking
+
+	// Check the parameters
 	for _, param := range f.parameters {
-		errors = param.TypeCheck(errors, tables)
+		errors = param.TypeCheck(errors, tables, f.funcEntry)
 	}
 
 	// Check the declarations
 	for _, decl := range f.declarations {
-		errors = decl.TypeCheck(errors, tables)
+		errors = decl.TypeCheck(errors, tables, f.funcEntry)
 	}
 
 	// Check the statements
 	for _, stmt := range f.statements {
-		errors = stmt.TypeCheck(errors, tables)
+		errors = stmt.TypeCheck(errors, tables, f.funcEntry)
 	}
 
 	return errors

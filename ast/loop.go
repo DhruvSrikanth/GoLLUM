@@ -37,6 +37,12 @@ func (l *Loop) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnaly
 }
 
 // Type checking for the loop node
-func (l *Loop) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (l *Loop) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Type check the condition
+	errors = l.condition.TypeCheck(errors, tables, funcEntry)
+
+	// Type check the body
+	errors = l.body.TypeCheck(errors, tables, funcEntry)
+
 	return errors
 }

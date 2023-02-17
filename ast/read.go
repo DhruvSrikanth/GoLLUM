@@ -4,6 +4,7 @@ import (
 	"bytes"
 	st "golite/symboltable"
 	"golite/token"
+	"golite/types"
 )
 
 // Read node struct for the AST
@@ -35,6 +36,19 @@ func (r *Read) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnaly
 }
 
 // Type check the read node*SemanticAnalysisError
-func (r *Read) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (r *Read) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Type check the lvalue
+	errors = r.lval.TypeCheck(errors, tables, funcEntry)
+
+	// Get the type of the lvalue
+	lvalType := r.lval.GetType()
+
+	// Check if the lvalue is a valid type (only int is valid)
+	if lvalType != types.StringToType("int") {
+		// Set to the valid type for predictive type checking
+		r.lval.ty = types.StringToType("int")
+		errors = append(errors, NewSemanticAnalysisError("Read statement can only be used with int variables", "type mismatch", r.Token))
+	}
+
 	return errors
 }

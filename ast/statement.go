@@ -7,5 +7,5 @@ import st "golite/symboltable"
 type Statement interface {
 	String() string
 	BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError
-	TypeCheck([]*SemanticAnalysisError, *st.SymbolTables) []*SemanticAnalysisError
+	TypeCheck([]*SemanticAnalysisError, *st.SymbolTables, *st.FuncEntry) []*SemanticAnalysisError
 }

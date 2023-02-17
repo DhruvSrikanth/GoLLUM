@@ -30,6 +30,6 @@ func (bl *BoolLiteral) GetType() types.Type {
 }
 
 // TypeCheck performs type checking for the bool literal
-func (bl *BoolLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (bl *BoolLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	return errors
 }

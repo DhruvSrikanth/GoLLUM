@@ -29,8 +29,9 @@ func Execute(program *ast.Program) *st.SymbolTables {
 	// First Build the Symbol Table(s) for all global declarations
 	errors = program.BuildSymbolTable(tables, errors)
 
-	//Second perform type checking.
-	errors = program.TypeCheck(errors, tables)
+	// Second perform type checking.
+	// Pass the funcEntry as nil as it will be updated at the function nodes in the AST during the traverse
+	errors = program.TypeCheck(errors, tables, nil)
 	if hasErrors(errors) {
 		reportErrors(errors)
 		return nil

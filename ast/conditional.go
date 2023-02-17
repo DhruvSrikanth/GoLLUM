@@ -45,6 +45,17 @@ func (c *Conditional) BuildSymbolTable(tables *st.SymbolTables, errors []*Semant
 }
 
 // Type checking for the conditional node
-func (c *Conditional) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (c *Conditional) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Type check the condition
+	errors = c.condition.TypeCheck(errors, tables, funcEntry)
+
+	// Type check the then block
+	errors = c.thenBlock.TypeCheck(errors, tables, funcEntry)
+
+	// Type check the else block
+	if c.elseBlock != nil {
+		errors = c.elseBlock.TypeCheck(errors, tables, funcEntry)
+	}
+
 	return errors
 }

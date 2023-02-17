@@ -233,3 +233,12 @@ ok      golite/golite   2.080s
 PASS
 ok      golite/golite   2.107s
 ```
+
+## Questions
+1. How to change tables.Contains because the functionality defers based on the type of the table. For example, the struct and decls can be checked by checking the map but the decls in funcs need to be checked in the Variables table in the func entry but we dont know the function name.
+
+2. How to we handle returns across different control flows? How do you ensure that there is a return statement in a function across all control flows?
+
+3. How do you check if the return inside the function?
+
+4. 

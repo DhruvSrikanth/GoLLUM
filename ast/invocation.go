@@ -45,11 +45,43 @@ func (i *Invocation) BuildSymbolTable(tables *st.SymbolTables, errors []*Semanti
 }
 
 // Type checking for the invocation node
-func (i *Invocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (i *Invocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Type check the expressions
+	// Ensures that GetType() has a valid type
+	for _, arg := range i.arguments {
+		errors = arg.TypeCheck(errors, tables, funcEntry)
+	}
+
+	// Check if the function has been declared
+	if tables.Funcs.Contains(i.identifier) == nil {
+		errors = append(errors, NewSemanticAnalysisError("Function "+i.identifier+" has not been declared", "Undeclared function", i.Token))
+	} else {
+		// Check if the number of arguments is correct
+		if len(i.arguments) != len(tables.Funcs.Contains(i.identifier).Parameters) {
+			errors = append(errors, NewSemanticAnalysisError("Function "+i.identifier+" has an incorrect number of arguments passed", "incorrect arguments provided", i.Token))
+		} else {
+			// Check the types of the arguments
+			// Can combine the with the above loop, however, this is more readable and explicit
+			for x, arg := range i.arguments {
+				if arg.GetType() != funcEntry.Parameters[x].GetType() {
+					errors = append(errors, NewSemanticAnalysisError("Argument type mismatch in function call", "mismatched type", i.GetToken()))
+				}
+			}
+		}
+	}
+
+	// Set the type of the invocation node
+	i.ty = funcEntry.RetTy
+
 	return errors
 }
 
 // Get the type of the invocation node
 func (i *Invocation) GetType() types.Type {
 	return i.ty
+}
+
+// Get the token of the invocation node
+func (i *Invocation) GetToken() *token.Token {
+	return i.Token
 }

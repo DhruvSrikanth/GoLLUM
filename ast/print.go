@@ -4,6 +4,8 @@ import (
 	"bytes"
 	st "golite/symboltable"
 	"golite/token"
+	"golite/types"
+	"strings"
 )
 
 // Print node for the print production rule in the AST
@@ -42,6 +44,24 @@ func (p *Print) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnal
 }
 
 // Type checking for the print
-func (p *Print) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (p *Print) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Type check all of the expressions in the print
+	// this ensures that GetType() on any expression will be valid
+	for _, expr := range p.expressions {
+		errors = expr.TypeCheck(errors, tables, funcEntry)
+	}
+
+	// Check if the format string contains the same number of expressions as the number of %d
+	if len(p.expressions) != strings.Count(p.formatString, "%d") {
+		errors = append(errors, NewSemanticAnalysisError("Number of expressions does not match the number of %d in the format string", "placeholder mismatch", p.Token))
+	}
+
+	// Check that the expressions are all of type int since that is the only placeholder allowed
+	for _, expr := range p.expressions {
+		if expr.GetType() != types.StringToType("int") {
+			errors = append(errors, NewSemanticAnalysisError("Expression is not of type int", "invalid type", p.Token))
+		}
+	}
+
 	return errors
 }

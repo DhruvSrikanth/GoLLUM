@@ -104,6 +104,42 @@ func (binOp *BinOpExpr) BuildSymbolTable(tables *st.SymbolTables, errors []*Sema
 }
 
 // Type check the binary operation
-func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Type check the left and right expressions
+	if binOp.left != nil {
+		errors = (*binOp.left).TypeCheck(errors, tables, funcEntry)
+	}
+	if binOp.right != nil {
+		errors = (*binOp.right).TypeCheck(errors, tables, funcEntry)
+	}
+
+	// First check if it is a unary term
+	if binOp.operator == nil && binOp.left == nil {
+		binOp.ty = (*binOp.right).GetType()
+	} else if binOp.operator != nil && binOp.left == nil {
+		// Valid unary operators are - and !
+		op := *binOp.operator
+		rightType := (*binOp.right).GetType()
+		if op == NOT && rightType == types.StringToType("bool") {
+			binOp.ty = rightType
+		} else if op == SUB && rightType == types.StringToType("int") {
+			binOp.ty = rightType
+		} else {
+			var expectedType types.Type
+			if op == NOT {
+				expectedType = types.StringToType("bool")
+			} else if op == SUB {
+				expectedType = types.StringToType("int")
+			}
+			// Set the expected type for predictive type checking
+			binOp.ty = expectedType
+
+			// Record the error
+			errors = append(errors, NewSemanticAnalysisError("Invalid expression", "mismatched types", binOp.Token))
+		}
+	} else {
+
+	}
+
 	return errors
 }
