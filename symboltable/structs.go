@@ -27,7 +27,7 @@ func (entry *StructEntry) String() string {
 	fields := ""
 	for i, f := range entry.Fields {
 		field := *f
-		if i < len(entry.Fields)-1 {
+		if i < len(entry.Fields)-1 && len(entry.Fields) > 1 {
 			fields += fmt.Sprintf("%s, ", field.String())
 		} else {
 			fields += field.String()

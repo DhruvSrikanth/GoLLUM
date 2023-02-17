@@ -27,5 +27,5 @@ func (entry *VarEntry) String() string {
 	if entry.Scope == LOCAL {
 		scope = "Local"
 	}
-	return fmt.Sprintf("[%s (Type: %s) (Scope: %s)]", entry.Name, entry.Ty, scope)
+	return fmt.Sprintf("%s (Type: %s) (Scope: %s)", entry.Name, entry.Ty, scope)
 }

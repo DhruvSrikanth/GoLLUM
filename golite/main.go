@@ -38,8 +38,10 @@ func main() {
 				fmt.Println(ast)
 			}
 			if tables := sa.Execute(ast); tables != nil {
-				fmt.Println("Passed semantic analysis (view console for errors at lexing and parsing stages)")
-				fmt.Println(tables)
+				if cmd.SymbolTableFlag {
+					fmt.Println(tables)
+				}
+				fmt.Println("Passed semantic analysis")
 			} else {
 				fmt.Println("Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)")
 			}

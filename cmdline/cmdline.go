@@ -7,19 +7,21 @@ import (
 )
 
 type Cmdline struct {
-	Program string
-	LexFlag bool
-	ASTFlag bool
-	Args    []string
+	Program         string
+	LexFlag         bool
+	ASTFlag         bool
+	SymbolTableFlag bool
+	Args            []string
 }
 
 // Returns a new Cmdline struct with the program name and arguments
-func newCmdline(program string, lexFlag, astFlag bool, args []string) *Cmdline {
+func newCmdline(program string, lexFlag, astFlag, symbolTableFlag bool, args []string) *Cmdline {
 	return &Cmdline{
-		Program: program,
-		LexFlag: lexFlag,
-		ASTFlag: astFlag,
-		Args:    args,
+		Program:         program,
+		LexFlag:         lexFlag,
+		ASTFlag:         astFlag,
+		SymbolTableFlag: symbolTableFlag,
+		Args:            args,
 	}
 }
 
@@ -36,6 +38,7 @@ func ReadCmdline() *Cmdline {
 	programFile := os.Args[0]
 	var lexFlag bool
 	var astFlag bool
+	var symbolTableFlag bool
 	var args []string
 	if len(os.Args) == 2 {
 		lexFlag = false
@@ -45,6 +48,8 @@ func ReadCmdline() *Cmdline {
 			lexFlag = true
 		} else if os.Args[1] == "-ast" {
 			astFlag = true
+		} else if os.Args[1] == "-sym" {
+			symbolTableFlag = true
 		} else {
 			usage()
 			return nil
@@ -52,7 +57,7 @@ func ReadCmdline() *Cmdline {
 		args = os.Args[2:]
 	}
 
-	cmdline := newCmdline(programFile, lexFlag, astFlag, args)
+	cmdline := newCmdline(programFile, lexFlag, astFlag, symbolTableFlag, args)
 
 	return cmdline
 }
@@ -64,7 +69,7 @@ func checkArgs() bool {
 	} else if len(os.Args) > 3 {
 		return false
 	} else if len(os.Args) == 3 {
-		if os.Args[1] != "-lex" && os.Args[1] != "-ast" {
+		if os.Args[1] != "-lex" && os.Args[1] != "-ast" && os.Args[1] != "-sym" {
 			return false
 		}
 	}
@@ -79,5 +84,8 @@ func isGoliteFile() bool {
 
 // usage of the program
 func usage() {
-	fmt.Println("Usage: go run golite/main.go [-lex || -ast] <input source file>\nArguments: <input source file> - path to the input source file\nFlags: \n-lex - Print the lexed tokens.\n-ast - Print the abstract syntax tree.")
+	usage := "Usage: go run golite/main.go [-lex || -ast || -sym] <input source file>\n"
+	usage += "Arguments: <input source file> - path to the input source file\n"
+	usage += "Flags: \n-lex - Print the lexed tokens.\n-ast - Print the abstract syntax tree."
+	fmt.Println(usage)
 }

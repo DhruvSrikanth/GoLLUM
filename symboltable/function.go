@@ -17,7 +17,7 @@ type FuncEntry struct {
 func (entry *FuncEntry) String() string {
 	parameters := ""
 	for i, param := range entry.Parameters {
-		if i < len(entry.Parameters)-1 {
+		if i < len(entry.Parameters)-1 && len(entry.Parameters) > 1 {
 			parameters += fmt.Sprintf("%s, ", param.String())
 		} else {
 			parameters += param.String()
@@ -27,14 +27,22 @@ func (entry *FuncEntry) String() string {
 	vars := *entry.Variables
 	variables := ""
 	i := 0
-	for k, v := range vars.table {
+	for _, v := range vars.table {
 		variable := *v
-		if i < len(vars.table)-1 {
-			variables += fmt.Sprintf("%s: %s, ", k, variable.String())
+		if i < len(vars.table)-1 && len(vars.table) > 1 {
+			variables += fmt.Sprintf("%s, ", variable.String())
 		} else {
-			variables += fmt.Sprintf("%s: %s", k, variable.String())
+			variables += variable.String()
 		}
 	}
+	out := entry.Name + "\n"
+	out += fmt.Sprintf("Return Type -  %s\n", entry.RetTy.String())
+	if len(entry.Parameters) > 0 {
+		out += fmt.Sprintf("Parameters -  %s\n", parameters)
+	}
+	if len(entry.Variables.table) > 0 {
+		out += fmt.Sprintf("Variables -  %s\n", variables)
+	}
 
-	return fmt.Sprintf("%s {Return Type: %s} {Parameters: %s} {Variables: %v}", entry.Name, entry.RetTy, parameters, variables)
+	return out
 }

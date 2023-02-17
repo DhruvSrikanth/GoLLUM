@@ -27,18 +27,12 @@ func (tables *SymbolTables) String() string {
 	var out bytes.Buffer
 	out.WriteString("Symbol Tables:\n")
 	out.WriteString("-------------\n")
-	out.WriteString("Globals:\n")
-	out.WriteString("*************\n")
-	out.WriteString(tables.Globals.String())
-	out.WriteString("*************\n")
-	out.WriteString("Functions:\n")
-	out.WriteString("*************\n")
-	out.WriteString(tables.Funcs.String())
-	out.WriteString("*************\n")
-	out.WriteString("Structs:\n")
-	out.WriteString("*************\n")
+	out.WriteString("Structs - \n")
 	out.WriteString(tables.Structs.String())
-	out.WriteString("*************\n")
+	out.WriteString("Globals - \n")
+	out.WriteString(tables.Globals.String())
+	out.WriteString("Functions - \n")
+	out.WriteString(tables.Funcs.String())
 	out.WriteString("-------------\n")
 	return out.String()
 }
@@ -61,12 +55,11 @@ func NewSymbolTable[T fmt.Stringer](parent *SymbolTable[T]) *SymbolTable[T] {
 func (s *SymbolTable[T]) String() string {
 	var out bytes.Buffer
 
-	out.WriteString("Symbol table:\n")
 	out.WriteString("=============\n")
 	i := 0
-	for k, v := range s.table {
+	for _, v := range s.table {
 		i += 1
-		out.WriteString(strconv.Itoa(i) + ". " + k + " -> " + v.String() + "\n")
+		out.WriteString(strconv.Itoa(i) + ". " + v.String() + "\n")
 	}
 	out.WriteString("=============\n")
 
