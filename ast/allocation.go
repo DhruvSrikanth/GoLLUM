@@ -16,7 +16,8 @@ type Allocate struct {
 
 // New Allocate node
 func NewAllocate(structType string, token *token.Token) *Allocate {
-	return &Allocate{token, structType, nil}
+	ty := types.StringToType("*" + structType)
+	return &Allocate{token, structType, ty}
 }
 
 // String representation of the allocate node
@@ -37,6 +38,10 @@ func (d *Allocate) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticA
 
 // Type check the allocate node
 func (d *Allocate) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+	entry := tables.Structs.Contains(d.structType)
+	if entry == nil {
+		errors = append(errors, NewSemanticAnalysisError("Struct "+d.structType+" not declared.", "undeclared", d.Token))
+	}
 	return errors
 }
 

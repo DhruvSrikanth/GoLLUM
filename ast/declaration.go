@@ -51,3 +51,8 @@ func (d *Declaration) GetType() types.Type {
 func (d *Declaration) GetVariable() string {
 	return d.variable
 }
+
+// Get the token of the declaration
+func (d *Declaration) GetToken() *token.Token {
+	return d.Token
+}

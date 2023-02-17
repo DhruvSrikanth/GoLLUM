@@ -30,7 +30,7 @@ func Execute(program *ast.Program) *st.SymbolTables {
 	errors = program.BuildSymbolTable(tables, errors)
 
 	//Second perform type checking.
-	// errors = program.TypeCheck(errors, tables)
+	errors = program.TypeCheck(errors, tables)
 	if hasErrors(errors) {
 		reportErrors(errors)
 		return nil

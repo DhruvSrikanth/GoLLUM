@@ -54,7 +54,7 @@ func (p *Program) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAn
 	// Declarations
 	for _, decl := range p.declarations {
 		if !tables.Globals.Insert(decl.GetVariable(), &st.VarEntry{Name: decl.GetVariable(), Ty: decl.GetType(), Scope: st.GLOBAL}) {
-			errors = append(errors, NewSemanticAnalysisError("Variable '"+decl.GetVariable()+"' redeclared.", "redeclaration"))
+			errors = append(errors, NewSemanticAnalysisError("Variable '"+decl.GetVariable()+"' redeclared.", "redeclaration", decl.GetToken()))
 		}
 	}
 

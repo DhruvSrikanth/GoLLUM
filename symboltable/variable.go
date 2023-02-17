@@ -29,3 +29,8 @@ func (entry *VarEntry) String() string {
 	}
 	return fmt.Sprintf("%s (Type: %s) (Scope: %s)", entry.Name, entry.Ty, scope)
 }
+
+// Get the type of the variable entry
+func (entry *VarEntry) GetType() types.Type {
+	return entry.Ty
+}

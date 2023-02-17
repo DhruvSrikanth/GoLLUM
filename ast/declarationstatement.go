@@ -1,10 +1,14 @@
 package ast
 
-import "golite/types"
+import (
+	"golite/token"
+	"golite/types"
+)
 
 // DeclarationStatement is an interface for all functions
 type DeclarationStatement interface {
 	Statement
 	GetType() types.Type
 	GetVariable() string
+	GetToken() *token.Token
 }

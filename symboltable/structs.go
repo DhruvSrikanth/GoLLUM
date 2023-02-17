@@ -13,7 +13,7 @@ type FieldEntry struct {
 
 // String representation of a struct field entry in the symbol table
 func (entry *FieldEntry) String() string {
-	return fmt.Sprintf("[%s (Type: %s)]", entry.Name, entry.Ty)
+	return fmt.Sprintf("%s (Type: %s)", entry.Name, entry.Ty)
 }
 
 // Struct entry in the symbol table
@@ -33,5 +33,5 @@ func (entry *StructEntry) String() string {
 			fields += field.String()
 		}
 	}
-	return fmt.Sprintf("%s {Fields: %s}", entry.Name, fields)
+	return fmt.Sprintf("%s\nFields -  %s", entry.Name, fields)
 }

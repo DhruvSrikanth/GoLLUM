@@ -70,13 +70,13 @@ func (f *Function) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticA
 	// Build up the entries for the variables
 	for _, decl := range f.declarations {
 		if !localTable.Insert(decl.variable, &st.VarEntry{Name: decl.variable, Ty: decl.ty, Scope: st.LOCAL}) {
-			errors = append(errors, NewSemanticAnalysisError("Variable '"+decl.variable+"' redeclared.", "redeclaration"))
+			errors = append(errors, NewSemanticAnalysisError("Variable '"+decl.variable+"' redeclared.", "redeclaration", decl.Token))
 		}
 	}
 
 	// Add the function to the symbol table
 	if !tables.Funcs.Insert(f.name, &st.FuncEntry{Name: f.name, RetTy: f.returnType, Parameters: params, Variables: localTable}) {
-		errors = append(errors, NewSemanticAnalysisError("Function '"+f.name+"' redeclared.", "redeclaration"))
+		errors = append(errors, NewSemanticAnalysisError("Function '"+f.name+"' redeclared.", "redeclaration", f.Token))
 	}
 	return errors
 }

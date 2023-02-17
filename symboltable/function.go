@@ -46,3 +46,8 @@ func (entry *FuncEntry) String() string {
 
 	return out
 }
+
+// Get the type of the function
+func (entry *FuncEntry) GetType() types.Type {
+	return entry.RetTy
+}

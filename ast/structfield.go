@@ -39,3 +39,8 @@ func (d *Decl) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTable
 	//When you reach a declaration you want to make sure you add the variable declaration to the symbol table.
 	return errors
 }
+
+// Get the type of the declaration
+func (d *Decl) GetType() types.Type {
+	return d.ty
+}

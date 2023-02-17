@@ -11,7 +11,7 @@ type SelectorTerm struct {
 	*token.Token
 	factor Expression // The identifier of the variable
 	fields []string   // The field of the struct (if it is a struct)
-	ty     types.Type // The type of the unary term
+	ty     types.Type // The type of the selector term
 }
 
 // NewSelectorTerm node
@@ -41,6 +41,25 @@ func (s *SelectorTerm) BuildSymbolTable(tables *st.SymbolTables, errors []*Seman
 
 // Type check the SelectorTerm node
 func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+	// Check if the selector is a struct field or a variable/function
+	// if len(s.fields) > 0 {
+	// 	// Struct field
+	// 	// Get the variable name
+	// 	varName := s.factor.(*VariableInvocation).identifier
+	// 	// Get the variable entry
+	// 	entry := tables.Funcs.Contains(varName)
+	// 	// Check if the variable exists
+	// 	if entry == nil {
+	// 		errors = append(errors, NewSemanticAnalysisError("Variable "+varName+" not declared.", "undeclared", s.Token))
+	// 	} else {
+	// 		// Check if the variable is a struct thats been declared
+	// 		structType := entry.GetType()
+	// 		structEntry := tables.Structs.Contains(structType)
+	// 		if entry.GetType() == nil {
+	// 			errors = append(errors, NewSemanticAnalysisError("Variable "+varName+" is not a struct.", "not a struct", s.Token))
+	// 		}
+	// 	}
+	// }
 	return errors
 }
 

@@ -45,7 +45,7 @@ func (s *StructDecl) BuildSymbolTable(tables *st.SymbolTables, errors []*Semanti
 
 	// Add the struct to the symbol table
 	if !tables.Structs.Insert(s.name, &st.StructEntry{Name: s.name, Fields: fields}) {
-		errors = append(errors, NewSemanticAnalysisError("Struct '"+s.name+"'redeclared.", "redeclaration"))
+		errors = append(errors, NewSemanticAnalysisError("Struct '"+s.name+"'redeclared.", "redeclaration", s.Token))
 	}
 
 	return errors

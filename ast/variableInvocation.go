@@ -47,6 +47,42 @@ func (v *VariableInvocation) BuildSymbolTable(tables *st.SymbolTables, errors []
 
 // Type checking for the VariableInvocation node
 func (v *VariableInvocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
+	// Check if its a variable or function call
+	entry := tables.Funcs.Contains(v.identifier)
+	if len(v.arguments) != 0 {
+		// Function call
+		// Check if the function exists in the symbol table
+		if entry == nil {
+			errors = append(errors, NewSemanticAnalysisError("Function "+v.identifier+" not declared.", "undeclared", v.Token))
+		} else {
+			// Check if the number of arguments is correct\
+			if len(entry.Parameters) != len(v.arguments) {
+				errors = append(errors, NewSemanticAnalysisError("Function "+v.identifier+" expects "+string(len(entry.Parameters))+" arguments but "+string(len(v.arguments))+" were provided.", "invalid number of arguments", v.Token))
+			} else {
+				// Call type check on each argument
+				// to ensure the GetTypes() method returns the correct type even if there are errors
+				for _, arg := range v.arguments {
+					errors = arg.TypeCheck(errors, tables)
+				}
+				// Check if the types of the arguments are correct
+				for i, arg := range v.arguments {
+					if arg.GetType() != entry.Parameters[i].GetType() {
+						errors = append(errors, NewSemanticAnalysisError("Expected type "+entry.Parameters[i].GetType().String()+" but got "+arg.GetType().String()+".", "invalid argument type", v.Token))
+					}
+				}
+			}
+		}
+
+	} else {
+		// Variable
+		// Check if the variable exists in the symbol table
+		if entry == nil {
+			errors = append(errors, NewSemanticAnalysisError("Variable "+v.identifier+" not declared.", "undeclared", v.Token))
+		}
+	}
+
+	// Set the type of the variable invocation
+	v.ty = entry.GetType()
 	return errors
 }
 
