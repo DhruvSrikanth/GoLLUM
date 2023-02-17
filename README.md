@@ -153,8 +153,9 @@ This runs both the `lexer` and `parser`.
 
 | Flag | Description | Example |
 | --- | --- | --- |
-| -lex | Runs the lexer | `go run golite/main.go -lex benchmarks/simple/simple1.golite` |
-| -ast | Print the parser produced by the parser | `go run golite/main.go -ast benchmarks/simple/simple1.golite` |
+| -lex | Print the lexed tokens (Runs lexer). | `go run golite/main.go -lex benchmarks/simple/simple1.golite` |
+| -ast | Print the parser produced by the parser (Runs lexer and parser). | `go run golite/main.go -ast benchmarks/simple/simple1.golite` |
+| -sym | Print the symbol table  (Runs lexer and parser). | `go run golite/main.go -sym benchmarks/simple/simple1.golite` |
 
 Check out the `benchmarks` folder for more examples.
 
