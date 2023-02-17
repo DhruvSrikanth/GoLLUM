@@ -84,19 +84,24 @@ func (f *Function) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticA
 // Type checking for the function
 func (f *Function) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables) []*SemanticAnalysisError {
 	// // Check the parameters
-	// for _, param := range f.parameters {
-	// 	errors = param.TypeCheck(errors, tables)
-	// }
+	for _, param := range f.parameters {
+		errors = param.TypeCheck(errors, tables)
+	}
 
-	// // Check the declarations
-	// for _, decl := range f.declarations {
-	// 	errors = decl.TypeCheck(errors, tables)
-	// }
+	// Check the declarations
+	for _, decl := range f.declarations {
+		errors = decl.TypeCheck(errors, tables)
+	}
 
-	// // Check the statements
-	// for _, stmt := range f.statements {
-	// 	errors = stmt.TypeCheck(errors, tables)
-	// }
+	// Check the statements
+	for _, stmt := range f.statements {
+		errors = stmt.TypeCheck(errors, tables)
+	}
 
 	return errors
+}
+
+// Get the return type of the function
+func (f *Function) GetReturnType() types.Type {
+	return f.returnType
 }

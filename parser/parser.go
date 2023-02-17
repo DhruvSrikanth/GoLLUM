@@ -343,7 +343,7 @@ func (gParser *goliteParser) ExitLValue(c *LValueContext) {
 	// Create the lValue
 	// Initialize the type to nil
 	// Type will be set in the semantic analysis
-	gParser.nodes[key] = ast.NewLValue(varName, fields, types.StringToType("nil"), token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewLValue(varName, fields, nil, token.NewToken(line, col))
 }
 
 // ExitPrint is called when exiting the print production.

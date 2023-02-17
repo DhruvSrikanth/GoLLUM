@@ -30,3 +30,18 @@ func StringToType(ty string) Type {
 	}
 	panic("Type not found.")
 }
+
+// Kind of type
+const (
+	PRIMITIVE = iota
+	STRUCT
+)
+
+// Map from kind of type to type_kind
+func TypeToKind(ty Type) int {
+	if ty == getIntInstance() || ty == getBoolInstance() || ty == getStringInstance() || ty == getVoidInstance() || ty == getNilInstance() {
+		return PRIMITIVE
+	} else {
+		return STRUCT
+	}
+}

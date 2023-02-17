@@ -16,6 +16,11 @@ func (entry *FieldEntry) String() string {
 	return fmt.Sprintf("%s (Type: %s)", entry.Name, entry.Ty)
 }
 
+// Get the type of variable
+func (entry *FieldEntry) GetType() types.Type {
+	return entry.Ty
+}
+
 // Struct entry in the symbol table
 type StructEntry struct {
 	Name   string
