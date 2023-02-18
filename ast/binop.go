@@ -135,10 +135,74 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 			binOp.ty = expectedType
 
 			// Record the error
-			errors = append(errors, NewSemanticAnalysisError("Invalid expression", "mismatched types", binOp.Token))
+			errors = append(errors, NewSemanticAnalysisError("invalid expression", "mismatched types", binOp.Token))
 		}
 	} else {
+		leftType := (*binOp.left).GetType()
+		rightType := (*binOp.right).GetType()
+		// Check for the term
+		if isIntOp(*binOp.operator) {
+			// Could be a term or a simple term
+			// Only ints allowed
+			// Result is an int
+			if leftType == types.StringToType("int") && rightType == types.StringToType("int") {
+				binOp.ty = types.StringToType("int")
+			} else {
+				// Set the expected type for predictive type checking
+				binOp.ty = types.StringToType("int")
 
+				// Record the error
+				errors = append(errors, NewSemanticAnalysisError("invalid expression", "mismatched types", binOp.Token))
+			}
+		} else if isCompareOp(*binOp.operator) {
+			// Could be a relation term, equal term
+			// Only ints allowed for relation terms
+			// Ints and structs allowed for equal terms
+			// Result is a bool
+			if leftType == types.StringToType("int") && rightType == types.StringToType("int") {
+				binOp.ty = types.StringToType("bool")
+			} else if types.TypeToKind(leftType) == types.STRUCT && types.TypeToKind(rightType) == types.STRUCT {
+				if *binOp.operator == EQ || *binOp.operator == NE {
+					binOp.ty = types.StringToType("bool")
+					// Struct comparison is only allowed between the same struct
+					// struct equivalence is through name equivalence
+					// this can be acomplished by comparing the pointers to the struct types
+					if leftType != rightType {
+						// Record the error
+						errors = append(errors, NewSemanticAnalysisError("invalid struct comparison", "mismatched types", binOp.Token))
+					}
+				} else {
+					// Set the expected type for predictive type checking
+					binOp.ty = types.StringToType("bool")
+
+					// Record the error
+					errors = append(errors, NewSemanticAnalysisError("only struct equivalence can be evaluated", "mismatched types", binOp.Token))
+				}
+			} else {
+				// Set the expected type for predictive type checking
+				binOp.ty = types.StringToType("bool")
+
+				// Record the error
+				errors = append(errors, NewSemanticAnalysisError("invalid expression", "mismatched types", binOp.Token))
+			}
+		} else if isBoolOp(*binOp.operator) {
+			// Could be a bool term or an expression term
+			// Only bools allowed
+			// Result is a bool
+			if leftType == types.StringToType("bool") && rightType == types.StringToType("bool") {
+				binOp.ty = types.StringToType("bool")
+			} else {
+				// Set the expected type for predictive type checking
+				binOp.ty = types.StringToType("bool")
+
+				// Record the error
+				errors = append(errors, NewSemanticAnalysisError("invalid expression", "mismatched types", binOp.Token))
+			}
+		} else {
+			// Invalid operator
+			// This should never happen
+			errors = append(errors, NewSemanticAnalysisError("invalid operator provided in expression", "invalid operator", binOp.Token))
+		}
 	}
 
 	return errors
