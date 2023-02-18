@@ -138,6 +138,7 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 			errors = append(errors, NewSemanticAnalysisError("invalid expression", "mismatched types", binOp.Token))
 		}
 	} else {
+
 		leftType := (*binOp.left).GetType()
 		rightType := (*binOp.right).GetType()
 		// Check for the term

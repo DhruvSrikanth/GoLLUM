@@ -66,6 +66,7 @@ func (v *VariableInvocation) TypeCheck(errors []*SemanticAnalysisError, tables *
 			} else {
 				// Check if the arguments are of the correct type
 				for x, arg := range v.arguments {
+					// fmt.Println(arg.GetType(), arg)
 					if arg.GetType() != entry.Parameters[x].GetType() {
 						errors = append(errors, NewSemanticAnalysisError(fmt.Sprintf("function %s expects %s as argument %d, got %s", v.identifier, entry.Parameters[x].GetType(), x+1, arg.GetType()), "mismatched type", v.Token))
 					}

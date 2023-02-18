@@ -43,10 +43,12 @@ func (s *SelectorTerm) BuildSymbolTable(tables *st.SymbolTables, errors []*Seman
 func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Type check the factor
 	errors = s.factor.TypeCheck(errors, tables, funcEntry)
-
 	// Check if the identifer is declared
 	identifer := s.factor.String()
+	// Check in the local variables (moves to global scope if not found in local scope)
 	entry := funcEntry.Variables.Contains(identifer)
+
+	// If it is not a variable in the local or global scope, check the parameters
 	if entry == nil {
 		// Check the parameters
 		for _, param := range funcEntry.Parameters {
@@ -56,43 +58,30 @@ func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sym
 			}
 		}
 	}
-	if entry == nil {
-		// Check if the identifier is a literal
-		if s.factor.GetType() == types.StringToType("int") || s.factor.GetType() == types.StringToType("bool") || s.factor.GetType() == types.StringToType("nil") {
-			s.ty = s.factor.GetType()
-			return errors
-		} else {
-			// Single struct variable for the allocation
-			if types.TypeToKind(s.factor.GetType()) == types.STRUCT {
-				// Check if the struct has been declared
-				structType := s.factor.GetType().String()[1:] // Remove the * from the type
-				structEntry := tables.Structs.Contains(structType)
-				if structEntry == nil {
-					errors = append(errors, NewSemanticAnalysisError("struct "+structType+" not declared", "undeclared struct", s.Token))
-				} else {
-					// Set the type to be a pointer to the struct
-					s.ty = s.factor.GetType()
-				}
-				return errors
-			}
-			errors = append(errors, NewSemanticAnalysisError("undeclared variable "+identifer, "undeclared variable", s.Token))
-		}
-	} else {
+	// If the identifier is not a parameter, local or global variable, then it is an invocation, literal or struct
+	if entry != nil {
+		// The identifier is a variable/parameter
+		// Could be a struct
 		if len(s.fields) == 0 {
 			// The lvalue is a variable
 			s.ty = entry.GetType()
 		} else {
-			for _, field := range s.fields {
-				entryType := entry.GetType()
+			// The lvalue is a struct field
+			entryType := entry.GetType()
+			var c int
+			for i, field := range s.fields {
+				c = i
 				if types.TypeToKind(entryType) == types.STRUCT {
 					entryStructName := entryType.String()[1:] // Remove the * from the type name
 					// Check if the struct exists in the symbol table
 					structEntry := tables.Structs.Contains(entryStructName)
 					if structEntry == nil {
 						errors = append(errors, NewSemanticAnalysisError("type "+entryType.String()+" not declared.", "undeclared type", s.Token))
+						break
 					} else {
 						// Check if the field exists in the struct
 						found := false
+
 						var matchedField *st.FieldEntry
 						for _, fieldEntry := range structEntry.Fields {
 							if fieldEntry.Name == field {
@@ -108,17 +97,48 @@ func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sym
 							s.ty = types.StringToType("nil")
 							break
 						}
+
 						// The field exists in the struct so move on to the next field
-						entryType = matchedField
+						entryType = matchedField.GetType()
 					}
 				} else {
-					// Primitive type meaning it must be the last field
-
+					errors = append(errors, NewSemanticAnalysisError("cannot access field "+field+" of non-struct type "+entryType.String(), "invalid field access", s.Token))
+					break
+				}
+			}
+			// Primitive type meaning it must be the last field
+			if c == len(s.fields)-1 {
+				s.ty = entryType
+				if types.TypeToKind(s.ty) == types.STRUCT {
+					errors = append(errors, NewSemanticAnalysisError("cannot use struct variable as lvalue", "invalid lvalue", s.Token))
+					s.ty = types.StringToType("nil")
+				} else {
 					// Set the type of the lvalue
 					s.ty = entryType
 				}
+			} else {
+				s.ty = types.StringToType("nil")
 			}
 		}
+	} else {
+		// The identifier is not a variable/parameter
+		// The identifier is either an invocation or literal or allocation
+
+		// if identifer is literal
+		// The identifier is a literal
+		// This is the type of literal
+		// s.factor.GetType() returns this
+
+		// if identifer is invocation
+		// The identifier is a function invocation
+		// Get the return type of the function
+		// s.factor.GetType() returns this
+
+		// if identifer is allocation
+		// The identifier is an allocation
+		// This is a pointer to the struct type being allocated
+		// s.factor.GetType() returns this
+		s.ty = s.factor.GetType()
 	}
 
 	return errors
