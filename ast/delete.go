@@ -41,8 +41,17 @@ func (d *Delete) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 	errors = d.expr.TypeCheck(errors, tables, funcEntry)
 
 	// Check if expression has been declared
-	if tables.Funcs.Contains(d.expr.String()) == nil {
-		errors = append(errors, NewSemanticAnalysisError(d.expr.String()+" has not been declared.", "undeclared identifier", d.Token))
+	if funcEntry.Variables.Contains(d.expr.String()) == nil {
+		// Check the parameters
+		found := false
+		for _, param := range funcEntry.Parameters {
+			if param.Name == d.expr.String() {
+				found = true
+			}
+		}
+		if !found {
+			errors = append(errors, NewSemanticAnalysisError(d.expr.String()+" has not been declared.", "undeclared identifier", d.Token))
+		}
 	}
 
 	// Check if the expression is a pointer to a struct type

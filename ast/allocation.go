@@ -40,7 +40,7 @@ func (d *Allocate) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticA
 func (d *Allocate) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	entry := tables.Structs.Contains(d.structType)
 	if entry == nil {
-		errors = append(errors, NewSemanticAnalysisError("Struct "+d.structType+" not declared.", "undeclared", d.Token))
+		errors = append(errors, NewSemanticAnalysisError("struct "+d.structType+" not declared", "undeclared struct", d.Token))
 	}
 	return errors
 }

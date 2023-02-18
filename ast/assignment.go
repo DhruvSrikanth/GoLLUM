@@ -51,12 +51,12 @@ func (a *Assignment) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symbo
 		// This ensures that the compiler can continue type checking to find more errors
 		// Error for this nil type will be added in the type checking of the lvalue so all errors can be accounted for
 		a.variable.ty = a.right.GetType()
-		errors = append(errors, NewSemanticAnalysisError("Type mismatch in assignment", "type mistmatch", a.GetToken()))
+		errors = append(errors, NewSemanticAnalysisError("type mismatch in assignment", "type mistmatch", a.GetToken()))
 	}
 
 	// Check that the type of the lvalue is the same as the type of the expression
 	if a.variable.GetType() != a.right.GetType() {
-		errors = append(errors, NewSemanticAnalysisError("Type mismatch in assignment", "type mistmatch", a.GetToken()))
+		errors = append(errors, NewSemanticAnalysisError("type mismatch in assignment", "type mistmatch", a.GetToken()))
 	}
 
 	return errors

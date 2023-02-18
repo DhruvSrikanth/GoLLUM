@@ -62,6 +62,19 @@ func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sym
 			s.ty = s.factor.GetType()
 			return errors
 		} else {
+			// Single struct variable for the allocation
+			if types.TypeToKind(s.factor.GetType()) == types.STRUCT {
+				// Check if the struct has been declared
+				structType := s.factor.GetType().String()[1:] // Remove the * from the type
+				structEntry := tables.Structs.Contains(structType)
+				if structEntry == nil {
+					errors = append(errors, NewSemanticAnalysisError("struct "+structType+" not declared", "undeclared struct", s.Token))
+				} else {
+					// Set the type to be a pointer to the struct
+					s.ty = s.factor.GetType()
+				}
+				return errors
+			}
 			errors = append(errors, NewSemanticAnalysisError("undeclared variable "+identifer, "undeclared variable", s.Token))
 		}
 	} else {
@@ -100,9 +113,6 @@ func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sym
 					}
 				} else {
 					// Primitive type meaning it must be the last field
-					if field != s.fields[len(s.fields)-1] {
-						errors = append(errors, NewSemanticAnalysisError("cannot access field "+field+" of type "+entryType.String(), "field access error", s.Token))
-					}
 
 					// Set the type of the lvalue
 					s.ty = entryType

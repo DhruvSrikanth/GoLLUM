@@ -54,14 +54,16 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 		}
 	}
 	if entry == nil {
-		errors = append(errors, NewSemanticAnalysisError("Undeclared variable "+l.identifier+".", "undeclared variable", l.Token))
+		errors = append(errors, NewSemanticAnalysisError("undeclared variable "+l.identifier+".", "undeclared variable", l.Token))
 	} else {
 		if len(l.fields) == 0 {
 			// The lvalue is a variable
 			l.ty = entry.GetType()
 		} else {
-			for _, field := range l.fields {
-				entryType := entry.GetType()
+			entryType := entry.GetType()
+			var c int
+			for i, field := range l.fields {
+				c = i
 				if types.TypeToKind(entryType) == types.STRUCT {
 					entryStructName := entryType.String()[1:] // Remove the * from the type name
 					// Check if the struct exists in the symbol table
@@ -72,6 +74,7 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 					} else {
 						// Check if the field exists in the struct
 						found := false
+
 						var matchedField *st.FieldEntry
 						for _, fieldEntry := range structEntry.Fields {
 							if fieldEntry.Name == field {
@@ -87,18 +90,27 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 							l.ty = types.StringToType("nil")
 							break
 						}
+
 						// The field exists in the struct so move on to the next field
-						entryType = matchedField
+						entryType = matchedField.GetType()
 					}
 				} else {
-					// Primitive type meaning it must be the last field
-					if field != l.fields[len(l.fields)-1] {
-						errors = append(errors, NewSemanticAnalysisError("cannot access field "+field+" of type "+entryType.String(), "field access error", l.Token))
-					}
-
+					errors = append(errors, NewSemanticAnalysisError("cannot access field "+field+" of non-struct type "+entryType.String(), "invalid field access", l.Token))
+					break
+				}
+			}
+			// Primitive type meaning it must be the last field
+			if c == len(l.fields)-1 {
+				l.ty = entryType
+				if types.TypeToKind(l.ty) == types.STRUCT {
+					errors = append(errors, NewSemanticAnalysisError("cannot use struct variable as lvalue", "invalid lvalue", l.Token))
+					l.ty = types.StringToType("nil")
+				} else {
 					// Set the type of the lvalue
 					l.ty = entryType
 				}
+			} else {
+				l.ty = types.StringToType("nil")
 			}
 		}
 	}
