@@ -112,7 +112,6 @@ func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sym
 	}
 
 	return errors
-	return errors
 }
 
 // Get the type of the SelectorTerm node
