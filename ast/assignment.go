@@ -4,6 +4,7 @@ import (
 	"bytes"
 	st "golite/symboltable"
 	"golite/token"
+	"golite/types"
 )
 
 // Assignment node struct for the AST
@@ -55,7 +56,14 @@ func (a *Assignment) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symbo
 	}
 
 	// Check that the type of the lvalue is the same as the type of the expression
+	// Check if it is a struct type
 	if a.variable.GetType() != a.right.GetType() {
+		// If the types are not the same, check if the lvalue is a struct type
+		// If it is, the right hand side must also be a struct literal or nil
+		// In this case since it is not a struct literal or atleast not the same struct literal, we can check for nil
+		if (types.TypeToKind(a.variable.GetType()) == types.STRUCT) && (a.right.GetType() == types.StringToType("nil")) {
+			return errors
+		}
 		errors = append(errors, NewSemanticAnalysisError("type mismatch in assignment", "type mistmatch", a.GetToken()))
 	}
 

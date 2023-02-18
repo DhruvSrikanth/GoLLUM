@@ -158,7 +158,7 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 		} else if isCompareOp(*binOp.operator) {
 			// Could be a relation term, equal term
 			// Only ints allowed for relation terms
-			// Ints and structs allowed for equal terms
+			// Ints, structs and nil allowed for equal terms
 			// Result is a bool
 			if leftType == types.StringToType("int") && rightType == types.StringToType("int") {
 				binOp.ty = types.StringToType("bool")
@@ -177,7 +177,18 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 					binOp.ty = types.StringToType("bool")
 
 					// Record the error
-					errors = append(errors, NewSemanticAnalysisError("only struct equivalence can be evaluated", "mismatched types", binOp.Token))
+					errors = append(errors, NewSemanticAnalysisError("only struct to struct or struct to nil equivalence can be evaluated", "mismatched types", binOp.Token))
+				}
+			} else if types.TypeToKind(leftType) == types.STRUCT && rightType == types.StringToType("nil") || leftType == types.StringToType("nil") && types.TypeToKind(rightType) == types.STRUCT {
+				// Comparing struct to nil
+				if *binOp.operator == EQ || *binOp.operator == NE {
+					binOp.ty = types.StringToType("bool")
+				} else {
+					// Set the expected type for predictive type checking
+					binOp.ty = types.StringToType("bool")
+
+					// Record the error
+					errors = append(errors, NewSemanticAnalysisError("only struct to struct or struct to nil equivalence can be evaluated", "mismatched types", binOp.Token))
 				}
 			} else {
 				// Set the expected type for predictive type checking
