@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -95,16 +96,15 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 						entryType = matchedField.GetType()
 					}
 				} else {
+					fmt.Println(l.identifier, l.fields)
 					errors = append(errors, NewSemanticAnalysisError("cannot access field "+field+" of non-struct type "+entryType.String(), "invalid field access", l.Token))
 					break
 				}
 			}
 			// Primitive type meaning it must be the last field
 			if c == len(l.fields)-1 {
-				l.ty = entryType
-				if types.TypeToKind(l.ty) == types.STRUCT {
-					errors = append(errors, NewSemanticAnalysisError("cannot use struct variable as lvalue", "invalid lvalue", l.Token))
-					l.ty = types.StringToType("nil")
+				if types.TypeToKind(entryType) == types.STRUCT {
+					l.ty = entryType
 				} else {
 					// Set the type of the lvalue
 					l.ty = entryType

@@ -108,10 +108,8 @@ func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sym
 			}
 			// Primitive type meaning it must be the last field
 			if c == len(s.fields)-1 {
-				s.ty = entryType
-				if types.TypeToKind(s.ty) == types.STRUCT {
-					errors = append(errors, NewSemanticAnalysisError("cannot use struct variable as lvalue", "invalid lvalue", s.Token))
-					s.ty = types.StringToType("nil")
+				if types.TypeToKind(entryType) == types.STRUCT {
+					s.ty = entryType
 				} else {
 					// Set the type of the lvalue
 					s.ty = entryType

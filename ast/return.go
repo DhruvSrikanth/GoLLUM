@@ -54,7 +54,7 @@ func (r *Return) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 
 	// Check if the return type is the same as the function return type
 	if r.ty != funcEntry.RetTy {
-		errors = append(errors, NewSemanticAnalysisError("Return type does not match function signature return type", "mismatched types", r.Token))
+		errors = append(errors, NewSemanticAnalysisError("return type does not match function signature return type", "mismatched types", r.Token))
 	}
 
 	return errors

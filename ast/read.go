@@ -47,7 +47,7 @@ func (r *Read) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTable
 	if lvalType != types.StringToType("int") {
 		// Set to the valid type for predictive type checking
 		r.lval.ty = types.StringToType("int")
-		errors = append(errors, NewSemanticAnalysisError("Read statement can only be used with int variables", "type mismatch", r.Token))
+		errors = append(errors, NewSemanticAnalysisError("read statement can only be used with int variables", "type mismatch", r.Token))
 	}
 
 	return errors

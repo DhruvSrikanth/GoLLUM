@@ -2,7 +2,6 @@ package ast
 
 import (
 	"bytes"
-	"fmt"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -47,7 +46,6 @@ func (i *Invocation) BuildSymbolTable(tables *st.SymbolTables, errors []*Semanti
 
 // Type checking for the invocation node
 func (i *Invocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
-	fmt.Println("Type checking invocation")
 	// Type check the expressions
 	// Ensures that GetType() has a valid type
 	for _, arg := range i.arguments {
