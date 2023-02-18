@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -159,6 +160,9 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 			// Only ints allowed for relation terms
 			// Ints and structs allowed for equal terms
 			// Result is a bool
+			fmt.Println("left type: ", (*binOp.left).GetType())
+			fmt.Println("right type: ", (*binOp.right).GetType())
+			fmt.Println("operator: ", OpToStr(*binOp.operator))
 			if leftType == types.StringToType("int") && rightType == types.StringToType("int") {
 				binOp.ty = types.StringToType("bool")
 			} else if types.TypeToKind(leftType) == types.STRUCT && types.TypeToKind(rightType) == types.STRUCT {

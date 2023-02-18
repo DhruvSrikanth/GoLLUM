@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -48,41 +49,56 @@ func (v *VariableInvocation) BuildSymbolTable(tables *st.SymbolTables, errors []
 // Type checking for the VariableInvocation node
 func (v *VariableInvocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Check if its a variable or function call
-	entry := tables.Funcs.Contains(v.identifier)
 	if len(v.arguments) != 0 {
-		// Function call
-		// Check if the function exists in the symbol table
+		// type check the arguments
+		for _, arg := range v.arguments {
+			errors = arg.TypeCheck(errors, tables, funcEntry)
+		}
+
+		// Check if the function exists
+		entry := tables.Funcs.Contains(v.identifier)
 		if entry == nil {
-			errors = append(errors, NewSemanticAnalysisError("Function "+v.identifier+" not declared.", "undeclared", v.Token))
+			errors = append(errors, NewSemanticAnalysisError(fmt.Sprintf("function %s does not exist", v.identifier), "undeclared function", v.Token))
 		} else {
-			// Check if the number of arguments is correct\
-			if len(entry.Parameters) != len(v.arguments) {
-				errors = append(errors, NewSemanticAnalysisError("Function "+v.identifier+" expects "+string(len(entry.Parameters))+" arguments but "+string(len(v.arguments))+" were provided.", "invalid number of arguments", v.Token))
+			// Check if the number of arguments is correct
+			if len(v.arguments) != len(entry.Parameters) {
+				errors = append(errors, NewSemanticAnalysisError(fmt.Sprintf("function %s expects %d arguments, got %d", v.identifier, len(entry.Parameters), len(v.arguments)), "incorrect number of arguments", v.Token))
 			} else {
-				// Call type check on each argument
-				// to ensure the GetTypes() method returns the correct type even if there are errors
-				for _, arg := range v.arguments {
-					errors = arg.TypeCheck(errors, tables, funcEntry)
-				}
-				// Check if the types of the arguments are correct
-				for i, arg := range v.arguments {
-					if arg.GetType() != entry.Parameters[i].GetType() {
-						errors = append(errors, NewSemanticAnalysisError("Expected type "+entry.Parameters[i].GetType().String()+" but got "+arg.GetType().String()+".", "invalid argument type", v.Token))
+				// Check if the arguments are of the correct type
+				for x, arg := range v.arguments {
+					if arg.GetType() != entry.Parameters[x].GetType() {
+						errors = append(errors, NewSemanticAnalysisError(fmt.Sprintf("function %s expects %s as argument %d, got %s", v.identifier, entry.Parameters[x].GetType(), x+1, arg.GetType()), "mismatched type", v.Token))
 					}
 				}
 			}
 		}
 
+		// Set the type of the VariableInvocation
+		v.ty = entry.RetTy
+
 	} else {
 		// Variable
+		entry := funcEntry.Variables.Contains(v.identifier)
+		// Search through the parameters
+		if entry == nil {
+			for _, param := range funcEntry.Parameters {
+				if param.Name == v.identifier {
+					entry = param
+					break
+				}
+			}
+		}
+
 		// Check if the variable exists in the symbol table
 		if entry == nil {
-			errors = append(errors, NewSemanticAnalysisError("Variable "+v.identifier+" not declared.", "undeclared", v.Token))
+			errors = append(errors, NewSemanticAnalysisError("variable "+v.identifier+" not declared.", "undeclared variable", v.Token))
 		}
+
+		// Set the type of the VariableInvocation
+		// This will throw an immediate error if the variable is not declared
+		v.ty = types.StringToType("nil")
 	}
 
-	// Set the type of the variable invocation
-	v.ty = entry.GetType()
 	return errors
 }
 

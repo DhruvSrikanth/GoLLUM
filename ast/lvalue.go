@@ -45,6 +45,15 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 	// Check if the identifer is declared
 	entry := funcEntry.Variables.Contains(l.identifier)
 	if entry == nil {
+		// Check the parameters
+		for _, param := range funcEntry.Parameters {
+			if param.Name == l.identifier {
+				entry = param
+				break
+			}
+		}
+	}
+	if entry == nil {
 		errors = append(errors, NewSemanticAnalysisError("Undeclared variable "+l.identifier+".", "undeclared variable", l.Token))
 	} else {
 		if len(l.fields) == 0 {
@@ -58,7 +67,8 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 					// Check if the struct exists in the symbol table
 					structEntry := tables.Structs.Contains(entryStructName)
 					if structEntry == nil {
-						errors = append(errors, NewSemanticAnalysisError("Type "+entryType.String()+" not declared.", "undeclared type", l.Token))
+						errors = append(errors, NewSemanticAnalysisError("type "+entryType.String()+" not declared.", "undeclared type", l.Token))
+						break
 					} else {
 						// Check if the field exists in the struct
 						found := false
@@ -71,7 +81,10 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 							}
 						}
 						if !found {
-							errors = append(errors, NewSemanticAnalysisError("Field "+field+" not declared in type "+entryType.String(), "undeclared field", l.Token))
+							errors = append(errors, NewSemanticAnalysisError("field "+field+" not declared in type "+entryType.String(), "undeclared field", l.Token))
+
+							// Set the type to nil
+							l.ty = types.StringToType("nil")
 							break
 						}
 						// The field exists in the struct so move on to the next field
@@ -80,7 +93,7 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 				} else {
 					// Primitive type meaning it must be the last field
 					if field != l.fields[len(l.fields)-1] {
-						errors = append(errors, NewSemanticAnalysisError("Cannot access field "+field+" of type "+entryType.String(), "field access error", l.Token))
+						errors = append(errors, NewSemanticAnalysisError("cannot access field "+field+" of type "+entryType.String(), "field access error", l.Token))
 					}
 
 					// Set the type of the lvalue

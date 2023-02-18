@@ -772,7 +772,7 @@ func (gParser *goliteParser) ExitSelectorTerm(c *SelectorTermContext) {
 	}
 
 	// Create the selector term
-	gParser.nodes[key] = ast.NewSelectorTerm(factor, fields, types.StringToType("nil"), token.NewToken(line, col))
+	gParser.nodes[key] = ast.NewSelectorTerm(factor, fields, nil, token.NewToken(line, col))
 }
 
 // ExitFactor is called when exiting the factor production.

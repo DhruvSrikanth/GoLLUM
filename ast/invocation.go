@@ -53,17 +53,18 @@ func (i *Invocation) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symbo
 	}
 
 	// Check if the function has been declared
-	if tables.Funcs.Contains(i.identifier) == nil {
+	entry := tables.Funcs.Contains(i.identifier)
+	if entry == nil {
 		errors = append(errors, NewSemanticAnalysisError("Function "+i.identifier+" has not been declared", "Undeclared function", i.Token))
 	} else {
 		// Check if the number of arguments is correct
-		if len(i.arguments) != len(tables.Funcs.Contains(i.identifier).Parameters) {
+		if len(i.arguments) != len(entry.Parameters) {
 			errors = append(errors, NewSemanticAnalysisError("Function "+i.identifier+" has an incorrect number of arguments passed", "incorrect arguments provided", i.Token))
 		} else {
 			// Check the types of the arguments
 			// Can combine the with the above loop, however, this is more readable and explicit
 			for x, arg := range i.arguments {
-				if arg.GetType() != funcEntry.Parameters[x].GetType() {
+				if arg.GetType() != entry.Parameters[x].GetType() {
 					errors = append(errors, NewSemanticAnalysisError("Argument type mismatch in function call", "mismatched type", i.GetToken()))
 				}
 			}
