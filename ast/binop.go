@@ -158,9 +158,11 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 		} else if isCompareOp(*binOp.operator) {
 			// Could be a relation term, equal term
 			// Only ints allowed for relation terms
-			// Ints, structs and nil allowed for equal terms
+			// Ints, structs, bool and nil allowed for equal terms
 			// Result is a bool
 			if leftType == types.StringToType("int") && rightType == types.StringToType("int") {
+				binOp.ty = types.StringToType("bool")
+			} else if leftType == types.StringToType("bool") && rightType == types.StringToType("bool") {
 				binOp.ty = types.StringToType("bool")
 			} else if types.TypeToKind(leftType) == types.STRUCT && types.TypeToKind(rightType) == types.STRUCT {
 				if *binOp.operator == EQ || *binOp.operator == NE {
