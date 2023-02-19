@@ -119,7 +119,7 @@ func main() {
 Run - 
 
 ```bash
-go run golite/main.go benchmarks/simple/simple1.golite 
+go run golite/main.go benchmarks/simple/simple2.golite 
 ```
 
 Example of code that will not work:
@@ -138,7 +138,7 @@ func main() {
 ```
 
 ```bash
-go run golite/main.go benchmarks/bad/bad1.golite 
+go run golite/main.go benchmarks/lexer/bad/bad1.golite 
 ```
 
 This runs both the `lexer` and `parser`. 
