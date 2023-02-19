@@ -15,6 +15,37 @@ make compiler
 
 ## Run Golite Compiler
 
+```bash
+go run golite/main.go benchmarks/simple/simple2.golite 
+```
+
+This runs both the `lexer` and `parser`. 
+
+## Golite Compiler Flags
+
+| Flag | Description | Example |
+| --- | --- | --- |
+| -lex | Print the lexed tokens (Runs lexer). | `go run golite/main.go -lex benchmarks/simple/example1.golite` |
+| -ast | Print the parser produced by the parser (Runs lexer and parser). | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
+| -sym | Print the symbol table (Runs lexer and parser). | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
+
+Check out the `benchmarks` folder for more examples.
+
+## Test Golite Compiler
+
+| Command | Description |
+| --- | --- |
+| `make test_lexer` | Runs lexer tests. |
+| `make test_ast` | Runs the ast construction tests. |
+| `make test_type_checking` | Runs type checker tests. |
+| `make test_control_flow` | Runs control flow tests. |
+| `make test_parser` | Runs all parser tests. |
+| `make test_compiler` | Runs all compiler tests. |
+
+
+Running the tests present in `golite/main_test.go` tests the compiler in both the `lexer` and `parser` phases.
+
+
 Example of code that will work:
 
 ```Go
@@ -116,12 +147,6 @@ func main() {
 }
 ```
 
-Run - 
-
-```bash
-go run golite/main.go benchmarks/simple/simple2.golite 
-```
-
 Example of code that will not work:
 
 ```Go
@@ -136,33 +161,3 @@ func main() {
 
 }
 ```
-
-```bash
-go run golite/main.go benchmarks/lexer/bad/bad1.golite 
-```
-
-This runs both the `lexer` and `parser`. 
-
-## Golite Compiler Flags
-
-| Flag | Description | Example |
-| --- | --- | --- |
-| -lex | Print the lexed tokens (Runs lexer). | `go run golite/main.go -lex benchmarks/simple/example1.golite` |
-| -ast | Print the parser produced by the parser (Runs lexer and parser). | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
-| -sym | Print the symbol table (Runs lexer and parser). | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
-
-Check out the `benchmarks` folder for more examples.
-
-## Test Golite Compiler
-
-| Command | Description |
-| --- | --- |
-| `make test_lexer` | Runs lexer tests. |
-| `make test_ast` | Runs the ast construction tests. |
-| `make test_type_checking` | Runs type checker tests. |
-| `make test_control_flow` | Runs control flow tests. |
-| `make test_parser` | Runs all parser tests. |
-| `make test_compiler` | Runs all compiler tests. |
-
-
-Running the tests present in `golite/main_test.go` tests the compiler in both the `lexer` and `parser` phases.
