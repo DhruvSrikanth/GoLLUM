@@ -1,0 +1,44 @@
+type nums struct {
+
+    a int;
+    b int;
+};
+
+func fib1(f1 int) int {
+    if( f1 < 2 ) {
+        return f1;
+    } else {
+        return fib1(f1-1) + fib1(f1-2);
+    }
+}
+func fib2(f2 int) int {
+    var fir int;
+    var sec int;
+    var temp int;
+    fir = 0;
+    sec = 1;
+    for (f2 != 0) {
+	f2=f2-1;
+	temp = fir+sec;
+	fir = sec;
+	sec = temp;
+    }
+    return fir;
+}
+func main() {
+    var x *nums;
+    var  c, d, temp int;
+    x = new nums;
+    scan temp; 
+    x.a = temp;  
+    scan temp; 
+    x.b = temp;  
+
+    c = fib1(x.a);
+    d = fib2(x.b);
+
+    delete x;
+
+    printf("c=%d\nd=%d",c,d); 
+}
+

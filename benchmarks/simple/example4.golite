@@ -1,0 +1,98 @@
+type Node struct {
+    num int;
+    next *Node;
+};
+
+var head *Node;
+var tail *Node;
+
+func Add(num int) {
+    var newList *Node;
+    newList = new Node;
+    newList.num = num;
+    newList.next = nil;
+
+    if (head == nil) {
+        head = newList;
+        tail = newList;
+    }else {
+        tail.next = newList;
+        tail = newList;
+    }
+
+}
+func PrintList(curr *Node) {
+
+    var printValue int;
+
+    if (curr == tail) {
+       printValue = curr.num;
+       printf("%d",printValue);
+    } else {
+       printValue = curr.num;
+       printf("%d",printValue);
+       PrintList(curr.next);
+    }
+}
+
+func Del(curr *Node, num int) {
+
+    var temp *Node;
+    if (curr == nil) {
+
+
+    } else {
+        if (head.num == num) {
+            temp = head;
+            head = head.next;
+            delete temp;
+        } else {
+            if (curr.next == tail) {
+                temp = tail;
+                tail = curr;
+                tail.next = nil;
+                delete temp;
+             } else  {
+                    if ((curr.next.num == num)) {
+                        temp = curr.next;
+                        curr.next = curr.next.next;
+                        delete temp;
+                    } else
+                    {
+                        Del(curr.next, num);
+                    }
+             }
+        }
+
+    }
+
+}
+func main() {
+    var x int;
+    var y int;
+    var i int;
+
+    scan x;
+    scan y;
+
+    Add(1);
+    Add(10);
+    Add(3);
+    Add(4);
+    Add(x);
+
+    PrintList(head);
+    i = 0;
+    for ((i < 50000000)) {
+        Add(i);
+        i = (i + 1);
+    }
+    i = 0;
+    // R
+    for ((i < 50000000)) {
+        Del(head, i);
+        i = (i + 1);
+    }
+    Del(head, y);
+    PrintList(head);
+}

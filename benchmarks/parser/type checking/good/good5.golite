@@ -1,0 +1,98 @@
+type simple struct {
+    one int; 
+};
+
+type foo struct {
+    bar int; 
+    cool bool; 
+    simp *simple; 
+};
+
+var globalfoo *foo;
+
+var unusedGlobal *foo; 
+
+func tailrecursive(num int) {
+
+    var unused *foo;
+
+    if(num <= 0) {
+        return;
+    }
+    //The next two lines leak memory and its on purpose for testing purposes. 
+    unused = new foo; 
+    unusedGlobal = unused; 
+    tailrecursive(num-1);
+}
+
+func add(x int, y int) int {
+    return x + y;
+}
+
+func domath(num int) {
+    var math1 *foo;
+    var math2 *foo;
+    var tmp int;
+
+    math1 = new foo;
+    math1.simp = new simple;
+    math2 = new foo;
+    math2.simp = new simple;
+
+    math1.bar = num;
+    math2.bar = 3;
+    math1.simp.one = math1.bar;
+    math2.simp.one = math2.bar;
+
+    for(num > 0) {
+        tmp = math1.bar * math2.bar;
+        tmp = (tmp * math1.simp.one) / math2.bar;
+        tmp = add(math2.simp.one, math1.bar);
+        tmp = math2.bar - math1.bar;
+        num = num - 1;
+    }
+
+    delete math1;
+    delete math2;
+}
+
+func objinstantiation(num int) {
+    
+    var tmp *foo;
+
+    for(num > 0) {
+        tmp = new foo;
+        delete tmp;
+        num = num - 1;
+    }
+}
+
+func ackermann(m int, n int) int {
+    
+    if(m==0) {
+        return n+1;
+    }
+
+    if(n==0) {
+        return ackermann(m-1, 1);
+    } else {
+        return ackermann(m-1, ackermann(m, n-1));
+    }
+}
+
+func main()  {
+
+    var a,b,c,d,e, temp int;
+
+    scan a; 
+    scan b; 
+    scan c; 
+    scan d;
+    scan e; 
+ 
+    tailrecursive(a);  
+    domath(b);
+    objinstantiation(c);
+    temp = ackermann(d,e); 
+    printf("a=%d\nb=%d\n%c=%d,temp=%d",a,b,c,temp); 
+}

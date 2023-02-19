@@ -1,0 +1,175 @@
+type Cell struct {
+   next *Cell;
+   value int;
+};
+
+type Row struct {
+   next *Row;
+   first *Cell;
+};
+
+type ListNode struct {
+   next *ListNode;
+   lookup int;
+   value int;
+};
+
+
+var matrix *Row;
+var maxrange int;
+
+
+func timesone (iter int)  {
+   for (iter > 0) {
+      maxrange = maxrange * 1;
+      iter = iter - 1;
+   }
+}
+
+func find (num int, list *ListNode) int {
+   if (list != nil) {
+      if (list.lookup == num) {
+         return list.value;
+      } else {
+         return find (num, list.next);
+      }
+   }
+   return -1;
+}
+
+func add (lookup int, value int,  list *ListNode) *ListNode {
+   if (list == nil) {
+      list = new ListNode;
+      list.lookup = lookup;
+      list.value = value;
+      list.next = nil;
+   } else {
+      list.next = add (lookup, value, list.next);
+   }
+   return list;
+}
+
+func factorial (num int, list *ListNode) int {
+   var lookup, fact int;
+
+   timesone (100);
+   
+   if (num == 1) {
+      return 1;
+   } else {
+      lookup = find (num, list);
+
+      if (lookup != -1) {
+         return lookup;
+      }
+
+      fact = num * factorial (num - 1, list);
+
+      if (fact / 3 == 0) {
+         add (num, fact, list);
+      }
+
+      return fact;
+   }
+}
+
+func maxfactorial (list *ListNode, max int)  {
+   var  row *Row;
+   var cell *Cell;
+   var fact int;
+
+   list.next = nil;
+
+   row = matrix;
+
+   for (row != nil) {
+      cell = row.first;
+      row = row.next;
+
+      for (cell != nil) {
+         fact = factorial (cell.value, list);
+         cell = cell.next;
+
+         if (fact > max) {
+            max = fact;
+         }
+      }
+   }
+   printf("Max Factorial=%d", max); 
+}
+
+func newvalue (height int, width int) int {
+   var position int;
+
+   timesone (0);
+   position = height * width;
+
+   return maxrange / position + height;
+}
+
+func newcell (cell *Cell,  height int, width int) *Cell {
+   cell.value = newvalue (height, width);
+   
+   if (width > 1) {
+      cell.next = newcell (new Cell, height, width - 1);
+   } else {
+      cell.next = nil;
+   }
+
+   return cell;
+}
+
+func newrow (row *Row, height int, width int) *Row {
+   row.first = (newcell (new Cell, height, width));
+
+   if (height > 1) {
+      row.next = newrow (new Row, height - 1, width);
+   } else {
+      row.next = nil;
+   }
+
+   return row;
+}
+
+func newmatrix (height int, width int)  {
+   matrix = newrow (new Row, height, width);
+}
+
+func getmatrixsize (matrixsize int) int {
+   if (matrixsize <= 0) {
+      scan matrixsize; 
+      getmatrixsize (matrixsize);
+   } else {
+      return matrixsize;
+   }
+
+   return matrixsize;
+}
+
+func getmaxrange (maxrange int) int {
+   if (maxrange <= 1) {
+      scan maxrange; 
+      getmaxrange (maxrange);
+   } else {
+      return maxrange;
+   }
+
+   return maxrange;
+}
+
+func main () {
+   var height, width int;
+
+   height = 0;
+   width = 0;
+   maxrange = 0;
+
+   height = getmatrixsize (height);
+   width = height;
+   maxrange = getmaxrange (maxrange);
+
+   newmatrix (height, width);
+   //Note this program leaks memory on purpose for testing. 
+   maxfactorial (new ListNode, 0);
+
+}

@@ -1,0 +1,39 @@
+func isqrt(a int) int {
+	var square, delta int;
+	square = 1;
+	delta = 3;
+	for (square <= a) {
+		square = square + delta;
+		delta = delta + 2;
+	}
+	return (delta/2 - 1);
+}
+
+func prime(a int) bool {
+	var max, divisor, remainder int;
+	if (a < 2) {
+		return false;
+	} else {
+		max = isqrt(a);
+		divisor = 2;
+		for (divisor <= max) {
+			remainder = a - ((a / divisor) * divisor);
+			if (remainder == 0) {
+				return false;
+			}
+			divisor = divisor + 1;
+		}
+		return true;
+	}
+}
+func main() {
+    var limit, a int;
+	scan limit; 
+	a = 0;
+	for (a <= limit) {
+		if (prime(a)) {
+			printf("%d",a); 
+		}
+		a = a + 1;
+	}
+}

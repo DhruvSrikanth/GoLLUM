@@ -36,14 +36,15 @@ func main() {
 			if cmd.ASTFlag {
 				// Print the AST
 				fmt.Println(ast)
-			}
-			if tables := sa.Execute(ast); tables != nil {
-				if cmd.SymbolTableFlag {
-					fmt.Println(tables)
-				}
-				fmt.Println("Passed semantic analysis")
 			} else {
-				fmt.Println("Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)")
+				if tables := sa.Execute(ast); tables != nil {
+					if cmd.SymbolTableFlag {
+						fmt.Println(tables)
+					}
+					fmt.Println("Passed semantic analysis")
+				} else {
+					fmt.Println("Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)")
+				}
 			}
 		}
 	}
