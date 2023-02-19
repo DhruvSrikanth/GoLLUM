@@ -7,19 +7,13 @@
 
 # GoLLUM
 
-## Build Golite compiler
-
-```bash
-source build.sh
-```
-
-or 
+## Build Golite Compiler
 
 ```bash
 make compiler
 ```
 
-## Run Golite compiler
+## Run Golite Compiler
 
 Example of code that will work:
 
@@ -149,40 +143,30 @@ go run golite/main.go benchmarks/bad/bad1.golite
 
 This runs both the `lexer` and `parser`. 
 
-## Flags
+## Golite Compiler Flags
 
 | Flag | Description | Example |
 | --- | --- | --- |
 | -lex | Print the lexed tokens (Runs lexer). | `go run golite/main.go -lex benchmarks/simple/simple1.golite` |
 | -ast | Print the parser produced by the parser (Runs lexer and parser). | `go run golite/main.go -ast benchmarks/simple/simple1.golite` |
-| -sym | Print the symbol table  (Runs lexer and parser). | `go run golite/main.go -sym benchmarks/simple/simple1.golite` |
+| -sym | Print the symbol table (Runs lexer and parser). | `go run golite/main.go -sym benchmarks/simple/simple1.golite` |
 
 Check out the `benchmarks` folder for more examples.
 
-## Run tests using Makefile
+## Test Golite Compiler
 
-Build `golite`:
-```shell
-make compiler
-```
+| Command | Description |
+| --- | --- |
+| `make test_lexer` | Runs lexer tests. |
+| `make test_symbol_table` | Runs symbol table tests. |
+| `make test_type_checking` | Runs type checker tests. |
+| `make test_control_flow` | Runs control flow tests. |
+| `make test_parser` | Runs all parser tests. |
+| `make test_compiler` | Runs all compiler tests. |
 
-Test `lexer`:
-```shell
-make test_lexer
-```
-
-Test `parser`:
-```shell
-make test_parser
-```
-
-
-Test all completed portions of the compiler:
-```shell
-make test_compiler
-```
 
 Running the tests present in `golite/main_test.go` tests the compiler in both the `lexer` and `parser` phases. Ideally this should return something like - 
+
 ```bash
 === RUN   TestLexer
 === RUN   TestLexer/T=1
@@ -234,5 +218,4 @@ PASS
 ok      golite/golite   2.107s
 ```
 
-## Questions
-1. How to we handle returns across different control flows? How do you ensure that there is a return statement in a function across all control flows? We need to recursively check all control flows and ensure that there is a atleast one return value after reaching the parent control flow.
+
