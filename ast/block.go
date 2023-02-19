@@ -46,3 +46,15 @@ func (b *Block) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTabl
 	}
 	return errors
 }
+
+// Control flow analysis for the block node
+func (b *Block) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Nothing to do here since the block node does not have any control flow
+	flow := false
+	cflow := false
+	for _, stmt := range b.statements {
+		errors, cflow = stmt.GetControlFlow(errors, funcEntry)
+		flow = flow || cflow
+	}
+	return errors, flow
+}

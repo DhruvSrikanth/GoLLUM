@@ -85,3 +85,13 @@ func (p *Program) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTa
 
 	return errors
 }
+
+// Control flow check
+func (p *Program) ControlFlowCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Functions
+	for _, fn := range p.funcs {
+		errors = fn.ControlFlowCheck(errors, tables, funcEntry)
+	}
+
+	return errors
+}

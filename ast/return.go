@@ -64,3 +64,9 @@ func (r *Return) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 func (r *Return) GetType() types.Type {
 	return r.ty
 }
+
+// Control flow analysis for the return node
+func (r *Return) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Return true to indicate that the return node has control flow
+	return errors, true
+}

@@ -46,3 +46,11 @@ func (l *Loop) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTable
 
 	return errors
 }
+
+// Control flow analysis for the loop node
+func (l *Loop) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Perform control flow analysis on the block
+	var flow bool
+	errors, flow = l.body.GetControlFlow(errors, funcEntry)
+	return errors, flow
+}

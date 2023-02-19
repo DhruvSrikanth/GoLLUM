@@ -64,3 +64,9 @@ func (d *Delete) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 	}
 	return errors
 }
+
+// Control flow analysis for the delete node
+func (d *Delete) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Nothing to do here since the delete node does not have any control flow
+	return errors, false
+}

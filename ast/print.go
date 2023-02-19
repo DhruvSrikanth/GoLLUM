@@ -65,3 +65,9 @@ func (p *Print) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTabl
 
 	return errors
 }
+
+// Control flow analysis for the print node
+func (p *Print) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Nothing to do here since the print node does not have any control flow
+	return errors, false
+}

@@ -113,3 +113,36 @@ func (f *Function) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolT
 func (f *Function) GetReturnType() types.Type {
 	return f.returnType
 }
+
+// Perform a control flow check on the function
+func (f *Function) ControlFlowCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
+	// Check the control flow of the entire function
+	var flow bool
+	errors, flow = f.GetControlFlow(errors, f.funcEntry)
+	// If function return is void and no control flow, its accepted
+	// If function return is void and control flow, its accepted
+	// If function return is not void and control flow, its accepted
+
+	// If function return is not void and no control flow, its not accepted
+
+	// If the flow is false, then we check to see if the function is a void function
+	// If the function is a not a void function and the control flow is false, then we
+	// have an error
+	if f.GetReturnType() != types.StringToType("void") && flow == false {
+		errors = append(errors, NewSemanticAnalysisError("control flow does not reach return statement", "invalid control flow", f.Token))
+	}
+
+	return errors
+}
+
+// Get the control flow
+func (f *Function) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Check the statements
+	flow := false
+	cFlow := false
+	for _, stmt := range f.statements {
+		errors, cFlow = stmt.GetControlFlow(errors, f.funcEntry)
+		flow = flow || cFlow
+	}
+	return errors, flow
+}

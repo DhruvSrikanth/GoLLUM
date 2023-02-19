@@ -52,3 +52,9 @@ func (r *Read) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTable
 
 	return errors
 }
+
+// Control flow analysis for the read node
+func (r *Read) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Nothing to do here since the read node does not have any control flow
+	return errors, false
+}

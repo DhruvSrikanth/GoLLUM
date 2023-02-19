@@ -86,3 +86,9 @@ func (i *Invocation) GetType() types.Type {
 func (i *Invocation) GetToken() *token.Token {
 	return i.Token
 }
+
+// Control flow analysis for the invocation node
+func (i *Invocation) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Nothing to do here since the invocation node does not have any control flow
+	return errors, false
+}

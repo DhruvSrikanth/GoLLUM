@@ -56,3 +56,9 @@ func (d *Declaration) GetVariable() string {
 func (d *Declaration) GetToken() *token.Token {
 	return d.Token
 }
+
+// Control flow for the declaration
+func (d *Declaration) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Declarations do not have control flow
+	return errors, false
+}

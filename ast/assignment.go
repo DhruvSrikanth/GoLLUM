@@ -74,3 +74,9 @@ func (a *Assignment) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symbo
 func (a *Assignment) GetToken() *token.Token {
 	return a.Token
 }
+
+// Control flow analysis for the assignment node
+func (a *Assignment) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Nothing to do here since the assignment node does not have any control flow
+	return errors, false
+}

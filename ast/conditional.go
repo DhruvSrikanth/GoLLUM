@@ -4,6 +4,7 @@ import (
 	"bytes"
 	st "golite/symboltable"
 	"golite/token"
+	"golite/types"
 )
 
 // Conditional statement node for the AST
@@ -58,4 +59,35 @@ func (c *Conditional) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symb
 	}
 
 	return errors
+}
+
+// Perform control flow analysis on the conditional node
+func (c *Conditional) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Perform control flow analysis on the then block
+	var thenFlow bool
+	errors, thenFlow = c.thenBlock.GetControlFlow(errors, funcEntry)
+
+	// Perform control flow analysis on the else block
+	var elseFlow bool
+	if c.elseBlock != nil {
+		errors, elseFlow = c.elseBlock.GetControlFlow(errors, funcEntry)
+	}
+
+	if funcEntry.RetTy != types.StringToType("void") {
+		// If the else block does not exist, it doesnt matter if the then block has a return statement
+		if c.elseBlock == nil {
+			return errors, thenFlow
+		} else {
+			// If the then and else blocks exists, then both blocks must return true or both must return false
+			if thenFlow == elseFlow {
+				return errors, thenFlow
+			} else {
+				// Not adding the error below because it is possible that the parent node will have an appropriate return statement
+				// errors = append(errors, NewSemanticAnalysisError("conditional branch missing control flow", "invalid control flow", c.Token))
+				return errors, false
+			}
+		}
+	} else {
+		return errors, true
+	}
 }

@@ -59,3 +59,9 @@ func (d *StructDecl) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symbo
 	}
 	return errors
 }
+
+// Control flow analysis for the struct declaration
+func (d *StructDecl) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
+	// Nothing to do here since the struct declaration node does not have any control flow
+	return errors, false
+}
