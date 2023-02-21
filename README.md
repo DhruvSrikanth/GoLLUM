@@ -59,7 +59,6 @@ type Node struct {
 var  root *Node; 
 
 func compare(cur int,neuw int) int {
-
     if (cur < neuw) {
 		return 1;
 	} else {  
@@ -70,59 +69,61 @@ func compare(cur int,neuw int) int {
 		}
 	}
 }
-func addNode (numAdd int, curr *Node) { 
+
+func addNode(numAdd int, curr *Node) { 
 	var compVal int;
     var newNode *Node;
 
-	if( curr == nil ){
+	if (curr == nil){
 		newNode = new Node;
 		newNode.value = numAdd;
 		root = newNode;
 	} else {
-		compVal = compare (curr.value, numAdd);
+		compVal = compare(curr.value, numAdd);
 		
-		if( compVal == -1) {
-			if(curr.left == nil) {
+		if (compVal == -1) {
+			if (curr.left == nil) {
 				newNode = new Node;
 				newNode.value = numAdd;
 				curr.left = newNode;
 			} else {
-				addNode ( numAdd, curr.left);
+				addNode(numAdd, curr.left);
 			}
 		} else {
-			if(compVal == 1) {
-				if(curr.right == nil) {
+			if (compVal == 1) {
+				if (curr.right == nil) {
 					newNode = new Node;
 					newNode.value = numAdd;
 					curr.right = newNode;
 				} else {
-					addNode ( numAdd, curr.right);
+					addNode(numAdd, curr.right);
 				}
 			}
 		}
 	}
 }
-func printDepthTree (curr *Node)  {
+
+func printDepthTree(curr *Node)  {
     var temp int;
-	if( curr != nil ) {
-		if( curr.left != nil) {
+	if (curr != nil) {
+		if (curr.left != nil) {
 			printDepthTree(curr.left);
 		}
         temp = curr.value;
 		printf("%d",temp);
 
-		if(curr.right !=nil) {
+		if (curr.right !=nil) {
 			printDepthTree(curr.right);
 		}
 	}
 }
-func deleteLeavesTree (curr *Node) {
-	if( curr != nil ) {
-		if( curr.left != nil) {
+func deleteLeavesTree(curr *Node) {
+	if (curr != nil) {
+		if (curr.left != nil) {
 			deleteLeavesTree(curr.left);
 		}
-
-		if(curr.right !=nil) {
+		
+		if (curr.right !=nil) {
 			deleteLeavesTree(curr.right);
 		}
 		delete(curr);
@@ -138,7 +139,7 @@ func main() {
 	scan input; 
 
 	for (input!=0) {
-		addNode (input, root);
+		addNode(input, root);
 		scan input; 
 	}
 	
@@ -151,13 +152,9 @@ Example of code that will not work:
 
 ```Go
 func main() {
-    
     var a bool;
     var x_ double;
-    
     a = +;
-    
     printf("%d", a);
-
 }
 ```
