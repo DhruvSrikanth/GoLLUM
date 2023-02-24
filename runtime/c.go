@@ -16,7 +16,7 @@ func NewRuntime() *runtime {
 
 // GetCFuncs returns a particular C function used by the runtime
 func (r *runtime) GetCFunc(funcKey string) string {
-	return "declare " + r.cFuncs[funcKey]
+	return r.cFuncs[funcKey]
 }
 
 // GetCFuncs returns the C functions used by the runtime
