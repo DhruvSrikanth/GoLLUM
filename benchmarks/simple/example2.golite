@@ -6,6 +6,8 @@ type Node struct {
 }; 
 
 var  root *Node; 
+var x int;
+var y bool;
 
 func compare(cur int,neuw int) int {
 
