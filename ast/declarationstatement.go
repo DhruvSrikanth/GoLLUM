@@ -13,5 +13,5 @@ type DeclarationStatement interface {
 	GetType() types.Type
 	GetVariable() string
 	GetToken() *token.Token
-	ToLLVM(*st.SymbolTables) (*st.SymbolTables, *llvm.GlobalDecl)
+	ToLLVM(*st.SymbolTables) *llvm.GlobalDecl
 }

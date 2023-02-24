@@ -149,7 +149,7 @@ func (f *Function) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st
 }
 
 // Translate the declaration to LLVM IR
-func (f *Function) ToLLVM(tables *st.SymbolTables) *llvm.FunctionDecl {
+func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.FunctionDecl) {
 	// Declarations are translated in the program and function
-	return
+	return tables, llvm.NewFunctionDecl()
 }

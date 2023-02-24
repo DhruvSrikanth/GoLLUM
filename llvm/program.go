@@ -24,17 +24,23 @@ func (p *Program) String() string {
 		out.WriteString("\n")
 	}
 
+	out.WriteString("\n")
+
 	// Print the global declarations
 	for _, global := range p.globalDecls {
 		out.WriteString(global.String())
 		out.WriteString("\n")
 	}
 
+	out.WriteString("\n")
+
 	// Print the function declarations
 	for _, fn := range p.functionDecls {
 		out.WriteString(fn.String())
 		out.WriteString("\n")
 	}
+
+	out.WriteString("\n")
 
 	// Print the runtime declarations
 	for _, runtime := range p.runtimeDecls {

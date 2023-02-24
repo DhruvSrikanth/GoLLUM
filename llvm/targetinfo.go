@@ -24,6 +24,6 @@ func NewTargetInformation(filePath, targetTriple string) *TargetInformation {
 func (ti *TargetInformation) String() string {
 	var out bytes.Buffer
 	out.WriteString(fmt.Sprintf("source_filename = \"%s\"\n", ti.fileName))
-	out.WriteString(fmt.Sprintf("target triple = \"%s\"\n", ti.targetTriple))
+	out.WriteString(fmt.Sprintf("target triple = \"%s\"\n\n", ti.targetTriple))
 	return out.String()
 }

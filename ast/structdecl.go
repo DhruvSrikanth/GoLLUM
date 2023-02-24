@@ -19,6 +19,11 @@ func NewStructDecl(name string, decls []Decl, token *token.Token) *StructDecl {
 	return &StructDecl{token, name, decls}
 }
 
+// Get the name of the struct
+func (d *StructDecl) GetName() string {
+	return d.name
+}
+
 // String representation of the struct declaration
 func (s *StructDecl) String() string {
 	var out bytes.Buffer
@@ -69,5 +74,15 @@ func (d *StructDecl) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 
 // Translate the struct declaration to LLVM IR
 func (d *StructDecl) ToLLVM(tables *st.SymbolTables) *llvm.StructDecl {
-	return
+	// Get the struct entry
+	structEntry := tables.Structs.Contains(d.name)
+
+	// Get the LLVM representation of the struct fields
+	fields := make([]string, 0)
+	for _, field := range structEntry.Fields {
+		fields = append(fields, field.LlvmType)
+	}
+
+	// Create the struct declaration
+	return llvm.NewStructDecl("struct."+d.name, fields)
 }

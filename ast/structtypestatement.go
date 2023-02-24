@@ -8,5 +8,6 @@ import (
 // StructTypeStatement is an interface that all struct types implement
 type StructTypeStatement interface {
 	Statement
-	ToLLVM(*st.SymbolTables) (*st.SymbolTables, *llvm.StructDecl)
+	ToLLVM(*st.SymbolTables) *llvm.StructDecl
+	GetName() string
 }
