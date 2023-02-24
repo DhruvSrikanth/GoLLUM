@@ -2,6 +2,8 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
+	"golite/runtime"
 	st "golite/symboltable"
 	"golite/token"
 )
@@ -97,20 +99,41 @@ func (p *Program) ControlFlowCheck(errors []*SemanticAnalysisError, tables *st.S
 }
 
 // Tralsate the program to LLVM IR
-// func (p *Program) ToLLVM(tables *st.SymbolTables, blocks []*llvm.BasicBlock) []*llvm.BasicBlock {
-// 	// Translate the struct definitions to LLVM IR
-// 	for _, strct := range p.structTypes {
-// 		strct.ToLLVM(tables, blocks)
-// 	}
+func (p *Program) ToLLVM(tables *st.SymbolTables) *llvm.Program {
+	// Translate the struct definitions to LLVM IR
+	var structDecls []llvm.StructDecl
+	var structDecl *llvm.StructDecl
+	for _, strct := range p.structTypes {
+		tables, structDecl = strct.ToLLVM(tables)
+		structDecls = append(structDecls, *structDecl)
+	}
 
-// 	// Translate the declarations to LLVM IR
-// 	for _, decl := range p.declarations {
-// 		decl.ToLLVM(tables, blocks)
-// 	}
+	// Translate the declarations to LLVM IR
+	var globalDecls []llvm.GlobalDecl
+	var globalDecl *llvm.GlobalDecl
+	for _, decl := range p.declarations {
+		tables, globalDecl = decl.ToLLVM(tables)
+		globalDecls = append(globalDecls, *globalDecl)
+	}
 
-// 	// Translate the functions to LLVM IR
-// 	for _, fn := range p.funcs {
-// 		fn.ToLLVM(tables, blocks)
-// 	}
+	// Translate the functions to LLVM IR
+	var functionDecls []llvm.FunctionDecl
+	var functionDecl *llvm.FunctionDecl
+	for _, fn := range p.funcs {
+		tables, functionDecl = fn.ToLLVM(tables)
+		functionDecls = append(functionDecls, *functionDecl)
+	}
 
-// }
+	// Get the C runtime functions
+	runtimeDecls := make([]llvm.RuntimeDecl, 0)
+	cRuntime := runtime.NewRuntime()
+
+	for _, cFuncName := range cRuntime.GetCFuncs() {
+		runtimeDecls = append(runtimeDecls, *llvm.NewRuntimeDecl(cFuncName, cRuntime.GetCFunc(cFuncName)))
+	}
+
+	// Create the LLVM program
+	llvm := llvm.NewProgram(structDecls, globalDecls, functionDecls, runtimeDecls)
+
+	return llvm
+}

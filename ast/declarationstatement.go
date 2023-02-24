@@ -1,6 +1,8 @@
 package ast
 
 import (
+	"golite/llvm"
+	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
 )
@@ -11,4 +13,5 @@ type DeclarationStatement interface {
 	GetType() types.Type
 	GetVariable() string
 	GetToken() *token.Token
+	ToLLVM(*st.SymbolTables) (*st.SymbolTables, *llvm.GlobalDecl)
 }

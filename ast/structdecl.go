@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 )
@@ -64,4 +65,9 @@ func (d *StructDecl) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symbo
 func (d *StructDecl) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
 	// Nothing to do here since the struct declaration node does not have any control flow
 	return errors, false
+}
+
+// Translate the struct declaration to LLVM IR
+func (d *StructDecl) ToLLVM(tables *st.SymbolTables) *llvm.StructDecl {
+	return
 }

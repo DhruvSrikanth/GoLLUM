@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -61,4 +62,10 @@ func (d *Declaration) GetToken() *token.Token {
 func (d *Declaration) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
 	// Declarations do not have control flow
 	return errors, false
+}
+
+// Translate the declaration to LLVM IR
+func (d *Declaration) ToLLVM(tables *st.SymbolTables) *llvm.GlobalDecl {
+	// Declarations are translated in the program and function
+	return
 }

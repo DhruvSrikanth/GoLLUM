@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -145,4 +146,10 @@ func (f *Function) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st
 		flow = flow || cFlow
 	}
 	return errors, flow
+}
+
+// Translate the declaration to LLVM IR
+func (f *Function) ToLLVM(tables *st.SymbolTables) *llvm.FunctionDecl {
+	// Declarations are translated in the program and function
+	return
 }
