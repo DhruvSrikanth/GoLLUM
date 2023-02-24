@@ -8,11 +8,13 @@ func GetTypeDefault(t types.Type) string {
 		if t == types.StringToType("int") {
 			return "0"
 		} else if t == types.StringToType("bool") {
-			return "0"
+			return "0" // Since we are representing bool as i64, 0 is false and 1 is true
 		} else if t == types.StringToType("nil") {
 			return "null"
 		} else if t == types.StringToType("string") {
 			return "null"
+		} else if t == types.StringToType("void") {
+			return "0" // Since we are representing void as i64
 		} else {
 			panic("Unknown primitive type")
 		}
