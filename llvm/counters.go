@@ -12,6 +12,11 @@ func GetNextLabel() string {
 	return nextLabel
 }
 
+// Get the current label.
+func GetCurrentLabel() string {
+	return fmt.Sprintf("label-%d", labelCounter)
+}
+
 // Global counter variable for registers.
 var registerCounter int
 
@@ -20,4 +25,9 @@ func GetNextRegister() string {
 	nextReg := fmt.Sprintf("%%r%d", registerCounter)
 	registerCounter++
 	return nextReg
+}
+
+// Get the current register.
+func GetCurrentRegister() string {
+	return fmt.Sprintf("%%r%d", registerCounter)
 }
