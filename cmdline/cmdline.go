@@ -11,16 +11,18 @@ type Cmdline struct {
 	LexFlag         bool
 	ASTFlag         bool
 	SymbolTableFlag bool
+	LLVMFlag        bool
 	Args            []string
 }
 
 // Returns a new Cmdline struct with the program name and arguments
-func newCmdline(program string, lexFlag, astFlag, symbolTableFlag bool, args []string) *Cmdline {
+func newCmdline(program string, lexFlag, astFlag, symbolTableFlag, llvmFlag bool, args []string) *Cmdline {
 	return &Cmdline{
 		Program:         program,
 		LexFlag:         lexFlag,
 		ASTFlag:         astFlag,
 		SymbolTableFlag: symbolTableFlag,
+		LLVMFlag:        llvmFlag,
 		Args:            args,
 	}
 }
@@ -39,6 +41,7 @@ func ReadCmdline() *Cmdline {
 	var lexFlag bool
 	var astFlag bool
 	var symbolTableFlag bool
+	var llvmFlag bool
 	var args []string
 	if len(os.Args) == 2 {
 		lexFlag = false
@@ -50,6 +53,8 @@ func ReadCmdline() *Cmdline {
 			astFlag = true
 		} else if os.Args[1] == "-sym" {
 			symbolTableFlag = true
+		} else if os.Args[1] == "-llvm" {
+			llvmFlag = true
 		} else {
 			usage()
 			return nil
@@ -57,7 +62,7 @@ func ReadCmdline() *Cmdline {
 		args = os.Args[2:]
 	}
 
-	cmdline := newCmdline(programFile, lexFlag, astFlag, symbolTableFlag, args)
+	cmdline := newCmdline(programFile, lexFlag, astFlag, symbolTableFlag, llvmFlag, args)
 
 	return cmdline
 }
@@ -69,7 +74,7 @@ func checkArgs() bool {
 	} else if len(os.Args) > 3 {
 		return false
 	} else if len(os.Args) == 3 {
-		if os.Args[1] != "-lex" && os.Args[1] != "-ast" && os.Args[1] != "-sym" {
+		if os.Args[1] != "-lex" && os.Args[1] != "-ast" && os.Args[1] != "-sym" && os.Args[1] != "-llvm" {
 			return false
 		}
 	}
@@ -84,8 +89,8 @@ func isGoliteFile() bool {
 
 // usage of the program
 func usage() {
-	usage := "Usage: go run golite/main.go [-lex || -ast || -sym] <input source file>\n"
+	usage := "Usage: go run golite/main.go [-lex || -ast || -sym || -llvm] <input source file>\n"
 	usage += "Arguments: <input source file> - path to the input source file\n"
-	usage += "Flags: \n-lex - Print the lexed tokens.\n-ast - Print the abstract syntax tree."
+	usage += "Flags: \n-lex - Print the lexed tokens.\n-ast - Print the abstract syntax tree.\n-sym - Print the symbol table.\n-llvm - Print the LLVM IR representation.\n"
 	fmt.Println(usage)
 }
