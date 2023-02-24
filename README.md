@@ -24,7 +24,7 @@ This runs both the `lexer` and `parser`.
 ## Golite Compiler Flags
 
 | Flag | Description | Stages | Example |
-| --- | --- | --- |
+| --- | --- | --- | --- |
 | -lex | Print the lexed tokens. | Lexer | `go run golite/main.go -lex benchmarks/simple/example1.golite` |
 | -ast | Print the parser produced by the parser. | Lexer, Parser | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
 | -sym | Print the symbol table. | Lexer, Parser | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
