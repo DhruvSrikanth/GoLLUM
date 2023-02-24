@@ -95,3 +95,22 @@ func (p *Program) ControlFlowCheck(errors []*SemanticAnalysisError, tables *st.S
 
 	return errors
 }
+
+// Tralsate the program to LLVM IR
+// func (p *Program) ToLLVM(tables *st.SymbolTables, blocks []*llvm.BasicBlock) []*llvm.BasicBlock {
+// 	// Translate the struct definitions to LLVM IR
+// 	for _, strct := range p.structTypes {
+// 		strct.ToLLVM(tables, blocks)
+// 	}
+
+// 	// Translate the declarations to LLVM IR
+// 	for _, decl := range p.declarations {
+// 		decl.ToLLVM(tables, blocks)
+// 	}
+
+// 	// Translate the functions to LLVM IR
+// 	for _, fn := range p.funcs {
+// 		fn.ToLLVM(tables, blocks)
+// 	}
+
+// }
