@@ -45,13 +45,23 @@ func main() {
 					if cmd.SymbolTableFlag {
 						// Print the symbol table
 						fmt.Println(tables)
+					} else {
+						// Continue translation from AST to LLVM IR
+						// Create the target information
+						targetInfo := llvm.NewTargetInformation(inputSourcePath, targetMachine)
+
+						// Create the source llvm representation
+						llvmProgram := ast.ToLLVM(tables)
+
+						llvmRepr := llvm.GetLLVMSource(targetInfo, llvmProgram)
+						// Print the llvm representation
+						if cmd.LLVMFlag {
+							fmt.Println(llvmRepr)
+						} else {
+							// Write the llvm representation to the output file
+							// llvm.WriteLLVMRepr(llvmRepr, cmd.OutputPath)
+						}
 					}
-
-					// Continue translation from AST to LLVM IR
-					// Create the target information
-					targetInfo := llvm.NewTargetInformation(inputSourcePath, targetMachine)
-					fmt.Println(targetInfo)
-
 				} else {
 					fmt.Println("Failed semantic analysis")
 				}
