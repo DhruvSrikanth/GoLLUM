@@ -159,3 +159,10 @@ func main() {
     printf("%d", a);
 }
 ```
+## Open Questions
+
+1. Does the symbol table need to be updated with new entries during LLVM or ARM translation?
+
+2. Do we actually manage the stack in LLVM or ARM translation (using FP, SP, LP)? Is this part of the register allocator and its algorithm?
+
+3. What errors are handled in the backend of the compiler?

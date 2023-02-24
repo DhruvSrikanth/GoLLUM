@@ -37,6 +37,9 @@ func (f *FunctionDecl) String() string {
 	out.WriteString("(")
 	for i, param := range f.params {
 		paramType := f.paramTypes[i]
+		if strings.Contains(paramType, "struct.") {
+			out.WriteString("%")
+		}
 		out.WriteString(paramType)
 		if strings.Contains(paramType, "struct.") {
 			out.WriteString("*")
