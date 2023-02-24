@@ -19,8 +19,6 @@ make compiler
 go run golite/main.go benchmarks/simple/simple2.golite 
 ```
 
-This runs both the `lexer` and `parser`. 
-
 ## Golite Compiler Flags
 
 | Flag | Description | Stages | Example |
