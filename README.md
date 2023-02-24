@@ -28,6 +28,7 @@ This runs both the `lexer` and `parser`.
 | -lex | Print the lexed tokens (Runs lexer). | `go run golite/main.go -lex benchmarks/simple/example1.golite` |
 | -ast | Print the parser produced by the parser (Runs lexer and parser). | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
 | -sym | Print the symbol table (Runs lexer and parser). | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
+| -llvm | Print the LLVM IR (Runs lexer, parser, IR generator). | `go run golite/main.go -llvm benchmarks/simple/example1.golite` |
 
 Check out the `benchmarks` folder for more examples.
 
