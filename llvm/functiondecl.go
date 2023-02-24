@@ -48,9 +48,9 @@ func (f *FunctionDecl) String() string {
 		}
 	}
 	out.WriteString(")\n{\n")
-	// for _, block := range f.blocks {
-	// 	out.WriteString(block.String())
-	// }
+	for _, block := range f.blocks {
+		out.WriteString(block.String())
+	}
 	out.WriteString("\n}\n")
 
 	return out.String()

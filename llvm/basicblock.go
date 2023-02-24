@@ -1,5 +1,7 @@
 package llvm
 
+import "bytes"
+
 // Basic Block representation for LLVM IR.
 type BasicBlock struct {
 	// The name of the basic block.
@@ -59,4 +61,18 @@ func (bb *BasicBlock) SetPredecessors(predecessors []*BasicBlock) {
 // Set the successor basic blocks.
 func (bb *BasicBlock) SetSuccessors(successors []*BasicBlock) {
 	bb.successors = successors
+}
+
+// String representation of the basic block.
+func (bb *BasicBlock) String() string {
+	var out bytes.Buffer
+	out.WriteString(bb.label)
+	out.WriteString(":\n")
+	// for _, inst := range bb.instructions {
+	// 	out.WriteString("\t")
+	// 	out.WriteString(inst.String())
+	// 	out.WriteString("\n")
+	// }
+	out.WriteString("\n")
+	return out.String()
 }
