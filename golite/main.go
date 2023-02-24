@@ -60,6 +60,8 @@ func main() {
 						} else {
 							// Write the llvm representation to the output file
 							// llvm.WriteLLVMRepr(llvmRepr, cmd.OutputPath)
+
+							// Remove the llvm representation file
 						}
 					}
 				} else {
