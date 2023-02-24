@@ -2,23 +2,25 @@ package llvm
 
 import "golite/types"
 
-// Get the default value for a type.
-func GetTypeDefault(t types.Type) string {
+// Convert type to LLVM type
+func TypeToLLVM(t types.Type) string {
 	if types.TypeToKind(t) == types.PRIMITIVE {
 		if t == types.StringToType("int") {
-			return "0"
+			return "i64"
 		} else if t == types.StringToType("bool") {
-			return "0"
+			return "i64"
 		} else if t == types.StringToType("nil") {
-			return "null"
+			return "i64"
 		} else if t == types.StringToType("string") {
-			return "null"
+			return "i64"
+		} else if t == types.StringToType("void") {
+			return "void"
 		} else {
 			panic("Unknown primitive type")
 		}
 	} else {
 		if types.TypeToKind(t) == types.STRUCT {
-			return "null"
+			return "struct." + t.String()[1:]
 		} else {
 			panic("Unknown type")
 		}
