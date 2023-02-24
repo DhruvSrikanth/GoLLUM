@@ -1,0 +1,30 @@
+type Point2D struct {
+	x int; 
+	y int; 
+};
+var globalInit int; 
+func Init(initVal int) *Point2D {
+	var newPt *Point2D; 
+	newPt = nil; 
+	if (initVal > 0) {
+		newPt = new Point2D; 
+		newPt.x = initVal;
+		newPt.y = initVal; 
+		return newPt; 
+	}
+	return newPt; 
+}
+func main() {
+	var a, b int;
+	var pt1, pt2 *Point2D; 
+	a = 5;
+	b = (a + 7) * 3; 
+	pt1 = new Point2D; 
+	pt1.x = a; 
+	pt1.y = b; 
+	scan globalInit; 
+	pt2 = Init(globalInit);
+	printf("offset=%d\npt2.x=%d\npt2.y=%d\n",globalInit,pt2.x,pt2.y);
+	delete pt1; 
+	delete pt2; 
+}
