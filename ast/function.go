@@ -151,5 +151,19 @@ func (f *Function) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st
 // Translate the declaration to LLVM IR
 func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.FunctionDecl) {
 	// Declarations are translated in the program and function
-	return tables, llvm.NewFunctionDecl()
+	// Get the function entry
+	funcEntry := tables.Funcs.Contains(f.name)
+
+	// Get the parameters
+	params := make([]string, 0)
+	paramTypes := make([]string, 0)
+	for _, param := range funcEntry.Parameters {
+		params = append(params, param.Name)
+		paramTypes = append(paramTypes, param.LlvmTy)
+	}
+
+	// Get the basic blocks
+	blocks := make([]*llvm.BasicBlock, 0)
+
+	return tables, llvm.NewFunctionDecl(funcEntry.Name, funcEntry.LlvmRetTy, params, paramTypes, blocks)
 }
