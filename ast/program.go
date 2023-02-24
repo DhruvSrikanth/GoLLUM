@@ -124,11 +124,11 @@ func (p *Program) ToLLVM(tables *st.SymbolTables) *llvm.Program {
 
 	// Translate the functions to LLVM IR
 	var functionDecls []llvm.FunctionDecl
-	// var functionDecl *llvm.FunctionDecl
-	// for _, fn := range p.funcs {
-	// 	tables, functionDecl = fn.ToLLVM(tables)
-	// 	functionDecls = append(functionDecls, *functionDecl)
-	// }
+	var functionDecl *llvm.FunctionDecl
+	for _, fn := range p.funcs {
+		tables, functionDecl = fn.ToLLVM(tables)
+		functionDecls = append(functionDecls, *functionDecl)
+	}
 
 	// Get the C runtime functions
 	runtimeDecls := make([]llvm.RuntimeDecl, 0)

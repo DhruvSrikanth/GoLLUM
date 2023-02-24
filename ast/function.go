@@ -129,7 +129,7 @@ func (f *Function) ControlFlowCheck(errors []*SemanticAnalysisError, tables *st.
 	// If the flow is false, then we check to see if the function is a void function
 	// If the function is a not a void function and the control flow is false, then we
 	// have an error
-	if f.GetReturnType() != types.StringToType("void") && flow == false {
+	if f.GetReturnType() != types.StringToType("void") && !flow {
 		errors = append(errors, NewSemanticAnalysisError("control flow does not reach return statement", "invalid control flow", f.Token))
 	}
 
