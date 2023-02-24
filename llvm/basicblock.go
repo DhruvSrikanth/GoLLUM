@@ -7,7 +7,7 @@ type BasicBlock struct {
 	// The name of the basic block.
 	label string
 	// The instructions in the basic block.
-	instructions []*Instruction
+	instructions []Instruction
 	// The predecessor and successor basic blocks.
 	predecessors []*BasicBlock
 	successors   []*BasicBlock
@@ -17,7 +17,7 @@ type BasicBlock struct {
 func NewBasicBlock(label string) *BasicBlock {
 	return &BasicBlock{
 		label:        label,
-		instructions: []*Instruction{},
+		instructions: []Instruction{},
 		predecessors: []*BasicBlock{},
 		successors:   []*BasicBlock{},
 	}
@@ -29,7 +29,7 @@ func (bb *BasicBlock) GetLabel() string {
 }
 
 // Get the instructions in the basic block.
-func (bb *BasicBlock) GetInstructions() []*Instruction {
+func (bb *BasicBlock) GetInstructions() []Instruction {
 	return bb.instructions
 }
 
@@ -49,7 +49,7 @@ func (bb *BasicBlock) SetLabel(label string) {
 }
 
 // Set the instructions in the basic block.
-func (bb *BasicBlock) SetInstructions(instructions []*Instruction) {
+func (bb *BasicBlock) SetInstructions(instructions []Instruction) {
 	bb.instructions = instructions
 }
 
@@ -68,11 +68,11 @@ func (bb *BasicBlock) String() string {
 	var out bytes.Buffer
 	out.WriteString(bb.label)
 	out.WriteString(":\n")
-	// for _, inst := range bb.instructions {
-	// 	out.WriteString("\t")
-	// 	out.WriteString(inst.String())
-	// 	out.WriteString("\n")
-	// }
+	for _, inst := range bb.instructions {
+		out.WriteString("\t")
+		out.WriteString(inst.String())
+		out.WriteString("\n")
+	}
 	out.WriteString("\n")
 	return out.String()
 }
