@@ -37,6 +37,22 @@ func (tables *SymbolTables) String() string {
 	return out.String()
 }
 
+// Translate the symbol tables to its LLVM representation
+func (tables *SymbolTables) LLVMTypeConversion() {
+	// Convert the structs
+	for _, v := range tables.Structs.table {
+		v.LLVMTypeConversion()
+	}
+	// Convert the functions
+	for _, v := range tables.Funcs.table {
+		v.LLVMTypeConversion()
+	}
+	// Convert the globals
+	for _, v := range tables.Globals.table {
+		v.LLVMTypeConversion()
+	}
+}
+
 // Symbol table for a scope
 type SymbolTable[T fmt.Stringer] struct {
 	parent *SymbolTable[T]

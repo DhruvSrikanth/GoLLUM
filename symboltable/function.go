@@ -2,6 +2,7 @@ package symboltable
 
 import (
 	"fmt"
+	"golite/llvm"
 	"golite/types"
 )
 
@@ -11,6 +12,7 @@ type FuncEntry struct {
 	RetTy      types.Type
 	Parameters []*VarEntry
 	Variables  *SymbolTable[*VarEntry]
+	LlvmRetTy  string
 }
 
 // String representation of a function entry in the symbol table
@@ -36,7 +38,7 @@ func (entry *FuncEntry) String() string {
 		}
 	}
 	out := entry.Name + "\n"
-	out += fmt.Sprintf("Return Type -  %s\n", entry.RetTy.String())
+	out += fmt.Sprintf("Return Type - %s [%s]\n", entry.RetTy.String(), entry.LlvmRetTy)
 	if len(entry.Parameters) > 0 {
 		out += fmt.Sprintf("Parameters -  %s\n", parameters)
 	}
@@ -50,4 +52,20 @@ func (entry *FuncEntry) String() string {
 // Get the type of the function
 func (entry *FuncEntry) GetType() types.Type {
 	return entry.RetTy
+}
+
+// Translate the function entry to its LLVM representation
+func (entry *FuncEntry) LLVMTypeConversion() {
+	// Set the return type
+	entry.LlvmRetTy = llvm.TypeToLLVM(entry.RetTy)
+
+	// Set the parameter types
+	for _, param := range entry.Parameters {
+		param.LLVMTypeConversion()
+	}
+
+	// Set the variable types
+	for _, v := range entry.Variables.table {
+		v.LLVMTypeConversion()
+	}
 }

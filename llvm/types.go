@@ -1,6 +1,9 @@
 package llvm
 
-import "golite/types"
+import (
+	"fmt"
+	"golite/types"
+)
 
 // Convert type to LLVM type
 func TypeToLLVM(t types.Type) string {
@@ -16,13 +19,15 @@ func TypeToLLVM(t types.Type) string {
 		} else if t == types.StringToType("void") {
 			return "void"
 		} else {
-			panic("Unknown primitive type")
+			fmt.Println("Unknown primitive type")
+			return ""
 		}
 	} else {
 		if types.TypeToKind(t) == types.STRUCT {
 			return "struct." + t.String()[1:]
 		} else {
-			panic("Unknown type")
+			fmt.Println("Unknown type")
+			return ""
 		}
 	}
 }

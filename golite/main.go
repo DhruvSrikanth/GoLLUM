@@ -38,6 +38,9 @@ func main() {
 				fmt.Println(ast)
 			} else {
 				if tables := sa.Execute(ast); tables != nil {
+					// Translate the all table types to their LLVM representation
+					tables.LLVMTypeConversion()
+
 					if cmd.SymbolTableFlag {
 						fmt.Println(tables)
 					}
