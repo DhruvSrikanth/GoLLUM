@@ -17,7 +17,7 @@ func TypeToLLVM(t types.Type) string {
 		} else if t == types.StringToType("string") {
 			return "i64"
 		} else if t == types.StringToType("void") {
-			return "void"
+			return "i64"
 		} else {
 			fmt.Println("Unknown primitive type")
 			return ""
