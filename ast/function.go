@@ -167,11 +167,13 @@ func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.Func
 	// Create the first block
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the declarations to the block
-	// for _, decl := range f.declarations {
-	// 	varEntry := tables.Globals.Contains(d.variable)
-	// 	llvm.NewDecl(d.variable, varEntry.LlvmTy, llvm.GetTypeDefault(d.ty), false)
-	// 	decl.ToLLVM(tables, block)
-	// }
+	var localDecl *llvm.LocalDecl
+	for _, decl := range f.declarations {
+		varEntry := funcEntry.Variables.Contains(decl.GetVariable())
+		localDecl = llvm.NewLocalDecl(varEntry.Name, varEntry.LlvmTy)
+		localDecl.SetLabel(block.GetLabel())
+		block.AddInstruction(localDecl)
+	}
 	blocks = append(blocks, block)
 	// for _, stmt := range f.statements {
 	// 	blocks = stmt.ToLLVMCFG(tables, blocks, f.funcEntry)

@@ -63,6 +63,11 @@ func (bb *BasicBlock) SetSuccessors(successors []*BasicBlock) {
 	bb.successors = successors
 }
 
+// Add an instruction to the basic block.
+func (bb *BasicBlock) AddInstruction(inst Instruction) {
+	bb.instructions = append(bb.instructions, inst)
+}
+
 // String representation of the basic block.
 func (bb *BasicBlock) String() string {
 	var out bytes.Buffer

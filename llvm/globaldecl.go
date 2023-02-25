@@ -6,7 +6,7 @@ import (
 )
 
 // Representation of a global declaration
-type Decl struct {
+type GlobalDecl struct {
 	// The name of the global declaration
 	name    string
 	ty      string
@@ -15,12 +15,12 @@ type Decl struct {
 }
 
 // NewglobalDecl returns a new global declaration
-func NewDecl(name, ty, initVal string, isNil bool) *Decl {
-	return &Decl{name, ty, initVal, isNil}
+func NewGlobalDecl(name, ty, initVal string, isNil bool) *GlobalDecl {
+	return &GlobalDecl{name, ty, initVal, isNil}
 }
 
 // String representation of the global declaration
-func (s *Decl) String() string {
+func (s *GlobalDecl) String() string {
 	var out bytes.Buffer
 	// Format is @variable_name = common global type init_value
 	// Common for all

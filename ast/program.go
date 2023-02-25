@@ -100,8 +100,8 @@ func (p *Program) ControlFlowCheck(errors []*SemanticAnalysisError, tables *st.S
 
 // Tralsate the program to LLVM IR
 func (p *Program) ToLLVM(tables *st.SymbolTables) *llvm.Program {
-	var globalDecls []llvm.Decl
-	var globalDecl *llvm.Decl
+	var globalDecls []llvm.GlobalDecl
+	var globalDecl *llvm.GlobalDecl
 
 	// Translate the struct definitions to LLVM IR
 	var structDecls []llvm.StructDecl
@@ -111,7 +111,7 @@ func (p *Program) ToLLVM(tables *st.SymbolTables) *llvm.Program {
 		structDecls = append(structDecls, *structDecl)
 
 		// Add the global null value declarations for the structs
-		globalDecl = llvm.NewDecl("struct."+strct.GetName(), "struct."+strct.GetName(), "null", true)
+		globalDecl = llvm.NewGlobalDecl("struct."+strct.GetName(), "struct."+strct.GetName(), "null", true)
 		globalDecls = append(globalDecls, *globalDecl)
 	}
 
