@@ -5,13 +5,13 @@ import "bytes"
 // The LLVM program node
 type Program struct {
 	structDecls   []StructDecl
-	globalDecls   []GlobalDecl
+	globalDecls   []Decl
 	functionDecls []FunctionDecl
 	runtimeDecls  []RuntimeDecl
 }
 
 // Create a new LLVM program node
-func NewProgram(structDecls []StructDecl, globalDecls []GlobalDecl, functionDecls []FunctionDecl, runtimeDecls []RuntimeDecl) *Program {
+func NewProgram(structDecls []StructDecl, globalDecls []Decl, functionDecls []FunctionDecl, runtimeDecls []RuntimeDecl) *Program {
 	return &Program{structDecls, globalDecls, functionDecls, runtimeDecls}
 }
 

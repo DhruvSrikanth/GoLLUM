@@ -7,14 +7,14 @@ var labelCounter int
 
 // Get the next label.
 func GetNextLabel() string {
-	nextLabel := fmt.Sprintf("label-%d", labelCounter)
+	nextLabel := fmt.Sprintf("L%d", labelCounter)
 	labelCounter++
 	return nextLabel
 }
 
 // Get the current label.
 func GetCurrentLabel() string {
-	return fmt.Sprintf("label-%d", labelCounter)
+	return fmt.Sprintf("L%d", labelCounter)
 }
 
 // Global counter variable for registers.

@@ -65,8 +65,8 @@ func (d *Declaration) GetControlFlow(errors []*SemanticAnalysisError, funcEntry 
 }
 
 // Translate the declaration to LLVM IR
-func (d *Declaration) ToLLVM(tables *st.SymbolTables) *llvm.GlobalDecl {
+func (d *Declaration) ToLLVM(tables *st.SymbolTables) *llvm.Decl {
 	// Declarations are translated in the program and function
 	varEntry := tables.Globals.Contains(d.variable)
-	return llvm.NewGlobalDecl(d.variable, varEntry.LlvmTy, llvm.GetTypeDefault(d.ty), false)
+	return llvm.NewDecl(d.variable, varEntry.LlvmTy, llvm.GetTypeDefault(d.ty), false)
 }

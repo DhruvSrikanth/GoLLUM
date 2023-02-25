@@ -164,6 +164,12 @@ func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.Func
 
 	// Get the basic blocks
 	blocks := make([]*llvm.BasicBlock, 0)
+	// Create the first block
+	block := llvm.NewBasicBlock(llvm.GetNextLabel())
+	blocks = append(blocks, block)
+	// for _, stmt := range f.statements {
+	// 	blocks = stmt.ToLLVMCFG(tables, blocks, f.funcEntry)
+	// }
 
 	return tables, llvm.NewFunctionDecl(funcEntry.Name, funcEntry.LlvmRetTy, params, paramTypes, blocks)
 }
