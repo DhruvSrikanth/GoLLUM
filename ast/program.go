@@ -118,7 +118,8 @@ func (p *Program) ToLLVM(tables *st.SymbolTables) *llvm.Program {
 	// Translate the declarations to LLVM IR
 	// Add the global declarations for the variables
 	for _, decl := range p.declarations {
-		globalDecl = decl.ToLLVM(tables)
+		varEntry := tables.Globals.Contains(decl.GetVariable())
+		globalDecl = decl.ToLLVM(tables, varEntry)
 		globalDecls = append(globalDecls, *globalDecl)
 	}
 
