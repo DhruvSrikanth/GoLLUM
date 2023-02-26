@@ -17,6 +17,11 @@ func GetCurrentLabel() string {
 	return fmt.Sprintf("L%d", labelCounter)
 }
 
+// Get the previous label.
+func GetPreviousLabel() string {
+	return fmt.Sprintf("L%d", labelCounter-1)
+}
+
 // Global counter variable for registers.
 var registerCounter int
 
@@ -30,4 +35,9 @@ func GetNextRegister() string {
 // Get the current register.
 func GetCurrentRegister() string {
 	return fmt.Sprintf("%%r%d", registerCounter)
+}
+
+// Get the previous register.
+func GetPreviousRegister() string {
+	return fmt.Sprintf("%%r%d", registerCounter-1)
 }

@@ -94,6 +94,20 @@ func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 	// Add the instruction to the block
 	block.AddInstruction(loadInst)
 
+	// Add the bitcast instruction to the block
+	bitcastInst := llvm.NewBitCast(localVariable.LlvmTy, "i8")
+	// // Update the instruction label
+	bitcastInst.SetLabel(block.GetLabel())
+	// // Add the instruction to the block
+	block.AddInstruction(bitcastInst)
+
+	// Add the free runtime function call instruction to the block
+	// freeInst := llvm.NewCall("free", []llvm.Value{loadInst.GetResult()})
+	// // Update the instruction label
+	// freeInst.SetLabel(block.GetLabel())
+	// // Add the instruction to the block
+	// block.AddInstruction(freeInst)
+
 	// Update the same block with the assignment
 	blocks[len(blocks)-1] = block
 	return blocks
