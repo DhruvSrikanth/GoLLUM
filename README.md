@@ -7,6 +7,10 @@
 
 # GoLLUM
 
+![build](https://img.shields.io/badge/build-passing-brightgreen)
+![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+
+
 ## Build Golite Compiler
 
 ```bash
