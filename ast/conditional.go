@@ -99,6 +99,8 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the condition instructions to the block
 	blocks = append(blocks, condBlock)
+	// Get the condition expression to translate to LLVM IR
+	// blocks := l.condition.ToLLVM(tables, blocks, funcEntry)
 
 	// Add new block for the then block
 	thenBlock := llvm.NewBasicBlock(llvm.GetNextLabel())

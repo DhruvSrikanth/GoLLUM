@@ -6,7 +6,7 @@ var globalInit int;
 func Init(initVal *Point2D) *Point2D {
 	var newPt *Point2D; 
 	newPt = nil; 
-	if (initVal.x > 0 && initVal.y > 0) {
+	for (initVal.x > 0 && initVal.y > 0) {
 		newPt = new Point2D; 
 		newPt.x = initVal.x;
 		newPt.y = initVal.y; 
