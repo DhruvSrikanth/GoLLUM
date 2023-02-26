@@ -90,17 +90,17 @@ func TestControlFlow(t *testing.T) {
 		expected    []string
 	}{
 		// Good programs
-		{"../benchmarks/parser/control flow/good/good1.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/control flow/good/good2.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/control flow/good/good3.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/control flow/good/good4.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/control flow/good/good5.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/control flow/good/good6.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/control flow/good/good7.golite", []string{"Passed semantic analysis"}},
+		{"../benchmarks/parser/control flow/good/good1.golite", []string{""}},
+		{"../benchmarks/parser/control flow/good/good2.golite", []string{""}},
+		{"../benchmarks/parser/control flow/good/good3.golite", []string{""}},
+		{"../benchmarks/parser/control flow/good/good4.golite", []string{""}},
+		{"../benchmarks/parser/control flow/good/good5.golite", []string{""}},
+		{"../benchmarks/parser/control flow/good/good6.golite", []string{""}},
+		{"../benchmarks/parser/control flow/good/good7.golite", []string{""}},
 
 		// Bad programs
-		{"../benchmarks/parser/control flow/bad/bad1.golite", []string{"semantic error at line (7), col (0): control flow does not reach return statement (invalid control flow)", "Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)"}},
-		{"../benchmarks/parser/control flow/bad/bad2.golite", []string{"semantic error at line (2), col (0): control flow does not reach return statement (invalid control flow)", "Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)"}},
+		{"../benchmarks/parser/control flow/bad/bad1.golite", []string{"semantic error at line (7), col (0): control flow does not reach return statement (invalid control flow)", "Failed semantic analysis"}},
+		{"../benchmarks/parser/control flow/bad/bad2.golite", []string{"semantic error at line (2), col (0): control flow does not reach return statement (invalid control flow)", "Failed semantic analysis"}},
 	}
 	for num, test := range parseTests {
 		testname := fmt.Sprintf("T=%v", num+1)
@@ -122,17 +122,17 @@ func TestTypeChecker(t *testing.T) {
 		expected    []string
 	}{
 		// Good programs
-		{"../benchmarks/parser/type checking/good/good1.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/type checking/good/good2.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/type checking/good/good3.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/type checking/good/good4.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/type checking/good/good5.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/type checking/good/good6.golite", []string{"Passed semantic analysis"}},
-		{"../benchmarks/parser/type checking/good/good7.golite", []string{"Passed semantic analysis"}},
+		{"../benchmarks/parser/type checking/good/good1.golite", []string{""}},
+		{"../benchmarks/parser/type checking/good/good2.golite", []string{""}},
+		{"../benchmarks/parser/type checking/good/good3.golite", []string{""}},
+		{"../benchmarks/parser/type checking/good/good4.golite", []string{""}},
+		{"../benchmarks/parser/type checking/good/good5.golite", []string{""}},
+		{"../benchmarks/parser/type checking/good/good6.golite", []string{""}},
+		{"../benchmarks/parser/type checking/good/good7.golite", []string{""}},
 
 		// Bad programs
-		{"../benchmarks/parser/type checking/bad/bad1.golite", []string{"semantic error at line (17), col (4): undeclared variable fir. (undeclared variable)", "semantic error at line (17), col (4): type mismatch in assignment (type mistmatch)", "semantic error at line (21), col (8): variable fir not declared. (undeclared variable)", "semantic error at line (21), col (8): invalid expression (mismatched types)", "semantic error at line (22), col (1): undeclared variable fir. (undeclared variable)", "semantic error at line (22), col (1): type mismatch in assignment (type mistmatch)", "semantic error at line (25), col (11): variable fir not declared. (undeclared variable)", "semantic error at line (25), col (4): return type does not match function signature return type (mismatched types)", "semantic error at line (36), col (8): invalid expression (mismatched types)", "Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)"}},
-		{"../benchmarks/parser/type checking/bad/bad2.golite", []string{"semantic error at line (27), col (2): undeclared variable root. (undeclared variable)", "semantic error at line (27), col (2): type mismatch in assignment (type mistmatch)", "semantic error at line (41), col (7): field right not declared in type *Node (undeclared field)", "semantic error at line (44), col (5): field right not declared in type *Node (undeclared field)", "semantic error at line (46), col (23): field right not declared in type *Node (undeclared field)", "semantic error at line (61), col (5): field right not declared in type *Node (undeclared field)", "semantic error at line (62), col (18): field right not declared in type *Node (undeclared field)", "semantic error at line (72), col (5): field right not declared in type *Node (undeclared field)", "semantic error at line (73), col (20): field right not declared in type *Node (undeclared field)", "semantic error at line (82), col (1): undeclared variable root. (undeclared variable)", "semantic error at line (82), col (1): type mismatch in assignment (type mistmatch)", "semantic error at line (83), col (1): type mismatch in assignment (type mistmatch)", "semantic error at line (88), col (18): variable root not declared. (undeclared variable)", "semantic error at line (88), col (2): argument type mismatch in function call (mismatched type)", "semantic error at line (92), col (16): variable root not declared. (undeclared variable)", "semantic error at line (92), col (1): argument type mismatch in function call (mismatched type)", "semantic error at line (93), col (18): variable root not declared. (undeclared variable)", "semantic error at line (93), col (1): argument type mismatch in function call (mismatched type)", "Failed semantic analysis (view console for errors at lexing, parsing and semantic analysis stages)"}},
+		{"../benchmarks/parser/type checking/bad/bad1.golite", []string{"semantic error at line (17), col (4): undeclared variable fir. (undeclared variable)", "semantic error at line (17), col (4): type mismatch in assignment (type mistmatch)", "semantic error at line (21), col (8): variable fir not declared. (undeclared variable)", "semantic error at line (21), col (8): invalid expression (mismatched types)", "semantic error at line (22), col (1): undeclared variable fir. (undeclared variable)", "semantic error at line (22), col (1): type mismatch in assignment (type mistmatch)", "semantic error at line (25), col (11): variable fir not declared. (undeclared variable)", "semantic error at line (25), col (4): return type does not match function signature return type (mismatched types)", "semantic error at line (36), col (8): invalid expression (mismatched types)", "Failed semantic analysis"}},
+		{"../benchmarks/parser/type checking/bad/bad2.golite", []string{"semantic error at line (27), col (2): undeclared variable root. (undeclared variable)", "semantic error at line (27), col (2): type mismatch in assignment (type mistmatch)", "semantic error at line (41), col (7): field right not declared in type *Node (undeclared field)", "semantic error at line (44), col (5): field right not declared in type *Node (undeclared field)", "semantic error at line (46), col (23): field right not declared in type *Node (undeclared field)", "semantic error at line (61), col (5): field right not declared in type *Node (undeclared field)", "semantic error at line (62), col (18): field right not declared in type *Node (undeclared field)", "semantic error at line (72), col (5): field right not declared in type *Node (undeclared field)", "semantic error at line (73), col (20): field right not declared in type *Node (undeclared field)", "semantic error at line (82), col (1): undeclared variable root. (undeclared variable)", "semantic error at line (82), col (1): type mismatch in assignment (type mistmatch)", "semantic error at line (83), col (1): type mismatch in assignment (type mistmatch)", "semantic error at line (88), col (18): variable root not declared. (undeclared variable)", "semantic error at line (88), col (2): argument type mismatch in function call (mismatched type)", "semantic error at line (92), col (16): variable root not declared. (undeclared variable)", "semantic error at line (92), col (1): argument type mismatch in function call (mismatched type)", "semantic error at line (93), col (18): variable root not declared. (undeclared variable)", "semantic error at line (93), col (1): argument type mismatch in function call (mismatched type)", "Failed semantic analysis"}},
 	}
 	for num, test := range parseTests {
 		testname := fmt.Sprintf("T=%v", num+1)
