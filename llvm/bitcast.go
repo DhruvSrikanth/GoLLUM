@@ -8,6 +8,7 @@ import (
 
 // Representation of a bitcast operation
 type BitCast struct {
+	sourceRegister  string
 	fromTy          string
 	toTy            string
 	blockLabel      string
@@ -16,15 +17,17 @@ type BitCast struct {
 }
 
 // NewBitCast returns a new BitCast operation
-func NewBitCast(fromTy, toTy string) *BitCast {
+func NewBitCast(sourceRegister, fromTy, toTy string) *BitCast {
 	srcR := make([]int, 0)
 	// This is the most recent register used
-	currReg, _ := strconv.Atoi(GetPreviousRegister()[2:])
-	srcR = append(srcR, currReg)
+	if strings.Contains(sourceRegister, "%r") {
+		currReg, _ := strconv.Atoi(GetPreviousRegister()[2:])
+		srcR = append(srcR, currReg)
+	}
 	tgtR := make([]int, 0)
 	nextR, _ := strconv.Atoi(GetNextRegister()[2:])
 	tgtR = append(tgtR, nextR)
-	return &BitCast{fromTy, toTy, "", srcR, tgtR}
+	return &BitCast{sourceRegister, fromTy, toTy, "", srcR, tgtR}
 }
 
 // String representation of the Local declaration
@@ -41,9 +44,8 @@ func (b *BitCast) String() string {
 	}
 	// Common for all
 	out.WriteString(b.fromTy)
-	out.WriteString("*")
-	out.WriteString(" %")
-	out.WriteString("r" + strconv.Itoa(b.sourceRegisters[len(b.sourceRegisters)-1]))
+	out.WriteString("* ")
+	out.WriteString(b.sourceRegister)
 	out.WriteString(" to ")
 
 	// struct type

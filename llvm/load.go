@@ -8,7 +8,7 @@ import (
 
 // Representation of a load operation
 type Load struct {
-	variable        string
+	sourceRegister  string
 	ty              string
 	blockLabel      string
 	sourceRegisters []int
@@ -16,12 +16,17 @@ type Load struct {
 }
 
 // NewLoad returns a new Load operation
-func NewLoad(varName, ty string) *Load {
+func NewLoad(sourceRegister, ty string) *Load {
 	srcR := make([]int, 0)
+	if strings.Contains(sourceRegister, "%r") {
+		sourceRegister = GetPreviousRegister()[1:]
+		mostRecentR, _ := strconv.Atoi(GetPreviousRegister()[2:])
+		srcR = append(srcR, mostRecentR)
+	}
 	tgtR := make([]int, 0)
 	nextR, _ := strconv.Atoi(GetNextRegister()[2:])
 	tgtR = append(tgtR, nextR)
-	return &Load{varName, ty, "", srcR, tgtR}
+	return &Load{sourceRegister, ty, "", srcR, tgtR}
 }
 
 // String representation of the Local declaration
@@ -53,9 +58,8 @@ func (l *Load) String() string {
 		out.WriteString("*")
 	}
 	// Common for all
-	out.WriteString("*")
-	out.WriteString(" %")
-	out.WriteString(l.variable)
+	out.WriteString("* ")
+	out.WriteString(l.sourceRegister)
 
 	return out.String()
 }

@@ -3,6 +3,7 @@ package ast
 import (
 	"bytes"
 	"fmt"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -121,4 +122,9 @@ func (l *LValue) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 // Get the type of the lvalue node
 func (l *LValue) GetType() types.Type {
 	return l.ty
+}
+
+// Translate the lvalue node into LLVM IR
+func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -32,4 +33,9 @@ func (il *IntLiteral) GetType() types.Type {
 // TypeCheck performs type checking for the integer literal
 func (il *IntLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	return errors
+}
+
+// Translate the allocate node into LLVM IR
+func (il *IntLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

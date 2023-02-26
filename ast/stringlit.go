@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -31,4 +32,9 @@ func (sl *StringLiteral) GetType() types.Type {
 // TypeCheck performs type checking for the string literal
 func (sl *StringLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	return errors
+}
+
+// Translate the string node into LLVM IR
+func (sl *StringLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

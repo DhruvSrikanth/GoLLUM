@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/types"
 )
@@ -11,4 +12,5 @@ type Expression interface {
 	String() string
 	TypeCheck([]*SemanticAnalysisError, *st.SymbolTables, *st.FuncEntry) []*SemanticAnalysisError
 	GetType() types.Type
+	ToLLVMCFG(*st.SymbolTables, []*llvm.BasicBlock, *st.FuncEntry) []*llvm.BasicBlock
 }

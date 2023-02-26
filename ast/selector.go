@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -145,4 +146,9 @@ func (s *SelectorTerm) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sym
 // Get the type of the SelectorTerm node
 func (s *SelectorTerm) GetType() types.Type {
 	return s.ty
+}
+
+// Translate the allocate node into LLVM IR
+func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

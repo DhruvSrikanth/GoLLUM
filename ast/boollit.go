@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -32,4 +33,9 @@ func (bl *BoolLiteral) GetType() types.Type {
 // TypeCheck performs type checking for the bool literal
 func (bl *BoolLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	return errors
+}
+
+// Translate the bool literal into LLVM IR
+func (bl *BoolLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

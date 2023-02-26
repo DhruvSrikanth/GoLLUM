@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -31,4 +32,9 @@ func (nl *NilLiteral) GetType() types.Type {
 // TypeCheck performs type checking for the nil literal
 func (nl *NilLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	return errors
+}
+
+// Translate the nil node into LLVM IR
+func (nl *NilLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

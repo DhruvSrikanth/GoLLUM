@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -220,4 +221,62 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 	}
 
 	return errors
+}
+
+// Translation of the expression to LLVM IR
+func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	var op string
+	if b.operator != nil && b.left != nil {
+		// Convert the operator to its LLVM equivalent
+		op = llvm.OperatorToLLVM(OpToStr(*b.operator))
+	} else if b.operator != nil && b.left == nil {
+		// In this case we create the left operand
+		// Could be the negation or the not operator
+		// If negative, we multiple by -1
+		// If not, we perform a xor with 1
+		if *b.operator == SUB {
+			op = "mul"
+			// Create the constant -1
+			storeInst := llvm.NewStore("-1", llvm.GetNextRegister(), "i64")
+			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(storeInst)
+			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
+		} else if *b.operator == NOT {
+			op = "xor"
+			// Create the constant 1
+			storeInst := llvm.NewStore("1", llvm.GetNextRegister(), "i64")
+			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(storeInst)
+			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
+		} else {
+			// This should never happen
+		}
+	} else if b.operator == nil && b.left != nil {
+		// Impossible because the right is guaranteed and the left cannot exists without an operator for the right
+	} else {
+		blocks = (*b.right).ToLLVMCFG(tables, blocks, funcEntry)
+		// Nothing to do here since left will also be nil and the right has been evaluated
+		return blocks
+	}
+
+	// Call the ToLLVMCFG method on the left and right expressions
+	if b.left != nil {
+		blocks = (*b.left).ToLLVMCFG(tables, blocks, funcEntry)
+	}
+
+	// Get the last register used
+	lastUsedRegLeft := llvm.GetPreviousRegister()
+
+	blocks = (*b.right).ToLLVMCFG(tables, blocks, funcEntry)
+
+	// Get the last register used
+	lastUsedRegRight := llvm.GetPreviousRegister()
+	// Perform the operation
+	operationInst := llvm.NewBinOp(lastUsedRegLeft, op, lastUsedRegRight)
+	// Update the instruction label
+	operationInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	// Add the operation to the last block
+	blocks[len(blocks)-1].AddInstruction(operationInst)
+
+	return blocks
 }
