@@ -20,12 +20,14 @@ func GetTypeDefault(t types.Type) string {
 			return "0" // Since we are representing void as i64
 		} else {
 			fmt.Println("Unknown primitive type")
+			return "0"
 		}
 	} else {
 		if types.TypeToKind(t) == types.STRUCT {
 			return "null"
 		} else {
 			fmt.Println("Unknown type")
+			return "null"
 		}
 	}
 }
