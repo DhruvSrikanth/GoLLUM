@@ -49,4 +49,8 @@ func calculateDistance(playerCoord *coord, originX int, originY int) int{
 }
 ```
 3. You may want to check for the existance of a main function, since it is used as a entry point to the execution of your code. 
-4. You're not checking that the condition of an if and for block evaluates to a boolean value, it may makes sense for a integer value to pass the type check (still not recommended), but currently you're also allowing struct types to be the conditional, which will be very problematic. 
+4. You're not checking that the condition of an if and for block evaluates to a boolean value, it may makes sense for a integer value to pass the type check (still not recommended), but currently you're also allowing struct types to be the conditional, which will be very problematic.
+5. Another thing I'm not seeing here is checks for redeclaration? <br>
+`type Point2D struct { ... }` <br>
+`var Point2D int;` <br>
+This should produce an error because type declarations and global variables have global scope so there cannot be a global variable declaration and type decalaration of the same scope. Check "Lanaguage Overview" page under "Language Semantics".
