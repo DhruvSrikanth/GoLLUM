@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
@@ -250,6 +251,7 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
 		} else {
 			// This should never happen
+			fmt.Println("Invalid operator provided in expression")
 		}
 	} else if b.operator == nil && b.left != nil {
 		// Impossible because the right is guaranteed and the left cannot exists without an operator for the right
