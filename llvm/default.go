@@ -13,7 +13,7 @@ func GetTypeDefault(t types.Type) string {
 		} else if t == types.StringToType("bool") {
 			return "0" // Since we are representing bool as i64, 0 is false and 1 is true
 		} else if t == types.StringToType("nil") {
-			return "0"
+			return "null"
 		} else if t == types.StringToType("string") {
 			return "null"
 		} else if t == types.StringToType("void") {
