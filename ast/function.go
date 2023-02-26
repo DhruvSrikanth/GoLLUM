@@ -150,7 +150,6 @@ func (f *Function) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st
 
 // Translate the function to LLVM IR
 func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.FunctionDecl) {
-	// Declarations are translated in the program and function
 	// Get the function entry
 	funcEntry := tables.Funcs.Contains(f.name)
 
@@ -184,6 +183,10 @@ func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.Func
 		blocks = stmt.ToLLVMCFG(tables, blocks, f.funcEntry)
 	}
 
+	// Maintain canonical form and add a exit block
+	// this is removed during the CFG optimization
+	exitBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	blocks = append(blocks, exitBlock)
 	return tables, llvm.NewFunctionDecl(funcEntry.Name, funcEntry.LlvmRetTy, params, paramTypes, blocks)
 }
 

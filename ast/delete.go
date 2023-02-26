@@ -74,5 +74,10 @@ func (d *Delete) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.F
 
 // Translate the delete node to LLVM IR
 func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	// Stay in the same block
+	block := blocks[len(blocks)-1]
+
+	// Update the same block with the assignment
+	blocks[len(blocks)-1] = block
 	return blocks
 }
