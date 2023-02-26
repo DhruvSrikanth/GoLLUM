@@ -166,6 +166,11 @@ func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.Func
 	blocks := make([]*llvm.BasicBlock, 0)
 	// Create the first block
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())
+	// Add the return value to the block
+	retVal := llvm.NewLocalDecl("_retval", funcEntry.LlvmRetTy)
+	retVal.SetLabel(block.GetLabel())
+	block.AddInstruction(retVal)
+
 	// Add the declarations to the block
 	var localDecl *llvm.LocalDecl
 	for _, decl := range f.declarations {
