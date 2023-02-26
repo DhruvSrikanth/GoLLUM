@@ -1,6 +1,9 @@
 package llvm
 
-import "golite/types"
+import (
+	"fmt"
+	"golite/types"
+)
 
 // Get the default value for a type.
 func GetTypeDefault(t types.Type) string {
@@ -16,13 +19,13 @@ func GetTypeDefault(t types.Type) string {
 		} else if t == types.StringToType("void") {
 			return "0" // Since we are representing void as i64
 		} else {
-			panic("Unknown primitive type")
+			fmt.Println("Unknown primitive type")
 		}
 	} else {
 		if types.TypeToKind(t) == types.STRUCT {
 			return "null"
 		} else {
-			panic("Unknown type")
+			fmt.Println("Unknown type")
 		}
 	}
 }
