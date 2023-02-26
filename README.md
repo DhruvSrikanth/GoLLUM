@@ -20,7 +20,7 @@ make compiler
 ## Run Golite Compiler
 
 ```bash
-go run golite/main.go benchmarks/simple/simple2.golite 
+go run golite/main.go benchmarks/simple/example2.golite 
 ```
 
 ## Golite Compiler Flags
@@ -48,6 +48,9 @@ Check out the `benchmarks` folder for more examples.
 
 Running the tests present in `golite/main_test.go` tests the compiler in both the `lexer` and `parser` phases.
 
+## Examples of Golite Programs
+
+Examples of Golite programs can be found in the `benchmarks/simple` folder.
 
 Example of code that will work:
 
@@ -120,6 +123,7 @@ func printDepthTree(curr *Node)  {
 		}
 	}
 }
+
 func deleteLeavesTree(curr *Node) {
 	if (curr != nil) {
 		if (curr.left != nil) {
