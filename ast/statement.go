@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"golite/llvm"
 	st "golite/symboltable"
 )
 
@@ -11,5 +12,5 @@ type Statement interface {
 	BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError
 	TypeCheck([]*SemanticAnalysisError, *st.SymbolTables, *st.FuncEntry) []*SemanticAnalysisError
 	GetControlFlow([]*SemanticAnalysisError, *st.FuncEntry) ([]*SemanticAnalysisError, bool)
-	// ToLLVMCFG(*st.SymbolTables, []*llvm.BasicBlock, *st.FuncEntry) []*llvm.BasicBlock
+	ToLLVMCFG(*st.SymbolTables, []*llvm.BasicBlock, *st.FuncEntry) []*llvm.BasicBlock
 }

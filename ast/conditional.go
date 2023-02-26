@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -90,4 +91,10 @@ func (c *Conditional) GetControlFlow(errors []*SemanticAnalysisError, funcEntry 
 	} else {
 		return errors, true
 	}
+}
+
+// Translate the conditional node to LLVM IR
+func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+
+	return blocks
 }

@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -91,4 +92,9 @@ func (i *Invocation) GetToken() *token.Token {
 func (i *Invocation) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
 	// Nothing to do here since the invocation node does not have any control flow
 	return errors, false
+}
+
+// Translate the invocation node to LLVM IR
+func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

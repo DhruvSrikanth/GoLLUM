@@ -86,3 +86,8 @@ func (d *StructDecl) ToLLVM(tables *st.SymbolTables) *llvm.StructDecl {
 	// Create the struct declaration
 	return llvm.NewStructDecl("struct."+d.name, fields)
 }
+
+// Translate the structdecl node to LLVM IR
+func (d *StructDecl) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
+}

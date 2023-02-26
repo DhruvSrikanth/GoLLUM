@@ -69,3 +69,8 @@ func (d *Declaration) ToLLVM(tables *st.SymbolTables, varEntry *st.VarEntry) *ll
 	// Declarations are translated in the program and function
 	return llvm.NewGlobalDecl(d.variable, varEntry.LlvmTy, llvm.GetTypeDefault(d.ty), false)
 }
+
+// Translate the declaration node to LLVM IR
+func (d *Declaration) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
+}

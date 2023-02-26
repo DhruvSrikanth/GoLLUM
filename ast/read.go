@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -57,4 +58,9 @@ func (r *Read) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTable
 func (r *Read) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
 	// Nothing to do here since the read node does not have any control flow
 	return errors, false
+}
+
+// Translate the read node to LLVM IR
+func (r *Read) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

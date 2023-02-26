@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
@@ -69,4 +70,9 @@ func (d *Delete) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 func (d *Delete) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.FuncEntry) ([]*SemanticAnalysisError, bool) {
 	// Nothing to do here since the delete node does not have any control flow
 	return errors, false
+}
+
+// Translate the delete node to LLVM IR
+func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

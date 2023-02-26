@@ -148,7 +148,7 @@ func (f *Function) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st
 	return errors, flow
 }
 
-// Translate the declaration to LLVM IR
+// Translate the function to LLVM IR
 func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.FunctionDecl) {
 	// Declarations are translated in the program and function
 	// Get the function entry
@@ -180,9 +180,14 @@ func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.Func
 		block.AddInstruction(localDecl)
 	}
 	blocks = append(blocks, block)
-	// for _, stmt := range f.statements {
-	// 	blocks = stmt.ToLLVMCFG(tables, blocks, f.funcEntry)
-	// }
+	for _, stmt := range f.statements {
+		blocks = stmt.ToLLVMCFG(tables, blocks, f.funcEntry)
+	}
 
 	return tables, llvm.NewFunctionDecl(funcEntry.Name, funcEntry.LlvmRetTy, params, paramTypes, blocks)
+}
+
+// Translate the function node to LLVM IR
+func (f *Function) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }

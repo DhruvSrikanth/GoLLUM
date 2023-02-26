@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
 )
@@ -53,4 +54,9 @@ func (l *Loop) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fun
 	var flow bool
 	errors, flow = l.body.GetControlFlow(errors, funcEntry)
 	return errors, flow
+}
+
+// Translate the loop node to LLVM IR
+func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	return blocks
 }
