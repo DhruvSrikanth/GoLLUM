@@ -77,6 +77,23 @@ func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 	// Stay in the same block
 	block := blocks[len(blocks)-1]
 
+	// Add load instruction to the block
+	// Get the variable entry
+	localVariable := funcEntry.Variables.Contains(d.expr.String())
+	if localVariable == nil {
+		// Check the parameters
+		for _, param := range funcEntry.Parameters {
+			if param.Name == d.expr.String() {
+				localVariable = param
+			}
+		}
+	}
+	loadInst := llvm.NewLoad(localVariable.Name, localVariable.LlvmTy)
+	// Update the instruction label
+	loadInst.SetLabel(block.GetLabel())
+	// Add the instruction to the block
+	block.AddInstruction(loadInst)
+
 	// Update the same block with the assignment
 	blocks[len(blocks)-1] = block
 	return blocks
