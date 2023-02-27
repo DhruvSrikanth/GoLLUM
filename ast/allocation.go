@@ -54,5 +54,25 @@ func (d *Allocate) GetType() types.Type {
 
 // Translate the allocate node into LLVM IR
 func (d *Allocate) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	// Get the struct entry
+	entry := tables.Structs.Contains(d.structType)
+	// Count the number of fields and multiply by 8 to get the size of the struct
+	i64Size := 8
+	size := len(entry.Fields) * i64Size
+	// Allocate the struct
+	mallocInst := llvm.NewMalloc(size)
+	mallocInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	// Add the malloc instruction to the current block
+	blocks[len(blocks)-1].AddInstruction(mallocInst)
+
+	// Get the struct type
+	llvmStructType := llvm.TypeToLLVM(d.ty)
+	// Cast the malloc result to the struct type using bitcast
+	// source register passed in will be the previous register used in the block for the load instruction
+	bitcastInst := llvm.NewBitCast(llvm.GetPreviousRegister(), "i8*", llvmStructType)
+	bitcastInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	// Add the bitcast instruction to the current block
+	blocks[len(blocks)-1].AddInstruction(bitcastInst)
+
 	return blocks
 }

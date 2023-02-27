@@ -111,5 +111,61 @@ func (v *VariableInvocation) GetType() types.Type {
 
 // Translate the allocate node into LLVM IR
 func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	// Check if its a variable or function call
+	if len(v.arguments) != 0 {
+		// Function
+		// Get the function entry
+		entry := tables.Funcs.Contains(v.identifier)
+		// Need to load all of the arguments into registers
+		// Record the last instruction source register in the block
+		argRegs := make([]string, len(v.arguments))
+		for _, param := range v.arguments {
+			// Load the argument into a register by calling the ToLLVMCFG function
+			blocks = param.ToLLVMCFG(tables, blocks, funcEntry)
+			// Get the last used register
+			argRegs = append(argRegs, llvm.GetPreviousRegister())
+		}
+
+		argTypes := make([]string, len(v.arguments))
+		for _, param := range entry.Parameters {
+			argTypes = append(argTypes, param.LlvmTy)
+		}
+
+		// Make the function call
+		// Note that the reassignment of the return to a variable is done in the assignment node as a store instruction
+		fCallInst := llvm.NewFunctionCall(entry.Name, entry.LlvmRetTy, argRegs, argTypes)
+		fCallInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(fCallInst)
+	} else {
+		// Variable
+		// Get the variable entry
+		entry := funcEntry.Variables.Contains(v.identifier)
+		if entry == nil {
+			for _, param := range funcEntry.Parameters {
+				if param.Name == v.identifier {
+					entry = param
+					break
+				}
+			}
+
+			// Load the parameter into a register
+			// Make the load instruction
+			loadInst := llvm.NewLoad("%"+entry.Name, entry.LlvmTy)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		} else {
+			// Load the variable into a register
+			var varName string
+			if entry.Scope == st.GLOBAL {
+				varName = "@" + entry.Name
+			} else {
+				varName = "%" + entry.Name
+			}
+			loadInst := llvm.NewLoad(varName, entry.LlvmTy)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+		}
+	}
 	return blocks
 }

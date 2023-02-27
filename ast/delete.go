@@ -74,59 +74,62 @@ func (d *Delete) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.F
 
 // Translate the delete node to LLVM IR
 func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
-	// Stay in the same block
-	block := blocks[len(blocks)-1]
-
 	// Add load instruction to the block
 	// Get the variable entry
-	localVariable := funcEntry.Variables.Contains(d.expr.String())
-	var varName string
-	if localVariable != nil {
-		if localVariable.Scope == st.LOCAL {
-			varName = "%" + d.expr.String()
-		} else {
-			varName = "@" + d.expr.String()
-		}
-	} else {
-		// Check the parameters
-		for _, param := range funcEntry.Parameters {
-			if param.Name == d.expr.String() {
-				localVariable = param
-				varName = "%" + param.Name
-			}
-		}
+	// localVariable := funcEntry.Variables.Contains(d.expr.String())
+	// var varName string
+	// if localVariable != nil {
+	// 	if localVariable.Scope == st.LOCAL {
+	// 		varName = "%" + d.expr.String()
+	// 	} else {
+	// 		varName = "@" + d.expr.String()
+	// 	}
+	// } else {
+	// 	// Check the parameters
+	// 	for _, param := range funcEntry.Parameters {
+	// 		if param.Name == d.expr.String() {
+	// 			localVariable = param
+	// 			varName = "%" + param.Name
+	// 		}
+	// 	}
 
-		if localVariable == nil {
-			// Must be a struct field
-			// Evaluate the expression to make the most recent register the one that the expression is placed into
-			blocks = d.expr.ToLLVMCFG(tables, blocks, funcEntry)
-			varName = llvm.GetPreviousRegister()
-		}
-	}
+	// 	if localVariable == nil {
+	// 		// Must be a struct field
+	// 		// Evaluate the expression to make the most recent register the one that the expression is placed into
+	// 		blocks = d.expr.ToLLVMCFG(tables, blocks, funcEntry)
+	// 		varName = llvm.GetPreviousRegister()
+	// 	}
+	// }
 
-	// Create the load instruction
-	loadInst := llvm.NewLoad(varName, localVariable.LlvmTy)
-	// Update the instruction label
-	loadInst.SetLabel(block.GetLabel())
-	// Add the instruction to the block
-	block.AddInstruction(loadInst)
+	// // Create the load instruction
+	// loadInst := llvm.NewLoad(varName, localVariable.LlvmTy)
+	// // Update the instruction label
+	// loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	// // Add the instruction to the block
+	// blocks[len(blocks)-1].AddInstruction(loadInst)
+
+	// Evaluate the expression
+	blocks = d.expr.ToLLVMCFG(tables, blocks, funcEntry)
+
+	// Get the type of the expression
+	exprType := d.expr.GetType()
+	// Get the LLVM type of the expression
+	exprLlvmType := llvm.TypeToLLVM(exprType)
 
 	// Add the bitcast instruction to the block
 	sourceReg := llvm.GetPreviousRegister()
-	bitcastInst := llvm.NewBitCast(sourceReg, localVariable.LlvmTy, "i8")
-	// // Update the instruction label
-	bitcastInst.SetLabel(block.GetLabel())
-	// // Add the instruction to the block
-	block.AddInstruction(bitcastInst)
+	bitcastInst := llvm.NewBitCast(sourceReg, exprLlvmType, "i8")
+	// Update the instruction label
+	bitcastInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	// Add the instruction to the block
+	blocks[len(blocks)-1].AddInstruction(bitcastInst)
 
 	// Add the free runtime function call instruction to the block
 	freeInst := llvm.NewFree()
-	// // Update the instruction label
-	freeInst.SetLabel(block.GetLabel())
-	// // Add the instruction to the block
-	block.AddInstruction(freeInst)
+	// Update the instruction label
+	freeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	// Add the instruction to the block
+	blocks[len(blocks)-1].AddInstruction(freeInst)
 
-	// Update the same block with the assignment
-	blocks[len(blocks)-1] = block
 	return blocks
 }

@@ -227,6 +227,7 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 // Translation of the expression to LLVM IR
 func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
 	var op string
+	var lastUsedRegLeft, lastUsedRegRight string
 	if b.operator != nil && b.left != nil {
 		// Convert the operator to its LLVM equivalent
 		op = llvm.OperatorToLLVM(OpToStr(*b.operator))
@@ -242,6 +243,7 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(storeInst)
 			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
+			lastUsedRegLeft = llvm.GetPreviousRegister()
 		} else if *b.operator == NOT {
 			op = "xor"
 			// Create the constant 1
@@ -249,6 +251,7 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(storeInst)
 			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
+			lastUsedRegLeft = llvm.GetPreviousRegister()
 		} else {
 			// This should never happen
 			fmt.Println("Invalid operator provided in expression")
@@ -264,20 +267,17 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	// Call the ToLLVMCFG method on the left and right expressions
 	if b.left != nil {
 		blocks = (*b.left).ToLLVMCFG(tables, blocks, funcEntry)
+		// Get the last register used if there is a left expression
+		lastUsedRegLeft = llvm.GetPreviousRegister()
 	}
 
-	// Get the last register used
-	lastUsedRegLeft := llvm.GetPreviousRegister()
-
 	blocks = (*b.right).ToLLVMCFG(tables, blocks, funcEntry)
-
 	// Get the last register used
-	lastUsedRegRight := llvm.GetPreviousRegister()
+	lastUsedRegRight = llvm.GetPreviousRegister()
+
 	// Perform the operation
 	operationInst := llvm.NewBinOp(lastUsedRegLeft, op, lastUsedRegRight)
-	// Update the instruction label
 	operationInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-	// Add the operation to the last block
 	blocks[len(blocks)-1].AddInstruction(operationInst)
 
 	return blocks

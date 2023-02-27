@@ -150,5 +150,95 @@ func (s *SelectorTerm) GetType() types.Type {
 
 // Translate the allocate node into LLVM IR
 func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+	// This term can either be a local variable, global variable, parameter, function invocation, literal, allocation or struct field
+	// Build the LLVM IR for the factor
+	if len(s.fields) == 0 {
+		blocks = s.factor.ToLLVMCFG(tables, blocks, funcEntry)
+		// This loads the value of the factor into a register
+		// This covers the case of local variable, global variable, parameter, function invocation, literal and allocation
+	} else {
+		// Only if it is a struct field will the value not be loaded into a register in the above way
+
+		// Get the variable entry
+		functionEntry := tables.Funcs.Contains(funcEntry.Name)
+		// Check in the local variables (moves to global scope if not found in local scope)
+		entry := functionEntry.Variables.Contains(s.factor.String())
+		var varName string
+		var varType string
+		if entry == nil {
+			// Check the parameters
+			for _, param := range functionEntry.Parameters {
+				if param.Name == s.factor.String() {
+					entry = param
+					varName = "%" + param.Name
+					varType = entry.LlvmTy
+					break
+				}
+			}
+		} else {
+			if entry.Scope == st.GLOBAL {
+				varName = "@" + entry.Name
+			} else {
+				varName = "%" + entry.Name
+			}
+			varType = entry.LlvmTy
+		}
+
+		// Load the variable into a register
+		loadInst := llvm.NewLoad(varName, varType)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		// Get the struct
+		entryStructName := entry.GetType().String()[1:] // Remove the * from the type name
+		structEntry := tables.Structs.Contains(entryStructName)
+
+		// Get the struct field index
+		var index int
+		var fieldEntry *st.FieldEntry
+		for i, field := range structEntry.Fields {
+			if field.Name == s.fields[0] {
+				index = i
+				fieldEntry = field
+				break
+			}
+		}
+
+		// Add the getelementptr instruction
+		selectElementInst := llvm.NewGetElementPtr(llvm.GetPreviousRegister(), varType, index)
+		selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(selectElementInst)
+
+		// Get the type of the field
+		fieldType := fieldEntry.GetType().String()[1:] // Remove the * from the type name
+		structEntry = tables.Structs.Contains(fieldType)
+		varType = fieldEntry.LlvmType // Update the type of the struct
+
+		// Do this for all the remaining fields
+		for i := 1; i < len(s.fields); i++ {
+			// If there are more fields then they are structs
+			// Get the struct field index
+			var index int
+			for j, field := range structEntry.Fields {
+				if field.Name == s.fields[i] {
+					index = j
+					fieldEntry = field
+					break
+				}
+			}
+
+			// Add the getelementptr instruction
+			selectElementInst = llvm.NewGetElementPtr(llvm.GetPreviousRegister(), varType, index)
+			selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(selectElementInst)
+
+			if i != len(s.fields)-1 {
+				// Get the type of the field
+				fieldType = fieldEntry.GetType().String()[1:] // Remove the * from the type name
+				structEntry = tables.Structs.Contains(fieldType)
+				varType = fieldEntry.LlvmType // Update the type of the struct
+			}
+		}
+	}
 	return blocks
 }
