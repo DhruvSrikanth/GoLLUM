@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 type SelectorTerm struct {
@@ -184,6 +185,10 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 			varType = entry.LlvmTy
 		}
 
+		if strings.Contains(varType, "struct.") {
+			varType += "*"
+		}
+
 		// Load the variable into a register
 		loadInst := llvm.NewLoad(varName, varType)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
@@ -205,6 +210,7 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 		}
 
 		// Add the getelementptr instruction
+		// Make sure to indicate that the struct is a pointer (in varType)
 		selectElementInst := llvm.NewGetElementPtr(llvm.GetPreviousRegister(), varType, index)
 		selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(selectElementInst)
@@ -213,6 +219,10 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 		fieldType := fieldEntry.GetType().String()[1:] // Remove the * from the type name
 		structEntry = tables.Structs.Contains(fieldType)
 		varType = fieldEntry.LlvmType // Update the type of the struct
+
+		if strings.Contains(varType, "struct.") {
+			varType += "*"
+		}
 
 		// Do this for all the remaining fields
 		for i := 1; i < len(s.fields); i++ {
@@ -228,6 +238,7 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 			}
 
 			// Add the getelementptr instruction
+			// Make sure to indicate that the struct is a pointer (in varType)
 			selectElementInst = llvm.NewGetElementPtr(llvm.GetPreviousRegister(), varType, index)
 			selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(selectElementInst)
@@ -237,6 +248,10 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 				fieldType = fieldEntry.GetType().String()[1:] // Remove the * from the type name
 				structEntry = tables.Structs.Contains(fieldType)
 				varType = fieldEntry.LlvmType // Update the type of the struct
+
+				if strings.Contains(varType, "struct.") {
+					varType += "*"
+				}
 			}
 		}
 	}

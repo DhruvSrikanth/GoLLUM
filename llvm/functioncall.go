@@ -45,9 +45,7 @@ func (f *FunctionCall) String() string {
 		out.WriteString("%")
 	}
 	out.WriteString(f.retTy)
-	if strings.Contains(f.retTy, "struct.") {
-		out.WriteString("*")
-	}
+
 	out.WriteString(" @" + f.fName + "(")
 	for i := 0; i < len(f.sourceTypes); i++ {
 		// Check if its a struct type
@@ -55,9 +53,6 @@ func (f *FunctionCall) String() string {
 			out.WriteString("%")
 		}
 		out.WriteString(f.sourceTypes[i])
-		if strings.Contains(f.sourceTypes[i], "struct.") {
-			out.WriteString("*")
-		}
 		out.WriteString(" %r" + strconv.Itoa(f.sourceRegisters[i]))
 		if i < len(f.sourceTypes)-1 {
 			out.WriteString(", ")

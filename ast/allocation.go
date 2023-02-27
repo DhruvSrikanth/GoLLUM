@@ -69,7 +69,7 @@ func (d *Allocate) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock,
 	llvmStructType := llvm.TypeToLLVM(d.ty)
 	// Cast the malloc result to the struct type using bitcast
 	// source register passed in will be the previous register used in the block for the load instruction
-	bitcastInst := llvm.NewBitCast(llvm.GetPreviousRegister(), "i8*", llvmStructType)
+	bitcastInst := llvm.NewBitCast(llvm.GetPreviousRegister(), "i8*", llvmStructType+"*")
 	bitcastInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	// Add the bitcast instruction to the current block
 	blocks[len(blocks)-1].AddInstruction(bitcastInst)

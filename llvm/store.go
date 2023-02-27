@@ -50,10 +50,6 @@ func (s *Store) String() string {
 	}
 	// Common for all
 	out.WriteString(s.ty)
-	if strings.Contains(s.ty, "struct.") {
-		out.WriteString("*")
-	}
-	// Common for all
 	out.WriteString(" ")
 	out.WriteString(s.sourceRegister)
 	out.WriteString(", ")
@@ -63,10 +59,6 @@ func (s *Store) String() string {
 	}
 	// Common for all
 	out.WriteString(s.ty)
-	if strings.Contains(s.ty, "struct.") {
-		out.WriteString("*")
-	}
-	// Common for all
 	out.WriteString("* ")
 	out.WriteString(s.targetRegister)
 

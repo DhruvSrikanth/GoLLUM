@@ -36,13 +36,11 @@ func (nl *NilLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symb
 
 // Translate the nil node into LLVM IR
 func (nl *NilLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
-	// Update the last block
-	block := blocks[len(blocks)-1]
-
 	// Add the integer literal to the last block
 	storeInt := llvm.NewStore("null", llvm.GetNextRegister(), "i64")
 	// Update the label of the instruction
-	storeInt.SetLabel(block.GetLabel())
-	block.AddInstruction(storeInt)
+	storeInt.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(storeInt)
+
 	return blocks
 }

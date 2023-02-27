@@ -35,11 +35,6 @@ func (r *Return) String() string {
 	}
 	out.WriteString(r.ty)
 
-	// struct type
-	if strings.Contains(r.ty, "struct.") {
-		out.WriteString("*")
-	}
-
 	out.WriteString(r.sourceRegister)
 
 	return out.String()

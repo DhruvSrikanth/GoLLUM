@@ -43,18 +43,12 @@ func (g *GetElementPtr) String() string {
 		out.WriteString("%")
 	}
 	out.WriteString(g.ty)
-	if strings.Contains(g.ty, "struct.") {
-		out.WriteString("*")
-	}
 	out.WriteString(", ")
 	// struct type
 	if strings.Contains(g.ty, "struct.") {
 		out.WriteString("%")
 	}
 	out.WriteString(g.ty)
-	if strings.Contains(g.ty, "struct.") {
-		out.WriteString("*")
-	}
 	out.WriteString("* ")
 	out.WriteString(g.sourceRegister)
 	out.WriteString(", i32 0, i32 ")

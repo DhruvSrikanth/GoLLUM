@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // Return production rule node in the AST
@@ -81,6 +82,10 @@ func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 		// If this exists, then store the result from the last used register into a new register
 		lastUsedReg := llvm.GetPreviousRegister()
 		exprLLVMType := llvm.TypeToLLVM(r.ty)
+		if strings.Contains(exprLLVMType, "struct.") {
+			exprLLVMType += "*"
+		}
+
 		storeInst := llvm.NewStore(lastUsedReg, "%_retval", exprLLVMType)
 		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(storeInst)

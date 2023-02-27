@@ -118,7 +118,7 @@ func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 
 	// Add the bitcast instruction to the block
 	sourceReg := llvm.GetPreviousRegister()
-	bitcastInst := llvm.NewBitCast(sourceReg, exprLlvmType, "i8")
+	bitcastInst := llvm.NewBitCast(sourceReg, exprLlvmType+"*", "i8*")
 	// Update the instruction label
 	bitcastInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	// Add the instruction to the block

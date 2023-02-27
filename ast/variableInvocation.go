@@ -7,6 +7,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // VariableInvocation node for the AST
@@ -128,12 +129,21 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 
 		argTypes := make([]string, len(v.arguments))
 		for _, param := range entry.Parameters {
+			paramTy := param.LlvmTy
+			if strings.Contains(paramTy, "struct.") {
+				paramTy += "*"
+			}
 			argTypes = append(argTypes, param.LlvmTy)
+		}
+
+		retTy := entry.LlvmRetTy
+		if strings.Contains(retTy, "struct.") {
+			retTy += "*"
 		}
 
 		// Make the function call
 		// Note that the reassignment of the return to a variable is done in the assignment node as a store instruction
-		fCallInst := llvm.NewFunctionCall(entry.Name, entry.LlvmRetTy, argRegs, argTypes)
+		fCallInst := llvm.NewFunctionCall(entry.Name, retTy, argRegs, argTypes)
 		fCallInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(fCallInst)
 	} else {
@@ -150,7 +160,11 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 
 			// Load the parameter into a register
 			// Make the load instruction
-			loadInst := llvm.NewLoad("%"+entry.Name, entry.LlvmTy)
+			ty := entry.LlvmTy
+			if strings.Contains(ty, "struct.") {
+				ty += "*"
+			}
+			loadInst := llvm.NewLoad("%"+entry.Name, ty)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 
@@ -162,7 +176,13 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 			} else {
 				varName = "%" + entry.Name
 			}
-			loadInst := llvm.NewLoad(varName, entry.LlvmTy)
+
+			ty := entry.LlvmTy
+			if strings.Contains(ty, "struct.") {
+				ty += "*"
+			}
+
+			loadInst := llvm.NewLoad(varName, ty)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 		}

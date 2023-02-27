@@ -43,9 +43,7 @@ func (l *Load) String() string {
 	}
 	// Common for all
 	out.WriteString(l.ty)
-	if strings.Contains(l.ty, "struct.") {
-		out.WriteString("*")
-	}
+
 	// Common for all
 	out.WriteString(", ")
 	// struct type
@@ -54,10 +52,6 @@ func (l *Load) String() string {
 	}
 	// Common for all
 	out.WriteString(l.ty)
-	if strings.Contains(l.ty, "struct.") {
-		out.WriteString("*")
-	}
-	// Common for all
 	out.WriteString("* ")
 	out.WriteString(l.sourceRegister)
 

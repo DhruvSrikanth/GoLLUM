@@ -44,7 +44,7 @@ func (b *BitCast) String() string {
 	}
 	// Common for all
 	out.WriteString(b.fromTy)
-	out.WriteString("* ")
+	out.WriteString(" ")
 	out.WriteString(b.sourceRegister)
 	out.WriteString(" to ")
 
@@ -54,7 +54,6 @@ func (b *BitCast) String() string {
 	}
 	// Common for all
 	out.WriteString(b.toTy)
-	out.WriteString("*")
 
 	return out.String()
 }
