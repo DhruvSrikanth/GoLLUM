@@ -23,6 +23,16 @@ func NewBasicBlock(label string) *BasicBlock {
 	}
 }
 
+// Add a predecessor basic block.
+func (bb *BasicBlock) AddPredecessor(pred *BasicBlock) {
+	bb.predecessors = append(bb.predecessors, pred)
+}
+
+// Add a successor basic block.
+func (bb *BasicBlock) AddSuccessor(succ *BasicBlock) {
+	bb.successors = append(bb.successors, succ)
+}
+
 // Get the label of the basic block.
 func (bb *BasicBlock) GetLabel() string {
 	return bb.label
