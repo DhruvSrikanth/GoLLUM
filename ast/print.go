@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strconv"
 	"strings"
 )
 
@@ -86,11 +87,32 @@ func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fu
 	formatString := strings.Replace(p.formatString, "%d", "%ld", -1)
 	// Replace all \n with \0A
 	formatString = strings.Replace(formatString, "\n", "\\0A", -1)
+	// Remove the first and last "
+	formatString = formatString[1 : len(formatString)-2]
 	// No need to to add a null terminator since that is added as part of the constant decl
 
 	// Create the constant decl
-	// constDecl := llvm.NewConstantDecl("format_string", llvm.NewArrayType(size, llvm.NewIntType(8)), llvm.NewStringConstant(formatString))
-	// constDecls = append(constDecls, constDecl)
+	varName := "fstr" + strconv.Itoa(len(constDecls)+1)
+	constDecl := llvm.NewConstantDecl(varName, size, formatString)
+	constDecls = append(constDecls, constDecl)
+
+	// Create the print instruction
+	// Evaluate the expressions
+	var registers []string
+	for _, expr := range p.expressions {
+		blocks, constDecls = expr.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		// Load the value from the register
+		loadInst := llvm.NewLoad(llvm.GetPreviousRegister(), "i64")
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		registers = append(registers, llvm.GetPreviousRegister())
+	}
+
+	// Create the print instruction
+	printInst := llvm.NewPrintf(varName, registers, size)
+	printInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(printInst)
 
 	return blocks, constDecls
 }
