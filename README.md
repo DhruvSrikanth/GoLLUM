@@ -188,5 +188,7 @@ func main() {
 
 ## Remaining Tasks
 
-3. Update predecessor and successor blocks
+1. Update predecessor and successor blocks
+
+2. Update code based on feedback on milestone 2.
 
