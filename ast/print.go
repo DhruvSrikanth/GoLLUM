@@ -76,9 +76,5 @@ func (p *Print) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fu
 // Translate the print node to LLVM IR
 func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
 	// Stay in the same block
-	block := blocks[len(blocks)-1]
-
-	// Update the same block with the assignment
-	blocks[len(blocks)-1] = block
 	return blocks
 }
