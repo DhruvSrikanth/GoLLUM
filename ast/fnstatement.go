@@ -9,5 +9,5 @@ import (
 type FunctionStatement interface {
 	Statement
 	ControlFlowCheck([]*SemanticAnalysisError, *st.SymbolTables, *st.FuncEntry) []*SemanticAnalysisError
-	ToLLVM(*st.SymbolTables, []llvm.ConstantDecl) (*st.SymbolTables, *llvm.FunctionDecl, []llvm.ConstantDecl)
+	ToLLVM(*st.SymbolTables, []*llvm.ConstantDecl) (*st.SymbolTables, *llvm.FunctionDecl, []*llvm.ConstantDecl)
 }

@@ -71,6 +71,6 @@ func (d *Declaration) ToLLVM(tables *st.SymbolTables, varEntry *st.VarEntry) *ll
 }
 
 // Translate the declaration node to LLVM IR
-func (d *Declaration) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+func (d *Declaration) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	return blocks, constDecls
 }

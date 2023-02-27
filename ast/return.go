@@ -74,7 +74,7 @@ func (r *Return) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.F
 }
 
 // Translate the return node to LLVM IR
-func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// If the expression exists, then translate it
 	if *r.expression != nil {
 		// Translate the expression

@@ -149,7 +149,7 @@ func (f *Function) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st
 }
 
 // Translate the function to LLVM IR
-func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []llvm.ConstantDecl) (*st.SymbolTables, *llvm.FunctionDecl, []llvm.ConstantDecl) {
+func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.ConstantDecl) (*st.SymbolTables, *llvm.FunctionDecl, []*llvm.ConstantDecl) {
 	// Get the function entry
 	funcEntry := tables.Funcs.Contains(f.name)
 
@@ -191,6 +191,6 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []llvm.Constant
 }
 
 // Translate the function node to LLVM IR
-func (f *Function) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constantDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+func (f *Function) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constantDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	return blocks, constantDecls
 }

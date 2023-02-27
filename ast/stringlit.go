@@ -35,6 +35,6 @@ func (sl *StringLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.S
 }
 
 // Translate the string node into LLVM IR
-func (sl *StringLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+func (sl *StringLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	return blocks, constDecls
 }

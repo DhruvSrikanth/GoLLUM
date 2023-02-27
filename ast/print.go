@@ -74,7 +74,23 @@ func (p *Print) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fu
 }
 
 // Translate the print node to LLVM IR
-func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
+	size := len(p.formatString)
+	// Add 1 for the null terminator
+	size++
+	// Subtract 2 for the " at the start and end
+	size -= 2
+	// Format the format string
+	// Replace all %d with %ld
+	formatString := strings.Replace(p.formatString, "%d", "%ld", -1)
+	// Replace all \n with \0A
+	formatString = strings.Replace(formatString, "\n", "\\0A", -1)
+	// No need to to add a null terminator since that is added as part of the constant decl
+
+	// Create the constant decl
+	// constDecl := llvm.NewConstantDecl("format_string", llvm.NewArrayType(size, llvm.NewIntType(8)), llvm.NewStringConstant(formatString))
+	// constDecls = append(constDecls, constDecl)
+
 	return blocks, constDecls
 }

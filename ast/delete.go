@@ -73,7 +73,7 @@ func (d *Delete) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.F
 }
 
 // Translate the delete node to LLVM IR
-func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Add load instruction to the block
 	// Get the variable entry
 	// localVariable := funcEntry.Variables.Contains(d.expr.String())
