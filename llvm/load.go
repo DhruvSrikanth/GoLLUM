@@ -19,7 +19,6 @@ type Load struct {
 func NewLoad(sourceRegister, ty string) *Load {
 	srcR := make([]int, 0)
 	if strings.Contains(sourceRegister, "%r") {
-		sourceRegister = GetPreviousRegister()[1:]
 		mostRecentR, _ := strconv.Atoi(GetPreviousRegister()[2:])
 		srcR = append(srcR, mostRecentR)
 	}

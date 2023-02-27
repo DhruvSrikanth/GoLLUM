@@ -188,7 +188,5 @@ func main() {
 
 ## Remaining Tasks
 
-1. Branch instructions
-2. Condition instructions
 3. Update predecessor and successor blocks
 

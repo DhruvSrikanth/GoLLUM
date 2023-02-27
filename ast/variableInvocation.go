@@ -74,10 +74,10 @@ func (v *VariableInvocation) TypeCheck(errors []*SemanticAnalysisError, tables *
 					}
 				}
 			}
-		}
 
-		// Set the type of the VariableInvocation
-		v.ty = entry.RetTy
+			// Set the type of the VariableInvocation
+			v.ty = entry.RetTy
+		}
 
 	} else {
 		// Variable

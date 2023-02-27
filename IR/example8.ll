@@ -97,13 +97,13 @@ L6:
 	%r39 = call %struct.Point2D* @Init(i64 %r38)
 	store %struct.Point2D* %r39, %struct.Point2D** %r37
 	%r40 = load i64, i64* @globalInit
-	%r41 = load i64, i64* r40
+	%r41 = load i64, i64* %r40
 	%r42 = load %struct.Point2D*, %struct.Point2D** %pt2
 	%r43 = getelementptr %struct.Point2D*, %struct.Point2D** %r42, i32 0, i32 0
-	%r44 = load i64, i64* r43
+	%r44 = load i64, i64* %r43
 	%r45 = load %struct.Point2D*, %struct.Point2D** %pt2
 	%r46 = getelementptr %struct.Point2D*, %struct.Point2D** %r45, i32 0, i32 1
-	%r47 = load i64, i64* r46
+	%r47 = load i64, i64* %r46
 	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.fstr2, i32 0, i32 0), i64 %r41, i64 %r44, i64 %r47)
 	%r48 = load %struct.Point2D*, %struct.Point2D** %pt1
 	%r49 = bitcast %struct.Point2D* %r48 to i8*
@@ -115,7 +115,7 @@ L6:
 
 L7:
 	store i64 0, i64* %_retval
-	%r54 = load i64, i64* r53
+	%r54 = load i64, i64* %r53
 	ret i64 %r54
 
 
