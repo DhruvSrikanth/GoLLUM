@@ -74,10 +74,43 @@ func (r *Return) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.F
 
 // Translate the return node to LLVM IR
 func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
-	// Stay in the same block
-	block := blocks[len(blocks)-1]
+	// If the expression exists, then translate it
+	if *r.expression != nil {
+		// Translate the expression
+		blocks = (*r.expression).ToLLVMCFG(tables, blocks, funcEntry)
+		// If this exists, then store the result from the last used register into a new register
+		lastUsedReg := llvm.GetPreviousRegister()
+		exprLLVMType := llvm.TypeToLLVM(r.ty)
+		storeInst := llvm.NewStore(lastUsedReg, "%_retval", exprLLVMType)
+		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(storeInst)
 
-	// Update the same block with the assignment
-	blocks[len(blocks)-1] = block
+		// Load the return value into the a register
+		loadInst := llvm.NewLoad("%_retval", exprLLVMType)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		// Create the return instruction
+		retInst := llvm.NewReturn("%_retval", exprLLVMType)
+		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(retInst)
+	} else {
+		// Expression does not exist, so we just return a 0 since we treat this as a void function
+		// the void function is represented by i64 in LLVM IR
+		// First store a 0 into the return value register
+		storeInst := llvm.NewStore("0", "%_retval", "i64")
+		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(storeInst)
+
+		// Load the return value into the a register
+		loadInst := llvm.NewLoad("%_retval", "i64")
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		// Create the return instruction
+		retInst := llvm.NewReturn("%_retval", "i64")
+		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(retInst)
+	}
 	return blocks
 }
