@@ -27,3 +27,13 @@ func (ti *TargetInformation) String() string {
 	out.WriteString(fmt.Sprintf("target triple = \"%s\"\n\n", ti.targetTriple))
 	return out.String()
 }
+
+// Get the file name.
+func (ti *TargetInformation) GetFileName() string {
+	return ti.fileName
+}
+
+// Get the target triple.
+func (ti *TargetInformation) GetTargetTriple() string {
+	return ti.targetTriple
+}

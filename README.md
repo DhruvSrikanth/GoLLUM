@@ -178,7 +178,6 @@ func main() {
 
 5. Can we do loads and stores the way i do for newPt = nil? (assignment ast node)
 
-
-
+6. Can the _retval be a common register for all functions? (function ast node)
 
 

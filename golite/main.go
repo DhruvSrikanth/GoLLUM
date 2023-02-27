@@ -59,10 +59,11 @@ func main() {
 							fmt.Println(llvmRepr)
 						} else {
 							// Write the llvm representation to the output file
-							// llvm.WriteLLVMRepr(llvmRepr)
+							outputPath := "IR/" + targetInfo.GetFileName() + ".ll"
+							llvm.WriteLLVMRepr(outputPath, llvmRepr)
 
 							// Remove the llvm representation file
-							// llvm.RemoveLLVMRepr()
+							// llvm.RemoveLLVMRepr(outputPath
 						}
 					}
 				} else {
