@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // Invocation node for the AST
@@ -97,5 +98,37 @@ func (i *Invocation) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 // Translate the invocation node to LLVM IR
 func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
+	// Function
+	// Get the function entry
+	entry := tables.Funcs.Contains(i.identifier)
+	// Need to load all of the arguments into registers
+	// Record the last instruction source register in the block
+	argRegs := make([]string, 0)
+	for _, param := range i.arguments {
+		// Load the argument into a register by calling the ToLLVMCFG function
+		blocks, constDecls = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		// Get the last used register
+		argRegs = append(argRegs, llvm.GetPreviousRegister())
+	}
+
+	argTypes := make([]string, 0)
+	for _, param := range entry.Parameters {
+		paramTy := param.LlvmTy
+		if strings.Contains(paramTy, "struct.") {
+			paramTy += "*"
+		}
+		argTypes = append(argTypes, param.LlvmTy)
+	}
+
+	retTy := entry.LlvmRetTy
+	if strings.Contains(retTy, "struct.") {
+		retTy += "*"
+	}
+
+	// Make the function call
+	// Note that the reassignment of the return to a variable is done in the assignment node as a store instruction
+	fCallInst := llvm.NewFunctionCall(entry.Name, retTy, argRegs, argTypes)
+	fCallInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(fCallInst)
 	return blocks, constDecls
 }

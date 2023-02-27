@@ -119,7 +119,7 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 		entry := tables.Funcs.Contains(v.identifier)
 		// Need to load all of the arguments into registers
 		// Record the last instruction source register in the block
-		argRegs := make([]string, len(v.arguments))
+		argRegs := make([]string, 0)
 		for _, param := range v.arguments {
 			// Load the argument into a register by calling the ToLLVMCFG function
 			blocks, constDecls = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
@@ -127,7 +127,7 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 			argRegs = append(argRegs, llvm.GetPreviousRegister())
 		}
 
-		argTypes := make([]string, len(v.arguments))
+		argTypes := make([]string, 0)
 		for _, param := range entry.Parameters {
 			paramTy := param.LlvmTy
 			if strings.Contains(paramTy, "struct.") {
