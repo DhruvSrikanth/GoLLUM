@@ -164,7 +164,7 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 			if strings.Contains(ty, "struct.") {
 				ty += "*"
 			}
-			loadInst := llvm.NewLoad("%"+entry.Name, ty)
+			loadInst := llvm.NewLoad("%P_"+entry.Name, ty)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 

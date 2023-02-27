@@ -178,9 +178,25 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 		localDecl.SetLabel(block.GetLabel())
 		block.AddInstruction(localDecl)
 	}
+
+	// Add the parameter allocations to the block
+	for _, varEntry := range funcEntry.Parameters {
+		localDecl = llvm.NewLocalDecl("P_"+varEntry.Name, varEntry.LlvmTy)
+		localDecl.SetLabel(block.GetLabel())
+		block.AddInstruction(localDecl)
+
+		// Store the parameter into the local variable allocated above
+		storeInst := llvm.NewStore("%"+varEntry.Name, "%P_"+varEntry.Name, varEntry.LlvmTy)
+		storeInst.SetLabel(block.GetLabel())
+		block.AddInstruction(storeInst)
+	}
+
+	// Add the block
 	blocks = append(blocks, block)
+
+	// Create the rest of the blocks within the function
 	for _, stmt := range f.statements {
-		blocks, constantDecls = stmt.ToLLVMCFG(tables, blocks, f.funcEntry, constantDecls)
+		blocks, constantDecls = stmt.ToLLVMCFG(tables, blocks, funcEntry, constantDecls)
 	}
 
 	// Maintain canonical form and add a exit block

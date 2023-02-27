@@ -176,6 +176,9 @@ func main() {
 
 4. Can we use a load to get the lvalue of a variable in the read operation? (read ast node)
 
+5. Can we do loads and stores the way i do for newPt = nil? (assignment ast node)
+
+
 
 
 

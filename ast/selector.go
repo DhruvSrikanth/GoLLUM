@@ -171,7 +171,7 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 			for _, param := range functionEntry.Parameters {
 				if param.Name == s.factor.String() {
 					entry = param
-					varName = "%" + param.Name
+					varName = "%P_" + param.Name
 					varType = entry.LlvmTy
 					break
 				}

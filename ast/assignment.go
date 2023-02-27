@@ -91,8 +91,29 @@ func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBloc
 	leftReg := llvm.GetPreviousRegister()
 
 	// Get the value of the expression on the right hand side of the assignment
-	blocks, constDecls = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-	rightReg := llvm.GetPreviousRegister()
+	var rightReg string
+	if a.right.GetType() == types.StringToType("nil") {
+		// If the right hand side is nil, we need to set the value to nullptr for the particular type
+		// We can do this by performing a load from the address of the default value for the type
+		// Get the type of the lvalue
+		ty := a.variable.GetType()
+		nilReg := "@.nil" + ty.String()[1:]
+		llvmTy := llvm.TypeToLLVM(ty)
+		if strings.Contains(llvmTy, "struct.") {
+			llvmTy += "*"
+		}
+
+		// Create the load instruction
+		loadInst := llvm.NewLoad(nilReg, llvmTy)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		// Get the register that the default value was loaded into
+		rightReg = llvm.GetPreviousRegister()
+	} else {
+		blocks, constDecls = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		rightReg = llvm.GetPreviousRegister()
+	}
 
 	ty := a.variable.GetType()
 	llvmTy := llvm.TypeToLLVM(ty)

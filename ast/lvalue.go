@@ -150,7 +150,7 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 			if strings.Contains(ty, "struct.") {
 				ty += "*"
 			}
-			loadInst := llvm.NewLoad("%"+entry.Name, ty)
+			loadInst := llvm.NewLoad("%P_"+entry.Name, ty)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 
@@ -185,7 +185,7 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 			for _, param := range functionEntry.Parameters {
 				if param.Name == l.identifier {
 					entry = param
-					varName = "%" + param.Name
+					varName = "%P_" + param.Name
 					varType = entry.LlvmTy
 					break
 				}

@@ -44,3 +44,8 @@ func (d *Decl) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTable
 func (d *Decl) GetType() types.Type {
 	return d.ty
 }
+
+// Get the name of the variable declared
+func (d *Decl) GetVariable() string {
+	return d.variable
+}
