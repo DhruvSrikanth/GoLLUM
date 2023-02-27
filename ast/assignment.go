@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // Assignment node struct for the AST
@@ -85,5 +86,24 @@ func (a *Assignment) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 // Translate the assignment node to LLVM IR
 func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
+	// Get the address of the lvalue on the left hand side of the assignment
+	blocks, constDecls = a.variable.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	leftReg := llvm.GetPreviousRegister()
+
+	// Get the value of the expression on the right hand side of the assignment
+	blocks, constDecls = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	rightReg := llvm.GetPreviousRegister()
+
+	ty := a.variable.GetType()
+	llvmTy := llvm.TypeToLLVM(ty)
+	if strings.Contains(llvmTy, "struct.") {
+		llvmTy += "*"
+	}
+
+	// Store the value of the expression into the address of the lvalue
+	storeInst := llvm.NewStore(rightReg, leftReg, llvmTy)
+	storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(storeInst)
+
 	return blocks, constDecls
 }

@@ -3,23 +3,17 @@ type Point2D struct {
 	y int; 
 };
 var globalInit int; 
-func Init(initVal *Point2D) *Point2D {
+func Init(initVal int) *Point2D {
 	var newPt *Point2D; 
 	newPt = nil; 
-	if (initVal.x > 0 && initVal.y > 0) {
+	if (initVal > 0) {
 		newPt = new Point2D; 
-		newPt.x = initVal.x;
-		newPt.y = initVal.y; 
+		newPt.x = initVal;
+		newPt.y = initVal; 
 		return newPt; 
 	}
 	return newPt; 
 }
-
-func doNothing() {
-	var localInit int; 
-	localInit = 0; 
-}
-
 func main() {
 	var a, b int;
 	var pt1, pt2 *Point2D; 
@@ -29,9 +23,8 @@ func main() {
 	pt1.x = a; 
 	pt1.y = b; 
 	scan globalInit; 
-	pt2 = Init(pt1);
+	pt2 = Init(globalInit);
 	printf("offset=%d\npt2.x=%d\npt2.y=%d\n",globalInit,pt2.x,pt2.y);
 	delete pt1; 
-	delete pt2;
-	doNothing();
+	delete pt2; 
 }
