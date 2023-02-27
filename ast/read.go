@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // Read node struct for the AST
@@ -63,5 +64,29 @@ func (r *Read) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fun
 // Translate the read node to LLVM IR
 func (r *Read) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
+	// Create the constant decl
+	// Check if the read decl already exists
+	var readConstant bool
+	for _, decl := range constDecls {
+		if strings.Contains(decl.GetVarName(), "read") {
+			readConstant = true
+			break
+		}
+	}
+
+	// Only create the read constant if it does not already exist
+	if !readConstant {
+		// Create the constant decl
+		constDecl := llvm.NewConstantDecl("read", 4, "%ld")
+		constDecls = append(constDecls, constDecl)
+	}
+
+	// Evaluate the lvalue
+	blocks, constDecls = r.lval.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	// Create the read instruction
+	readInst := llvm.NewRead(llvm.GetPreviousRegister())
+	readInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(readInst)
+
 	return blocks, constDecls
 }

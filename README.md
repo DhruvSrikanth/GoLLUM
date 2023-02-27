@@ -171,3 +171,7 @@ func main() {
 1. How do I add \00 and \0A to the format string (print ast node and constDecl llvm node) ?
 
 2. When I need to do repeated getelementptr instructions, do I need to load into another register and then do the getelementptr or can I do it in one instruction? (selector ast node)
+
+3. Do we need to perform a store after using scanf on the most recently used register after evaluating the lvalue LLVM statements in the read operation? (read ast node)
+
+
