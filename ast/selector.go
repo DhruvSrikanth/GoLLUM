@@ -150,11 +150,11 @@ func (s *SelectorTerm) GetType() types.Type {
 }
 
 // Translate the allocate node into LLVM IR
-func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// This term can either be a local variable, global variable, parameter, function invocation, literal, allocation or struct field
 	// Build the LLVM IR for the factor
 	if len(s.fields) == 0 {
-		blocks = s.factor.ToLLVMCFG(tables, blocks, funcEntry)
+		blocks, constDecls = s.factor.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// This loads the value of the factor into a register
 		// This covers the case of local variable, global variable, parameter, function invocation, literal and allocation
 	} else {
@@ -255,5 +255,5 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 			}
 		}
 	}
-	return blocks
+	return blocks, constDecls
 }

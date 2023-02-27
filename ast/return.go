@@ -74,11 +74,11 @@ func (r *Return) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.F
 }
 
 // Translate the return node to LLVM IR
-func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// If the expression exists, then translate it
 	if *r.expression != nil {
 		// Translate the expression
-		blocks = (*r.expression).ToLLVMCFG(tables, blocks, funcEntry)
+		blocks, constDecls = (*r.expression).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// If this exists, then store the result from the last used register into a new register
 		lastUsedReg := llvm.GetPreviousRegister()
 		exprLLVMType := llvm.TypeToLLVM(r.ty)
@@ -117,5 +117,5 @@ func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(retInst)
 	}
-	return blocks
+	return blocks, constDecls
 }

@@ -8,11 +8,12 @@ type Program struct {
 	globalDecls   []GlobalDecl
 	functionDecls []FunctionDecl
 	runtimeDecls  []RuntimeDecl
+	constantDecls []ConstantDecl
 }
 
 // Create a new LLVM program node
-func NewProgram(structDecls []StructDecl, globalDecls []GlobalDecl, functionDecls []FunctionDecl, runtimeDecls []RuntimeDecl) *Program {
-	return &Program{structDecls, globalDecls, functionDecls, runtimeDecls}
+func NewProgram(structDecls []StructDecl, globalDecls []GlobalDecl, functionDecls []FunctionDecl, runtimeDecls []RuntimeDecl, constantDecls []ConstantDecl) *Program {
+	return &Program{structDecls, globalDecls, functionDecls, runtimeDecls, constantDecls}
 }
 
 // String representation of the LLVM program node
@@ -45,6 +46,14 @@ func (p *Program) String() string {
 	// Print the runtime declarations
 	for _, runtime := range p.runtimeDecls {
 		out.WriteString(runtime.String())
+		out.WriteString("\n")
+	}
+
+	out.WriteString("\n")
+
+	// Print the constant declarations
+	for _, constant := range p.constantDecls {
+		out.WriteString(constant.String())
 		out.WriteString("\n")
 	}
 

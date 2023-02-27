@@ -95,7 +95,7 @@ func (i *Invocation) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 }
 
 // Translate the invocation node to LLVM IR
-func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// Stay in the same block
-	return blocks
+	return blocks, constDecls
 }

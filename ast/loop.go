@@ -57,7 +57,7 @@ func (l *Loop) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fun
 }
 
 // Translate the loop node to LLVM IR
-func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// Add new block for the condition
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the condition instructions to the block
@@ -69,12 +69,12 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	bodyBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Append the then block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, bodyBlock)
-	blocks = l.body.ToLLVMCFG(tables, blocks, funcEntry)
+	blocks, constDecls = l.body.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 
 	// Add new block for canonical form
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the block to the list of blocks
 	blocks = append(blocks, block)
 
-	return blocks
+	return blocks, constDecls
 }

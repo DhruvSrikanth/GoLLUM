@@ -149,7 +149,7 @@ func (f *Function) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st
 }
 
 // Translate the function to LLVM IR
-func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.FunctionDecl) {
+func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []llvm.ConstantDecl) (*st.SymbolTables, *llvm.FunctionDecl, []llvm.ConstantDecl) {
 	// Get the function entry
 	funcEntry := tables.Funcs.Contains(f.name)
 
@@ -180,17 +180,17 @@ func (f *Function) ToLLVM(tables *st.SymbolTables) (*st.SymbolTables, *llvm.Func
 	}
 	blocks = append(blocks, block)
 	for _, stmt := range f.statements {
-		blocks = stmt.ToLLVMCFG(tables, blocks, f.funcEntry)
+		blocks, constantDecls = stmt.ToLLVMCFG(tables, blocks, f.funcEntry, constantDecls)
 	}
 
 	// Maintain canonical form and add a exit block
 	// this is removed during the CFG optimization
 	exitBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	blocks = append(blocks, exitBlock)
-	return tables, llvm.NewFunctionDecl(funcEntry.Name, funcEntry.LlvmRetTy, params, paramTypes, blocks)
+	return tables, llvm.NewFunctionDecl(funcEntry.Name, funcEntry.LlvmRetTy, params, paramTypes, blocks), constantDecls
 }
 
 // Translate the function node to LLVM IR
-func (f *Function) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
-	return blocks
+func (f *Function) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constantDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+	return blocks, constantDecls
 }

@@ -36,7 +36,7 @@ func (bl *BoolLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sym
 }
 
 // Translate the bool literal into LLVM IR
-func (bl *BoolLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (bl *BoolLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// Add the integer literal to the last block
 	var boolVal string
 	if bl.Value {
@@ -48,5 +48,5 @@ func (bl *BoolLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 	// Update the label of the instruction
 	storeInt.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(storeInt)
-	return blocks
+	return blocks, constDecls
 }

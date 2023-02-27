@@ -88,6 +88,6 @@ func (d *StructDecl) ToLLVM(tables *st.SymbolTables) *llvm.StructDecl {
 }
 
 // Translate the structdecl node to LLVM IR
-func (d *StructDecl) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
-	return blocks
+func (d *StructDecl) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+	return blocks, constDecls
 }

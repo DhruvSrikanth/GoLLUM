@@ -94,7 +94,7 @@ func (c *Conditional) GetControlFlow(errors []*SemanticAnalysisError, funcEntry 
 }
 
 // Translate the conditional node to LLVM IR
-func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// Add new block for the condition
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the condition instructions to the block
@@ -106,14 +106,14 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 	thenBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Append the then block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, thenBlock)
-	blocks = c.thenBlock.ToLLVMCFG(tables, blocks, funcEntry)
+	blocks, constDecls = c.thenBlock.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 
 	// Add new block for the else block
 	elseBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Append the else block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, elseBlock)
 	if c.elseBlock != nil {
-		blocks = c.elseBlock.ToLLVMCFG(tables, blocks, funcEntry)
+		blocks, constDecls = c.elseBlock.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 	}
 
 	// Add new block for canonical form
@@ -121,5 +121,5 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 	// Add the block to the list of blocks
 	blocks = append(blocks, block)
 
-	return blocks
+	return blocks, constDecls
 }

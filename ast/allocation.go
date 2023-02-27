@@ -53,7 +53,7 @@ func (d *Allocate) GetType() types.Type {
 }
 
 // Translate the allocate node into LLVM IR
-func (d *Allocate) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (d *Allocate) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// Get the struct entry
 	entry := tables.Structs.Contains(d.structType)
 	// Count the number of fields and multiply by 8 to get the size of the struct
@@ -74,5 +74,5 @@ func (d *Allocate) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock,
 	// Add the bitcast instruction to the current block
 	blocks[len(blocks)-1].AddInstruction(bitcastInst)
 
-	return blocks
+	return blocks, constDecls
 }

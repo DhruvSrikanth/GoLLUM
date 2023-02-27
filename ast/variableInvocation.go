@@ -111,7 +111,7 @@ func (v *VariableInvocation) GetType() types.Type {
 }
 
 // Translate the allocate node into LLVM IR
-func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// Check if its a variable or function call
 	if len(v.arguments) != 0 {
 		// Function
@@ -122,7 +122,7 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 		argRegs := make([]string, len(v.arguments))
 		for _, param := range v.arguments {
 			// Load the argument into a register by calling the ToLLVMCFG function
-			blocks = param.ToLLVMCFG(tables, blocks, funcEntry)
+			blocks, constDecls = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 			// Get the last used register
 			argRegs = append(argRegs, llvm.GetPreviousRegister())
 		}
@@ -187,5 +187,5 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 		}
 	}
-	return blocks
+	return blocks, constDecls
 }

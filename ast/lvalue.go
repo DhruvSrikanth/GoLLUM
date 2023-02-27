@@ -125,6 +125,6 @@ func (l *LValue) GetType() types.Type {
 }
 
 // Translate the lvalue node into LLVM IR
-func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
-	return blocks
+func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
+	return blocks, constDecls
 }

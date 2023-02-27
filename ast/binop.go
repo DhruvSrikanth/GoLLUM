@@ -225,7 +225,7 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 }
 
 // Translation of the expression to LLVM IR
-func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	var op string
 	var lastUsedRegLeft, lastUsedRegRight string
 	if b.operator != nil && b.left != nil {
@@ -259,19 +259,19 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	} else if b.operator == nil && b.left != nil {
 		// Impossible because the right is guaranteed and the left cannot exists without an operator for the right
 	} else {
-		blocks = (*b.right).ToLLVMCFG(tables, blocks, funcEntry)
+		blocks, constDecls = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// Nothing to do here since left will also be nil and the right has been evaluated
-		return blocks
+		return blocks, constDecls
 	}
 
 	// Call the ToLLVMCFG method on the left and right expressions
 	if b.left != nil {
-		blocks = (*b.left).ToLLVMCFG(tables, blocks, funcEntry)
+		blocks, constDecls = (*b.left).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// Get the last register used if there is a left expression
 		lastUsedRegLeft = llvm.GetPreviousRegister()
 	}
 
-	blocks = (*b.right).ToLLVMCFG(tables, blocks, funcEntry)
+	blocks, constDecls = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 	// Get the last register used
 	lastUsedRegRight = llvm.GetPreviousRegister()
 
@@ -280,5 +280,5 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	operationInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(operationInst)
 
-	return blocks
+	return blocks, constDecls
 }

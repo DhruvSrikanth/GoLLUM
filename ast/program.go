@@ -123,11 +123,13 @@ func (p *Program) ToLLVM(tables *st.SymbolTables) *llvm.Program {
 		globalDecls = append(globalDecls, *globalDecl)
 	}
 
+	// With the below translation of functions to LLVM IR, we also get the constant declarations
+	var constantDecls []llvm.ConstantDecl
 	// Translate the functions to LLVM IR
 	var functionDecls []llvm.FunctionDecl
 	var functionDecl *llvm.FunctionDecl
 	for _, fn := range p.funcs {
-		tables, functionDecl = fn.ToLLVM(tables)
+		tables, functionDecl, constantDecls = fn.ToLLVM(tables, constantDecls)
 		functionDecls = append(functionDecls, *functionDecl)
 	}
 
@@ -140,7 +142,7 @@ func (p *Program) ToLLVM(tables *st.SymbolTables) *llvm.Program {
 	}
 
 	// Create the LLVM program
-	llvm := llvm.NewProgram(structDecls, globalDecls, functionDecls, runtimeDecls)
+	llvm := llvm.NewProgram(structDecls, globalDecls, functionDecls, runtimeDecls, constantDecls)
 
 	return llvm
 }

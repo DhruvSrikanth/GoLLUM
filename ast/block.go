@@ -61,10 +61,10 @@ func (b *Block) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fu
 }
 
 // Translate the block node to LLVM IR
-func (b *Block) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry) []*llvm.BasicBlock {
+func (b *Block) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []llvm.ConstantDecl) ([]*llvm.BasicBlock, []llvm.ConstantDecl) {
 	// Translate each statement in the block
 	for _, stmt := range b.statements {
-		blocks = stmt.ToLLVMCFG(tables, blocks, funcEntry)
+		blocks, constDecls = stmt.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 	}
-	return blocks
+	return blocks, constDecls
 }
