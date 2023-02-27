@@ -35,7 +35,7 @@ L2:
 	%r11 = load %struct.Point2D*, %struct.Point2D** %newPt
 	store %struct.Point2D* %r11, %struct.Point2D** %_retval
 	%r12 = load %struct.Point2D*, %struct.Point2D** %_retval
-	ret %struct.Point2D*%_retval
+	ret %struct.Point2D* %_retval
 
 L3:
 
@@ -43,9 +43,12 @@ L4:
 	%r13 = load %struct.Point2D*, %struct.Point2D** %newPt
 	store %struct.Point2D* %r13, %struct.Point2D** %_retval
 	%r14 = load %struct.Point2D*, %struct.Point2D** %_retval
-	ret %struct.Point2D*%_retval
+	ret %struct.Point2D* %_retval
+	br label %L5
 
 L5:
+	%r15 = load %struct.Point2D, %struct.Point2D* %_retval
+	ret %struct.Point2D %r15
 
 
 }
@@ -58,60 +61,64 @@ L6:
 	%b = alloca i64
 	%pt1 = alloca %struct.Point2D*
 	%pt2 = alloca %struct.Point2D*
-	%r15 = load i64, i64* %a
-	store i64 5, i64* %r16
-	store i64 %r16, i64* %r15
-	%r17 = load i64, i64* %b
-	%r18 = load i64, i64* %a
-	store i64 7, i64* %r19
-	%r20 = add i64 %r18, %r19
-	store i64 3, i64* %r21
-	%r22 = mul i64 %r20, %r21
-	store i64 %r22, i64* %r17
-	%r23 = load %struct.Point2D*, %struct.Point2D** %pt1
-	%r24 = call i8* @malloc(i32 16)
-	%r25 = bitcast i8* %r24 to %struct.Point2D*
-	store %struct.Point2D* %r25, %struct.Point2D** %r23
-	%r26 = load %struct.Point2D*, %struct.Point2D** %pt1
-	%r27 = getelementptr %struct.Point2D*, %struct.Point2D** %r26, i32 0, i32 0
-	%r28 = load i64, i64* %a
-	store i64 %r28, i64* %r27
-	%r29 = load %struct.Point2D*, %struct.Point2D** %pt1
-	%r30 = getelementptr %struct.Point2D*, %struct.Point2D** %r29, i32 0, i32 1
-	%r31 = load i64, i64* %b
-	store i64 %r31, i64* %r30
-	%r32 = load i64, i64* @globalInit
-	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %r32)
-	%r33 = load %struct.Point2D*, %struct.Point2D** %pt2
-	%r34 = load i64, i64* @globalInit
-	%r35 = call %struct.Point2D* @Init(i64 %r34)
-	store %struct.Point2D* %r35, %struct.Point2D** %r33
-	%r36 = load i64, i64* @globalInit
-	%r37 = load i64, i64* r36
-	%r38 = load %struct.Point2D*, %struct.Point2D** %pt2
-	%r39 = getelementptr %struct.Point2D*, %struct.Point2D** %r38, i32 0, i32 0
-	%r40 = load i64, i64* r39
-	%r41 = load %struct.Point2D*, %struct.Point2D** %pt2
-	%r42 = getelementptr %struct.Point2D*, %struct.Point2D** %r41, i32 0, i32 1
-	%r43 = load i64, i64* r42
-	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.fstr2, i32 0, i32 0), i64 %r37, i64 %r40, i64 %r43)
-	%r44 = load %struct.Point2D*, %struct.Point2D** %pt1
-	%r45 = bitcast %struct.Point2D* %r44 to i8*
-	call void @free(i8* %r45)
-	%r47 = load %struct.Point2D*, %struct.Point2D** %pt2
-	%r48 = bitcast %struct.Point2D* %r47 to i8*
-	call void @free(i8* %r48)
+	%r16 = load i64, i64* %a
+	store i64 5, i64* %r17
+	store i64 %r17, i64* %r16
+	%r18 = load i64, i64* %b
+	%r19 = load i64, i64* %a
+	store i64 7, i64* %r20
+	%r21 = add i64 %r19, %r20
+	store i64 3, i64* %r22
+	%r23 = mul i64 %r21, %r22
+	store i64 %r23, i64* %r18
+	%r24 = load %struct.Point2D*, %struct.Point2D** %pt1
+	%r25 = call i8* @malloc(i32 16)
+	%r26 = bitcast i8* %r25 to %struct.Point2D*
+	store %struct.Point2D* %r26, %struct.Point2D** %r24
+	%r27 = load %struct.Point2D*, %struct.Point2D** %pt1
+	%r28 = getelementptr %struct.Point2D*, %struct.Point2D** %r27, i32 0, i32 0
+	%r29 = load i64, i64* %a
+	store i64 %r29, i64* %r28
+	%r30 = load %struct.Point2D*, %struct.Point2D** %pt1
+	%r31 = getelementptr %struct.Point2D*, %struct.Point2D** %r30, i32 0, i32 1
+	%r32 = load i64, i64* %b
+	store i64 %r32, i64* %r31
+	%r33 = load i64, i64* @globalInit
+	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %r33)
+	%r34 = load %struct.Point2D*, %struct.Point2D** %pt2
+	%r35 = load i64, i64* @globalInit
+	%r36 = call %struct.Point2D* @Init(i64 %r35)
+	store %struct.Point2D* %r36, %struct.Point2D** %r34
+	%r37 = load i64, i64* @globalInit
+	%r38 = load i64, i64* r37
+	%r39 = load %struct.Point2D*, %struct.Point2D** %pt2
+	%r40 = getelementptr %struct.Point2D*, %struct.Point2D** %r39, i32 0, i32 0
+	%r41 = load i64, i64* r40
+	%r42 = load %struct.Point2D*, %struct.Point2D** %pt2
+	%r43 = getelementptr %struct.Point2D*, %struct.Point2D** %r42, i32 0, i32 1
+	%r44 = load i64, i64* r43
+	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.fstr2, i32 0, i32 0), i64 %r38, i64 %r41, i64 %r44)
+	%r45 = load %struct.Point2D*, %struct.Point2D** %pt1
+	%r46 = bitcast %struct.Point2D* %r45 to i8*
+	call void @free(i8* %r46)
+	%r48 = load %struct.Point2D*, %struct.Point2D** %pt2
+	%r49 = bitcast %struct.Point2D* %r48 to i8*
+	call void @free(i8* %r49)
+	br label %L7
 
 L7:
+	store i64 0, i64* %_retval
+	%r51 = load i64, i64* r50
+	ret i64 %r51
 
 
 }
 
 
+declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
-declare i32 @scanf(i8*, ...)
 
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.fstr2 = private unnamed_addr constant [32 x i8] c"offset=%ld\npt2.x=%ld\npt2.y=%ld\n\00", align 1

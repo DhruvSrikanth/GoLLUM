@@ -201,8 +201,42 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 
 	// Maintain canonical form and add a exit block
 	// this is removed during the CFG optimization
+	// Before adding this block, we need to add a branch instruction at the end of the last block to the exit block
+	branchInst := llvm.NewBranchUnconditional(llvm.GetCurrentLabel())
+	branchInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(branchInst)
+
 	exitBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	blocks = append(blocks, exitBlock)
+	// Add the return instruction to the exit block if the function is void
+	if funcEntry.RetTy == types.StringToType("void") {
+		// Store a 0 in the return value
+		storeInst := llvm.NewStore("0", "%_retval", "i64")
+		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(storeInst)
+
+		// Load the return register into a register
+		loadInst := llvm.NewLoad(llvm.GetPreviousRegister(), "i64")
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		// Add the return instruction
+		retInst := llvm.NewReturn(llvm.GetPreviousRegister(), "i64")
+		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(retInst)
+	} else {
+		// If we reach this point, it means the function is not void, therefore, the return value is stored in the return value register
+		// Load the return register into a register
+		loadInst := llvm.NewLoad("%_retval", funcEntry.LlvmRetTy)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		// Add the return instruction
+		retInst := llvm.NewReturn(llvm.GetPreviousRegister(), funcEntry.LlvmRetTy)
+		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(retInst)
+	}
+
 	return tables, llvm.NewFunctionDecl(funcEntry.Name, funcEntry.LlvmRetTy, params, paramTypes, blocks), constantDecls
 }
 

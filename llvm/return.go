@@ -35,6 +35,7 @@ func (r *Return) String() string {
 	}
 	out.WriteString(r.ty)
 
+	out.WriteString(" ")
 	out.WriteString(r.sourceRegister)
 
 	return out.String()

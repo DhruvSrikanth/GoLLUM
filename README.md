@@ -180,4 +180,9 @@ func main() {
 
 6. Can the _retval be a common register for all functions? (function ast node)
 
+## Remaining Tasks
+
+1. Branch instructions
+2. Condition instructions
+3. Update predecessor and successor blocks
 
