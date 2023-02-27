@@ -7,6 +7,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // LValue node in the AST
@@ -126,5 +127,147 @@ func (l *LValue) GetType() types.Type {
 
 // Translate the lvalue node into LLVM IR
 func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
+	// Stay in the same block
+
+	// The lvalue could either be a variable or a field of a struct
+	// Check if the lvalue is a variable
+	if len(l.fields) == 0 {
+		// The lvalue is a variable
+		// Get the variable entry
+		functionEntry := tables.Funcs.Contains(funcEntry.Name)
+		entry := functionEntry.Variables.Contains(l.identifier)
+		if entry == nil {
+			for _, param := range funcEntry.Parameters {
+				if param.Name == l.identifier {
+					entry = param
+					break
+				}
+			}
+
+			// Load the parameter into a register
+			// Make the load instruction
+			ty := entry.LlvmTy
+			if strings.Contains(ty, "struct.") {
+				ty += "*"
+			}
+			loadInst := llvm.NewLoad("%"+entry.Name, ty)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		} else {
+			// Load the variable into a register
+			var varName string
+			if entry.Scope == st.GLOBAL {
+				varName = "@" + entry.Name
+			} else {
+				varName = "%" + entry.Name
+			}
+
+			ty := entry.LlvmTy
+			if strings.Contains(ty, "struct.") {
+				ty += "*"
+			}
+
+			loadInst := llvm.NewLoad(varName, ty)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+		}
+	} else {
+		// The lvalue is a field of a struct
+		// Get the variable entry
+		functionEntry := tables.Funcs.Contains(funcEntry.Name)
+		// Check in the local variables (moves to global scope if not found in local scope)
+		entry := functionEntry.Variables.Contains(l.identifier)
+		var varName string
+		var varType string
+		if entry == nil {
+			// Check the parameters
+			for _, param := range functionEntry.Parameters {
+				if param.Name == l.identifier {
+					entry = param
+					varName = "%" + param.Name
+					varType = entry.LlvmTy
+					break
+				}
+			}
+		} else {
+			if entry.Scope == st.GLOBAL {
+				varName = "@" + entry.Name
+			} else {
+				varName = "%" + entry.Name
+			}
+			varType = entry.LlvmTy
+		}
+
+		if strings.Contains(varType, "struct.") {
+			varType += "*"
+		}
+
+		// Load the variable into a register
+		loadInst := llvm.NewLoad(varName, varType)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
+		// Get the struct
+		entryStructName := entry.GetType().String()[1:] // Remove the * from the type name
+		structEntry := tables.Structs.Contains(entryStructName)
+
+		// Get the struct field index
+		var index int
+		var fieldEntry *st.FieldEntry
+		for i, field := range structEntry.Fields {
+			if field.Name == l.fields[0] {
+				index = i
+				fieldEntry = field
+				break
+			}
+		}
+
+		// Add the getelementptr instruction
+		// Make sure to indicate that the struct is a pointer (in varType)
+		selectElementInst := llvm.NewGetElementPtr(llvm.GetPreviousRegister(), varType, index)
+		selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(selectElementInst)
+
+		// Get the type of the field
+		fieldType := fieldEntry.GetType().String()[1:] // Remove the * from the type name
+		structEntry = tables.Structs.Contains(fieldType)
+		varType = fieldEntry.LlvmType // Update the type of the struct
+
+		if strings.Contains(varType, "struct.") {
+			varType += "*"
+		}
+
+		// Do this for all the remaining fields
+		for i := 1; i < len(l.fields); i++ {
+			// If there are more fields then they are structs
+			// Get the struct field index
+			var index int
+			for j, field := range structEntry.Fields {
+				if field.Name == l.fields[i] {
+					index = j
+					fieldEntry = field
+					break
+				}
+			}
+
+			// Add the getelementptr instruction
+			// Make sure to indicate that the struct is a pointer (in varType)
+			selectElementInst = llvm.NewGetElementPtr(llvm.GetPreviousRegister(), varType, index)
+			selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(selectElementInst)
+
+			if i != len(l.fields)-1 {
+				// Get the type of the field
+				fieldType = fieldEntry.GetType().String()[1:] // Remove the * from the type name
+				structEntry = tables.Structs.Contains(fieldType)
+				varType = fieldEntry.LlvmType // Update the type of the struct
+
+				if strings.Contains(varType, "struct.") {
+					varType += "*"
+				}
+			}
+		}
+	}
 	return blocks, constDecls
 }

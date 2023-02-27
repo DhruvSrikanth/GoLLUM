@@ -174,4 +174,8 @@ func main() {
 
 3. Do we need to perform a store after using scanf on the most recently used register after evaluating the lvalue LLVM statements in the read operation? (read ast node)
 
+4. Can we use a load to get the lvalue of a variable in the read operation? (read ast node)
+
+
+
 
