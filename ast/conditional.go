@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strconv"
 )
 
 // Conditional statement node for the AST
@@ -95,26 +96,56 @@ func (c *Conditional) GetControlFlow(errors []*SemanticAnalysisError, funcEntry 
 
 // Translate the conditional node to LLVM IR
 func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
+	// Before adding a new block, add an unconditional branch to the current block
+	branchUncondInst := llvm.NewBranchUnconditional(llvm.GetCurrentLabel())
+	branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(branchUncondInst)
+
 	// Add new block for the condition
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the condition instructions to the block
 	blocks = append(blocks, condBlock)
 	// Get the condition expression to translate to LLVM IR
-	// blocks := l.condition.ToLLVM(tables, blocks, funcEntry)
+	blocks, constDecls = c.condition.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+
+	// Add a conditional branch instruction to the condition block
+	condReg := llvm.GetPreviousRegister()                      // This is set in the condition expression
+	currLabelID, _ := strconv.Atoi(llvm.GetCurrentLabel()[1:]) // remove the L from the label
+	trueLabel := "L" + strconv.Itoa(currLabelID)
+	falseLabel := "L" + strconv.Itoa(currLabelID+1)
+
+	branchCondInst := llvm.NewBranchConditional(condReg, trueLabel, falseLabel)
+	branchCondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(branchCondInst)
 
 	// Add new block for the then block
 	thenBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Append the then block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, thenBlock)
+
+	// Evaluate the then block before adding the unconditional branch instruction
 	blocks, constDecls = c.thenBlock.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+
+	// Unconditional branch to the block after the then and else blocks
+	nextLabel := "L" + strconv.Itoa(currLabelID+2)
+	branchUncondInst = llvm.NewBranchUnconditional(nextLabel)
+	branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(branchUncondInst)
 
 	// Add new block for the else block
 	elseBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Append the else block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, elseBlock)
+
+	// Evaluate the else block if required before adding branch instructions
 	if c.elseBlock != nil {
 		blocks, constDecls = c.elseBlock.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 	}
+
+	// Unconditional branch to the block after the then and else blocks
+	branchUncondInst = llvm.NewBranchUnconditional(nextLabel)
+	branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(branchUncondInst)
 
 	// Add new block for canonical form
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())

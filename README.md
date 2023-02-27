@@ -180,6 +180,12 @@ func main() {
 
 6. Can the _retval be a common register for all functions? (function ast node)
 
+7. Is the way I'm performing branch instructions correct? (if ast node)
+
+8. Is it okay for me to define the returns and branches in the way I am correct? (function ast node) Specifically the exit block in the case that there is and isnt a return value
+
+9. Can I make the assumption that if there is a return type for a function, it would have been loaded in to %_retval? (function ast node)
+
 ## Remaining Tasks
 
 1. Branch instructions

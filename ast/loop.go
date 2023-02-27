@@ -63,7 +63,7 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	// Add the condition instructions to the block
 	blocks = append(blocks, condBlock)
 	// Get the condition expression to translate to LLVM IR
-	// blocks := l.condition.ToLLVM(tables, blocks, funcEntry)
+	blocks, constDecls = l.condition.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 
 	// Add new block for the body block
 	bodyBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
