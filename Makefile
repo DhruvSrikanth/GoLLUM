@@ -1,3 +1,5 @@
+LLVM_PATH="/opt/homebrew/opt/llvm/bin/llc"
+
 # Generate grammars
 golite_compiler:
 	@sh build.sh

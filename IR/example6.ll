@@ -151,20 +151,21 @@ L20:
 L21:
 	%r38 = load i64, i64* %a
 	%r39 = call i64 @prime(i64 %r38)
-	br i1 %r39, label %L22, label %L23
+	%r40 = icmp eq i64 %r39, 1
+	br i1 %r40, label %L22, label %L23
 
 L22:
-	%r40 = load i64, i64* %a
-	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.fstr2, i32 0, i32 0), i64 %r40)
+	%r41 = load i64, i64* %a
+	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.fstr2, i32 0, i32 0), i64 %r41)
 	br label %L24
 
 L23:
 	br label %L24
 
 L24:
-	%r41 = load i64, i64* %a
-	%r42 = add i64 %r41, 1
-	store i64 %r42, i64* %a
+	%r42 = load i64, i64* %a
+	%r43 = add i64 %r42, 1
+	store i64 %r43, i64* %a
 	br label %L19
 
 L25:
@@ -172,17 +173,17 @@ L25:
 
 L26:
 	store i64 0, i64* %main_retval
-	%r43 = load i64, i64* %main_retval
-	ret i64 %r43
+	%r44 = load i64, i64* %main_retval
+	ret i64 %r44
 
 
 }
 
 
+declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
-declare i32 @scanf(i8*, ...)
 
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.fstr2 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
