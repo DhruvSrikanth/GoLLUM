@@ -168,27 +168,11 @@ func main() {
 
 ## Open Questions
 
-1. How do I add \00 and \0A to the format string (print ast node and constDecl llvm node) ?
+1. How do I add \00 and \0A to the format string (print ast node and constDecl llvm node) ? Use regex to replace \n with \0A.
 
-2. When I need to do repeated getelementptr instructions, do I need to load into another register and then do the getelementptr or can I do it in one instruction? (selector ast node)
-
-3. Do we need to perform a store after using scanf on the most recently used register after evaluating the lvalue LLVM statements in the read operation? (read ast node)
-
-4. Can we use a load to get the lvalue of a variable in the read operation? (read ast node)
-
-5. Can we do loads and stores the way i do for newPt = nil? (assignment ast node)
-
-6. Can the _retval be a common register for all functions? (function ast node)
-
-7. Is the way I'm performing branch instructions correct? (if ast node)
-
-8. Is it okay for me to define the returns and branches in the way I am correct? (function ast node) Specifically the exit block in the case that there is and isnt a return value
-
-9. Can I make the assumption that if there is a return type for a function, it would have been loaded in to %_retval? (function ast node)
+2. Anytime the lhs or rhs are not a local, global or parameter variable, we need to use the most recent register, else use the %variable name.
 
 ## Remaining Tasks
 
-1. Update predecessor and successor blocks
-
-2. Update code based on feedback on milestone 2.
+1. Update code based on feedback on milestone 2.
 

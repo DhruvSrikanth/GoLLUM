@@ -215,6 +215,11 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 		selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(selectElementInst)
 
+		// Load the value of the field into a register
+		loadInst = llvm.NewLoad(llvm.GetPreviousRegister(), fieldEntry.LlvmType)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+
 		// Get the type of the field
 		fieldType := fieldEntry.GetType().String()[1:] // Remove the * from the type name
 		structEntry = tables.Structs.Contains(fieldType)
@@ -244,6 +249,11 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 			blocks[len(blocks)-1].AddInstruction(selectElementInst)
 
 			if i != len(s.fields)-1 {
+				// Load the value of the field into a register
+				loadInst = llvm.NewLoad(llvm.GetPreviousRegister(), fieldEntry.LlvmType)
+				loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+				blocks[len(blocks)-1].AddInstruction(loadInst)
+
 				// Get the type of the field
 				fieldType = fieldEntry.GetType().String()[1:] // Remove the * from the type name
 				structEntry = tables.Structs.Contains(fieldType)

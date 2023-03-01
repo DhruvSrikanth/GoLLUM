@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -86,7 +87,8 @@ func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fu
 	// Replace all %d with %ld
 	formatString := strings.Replace(p.formatString, "%d", "%ld", -1)
 	// Replace all \n with \0A
-	formatString = strings.Replace(formatString, "\n", "\\0A", -1)
+	regex := regexp.MustCompile("\n")
+	formatString = regex.ReplaceAllString(formatString, "\\0A")
 	// Remove the first and last "
 	formatString = formatString[1 : len(formatString)-1]
 	// No need to to add a null terminator since that is added as part of the constant decl

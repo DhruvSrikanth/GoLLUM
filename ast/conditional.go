@@ -103,6 +103,10 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 
 	// Add new block for the condition
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	// Add the last block to this block's predecessors
+	condBlock.AddPredecessor(blocks[len(blocks)-1])
+	// Add the this block to the previous blocks successors
+	blocks[len(blocks)-1].AddSuccessor(condBlock)
 	// Add the condition instructions to the block
 	blocks = append(blocks, condBlock)
 	// Get the condition expression to translate to LLVM IR
@@ -120,6 +124,10 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 
 	// Add new block for the then block
 	thenBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	// Add the last block to this block's predecessors
+	thenBlock.AddPredecessor(blocks[len(blocks)-1])
+	// Add the this block to the previous blocks successors
+	blocks[len(blocks)-1].AddSuccessor(thenBlock)
 	// Append the then block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, thenBlock)
 
@@ -134,6 +142,11 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 
 	// Add new block for the else block
 	elseBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	// Add the last block to this block's predecessors
+	elseBlock.AddPredecessor(blocks[len(blocks)-2])
+	// Add the this block to the previous blocks successors
+	blocks[len(blocks)-2].AddSuccessor(elseBlock)
+
 	// Append the else block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, elseBlock)
 
@@ -149,6 +162,9 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 
 	// Add new block for canonical form
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())
+	// Add the last block to this block's predecessors
+	block.AddPredecessor(blocks[len(blocks)-2])
+	block.AddPredecessor(blocks[len(blocks)-1])
 	// Add the block to the list of blocks
 	blocks = append(blocks, block)
 

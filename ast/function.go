@@ -166,7 +166,7 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 	// Create the first block
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the return value to the block
-	retVal := llvm.NewLocalDecl("_retval", funcEntry.LlvmRetTy)
+	retVal := llvm.NewLocalDecl(funcEntry.Name+"_retval", funcEntry.LlvmRetTy)
 	retVal.SetLabel(block.GetLabel())
 	block.AddInstruction(retVal)
 
@@ -206,12 +206,21 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 	branchInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(branchInst)
 
+	// Create the exit block
 	exitBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+
+	// add the last block to this blocks predecessors
+	exitBlock.AddPredecessor(blocks[len(blocks)-1])
+
+	// add this block to the last blocks successors
+	blocks[len(blocks)-1].AddSuccessor(exitBlock)
+
+	// add the block
 	blocks = append(blocks, exitBlock)
 	// Add the return instruction to the exit block if the function is void
 	if funcEntry.RetTy == types.StringToType("void") {
 		// Store a 0 in the return value
-		storeInst := llvm.NewStore("0", "%_retval", "i64")
+		storeInst := llvm.NewStore("0", "%"+funcEntry.Name+"_retval", "i64")
 		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(storeInst)
 
@@ -227,7 +236,7 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 	} else {
 		// If we reach this point, it means the function is not void, therefore, the return value is stored in the return value register
 		// Load the return register into a register
-		loadInst := llvm.NewLoad("%_retval", funcEntry.LlvmRetTy)
+		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", funcEntry.LlvmRetTy)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 

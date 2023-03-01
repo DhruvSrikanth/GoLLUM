@@ -9,7 +9,7 @@ target triple = "arm64-apple-darwin22.2.0"
 define %struct.Point2D* @Init(i64 %initVal)
 {
 L0:
-	%_retval = alloca %struct.Point2D*
+	%Init_retval = alloca %struct.Point2D*
 	%newPt = alloca %struct.Point2D*
 	%P_initVal = alloca i64
 	store i64 %initVal, i64* %P_initVal
@@ -38,9 +38,9 @@ L2:
 	%r13 = load i64, i64* %P_initVal
 	store i64 %r13, i64* %r12
 	%r14 = load %struct.Point2D*, %struct.Point2D** %newPt
-	store %struct.Point2D* %r14, %struct.Point2D** %_retval
-	%r15 = load %struct.Point2D*, %struct.Point2D** %_retval
-	ret %struct.Point2D* %_retval
+	store %struct.Point2D* %r14, %struct.Point2D** %Init_retval
+	%r15 = load %struct.Point2D*, %struct.Point2D** %Init_retval
+	ret %struct.Point2D* %r15
 	br label %L4
 
 L3:
@@ -48,13 +48,13 @@ L3:
 
 L4:
 	%r16 = load %struct.Point2D*, %struct.Point2D** %newPt
-	store %struct.Point2D* %r16, %struct.Point2D** %_retval
-	%r17 = load %struct.Point2D*, %struct.Point2D** %_retval
-	ret %struct.Point2D* %_retval
+	store %struct.Point2D* %r16, %struct.Point2D** %Init_retval
+	%r17 = load %struct.Point2D*, %struct.Point2D** %Init_retval
+	ret %struct.Point2D* %r17
 	br label %L5
 
 L5:
-	%r18 = load %struct.Point2D, %struct.Point2D* %_retval
+	%r18 = load %struct.Point2D, %struct.Point2D* %Init_retval
 	ret %struct.Point2D %r18
 
 
@@ -63,7 +63,7 @@ L5:
 define i64 @main()
 {
 L6:
-	%_retval = alloca i64
+	%main_retval = alloca i64
 	%a = alloca i64
 	%b = alloca i64
 	%pt1 = alloca %struct.Point2D*
@@ -101,22 +101,24 @@ L6:
 	%r42 = load %struct.Point2D*, %struct.Point2D** %pt2
 	%r43 = getelementptr %struct.Point2D*, %struct.Point2D** %r42, i32 0, i32 0
 	%r44 = load i64, i64* %r43
-	%r45 = load %struct.Point2D*, %struct.Point2D** %pt2
-	%r46 = getelementptr %struct.Point2D*, %struct.Point2D** %r45, i32 0, i32 1
-	%r47 = load i64, i64* %r46
-	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.fstr2, i32 0, i32 0), i64 %r41, i64 %r44, i64 %r47)
-	%r48 = load %struct.Point2D*, %struct.Point2D** %pt1
-	%r49 = bitcast %struct.Point2D* %r48 to i8*
-	call void @free(i8* %r49)
-	%r51 = load %struct.Point2D*, %struct.Point2D** %pt2
-	%r52 = bitcast %struct.Point2D* %r51 to i8*
-	call void @free(i8* %r52)
+	%r45 = load i64, i64* %r44
+	%r46 = load %struct.Point2D*, %struct.Point2D** %pt2
+	%r47 = getelementptr %struct.Point2D*, %struct.Point2D** %r46, i32 0, i32 1
+	%r48 = load i64, i64* %r47
+	%r49 = load i64, i64* %r48
+	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.fstr2, i32 0, i32 0), i64 %r41, i64 %r45, i64 %r49)
+	%r50 = load %struct.Point2D*, %struct.Point2D** %pt1
+	%r51 = bitcast %struct.Point2D* %r50 to i8*
+	call void @free(i8* %r51)
+	%r53 = load %struct.Point2D*, %struct.Point2D** %pt2
+	%r54 = bitcast %struct.Point2D* %r53 to i8*
+	call void @free(i8* %r54)
 	br label %L7
 
 L7:
-	store i64 0, i64* %_retval
-	%r54 = load i64, i64* %r53
-	ret i64 %r54
+	store i64 0, i64* %main_retval
+	%r56 = load i64, i64* %r55
+	ret i64 %r56
 
 
 }

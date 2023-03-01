@@ -86,34 +86,34 @@ func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 			exprLLVMType += "*"
 		}
 
-		storeInst := llvm.NewStore(lastUsedReg, "%_retval", exprLLVMType)
+		storeInst := llvm.NewStore(lastUsedReg, "%"+funcEntry.Name+"_retval", exprLLVMType)
 		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(storeInst)
 
 		// Load the return value into the a register
-		loadInst := llvm.NewLoad("%_retval", exprLLVMType)
+		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", exprLLVMType)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 
 		// Create the return instruction
-		retInst := llvm.NewReturn("%_retval", exprLLVMType)
+		retInst := llvm.NewReturn(llvm.GetPreviousRegister(), exprLLVMType)
 		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(retInst)
 	} else {
 		// Expression does not exist, so we just return a 0 since we treat this as a void function
 		// the void function is represented by i64 in LLVM IR
 		// First store a 0 into the return value register
-		storeInst := llvm.NewStore("0", "%_retval", "i64")
+		storeInst := llvm.NewStore("0", "%"+funcEntry.Name+"_retval", "i64")
 		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(storeInst)
 
 		// Load the return value into the a register
-		loadInst := llvm.NewLoad("%_retval", "i64")
+		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", "i64")
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 
 		// Create the return instruction
-		retInst := llvm.NewReturn("%_retval", "i64")
+		retInst := llvm.NewReturn(llvm.GetPreviousRegister(), "i64")
 		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(retInst)
 	}

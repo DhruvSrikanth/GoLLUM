@@ -66,6 +66,10 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 
 	// Add new block for the condition
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	// Add the previous block to this blocks predecessors
+	condBlock.AddPredecessor(blocks[len(blocks)-1])
+	// Add this block to the last blocks successors
+	blocks[len(blocks)-1].AddSuccessor(condBlock)
 	// Add the condition instructions to the block
 	blocks = append(blocks, condBlock)
 	// Get the condition expression to translate to LLVM IR
@@ -83,6 +87,11 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 
 	// Add new block for the body block
 	bodyBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	// Add the previous block to this blocks predecessors
+	bodyBlock.AddPredecessor(blocks[len(blocks)-1])
+	// Add this block to the last blocks successors
+	blocks[len(blocks)-1].AddSuccessor(bodyBlock)
+
 	// Append the then block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, bodyBlock)
 	blocks, constDecls = l.body.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
@@ -96,6 +105,13 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 
 	// Add new block for canonical form
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())
+	// Add the previous block to this blocks predecessors
+	block.AddPredecessor(blocks[len(blocks)-1])
+	// Add the cond block to this blocks predecessors
+	block.AddPredecessor(blocks[len(blocks)-2])
+	// Add this block to the last blocks successors
+	blocks[len(blocks)-1].AddSuccessor(block)
+	blocks[len(blocks)-2].AddSuccessor(block)
 	// Add the block to the list of blocks
 	blocks = append(blocks, block)
 

@@ -1,6 +1,8 @@
 package llvm
 
-import "strconv"
+import (
+	"strconv"
+)
 
 // Representation of a constant declaration (global scope)
 type ConstantDecl struct {
