@@ -108,8 +108,10 @@ func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 	// // Add the instruction to the block
 	// blocks[len(blocks)-1].AddInstruction(loadInst)
 
+	var mostRecentOperand string
+
 	// Evaluate the expression
-	blocks, constDecls = d.expr.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	blocks, constDecls, mostRecentOperand = d.expr.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 
 	// Get the type of the expression
 	exprType := d.expr.GetType()
@@ -117,7 +119,7 @@ func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 	exprLlvmType := llvm.TypeToLLVM(exprType)
 
 	// Add the bitcast instruction to the block
-	sourceReg := llvm.GetPreviousRegister()
+	sourceReg := mostRecentOperand
 	bitcastInst := llvm.NewBitCast(sourceReg, exprLlvmType+"*", "i8*")
 	// Update the instruction label
 	bitcastInst.SetLabel(blocks[len(blocks)-1].GetLabel())

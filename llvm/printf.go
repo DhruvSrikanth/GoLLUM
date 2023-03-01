@@ -1,7 +1,6 @@
 package llvm
 
 import (
-	"bytes"
 	"strconv"
 )
 
@@ -37,23 +36,23 @@ func NewPrintf(varName string, sourceR []string, size int) *Printf {
 
 // String representation of the Printf call
 func (p *Printf) String() string {
-	var out bytes.Buffer
+	var out string
 	// Format is - call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([32 x i8], [32 x i8]* @.fstr1, i32 0, i32 0), i64 %r15, i64 %r18, i64 %r21)
 	// Common for all
-	out.WriteString("call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([")
-	out.WriteString(strconv.Itoa(p.size))
-	out.WriteString(" x i8], [")
-	out.WriteString(strconv.Itoa(p.size))
-	out.WriteString(" x i8]* @.")
-	out.WriteString(p.varName)
-	out.WriteString(", i32 0, i32 0)")
+	out += "call i32 (i8*, ...) @printf(i8* getelementptr inbounds (["
+	out += strconv.Itoa(p.size)
+	out += " x i8], ["
+	out += strconv.Itoa(p.size)
+	out += " x i8]* @."
+	out += p.varName
+	out += ", i32 0, i32 0)"
 	for _, r := range p.sourceRegString {
-		out.WriteString(", ")
-		out.WriteString("i64 ")
-		out.WriteString(r)
+		out += ", "
+		out += "i64 "
+		out += r
 	}
-	out.WriteString(")")
-	return out.String()
+	out += ")"
+	return out
 }
 
 // Get the registers targeted by the instruction.

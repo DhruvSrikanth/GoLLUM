@@ -19,9 +19,10 @@ type GetElementPtr struct {
 // NewGetElementPtr returns a new getelementptr instruction
 func NewGetElementPtr(sourceRegister string, ty string, index int) *GetElementPtr {
 	srcR := make([]int, 0)
-	sourceR := sourceRegister[2:]
-	sourceRInt, _ := strconv.Atoi(sourceR)
-	srcR = append(srcR, sourceRInt)
+	if strings.Contains(sourceRegister, "%r") {
+		sourceRInt, _ := strconv.Atoi(sourceRegister[2:])
+		srcR = append(srcR, sourceRInt)
+	}
 
 	tgtR := make([]int, 0)
 	nextR, _ := strconv.Atoi(GetNextRegister()[2:])

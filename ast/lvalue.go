@@ -126,8 +126,9 @@ func (l *LValue) GetType() types.Type {
 }
 
 // Translate the lvalue node into LLVM IR
-func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
+func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl, string) {
 	// Stay in the same block
+	var mostRecentOperand string
 
 	// The lvalue could either be a variable or a field of a struct
 	// Check if the lvalue is a variable
@@ -146,13 +147,14 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 
 			// Load the parameter into a register
 			// Make the load instruction
-			ty := entry.LlvmTy
-			if strings.Contains(ty, "struct.") {
-				ty += "*"
-			}
-			loadInst := llvm.NewLoad("%P_"+entry.Name, ty)
-			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-			blocks[len(blocks)-1].AddInstruction(loadInst)
+			// ty := entry.LlvmTy
+			// if strings.Contains(ty, "struct.") {
+			// 	ty += "*"
+			// }
+			// loadInst := llvm.NewLoad("%P_"+entry.Name, ty)
+			// loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			// blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = "%P_" + entry.Name
 
 		} else {
 			// Load the variable into a register
@@ -168,9 +170,10 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 				ty += "*"
 			}
 
-			loadInst := llvm.NewLoad(varName, ty)
-			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-			blocks[len(blocks)-1].AddInstruction(loadInst)
+			// loadInst := llvm.NewLoad(varName, ty)
+			// loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			// blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = varName
 		}
 	} else {
 		// The lvalue is a field of a struct
@@ -207,6 +210,7 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 		loadInst := llvm.NewLoad(varName, varType)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
 
 		// Get the struct
 		entryStructName := entry.GetType().String()[1:] // Remove the * from the type name
@@ -223,11 +227,17 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 			}
 		}
 
+		if strings.Contains(varType, "struct.") {
+			// Remove the * from the type name
+			varType = varType[:len(varType)-1]
+		}
+
 		// Add the getelementptr instruction
 		// Make sure to indicate that the struct is a pointer (in varType)
-		selectElementInst := llvm.NewGetElementPtr(llvm.GetPreviousRegister(), varType, index)
+		selectElementInst := llvm.NewGetElementPtr(mostRecentOperand, varType, index)
 		selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(selectElementInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
 
 		// Get the type of the field
 		fieldType := fieldEntry.GetType().String()[1:] // Remove the * from the type name
@@ -241,6 +251,13 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 		// Do this for all the remaining fields
 		for i := 1; i < len(l.fields); i++ {
 			// If there are more fields then they are structs
+			// First load the struct to get the value
+			// Load the variable into a register
+			loadInst := llvm.NewLoad(varName, varType)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
+
 			// Get the struct field index
 			var index int
 			for j, field := range structEntry.Fields {
@@ -251,9 +268,14 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 				}
 			}
 
+			if strings.Contains(varType, "struct.") {
+				// Remove the * from the type name
+				varType = varType[:len(varType)-1]
+			}
+
 			// Add the getelementptr instruction
 			// Make sure to indicate that the struct is a pointer (in varType)
-			selectElementInst = llvm.NewGetElementPtr(llvm.GetPreviousRegister(), varType, index)
+			selectElementInst = llvm.NewGetElementPtr(mostRecentOperand, varType, index)
 			selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(selectElementInst)
 
@@ -269,5 +291,5 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 			}
 		}
 	}
-	return blocks, constDecls
+	return blocks, constDecls, mostRecentOperand
 }

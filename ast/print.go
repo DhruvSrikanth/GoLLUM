@@ -6,7 +6,6 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -78,20 +77,22 @@ func (p *Print) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fu
 // Translate the print node to LLVM IR
 func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
-	size := len(p.formatString)
-	// Add 1 for the null terminator
-	size++
-	// Subtract 2 for the " at the start and end
-	size -= 2
+	var mostRecentOperand string
+
 	// Format the format string
-	// Replace all %d with %ld
-	formatString := strings.Replace(p.formatString, "%d", "%ld", -1)
-	// Replace all \n with \0A
-	regex := regexp.MustCompile("\n")
-	formatString = regex.ReplaceAllString(formatString, "\\0A")
-	// Remove the first and last "
+	formatString := p.GetString()
 	formatString = formatString[1 : len(formatString)-1]
+
+	// Replace all %d with %ld
+	formatString = strings.Replace(formatString, "%d", "%ld", -1)
+	// Replace all \n with \0A
+	formatString = strings.Replace(formatString, "\\n", "\\0A", -1)
 	// No need to to add a null terminator since that is added as part of the constant decl
+
+	size := len(formatString)
+	// Add 1 for the null terminator
+	size += 1
+	size -= strings.Count(formatString, "\\0A") * 2
 
 	// Create the constant decl
 	varName := "fstr" + strconv.Itoa(len(constDecls)+1)
@@ -102,13 +103,29 @@ func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fu
 	// Evaluate the expressions
 	var registers []string
 	for _, expr := range p.expressions {
-		blocks, constDecls = expr.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-		// Load the value from the register
-		loadInst := llvm.NewLoad(llvm.GetPreviousRegister(), "i64")
-		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(loadInst)
+		blocks, constDecls, mostRecentOperand = expr.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 
-		registers = append(registers, llvm.GetPreviousRegister())
+		// Load the value from the register if the most recent operand is not a local variable, global variable, or constant or parameter
+		needToLoad := true
+		if funcEntry.Variables.Contains(expr.String()) != nil {
+			needToLoad = false
+		} else {
+			for _, param := range funcEntry.Parameters {
+				if param.Name == expr.String() {
+					needToLoad = false
+					break
+				}
+			}
+		}
+
+		if needToLoad {
+			loadInst := llvm.NewLoad(mostRecentOperand, "i64")
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
+		}
+
+		registers = append(registers, mostRecentOperand)
 	}
 
 	// Create the print instruction
@@ -117,4 +134,10 @@ func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fu
 	blocks[len(blocks)-1].AddInstruction(printInst)
 
 	return blocks, constDecls
+}
+
+func (p *Print) GetString() string {
+	var sb strings.Builder
+	sb.WriteString(p.formatString)
+	return sb.String()
 }

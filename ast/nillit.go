@@ -35,12 +35,8 @@ func (nl *NilLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symb
 }
 
 // Translate the nil node into LLVM IR
-func (nl *NilLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
+func (nl *NilLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl, string) {
 	// Add the integer literal to the last block
-	storeInt := llvm.NewStore("null", llvm.GetNextRegister(), "i64")
-	// Update the label of the instruction
-	storeInt.SetLabel(blocks[len(blocks)-1].GetLabel())
-	blocks[len(blocks)-1].AddInstruction(storeInt)
-
-	return blocks, constDecls
+	// This will never be called because we handle a nil literal assignment in the assign node (it will only occur for lhs = pointer and rhs = nil)
+	return blocks, constDecls, nl.Value
 }

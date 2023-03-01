@@ -3,6 +3,7 @@ package llvm
 import (
 	"bytes"
 	"strconv"
+	"strings"
 )
 
 // Representation of a binop operation
@@ -19,12 +20,16 @@ type BinOp struct {
 func NewBinOp(leftRegister, opType, rightRegister string) *BinOp {
 	srcR := make([]int, 0)
 	// This is the most recent register used
-	mostRecentR, _ := strconv.Atoi(leftRegister[2:])
-	srcR = append(srcR, mostRecentR)
+	if strings.Contains(leftRegister, "%r") {
+		mostRecentR, _ := strconv.Atoi(leftRegister[2:])
+		srcR = append(srcR, mostRecentR)
+	}
 
 	// This always exists
-	mostRecentR, _ = strconv.Atoi(rightRegister[2:])
-	srcR = append(srcR, mostRecentR)
+	if strings.Contains(rightRegister, "%r") {
+		mostRecentR, _ := strconv.Atoi(rightRegister[2:])
+		srcR = append(srcR, mostRecentR)
+	}
 
 	// Get the next register
 	tgtR := make([]int, 0)
@@ -74,4 +79,9 @@ func (b *BinOp) GetLabel() string {
 // Set the label that marks this instruction in code.
 func (b *BinOp) SetLabel(newLabel string) {
 	b.blockLabel = newLabel
+}
+
+// Get the optype of the instruction.
+func (b *BinOp) GetOpType() string {
+	return b.opType
 }

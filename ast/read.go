@@ -64,6 +64,7 @@ func (r *Read) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fun
 // Translate the read node to LLVM IR
 func (r *Read) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
+	var mostRecentOperand string
 	// Create the constant decl
 	// Check if the read decl already exists
 	var readConstant bool
@@ -82,9 +83,9 @@ func (r *Read) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	}
 
 	// Evaluate the lvalue
-	blocks, constDecls = r.lval.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	blocks, constDecls, mostRecentOperand = r.lval.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 	// Create the read instruction
-	readInst := llvm.NewRead(llvm.GetPreviousRegister())
+	readInst := llvm.NewRead(mostRecentOperand)
 	readInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(readInst)
 

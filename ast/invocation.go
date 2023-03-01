@@ -98,6 +98,7 @@ func (i *Invocation) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 // Translate the invocation node to LLVM IR
 func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
+	var mostRecentOperand string
 	// Function
 	// Get the function entry
 	entry := tables.Funcs.Contains(i.identifier)
@@ -106,9 +107,9 @@ func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBloc
 	argRegs := make([]string, 0)
 	for _, param := range i.arguments {
 		// Load the argument into a register by calling the ToLLVMCFG function
-		blocks, constDecls = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		blocks, constDecls, mostRecentOperand = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// Get the last used register
-		argRegs = append(argRegs, llvm.GetPreviousRegister())
+		argRegs = append(argRegs, mostRecentOperand)
 	}
 
 	argTypes := make([]string, 0)

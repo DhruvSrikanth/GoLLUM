@@ -1,7 +1,5 @@
 package llvm
 
-import "bytes"
-
 // Basic Block representation for LLVM IR.
 type BasicBlock struct {
 	// The name of the basic block.
@@ -80,14 +78,19 @@ func (bb *BasicBlock) AddInstruction(inst Instruction) {
 
 // String representation of the basic block.
 func (bb *BasicBlock) String() string {
-	var out bytes.Buffer
-	out.WriteString(bb.label)
-	out.WriteString(":\n")
+	var out string
+	out += bb.label
+	out += ":\n"
 	for _, inst := range bb.instructions {
-		out.WriteString("\t")
-		out.WriteString(inst.String())
-		out.WriteString("\n")
+		out += "\t"
+		out += inst.String()
+		out += "\n"
 	}
-	out.WriteString("\n")
-	return out.String()
+	out += "\n"
+	return out
+}
+
+// Get the last instruction in the basic block.
+func (bb *BasicBlock) GetLastInstruction() Instruction {
+	return bb.instructions[len(bb.instructions)-1]
 }

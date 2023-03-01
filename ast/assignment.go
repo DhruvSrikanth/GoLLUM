@@ -86,9 +86,40 @@ func (a *Assignment) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 // Translate the assignment node to LLVM IR
 func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
-	// Get the address of the lvalue on the left hand side of the assignment
-	blocks, constDecls = a.variable.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-	leftReg := llvm.GetPreviousRegister()
+	var mostRecentOperand string
+
+	var leftReg string
+	useNamedReg := false
+	// Check if it us a local variable, global variable, or a parameter
+	// local - %name
+	// global - @name
+	// parameter - %P_name
+
+	varEntry := funcEntry.Variables.Contains(a.variable.String())
+	if varEntry != nil {
+		// This is a local variable or global variable
+		useNamedReg = true
+		// Get the appropriate scope
+		if varEntry.Scope == st.GLOBAL {
+			leftReg = "@" + a.variable.String()
+		} else {
+			leftReg = "%" + a.variable.String()
+		}
+	} else {
+		for _, param := range funcEntry.Parameters {
+			if param.Name == a.variable.String() {
+				useNamedReg = true
+				leftReg = "%P_" + param.Name
+				break
+			}
+		}
+	}
+	if !useNamedReg {
+		// If we are not using a named register, we need to evaluate the lhs value and get the register that the result is stored at
+		// Get the address of the lvalue on the left hand side of the assignment
+		blocks, constDecls, mostRecentOperand = a.variable.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		leftReg = mostRecentOperand
+	}
 
 	// Get the value of the expression on the right hand side of the assignment
 	var rightReg string
@@ -107,12 +138,41 @@ func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBloc
 		loadInst := llvm.NewLoad(nilReg, llvmTy)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
 
 		// Get the register that the default value was loaded into
-		rightReg = llvm.GetPreviousRegister()
+		rightReg = mostRecentOperand
 	} else {
-		blocks, constDecls = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-		rightReg = llvm.GetPreviousRegister()
+		useNamedReg := false
+		// Check if it us a local variable, global variable, or a parameter
+		// local - %name
+		// global - @name
+		// parameter - %P_name
+		varEntry := funcEntry.Variables.Contains(a.right.String())
+		if varEntry != nil {
+			// This is a local variable or global variable
+			useNamedReg = true
+			// Get the appropriate scope
+			if varEntry.Scope == st.GLOBAL {
+				rightReg = "@" + a.right.String()
+			} else {
+				rightReg = "%" + a.right.String()
+			}
+		} else {
+			for _, param := range funcEntry.Parameters {
+				if param.Name == a.right.String() {
+					useNamedReg = true
+					rightReg = "%P_" + param.Name
+					break
+				}
+			}
+		}
+
+		if !useNamedReg || useNamedReg {
+			// If we are not using a named register, we need to evaluate the rhs expression and get the register that the result is stored at
+			blocks, constDecls, mostRecentOperand = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+			rightReg = mostRecentOperand
+		}
 	}
 
 	ty := a.variable.GetType()

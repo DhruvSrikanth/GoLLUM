@@ -19,45 +19,45 @@ func NewProgram(structDecls []StructDecl, globalDecls []GlobalDecl, functionDecl
 // String representation of the LLVM program node
 func (p *Program) String() string {
 	// Print the struct declarations
-	var out bytes.Buffer
+	var out string
 	for _, strct := range p.structDecls {
-		out.WriteString(strct.String())
-		out.WriteString("\n")
+		out += strct.String()
+		out += "\n"
 	}
 
-	out.WriteString("\n")
+	out += "\n"
 
 	// Print the global declarations
 	for _, global := range p.globalDecls {
-		out.WriteString(global.String())
-		out.WriteString("\n")
+		out += global.String()
+		out += "\n"
 	}
 
-	out.WriteString("\n")
+	out += "\n"
 
 	// Print the function declarations
 	for _, fn := range p.functionDecls {
-		out.WriteString(fn.String())
-		out.WriteString("\n")
+		out += fn.String()
+		out += "\n"
 	}
 
-	out.WriteString("\n")
+	out += "\n"
 
 	// Print the runtime declarations
 	for _, runtime := range p.runtimeDecls {
-		out.WriteString(runtime.String())
-		out.WriteString("\n")
+		out += runtime.String()
+		out += "\n"
 	}
 
-	out.WriteString("\n")
+	out += "\n"
 
 	// Print the constant declarations
 	for _, constant := range p.constantDecls {
-		out.WriteString(constant.String())
-		out.WriteString("\n")
+		out += constant.String()
+		out += "\n"
 	}
 
-	return out.String()
+	return out
 }
 
 // Combines the target information and the LLVM program into a single object

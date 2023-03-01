@@ -35,7 +35,7 @@ func NewRead(sourceRegister string) *Read {
 // String representation of the Read call
 func (r *Read) String() string {
 	var out bytes.Buffer
-	// Format is -  call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* @globalInit)
+	// Format is -  call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %register)
 	// Common for all
 	out.WriteString("call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* ")
 	out.WriteString(r.sourceReg)

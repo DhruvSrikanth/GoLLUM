@@ -96,6 +96,7 @@ func (c *Conditional) GetControlFlow(errors []*SemanticAnalysisError, funcEntry 
 
 // Translate the conditional node to LLVM IR
 func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
+	var mostRecentOperand string
 	// Before adding a new block, add an unconditional branch to the current block
 	branchUncondInst := llvm.NewBranchUnconditional(llvm.GetCurrentLabel())
 	branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
@@ -110,10 +111,10 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 	// Add the condition instructions to the block
 	blocks = append(blocks, condBlock)
 	// Get the condition expression to translate to LLVM IR
-	blocks, constDecls = c.condition.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	blocks, constDecls, mostRecentOperand = c.condition.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 
 	// Add a conditional branch instruction to the condition block
-	condReg := llvm.GetPreviousRegister()                      // This is set in the condition expression
+	condReg := mostRecentOperand                               // This is set in the condition expression
 	currLabelID, _ := strconv.Atoi(llvm.GetCurrentLabel()[1:]) // remove the L from the label
 	trueLabel := "L" + strconv.Itoa(currLabelID)
 	falseLabel := "L" + strconv.Itoa(currLabelID+1)

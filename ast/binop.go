@@ -225,9 +225,10 @@ func (binOp *BinOpExpr) TypeCheck(errors []*SemanticAnalysisError, tables *st.Sy
 }
 
 // Translation of the expression to LLVM IR
-func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
+func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl, string) {
 	var op string
 	var lastUsedRegLeft, lastUsedRegRight string
+	var mostRecentOperand string
 	if b.operator != nil && b.left != nil {
 		// Convert the operator to its LLVM equivalent
 		op = llvm.OperatorToLLVM(OpToStr(*b.operator))
@@ -242,16 +243,18 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 			storeInst := llvm.NewStore("-1", llvm.GetNextRegister(), "i64")
 			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(storeInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
 			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
-			lastUsedRegLeft = llvm.GetPreviousRegister()
+			lastUsedRegLeft = mostRecentOperand
 		} else if *b.operator == NOT {
 			op = "xor"
 			// Create the constant 1
 			storeInst := llvm.NewStore("1", llvm.GetNextRegister(), "i64")
 			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(storeInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
 			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
-			lastUsedRegLeft = llvm.GetPreviousRegister()
+			lastUsedRegLeft = mostRecentOperand
 		} else {
 			// This should never happen
 			fmt.Println("Invalid operator provided in expression")
@@ -259,26 +262,27 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	} else if b.operator == nil && b.left != nil {
 		// Impossible because the right is guaranteed and the left cannot exists without an operator for the right
 	} else {
-		blocks, constDecls = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		blocks, constDecls, mostRecentOperand = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// Nothing to do here since left will also be nil and the right has been evaluated
-		return blocks, constDecls
+		return blocks, constDecls, mostRecentOperand
 	}
 
 	// Call the ToLLVMCFG method on the left and right expressions
 	if b.left != nil {
-		blocks, constDecls = (*b.left).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		blocks, constDecls, mostRecentOperand = (*b.left).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// Get the last register used if there is a left expression
-		lastUsedRegLeft = llvm.GetPreviousRegister()
+		lastUsedRegLeft = mostRecentOperand
 	}
 
-	blocks, constDecls = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	blocks, constDecls, mostRecentOperand = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 	// Get the last register used
-	lastUsedRegRight = llvm.GetPreviousRegister()
+	lastUsedRegRight = mostRecentOperand
 
 	// Perform the operation
 	operationInst := llvm.NewBinOp(lastUsedRegLeft, op, lastUsedRegRight)
 	operationInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(operationInst)
+	mostRecentOperand = llvm.GetPreviousRegister()
 
-	return blocks, constDecls
+	return blocks, constDecls, mostRecentOperand
 }

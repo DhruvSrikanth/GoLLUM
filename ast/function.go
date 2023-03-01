@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // Function node for the AST
@@ -225,7 +226,7 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 		blocks[len(blocks)-1].AddInstruction(storeInst)
 
 		// Load the return register into a register
-		loadInst := llvm.NewLoad(llvm.GetPreviousRegister(), "i64")
+		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", "i64")
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 
@@ -234,14 +235,18 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(retInst)
 	} else {
+		LlvmRetTy := funcEntry.LlvmRetTy
+		if strings.Contains(LlvmRetTy, "struct.") {
+			LlvmRetTy += "*"
+		}
 		// If we reach this point, it means the function is not void, therefore, the return value is stored in the return value register
 		// Load the return register into a register
-		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", funcEntry.LlvmRetTy)
+		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", LlvmRetTy)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 
 		// Add the return instruction
-		retInst := llvm.NewReturn(llvm.GetPreviousRegister(), funcEntry.LlvmRetTy)
+		retInst := llvm.NewReturn(llvm.GetPreviousRegister(), LlvmRetTy)
 		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(retInst)
 	}

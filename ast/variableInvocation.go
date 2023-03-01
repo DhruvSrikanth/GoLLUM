@@ -111,8 +111,9 @@ func (v *VariableInvocation) GetType() types.Type {
 }
 
 // Translate the allocate node into LLVM IR
-func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
+func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl, string) {
 	// Check if its a variable or function call
+	var mostRecentOperand string
 	if len(v.arguments) != 0 {
 		// Function
 		// Get the function entry
@@ -122,9 +123,23 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 		argRegs := make([]string, 0)
 		for _, param := range v.arguments {
 			// Load the argument into a register by calling the ToLLVMCFG function
-			blocks, constDecls = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+			blocks, constDecls, mostRecentOperand = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+			// If the most recent operand is a constant, we need to store it into a register
+			if !strings.HasPrefix(mostRecentOperand, "%r") {
+				storeInst := llvm.NewStore(mostRecentOperand, llvm.GetNextRegister(), "i64")
+				storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+				blocks[len(blocks)-1].AddInstruction(storeInst)
+				mostRecentOperand = llvm.GetPreviousRegister()
+			} else if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
+				// If the most recent operand is a pointer, we need to load it into a register
+				loadInst := llvm.NewLoad(mostRecentOperand, "i64")
+				loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+				blocks[len(blocks)-1].AddInstruction(loadInst)
+				mostRecentOperand = llvm.GetPreviousRegister()
+			}
+
 			// Get the last used register
-			argRegs = append(argRegs, llvm.GetPreviousRegister())
+			argRegs = append(argRegs, mostRecentOperand)
 		}
 
 		argTypes := make([]string, 0)
@@ -146,6 +161,7 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 		fCallInst := llvm.NewFunctionCall(entry.Name, retTy, argRegs, argTypes)
 		fCallInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(fCallInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
 	} else {
 		// Variable
 		// Get the variable entry
@@ -167,6 +183,7 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 			loadInst := llvm.NewLoad("%P_"+entry.Name, ty)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
 
 		} else {
 			// Load the variable into a register
@@ -185,7 +202,8 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 			loadInst := llvm.NewLoad(varName, ty)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
 		}
 	}
-	return blocks, constDecls
+	return blocks, constDecls, mostRecentOperand
 }
