@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"strconv"
+	"strings"
 )
 
 // Loop node for the AST
@@ -75,6 +76,16 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	blocks = append(blocks, condBlock)
 	// Get the condition expression to translate to LLVM IR
 	blocks, constDecls, mostRecentOperand = l.condition.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	// Check the last instruction in the block to see if it is a comparison instruction
+	// If it is not, then we need to add a comparison instruction
+	lastInst := blocks[len(blocks)-1].GetLastInstruction()
+	if !strings.Contains(lastInst.String(), "icmp") {
+		// Add a comparison instruction
+		operationInst := llvm.NewBinOp(mostRecentOperand, llvm.OperatorToLLVM("=="), "1")
+		operationInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(operationInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
+	}
 
 	// Add a conditional branch to the body
 	condReg := mostRecentOperand

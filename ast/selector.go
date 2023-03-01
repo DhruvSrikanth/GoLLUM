@@ -164,15 +164,13 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 	} else {
 		// Only if it is a struct field will the value not be loaded into a register in the above way
 
-		// Get the variable entry
-		functionEntry := tables.Funcs.Contains(funcEntry.Name)
 		// Check in the local variables (moves to global scope if not found in local scope)
-		entry := functionEntry.Variables.Contains(s.factor.String())
+		entry := funcEntry.Variables.Contains(s.factor.String())
 		var varName string
 		var varType string
 		if entry == nil {
 			// Check the parameters
-			for _, param := range functionEntry.Parameters {
+			for _, param := range funcEntry.Parameters {
 				if param.Name == s.factor.String() {
 					entry = param
 					varName = "%P_" + param.Name
@@ -239,9 +237,8 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 		// Do this for all the remaining fields
 		for i := 1; i < len(s.fields); i++ {
 			// If there are more fields then they are structs
-
 			// Load the value of the field into a register
-			loadInst = llvm.NewLoad(mostRecentOperand, fieldEntry.LlvmType)
+			loadInst = llvm.NewLoad(mostRecentOperand, varType)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 			mostRecentOperand = llvm.GetPreviousRegister()

@@ -253,7 +253,7 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 			// If there are more fields then they are structs
 			// First load the struct to get the value
 			// Load the variable into a register
-			loadInst := llvm.NewLoad(varName, varType)
+			loadInst := llvm.NewLoad(mostRecentOperand, varType)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 			mostRecentOperand = llvm.GetPreviousRegister()

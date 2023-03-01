@@ -187,7 +187,11 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 		block.AddInstruction(localDecl)
 
 		// Store the parameter into the local variable allocated above
-		storeInst := llvm.NewStore("%"+varEntry.Name, "%P_"+varEntry.Name, varEntry.LlvmTy)
+		llvmTy := varEntry.LlvmTy
+		if strings.Contains(varEntry.LlvmTy, "struct.") {
+			llvmTy += "*"
+		}
+		storeInst := llvm.NewStore("%"+varEntry.Name, "%P_"+varEntry.Name, llvmTy)
 		storeInst.SetLabel(block.GetLabel())
 		block.AddInstruction(storeInst)
 	}

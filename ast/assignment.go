@@ -143,36 +143,9 @@ func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBloc
 		// Get the register that the default value was loaded into
 		rightReg = mostRecentOperand
 	} else {
-		useNamedReg := false
-		// Check if it us a local variable, global variable, or a parameter
-		// local - %name
-		// global - @name
-		// parameter - %P_name
-		varEntry := funcEntry.Variables.Contains(a.right.String())
-		if varEntry != nil {
-			// This is a local variable or global variable
-			useNamedReg = true
-			// Get the appropriate scope
-			if varEntry.Scope == st.GLOBAL {
-				rightReg = "@" + a.right.String()
-			} else {
-				rightReg = "%" + a.right.String()
-			}
-		} else {
-			for _, param := range funcEntry.Parameters {
-				if param.Name == a.right.String() {
-					useNamedReg = true
-					rightReg = "%P_" + param.Name
-					break
-				}
-			}
-		}
-
-		if !useNamedReg || useNamedReg {
-			// If we are not using a named register, we need to evaluate the rhs expression and get the register that the result is stored at
-			blocks, constDecls, mostRecentOperand = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-			rightReg = mostRecentOperand
-		}
+		// If we are not using a named register, we need to evaluate the rhs expression and get the register that the result is stored at
+		blocks, constDecls, mostRecentOperand = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		rightReg = mostRecentOperand
 	}
 
 	ty := a.variable.GetType()

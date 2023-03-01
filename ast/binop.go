@@ -7,6 +7,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // Binary operation struct for rhs evaluation
@@ -240,19 +241,13 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 		if *b.operator == SUB {
 			op = "mul"
 			// Create the constant -1
-			storeInst := llvm.NewStore("-1", llvm.GetNextRegister(), "i64")
-			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-			blocks[len(blocks)-1].AddInstruction(storeInst)
-			mostRecentOperand = llvm.GetPreviousRegister()
+			mostRecentOperand = "-1"
 			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
 			lastUsedRegLeft = mostRecentOperand
 		} else if *b.operator == NOT {
 			op = "xor"
 			// Create the constant 1
-			storeInst := llvm.NewStore("1", llvm.GetNextRegister(), "i64")
-			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-			blocks[len(blocks)-1].AddInstruction(storeInst)
-			mostRecentOperand = llvm.GetPreviousRegister()
+			mostRecentOperand = "1"
 			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
 			lastUsedRegLeft = mostRecentOperand
 		} else {
@@ -277,6 +272,42 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	blocks, constDecls, mostRecentOperand = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 	// Get the last register used
 	lastUsedRegRight = mostRecentOperand
+
+	if lastUsedRegLeft == "nil" {
+		// If the right hand side is nil, we need to set the value to nullptr for the particular type
+		// We can do this by performing a load from the address of the default value for the type
+		// Get the type of the lvalue
+		ty := (*b.right).GetType()
+		nilReg := "@.nil" + ty.String()[1:]
+		llvmTy := llvm.TypeToLLVM(ty)
+		if strings.Contains(llvmTy, "struct.") {
+			llvmTy += "*"
+		}
+
+		// Create the load instruction
+		loadInst := llvm.NewLoad(nilReg, llvmTy)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
+		lastUsedRegLeft = mostRecentOperand
+	} else if lastUsedRegRight == "nil" {
+		// If the left hand side is nil, we need to set the value to nullptr for the particular type
+		// We can do this by performing a load from the address of the default value for the type
+		// Get the type of the lvalue
+		ty := (*b.left).GetType()
+		nilReg := "@.nil" + ty.String()[1:]
+		llvmTy := llvm.TypeToLLVM(ty)
+		if strings.Contains(llvmTy, "struct.") {
+			llvmTy += "*"
+		}
+
+		// Create the load instruction
+		loadInst := llvm.NewLoad(nilReg, llvmTy)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
+		lastUsedRegRight = mostRecentOperand
+	}
 
 	// Perform the operation
 	operationInst := llvm.NewBinOp(lastUsedRegLeft, op, lastUsedRegRight)

@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"strings"
 )
 
 // Representation of a struct declaration
@@ -26,11 +27,11 @@ func (s *StructDecl) String() string {
 		if i != 0 {
 			out.WriteString(", ")
 		}
-		if field == s.name {
+		if strings.Contains(field, "struct.") {
 			out.WriteString("%")
 		}
 		out.WriteString(field)
-		if field == s.name {
+		if strings.Contains(field, "struct.") {
 			out.WriteString("*")
 		}
 	}
