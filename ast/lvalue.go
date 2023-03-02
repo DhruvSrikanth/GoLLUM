@@ -278,6 +278,7 @@ func (l *LValue) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, f
 			selectElementInst = llvm.NewGetElementPtr(mostRecentOperand, varType, index)
 			selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(selectElementInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
 
 			if i != len(l.fields)-1 {
 				// Get the type of the field

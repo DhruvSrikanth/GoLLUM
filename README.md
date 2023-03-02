@@ -168,9 +168,7 @@ func main() {
 
 ## Open Questions
 
-1. How do I add \00 and \0A to the format string (print ast node and constDecl llvm node) ? Use regex to replace \n with \0A.
-
-2. Anytime the lhs or rhs are not a local, global or parameter variable, we need to use the most recent register, else use the %variable name.
+1. How do you compare two structs?
 
 ## Remaining Tasks
 

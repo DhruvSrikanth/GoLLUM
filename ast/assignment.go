@@ -87,7 +87,7 @@ func (a *Assignment) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
 	var mostRecentOperand string
-
+	var leftval, rightval bool
 	var leftReg string
 	useNamedReg := false
 	// Check if it us a local variable, global variable, or a parameter
@@ -118,6 +118,10 @@ func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBloc
 		// If we are not using a named register, we need to evaluate the lhs value and get the register that the result is stored at
 		// Get the address of the lvalue on the left hand side of the assignment
 		blocks, constDecls, mostRecentOperand = a.variable.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+
+		if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
+			leftval = true
+		}
 		leftReg = mostRecentOperand
 	}
 
@@ -143,10 +147,22 @@ func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBloc
 		// Get the register that the default value was loaded into
 		rightReg = mostRecentOperand
 	} else {
-		// If we are not using a named register, we need to evaluate the rhs expression and get the register that the result is stored at
 		blocks, constDecls, mostRecentOperand = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		rightReg = mostRecentOperand
+		if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
+			rightval = true
+		}
 	}
+
+	if leftval && rightval && strings.Contains(rightReg, "%r") {
+		// If the most recent operand is a pointer, we need to load it into a register
+		loadInst := llvm.NewLoad(rightReg, "i64")
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
+		rightReg = mostRecentOperand
+	}
+	// fmt.Println(leftval, rightval, leftReg, rightReg)
 
 	ty := a.variable.GetType()
 	llvmTy := llvm.TypeToLLVM(ty)

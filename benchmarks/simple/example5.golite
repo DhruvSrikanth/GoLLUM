@@ -41,6 +41,7 @@ func domath(num int) {
 
     math1.bar = num;
     math2.bar = 3;
+    
     math1.simp.one = math1.bar;
     math2.simp.one = math2.bar;
 

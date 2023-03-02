@@ -267,14 +267,33 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 		blocks, constDecls, mostRecentOperand = (*b.left).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// Get the last register used if there is a left expression
 		lastUsedRegLeft = mostRecentOperand
+		// Check if the last instruction was a getelementptr instruction
+		if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
+			// If so, we need to load the value from the address
+			// Create the load instruction
+			loadInst := llvm.NewLoad(lastUsedRegLeft, "i64")
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
+			lastUsedRegLeft = mostRecentOperand
+		}
 	}
 
 	blocks, constDecls, mostRecentOperand = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 	// Get the last register used
 	lastUsedRegRight = mostRecentOperand
+	if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
+		// If so, we need to load the value from the address
+		// Create the load instruction
+		loadInst := llvm.NewLoad(lastUsedRegRight, "i64")
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
+		lastUsedRegRight = mostRecentOperand
+	}
 
 	if lastUsedRegLeft == "nil" {
-		// If the right hand side is nil, we need to set the value to nullptr for the particular type
+		// If the left hand side is nil, we need to set the value to nullptr for the particular type
 		// We can do this by performing a load from the address of the default value for the type
 		// Get the type of the lvalue
 		ty := (*b.right).GetType()
@@ -291,7 +310,7 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 		mostRecentOperand = llvm.GetPreviousRegister()
 		lastUsedRegLeft = mostRecentOperand
 	} else if lastUsedRegRight == "nil" {
-		// If the left hand side is nil, we need to set the value to nullptr for the particular type
+		// If the right hand side is nil, we need to set the value to nullptr for the particular type
 		// We can do this by performing a load from the address of the default value for the type
 		// Get the type of the lvalue
 		ty := (*b.left).GetType()

@@ -108,6 +108,23 @@ func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBloc
 	for _, param := range i.arguments {
 		// Load the argument into a register by calling the ToLLVMCFG function
 		blocks, constDecls, mostRecentOperand = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+		// isNumber := false
+		// if _, err := strconv.Atoi(mostRecentOperand); err == nil {
+		// 	isNumber = true
+		// }
+		if !strings.HasPrefix(mostRecentOperand, "%r") {
+			storeInst := llvm.NewStore(mostRecentOperand, llvm.GetNextRegister(), "i64")
+			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(storeInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
+		}
+		// } else if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
+		// 	// If the most recent operand is a pointer, we need to load it into a register
+		// 	loadInst := llvm.NewLoad(mostRecentOperand, "i64")
+		// 	loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		// 	blocks[len(blocks)-1].AddInstruction(loadInst)
+		// 	mostRecentOperand = llvm.GetPreviousRegister()
+		// }
 		// Get the last used register
 		argRegs = append(argRegs, mostRecentOperand)
 	}
@@ -131,5 +148,6 @@ func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBloc
 	fCallInst := llvm.NewFunctionCall(entry.Name, retTy, argRegs, argTypes)
 	fCallInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(fCallInst)
+
 	return blocks, constDecls
 }
