@@ -55,3 +55,8 @@ func (b *BranchUnconditional) GetLabel() string {
 func (b *BranchUnconditional) SetLabel(newLabel string) {
 	b.blockLabel = newLabel
 }
+
+// Set the destination label
+func (b *BranchUnconditional) SetDestinationLabel(newLabel string) {
+	b.destinationLabel = newLabel
+}

@@ -50,7 +50,7 @@ L6:
 	ret i64 %r9
 
 L7:
-	br label %L4
+	br label %L8
 
 L8:
 	br label %L9
@@ -90,7 +90,7 @@ L12:
 	store i64 %r18, i64* %r17
 	%r19 = load %struct.Node*, %struct.Node** %newNode
 	store %struct.Node* %r19, %struct.Node** @root
-	br label %L14
+	br label %L30
 
 L13:
 	%r20 = load %struct.Node*, %struct.Node** %P_curr
@@ -105,7 +105,7 @@ L14:
 	%r25 = mul i64 -1, 1
 	%r26 = load i64, i64* %compVal
 	%r27 = icmp eq i64 %r26, %r25
-	br i1 %r27, label %L15, label %L16
+	br i1 %r27, label %L15, label %L20
 
 L15:
 	br label %L16
@@ -141,7 +141,7 @@ L18:
 	br label %L19
 
 L19:
-	br label %L17
+	br label %L29
 
 L20:
 	br label %L21
@@ -149,7 +149,7 @@ L20:
 L21:
 	%r46 = load i64, i64* %compVal
 	%r47 = icmp eq i64 %r46, 1
-	br i1 %r47, label %L22, label %L23
+	br i1 %r47, label %L22, label %L27
 
 L22:
 	br label %L23
@@ -185,16 +185,16 @@ L25:
 	br label %L26
 
 L26:
-	br label %L24
+	br label %L28
 
 L27:
-	br label %L24
+	br label %L28
 
 L28:
-	br label %L17
+	br label %L29
 
 L29:
-	br label %L14
+	br label %L30
 
 L30:
 	br label %L31
@@ -220,7 +220,7 @@ L33:
 	%r67 = load %struct.Node*, %struct.Node** %P_curr
 	%r68 = load %struct.Node*, %struct.Node** @.nilNode
 	%r69 = icmp ne %struct.Node* %r67, %r68
-	br i1 %r69, label %L34, label %L35
+	br i1 %r69, label %L34, label %L43
 
 L34:
 	br label %L35
@@ -271,10 +271,10 @@ L41:
 	br label %L42
 
 L42:
-	br label %L36
+	br label %L44
 
 L43:
-	br label %L36
+	br label %L44
 
 L44:
 	br label %L45
@@ -299,7 +299,7 @@ L47:
 	%r93 = load %struct.Node*, %struct.Node** %P_curr
 	%r94 = load %struct.Node*, %struct.Node** @.nilNode
 	%r95 = icmp ne %struct.Node* %r93, %r94
-	br i1 %r95, label %L48, label %L49
+	br i1 %r95, label %L48, label %L57
 
 L48:
 	br label %L49
@@ -347,10 +347,10 @@ L56:
 	%r114 = load %struct.Node*, %struct.Node** %P_curr
 	%r115 = bitcast %struct.Node* %r114 to i8*
 	call void @free(i8* %r115)
-	br label %L50
+	br label %L58
 
 L57:
-	br label %L50
+	br label %L58
 
 L58:
 	br label %L59
@@ -403,10 +403,10 @@ L64:
 }
 
 
-declare i32 @printf(i8*, ...)
-declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
+declare i32 @printf(i8*, ...)
+declare i32 @scanf(i8*, ...)
 
 @.fstr1 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1

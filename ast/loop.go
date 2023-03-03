@@ -90,6 +90,7 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	// Add a conditional branch to the body
 	condReg := mostRecentOperand
 	currLabelID, _ := strconv.Atoi(llvm.GetCurrentLabel()[1:]) // remove the L from the label
+	// These will need to be updated
 	trueLabel := "L" + strconv.Itoa(currLabelID)
 	falseLabel := "L" + strconv.Itoa(currLabelID+1)
 	branchCondInst := llvm.NewBranchConditional(condReg, trueLabel, falseLabel)
@@ -99,8 +100,8 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	// Add new block for the body block
 	bodyBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the previous block to this blocks predecessors and add the body block to the previous blocks successors
-	bodyBlock.AddPredecessor(blocks[len(blocks)-1])
-	blocks[len(blocks)-1].AddSuccessor(bodyBlock)
+	bodyBlock.AddPredecessor(condBlock)
+	condBlock.AddSuccessor(bodyBlock)
 	blocks = append(blocks, bodyBlock)
 
 	// Evaluate the body block
@@ -112,9 +113,7 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 
 	// Add an unconditional branch to the condition block
 	if !hasReturn {
-		condLabelID := currLabelID - 1
-		condLabel := "L" + strconv.Itoa(condLabelID)
-		branchUncondInst = llvm.NewBranchUnconditional(condLabel)
+		branchUncondInst = llvm.NewBranchUnconditional(condBlock.GetLabel())
 		branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(branchUncondInst)
 	}
@@ -123,13 +122,13 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 
 	// Add new block for canonical form
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())
-	// Add the previous block to this blocks predecessors
-	block.AddPredecessor(blocks[len(blocks)-1])
 	// Add the cond block to this blocks predecessors
-	block.AddPredecessor(blocks[len(blocks)-2])
+	block.AddPredecessor(condBlock)
+	// Add the previous block to this blocks predecessors
+	block.AddPredecessor(bodyBlock)
 	// Add this block to the last blocks successors
-	blocks[len(blocks)-1].AddSuccessor(block)
-	blocks[len(blocks)-2].AddSuccessor(block)
+	condBlock.AddSuccessor(block)
+	bodyBlock.AddSuccessor(block)
 	blocks = append(blocks, block)
 
 	return blocks, constDecls

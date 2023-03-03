@@ -114,66 +114,75 @@ _Del:                                   ; @Del
 	.cfi_offset w30, -8
 	.cfi_offset w29, -16
 Lloh13:
-	adrp	x8, _head@GOTPAGE
+	adrp	x8, _.nilNode@GOTPAGE
 Lloh14:
-	ldr	x8, [x8, _head@GOTPAGEOFF]
+	ldr	x8, [x8, _.nilNode@GOTPAGEOFF]
 	stp	x1, x0, [sp]
 	ldr	x9, [x8]
-	ldr	x9, [x9]
-	cmp	x9, x1
-	b.ne	LBB2_2
-; %bb.1:                                ; %L17
-	ldr	x0, [x8]
-	ldr	x9, [x0, #8]
-	str	x0, [sp, #16]
-	str	x9, [x8]
-	bl	_free
-LBB2_2:                                 ; %L19
+	cmp	x0, x9
+	b.eq	LBB2_8
+; %bb.1:                                ; %L16
 Lloh15:
-	adrp	x8, _tail@GOTPAGE
-	ldr	x9, [sp, #8]
+	adrp	x9, _head@GOTPAGE
 Lloh16:
-	ldr	x8, [x8, _tail@GOTPAGEOFF]
-	ldr	x9, [x9, #8]
-	ldr	x10, [x8]
-	cmp	x9, x10
-	b.ne	LBB2_5
-; %bb.3:                                ; %L20
-Lloh17:
-	adrp	x9, _.nilNode@GOTPAGE
-Lloh18:
-	ldr	x9, [x9, _.nilNode@GOTPAGEOFF]
-	ldr	x0, [x8]
-	ldr	x10, [sp, #8]
-Lloh19:
-	ldr	x9, [x9]
+	ldr	x9, [x9, _head@GOTPAGEOFF]
+	ldr	x11, [sp]
+	ldr	x10, [x9]
+	ldr	x10, [x10]
+	cmp	x10, x11
+	b.ne	LBB2_3
+; %bb.2:                                ; %L17
+	ldr	x0, [x9]
+	ldr	x8, [x0, #8]
 	str	x0, [sp, #16]
-	str	x10, [x8]
-	str	x9, [x10, #8]
-LBB2_4:                                 ; %L22
+	str	x8, [x9]
 	bl	_free
-LBB2_5:                                 ; %L22
-                                        ; =>This Inner Loop Header: Depth=1
+	b	LBB2_8
+LBB2_3:                                 ; %L19
+Lloh17:
+	adrp	x9, _tail@GOTPAGE
+	ldr	x10, [sp, #8]
+Lloh18:
+	ldr	x9, [x9, _tail@GOTPAGEOFF]
+	ldr	x10, [x10, #8]
+	ldr	x11, [x9]
+	cmp	x10, x11
+	b.eq	LBB2_6
+; %bb.4:                                ; %L22
 	ldp	x9, x8, [sp]
 	ldr	x0, [x8, #8]
 	ldr	x8, [x0]
 	cmp	x8, x9
-	b.eq	LBB2_7
-; %bb.6:                                ; %L24
-                                        ;   in Loop: Header=BB2_5 Depth=1
-	ldr	x1, [sp]
-	bl	_Del
-	b	LBB2_5
-LBB2_7:                                 ; %L23
+	b.ne	LBB2_7
+; %bb.5:                                ; %L23
 	ldr	x8, [sp, #8]
 	str	x0, [sp, #16]
 	ldr	x9, [x8, #8]
 	ldr	x9, [x9, #8]
 	str	x9, [x8, #8]
-	b	LBB2_4
+	bl	_free
+	b	LBB2_8
+LBB2_6:                                 ; %L20
+	ldr	x0, [x9]
+	ldr	x10, [sp, #8]
+	ldr	x8, [x8]
+	str	x0, [sp, #16]
+	str	x10, [x9]
+	str	x8, [x10, #8]
+	bl	_free
+	b	LBB2_8
+LBB2_7:                                 ; %L24
+	ldr	x1, [sp]
+	bl	_Del
+LBB2_8:                                 ; %L29
+	ldp	x29, x30, [sp, #32]             ; 16-byte Folded Reload
+	mov	x0, xzr
+	str	xzr, [sp, #24]
+	add	sp, sp, #48
+	ret
 	.loh AdrpLdrGot	Lloh13, Lloh14
 	.loh AdrpLdrGot	Lloh15, Lloh16
-	.loh AdrpLdrGotLdr	Lloh17, Lloh18, Lloh19
+	.loh AdrpLdrGot	Lloh17, Lloh18
 	.cfi_endproc
                                         ; -- End function
 	.globl	_main                           ; -- Begin function main
@@ -189,9 +198,9 @@ _main:                                  ; @main
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
 	.cfi_offset w20, -32
-Lloh20:
+Lloh19:
 	adrp	x19, l_.read@PAGE
-Lloh21:
+Lloh20:
 	add	x19, x19, l_.read@PAGEOFF
 	add	x8, sp, #32
 	mov	x0, x19
@@ -213,9 +222,9 @@ Lloh21:
 	bl	_Add
 	ldr	x0, [sp, #32]
 	bl	_Add
-Lloh22:
+Lloh21:
 	adrp	x19, _head@GOTPAGE
-Lloh23:
+Lloh22:
 	ldr	x19, [x19, _head@GOTPAGEOFF]
 	ldr	x0, [x19]
 	bl	_PrintList
@@ -260,8 +269,8 @@ LBB3_6:                                 ; %L36
 	ldp	x20, x19, [sp, #48]             ; 16-byte Folded Reload
 	add	sp, sp, #80
 	ret
-	.loh AdrpLdrGot	Lloh22, Lloh23
-	.loh AdrpAdd	Lloh20, Lloh21
+	.loh AdrpLdrGot	Lloh21, Lloh22
+	.loh AdrpAdd	Lloh19, Lloh20
 	.cfi_endproc
                                         ; -- End function
 	.comm	_.nilNode,8,3                   ; @.nilNode

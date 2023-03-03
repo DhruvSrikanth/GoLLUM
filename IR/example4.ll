@@ -126,7 +126,7 @@ L13:
 	br i1 %r36, label %L14, label %L15
 
 L14:
-	br label %L16
+	br label %L28
 
 L15:
 	br label %L16
@@ -149,7 +149,7 @@ L17:
 	%r46 = load %struct.Node*, %struct.Node** %temp
 	%r47 = bitcast %struct.Node* %r46 to i8*
 	call void @free(i8* %r47)
-	br label %L19
+	br label %L27
 
 L18:
 	br label %L19
@@ -174,7 +174,7 @@ L20:
 	%r59 = load %struct.Node*, %struct.Node** %temp
 	%r60 = bitcast %struct.Node* %r59 to i8*
 	call void @free(i8* %r60)
-	br label %L22
+	br label %L26
 
 L21:
 	br label %L22
@@ -216,13 +216,13 @@ L24:
 	br label %L25
 
 L25:
-	br label %L22
+	br label %L26
 
 L26:
-	br label %L19
+	br label %L27
 
 L27:
-	br label %L16
+	br label %L28
 
 L28:
 	br label %L29
@@ -303,10 +303,10 @@ L37:
 }
 
 
+declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
 declare i32 @scanf(i8*, ...)
-declare i8* @malloc(i32)
 
 @.fstr1 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.fstr2 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1

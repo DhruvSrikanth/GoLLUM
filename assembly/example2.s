@@ -50,14 +50,25 @@ Lloh1:
 	stp	x1, x0, [sp, #8]
 	ldr	x8, [x19]
 	cmp	x1, x8
-	b.eq	LBB1_2
+	b.eq	LBB1_4
 ; %bb.1:                                ; %L13
 	ldp	x8, x1, [sp, #8]
 	ldr	x0, [x8]
 	bl	_compare
+	cmn	x0, #1
 	str	x0, [sp, #32]
-	b	LBB1_3
-LBB1_2:                                 ; %L12
+	b.ne	LBB1_5
+; %bb.2:                                ; %L16
+	ldr	x8, [sp, #8]
+	ldr	x9, [x19]
+	ldr	x8, [x8, #8]
+	cmp	x8, x9
+	b.eq	LBB1_9
+; %bb.3:                                ; %L18
+	ldp	x8, x0, [sp, #8]
+	ldr	x1, [x8, #8]
+	b	LBB1_8
+LBB1_4:                                 ; %L12
 	mov	w0, #24
 	bl	_malloc
 Lloh2:
@@ -69,25 +80,45 @@ Lloh3:
 	str	x8, [x0]
 Lloh4:
 	str	x0, [x9]
-LBB1_3:                                 ; %L14
+	b	LBB1_11
+LBB1_5:                                 ; %L21
+	ldr	x8, [sp, #32]
+	cmp	x8, #1
+	b.ne	LBB1_11
+; %bb.6:                                ; %L23
 	ldr	x8, [sp, #8]
 	ldr	x9, [x19]
-	ldr	x8, [x8, #8]
+	ldr	x8, [x8, #16]
 	cmp	x8, x9
-	b.eq	LBB1_5
-; %bb.4:                                ; %L18
+	b.eq	LBB1_10
+; %bb.7:                                ; %L25
 	ldp	x8, x0, [sp, #8]
-	ldr	x1, [x8, #8]
+	ldr	x1, [x8, #16]
+LBB1_8:                                 ; %L31
 	bl	_addNode
-LBB1_5:                                 ; %L17
-                                        ; =>This Inner Loop Header: Depth=1
+	b	LBB1_11
+LBB1_9:                                 ; %L17
 	mov	w0, #24
 	bl	_malloc
 	ldp	x9, x8, [sp, #8]
 	str	x0, [sp, #24]
 	str	x8, [x0]
 	str	x0, [x9, #8]
-	b	LBB1_5
+	b	LBB1_11
+LBB1_10:                                ; %L24
+	mov	w0, #24
+	bl	_malloc
+	ldp	x9, x8, [sp, #8]
+	str	x0, [sp, #24]
+	str	x8, [x0]
+	str	x0, [x9, #16]
+LBB1_11:                                ; %L31
+	ldp	x29, x30, [sp, #64]             ; 16-byte Folded Reload
+	mov	x0, xzr
+	str	xzr, [sp, #40]
+	ldp	x20, x19, [sp, #48]             ; 16-byte Folded Reload
+	add	sp, sp, #80
+	ret
 	.loh AdrpLdrGot	Lloh0, Lloh1
 	.loh AdrpLdrGotStr	Lloh2, Lloh3, Lloh4
 	.cfi_endproc
@@ -110,15 +141,20 @@ Lloh5:
 Lloh6:
 	ldr	x19, [x19, _.nilNode@GOTPAGEOFF]
 	str	x0, [sp, #8]
-	ldr	x8, [x0, #8]
+	ldr	x8, [x19]
+	cmp	x0, x8
+	b.eq	LBB2_5
+; %bb.1:                                ; %L35
+	ldr	x8, [sp, #8]
 	ldr	x9, [x19]
+	ldr	x8, [x8, #8]
 	cmp	x8, x9
-	b.eq	LBB2_2
-LBB2_1:                                 ; %L36
+	b.eq	LBB2_3
+; %bb.2:                                ; %L36
 	ldr	x8, [sp, #8]
 	ldr	x0, [x8, #8]
 	bl	_printDepthTree
-LBB2_2:                                 ; %L38
+LBB2_3:                                 ; %L38
 	ldr	x8, [sp, #8]
 Lloh7:
 	adrp	x0, l_.fstr1@PAGE
@@ -132,12 +168,18 @@ Lloh8:
 	ldr	x9, [x19]
 	ldr	x8, [x8, #16]
 	cmp	x8, x9
-	b.eq	LBB2_1
-; %bb.3:                                ; %L40
+	b.eq	LBB2_5
+; %bb.4:                                ; %L40
 	ldr	x8, [sp, #8]
 	ldr	x0, [x8, #16]
 	bl	_printDepthTree
-	b	LBB2_1
+LBB2_5:                                 ; %L45
+	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
+	mov	x0, xzr
+	str	xzr, [sp, #24]
+	ldp	x20, x19, [sp, #32]             ; 16-byte Folded Reload
+	add	sp, sp, #64
+	ret
 	.loh AdrpLdrGot	Lloh5, Lloh6
 	.loh AdrpAdd	Lloh7, Lloh8
 	.cfi_endproc
@@ -160,28 +202,39 @@ Lloh9:
 Lloh10:
 	ldr	x19, [x19, _.nilNode@GOTPAGEOFF]
 	str	x0, [sp]
-	ldr	x8, [x0, #8]
+	ldr	x8, [x19]
+	cmp	x0, x8
+	b.eq	LBB3_6
+; %bb.1:                                ; %L49
+	ldr	x8, [sp]
 	ldr	x9, [x19]
+	ldr	x8, [x8, #8]
 	cmp	x8, x9
-	b.eq	LBB3_2
-LBB3_1:                                 ; %L50
+	b.eq	LBB3_3
+; %bb.2:                                ; %L50
 	ldr	x8, [sp]
 	ldr	x0, [x8, #8]
 	bl	_deleteLeavesTree
-LBB3_2:                                 ; %L53
+LBB3_3:                                 ; %L53
 	ldr	x8, [sp]
 	ldr	x9, [x19]
 	ldr	x8, [x8, #16]
 	cmp	x8, x9
-	b.eq	LBB3_4
-; %bb.3:                                ; %L54
+	b.eq	LBB3_5
+; %bb.4:                                ; %L54
 	ldr	x8, [sp]
 	ldr	x0, [x8, #16]
 	bl	_deleteLeavesTree
-LBB3_4:                                 ; %L56
+LBB3_5:                                 ; %L56
 	ldr	x0, [sp]
 	bl	_free
-	b	LBB3_1
+LBB3_6:                                 ; %L59
+	ldp	x29, x30, [sp, #32]             ; 16-byte Folded Reload
+	mov	x0, xzr
+	str	xzr, [sp, #8]
+	ldp	x20, x19, [sp, #16]             ; 16-byte Folded Reload
+	add	sp, sp, #48
+	ret
 	.loh AdrpLdrGot	Lloh9, Lloh10
 	.cfi_endproc
                                         ; -- End function

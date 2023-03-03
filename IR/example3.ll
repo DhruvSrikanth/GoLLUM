@@ -58,7 +58,7 @@ L6:
 	%r7 = load %struct.ListNode*, %struct.ListNode** %P_list
 	%r8 = load %struct.ListNode*, %struct.ListNode** @.nilListNode
 	%r9 = icmp ne %struct.ListNode* %r7, %r8
-	br i1 %r9, label %L7, label %L8
+	br i1 %r9, label %L7, label %L12
 
 L7:
 	br label %L8
@@ -90,10 +90,10 @@ L10:
 	ret i64 %r24
 
 L11:
-	br label %L9
+	br label %L13
 
 L12:
-	br label %L9
+	br label %L13
 
 L13:
 	%r25 = mul i64 -1, 1
@@ -592,10 +592,10 @@ L69:
 }
 
 
-declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
 declare i32 @scanf(i8*, ...)
+declare i8* @malloc(i32)
 
 @.fstr1 = private unnamed_addr constant [18 x i8] c"Max Factorial=%ld\00", align 1
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
