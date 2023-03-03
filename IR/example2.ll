@@ -5,8 +5,6 @@ target triple = "arm64-apple-darwin22.2.0"
 
 @.nilNode = common global %struct.Node* null
 @root = common global %struct.Node* null
-@x = common global i64 0
-@y = common global i64 0
 
 define i64 @compare(i64 %cur, i64 %neuw)
 {
@@ -403,10 +401,10 @@ L64:
 }
 
 
-declare i32 @printf(i8*, ...)
-declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
+declare i32 @printf(i8*, ...)
+declare i32 @scanf(i8*, ...)
 
 @.fstr1 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1

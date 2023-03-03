@@ -303,8 +303,6 @@ LBB4_3:                                 ; %L63
                                         ; -- End function
 	.comm	_.nilNode,8,3                   ; @.nilNode
 	.comm	_root,8,3                       ; @root
-	.comm	_x,8,3                          ; @x
-	.comm	_y,8,3                          ; @y
 	.section	__TEXT,__cstring,cstring_literals
 l_.fstr1:                               ; @.fstr1
 	.asciz	"%ld"
