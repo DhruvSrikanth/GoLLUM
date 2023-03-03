@@ -159,10 +159,10 @@ LBB3_7:                                 ; %common.ret
 _maxfactorial:                          ; @maxfactorial
 	.cfi_startproc
 ; %bb.0:                                ; %L33
-	sub	sp, sp, #80
-	.cfi_def_cfa_offset 80
-	stp	x20, x19, [sp, #48]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #64]             ; 16-byte Folded Spill
+	sub	sp, sp, #96
+	.cfi_def_cfa_offset 96
+	stp	x20, x19, [sp, #64]             ; 16-byte Folded Spill
+	stp	x29, x30, [sp, #80]             ; 16-byte Folded Spill
 	.cfi_offset w30, -8
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
@@ -172,63 +172,80 @@ Lloh2:
 Lloh3:
 	adrp	x9, _matrix@GOTPAGE
 Lloh4:
-	adrp	x10, _.nilRow@GOTPAGE
+	adrp	x19, _.nilRow@GOTPAGE
 Lloh5:
-	ldr	x8, [x8, _.nilListNode@GOTPAGEOFF]
+	adrp	x20, _.nilCell@GOTPAGE
 Lloh6:
-	ldr	x8, [x8]
+	ldr	x8, [x8, _.nilListNode@GOTPAGEOFF]
 Lloh7:
-	ldr	x9, [x9, _matrix@GOTPAGEOFF]
+	ldr	x8, [x8]
 Lloh8:
-	ldr	x10, [x10, _.nilRow@GOTPAGEOFF]
-	stp	x1, x0, [sp]
+	ldr	x9, [x9, _matrix@GOTPAGEOFF]
+	str	x0, [sp, #24]
 	str	x8, [x0]
 Lloh9:
 	ldr	x8, [x9]
 Lloh10:
-	ldr	x9, [x10]
-	str	x8, [sp, #32]
-	cmp	x8, x9
-	b.eq	LBB4_2
-; %bb.1:                                ; %L35
-	ldr	x8, [sp, #32]
-	ldp	x8, x9, [x8]
-	stp	x9, x8, [sp, #24]
-LBB4_2:                                 ; %L36.preheader
+	ldr	x19, [x19, _.nilRow@GOTPAGEOFF]
 Lloh11:
-	adrp	x19, _.nilCell@GOTPAGE
-Lloh12:
-	ldr	x19, [x19, _.nilCell@GOTPAGEOFF]
-LBB4_3:                                 ; %L36
-                                        ; =>This Inner Loop Header: Depth=1
-	ldr	x8, [sp, #24]
+	ldr	x20, [x20, _.nilCell@GOTPAGEOFF]
+	str	x1, [sp, #16]
+	str	x8, [sp, #48]
+LBB4_1:                                 ; %L34
+                                        ; =>This Loop Header: Depth=1
+                                        ;     Child Loop BB4_3 Depth 2
+	ldr	x8, [sp, #48]
 	ldr	x9, [x19]
 	cmp	x8, x9
-	b.eq	LBB4_5
+	b.eq	LBB4_6
+; %bb.2:                                ; %L35
+                                        ;   in Loop: Header=BB4_1 Depth=1
+	ldr	x8, [sp, #48]
+	ldp	x8, x9, [x8]
+	stp	x9, x8, [sp, #40]
+LBB4_3:                                 ; %L36
+                                        ;   Parent Loop BB4_1 Depth=1
+                                        ; =>  This Inner Loop Header: Depth=2
+	ldr	x8, [sp, #40]
+	ldr	x9, [x20]
+	cmp	x8, x9
+	b.eq	LBB4_1
 ; %bb.4:                                ; %L37
-                                        ;   in Loop: Header=BB4_3 Depth=1
-	ldr	x8, [sp, #24]
-	ldr	x1, [sp, #8]
+                                        ;   in Loop: Header=BB4_3 Depth=2
+	ldr	x8, [sp, #40]
+	ldr	x1, [sp, #24]
 	ldr	x0, [x8, #8]
 	bl	_factorial
-	ldr	x8, [sp, #24]
+	ldr	x8, [sp, #40]
+	ldr	x9, [sp, #16]
 	ldr	x8, [x8]
-	stp	x0, x8, [sp, #16]
-LBB4_5:                                 ; %L38
-                                        ;   in Loop: Header=BB4_3 Depth=1
-	ldr	x8, [sp, #16]
-	ldr	x9, [sp]
-	cmp	x8, x9
+	cmp	x0, x9
+	stp	x0, x8, [sp, #32]
 	b.le	LBB4_3
-; %bb.6:                                ; %L39
-                                        ;   in Loop: Header=BB4_3 Depth=1
-	ldr	x8, [sp, #16]
-	str	x8, [sp]
+; %bb.5:                                ; %L39
+                                        ;   in Loop: Header=BB4_3 Depth=2
+	ldr	x8, [sp, #32]
+	str	x8, [sp, #16]
 	b	LBB4_3
-	.loh AdrpLdrGotLdr	Lloh4, Lloh8, Lloh10
-	.loh AdrpLdrGotLdr	Lloh3, Lloh7, Lloh9
-	.loh AdrpLdrGotLdr	Lloh2, Lloh5, Lloh6
-	.loh AdrpLdrGot	Lloh11, Lloh12
+LBB4_6:                                 ; %L43
+	ldr	x8, [sp, #16]
+Lloh12:
+	adrp	x0, l_.fstr1@PAGE
+Lloh13:
+	add	x0, x0, l_.fstr1@PAGEOFF
+	str	x8, [sp]
+	bl	_printf
+	ldp	x29, x30, [sp, #80]             ; 16-byte Folded Reload
+	mov	x0, xzr
+	str	xzr, [sp, #56]
+	ldp	x20, x19, [sp, #64]             ; 16-byte Folded Reload
+	add	sp, sp, #96
+	ret
+	.loh AdrpLdrGot	Lloh5, Lloh11
+	.loh AdrpLdrGot	Lloh4, Lloh10
+	.loh AdrpLdrGotLdr	Lloh3, Lloh8, Lloh9
+	.loh AdrpLdrGotLdr	Lloh2, Lloh6, Lloh7
+	.loh AdrpAdd	Lloh12, Lloh13
 	.cfi_endproc
                                         ; -- End function
 	.globl	_newvalue                       ; -- Begin function newvalue
@@ -244,21 +261,21 @@ _newvalue:                              ; @newvalue
 	stp	x1, x0, [sp]
 	mov	x0, xzr
 	bl	_timesone
-Lloh13:
+Lloh14:
 	adrp	x10, _maxrange@GOTPAGE
 	ldp	x8, x9, [sp]
-Lloh14:
+Lloh15:
 	ldr	x10, [x10, _maxrange@GOTPAGEOFF]
 	ldp	x29, x30, [sp, #32]             ; 16-byte Folded Reload
 	mul	x8, x9, x8
-Lloh15:
+Lloh16:
 	ldr	x10, [x10]
 	sdiv	x10, x10, x8
 	add	x0, x10, x9
 	stp	x8, x0, [sp, #16]
 	add	sp, sp, #48
 	ret
-	.loh AdrpLdrGotLdr	Lloh13, Lloh14, Lloh15
+	.loh AdrpLdrGotLdr	Lloh14, Lloh15, Lloh16
 	.cfi_endproc
                                         ; -- End function
 	.globl	_newcell                        ; -- Begin function newcell
@@ -294,11 +311,11 @@ _newcell:                               ; @newcell
 	mov	x8, x0
 	b	LBB6_3
 LBB6_2:                                 ; %L49
-Lloh16:
-	adrp	x8, _.nilCell@GOTPAGE
 Lloh17:
-	ldr	x8, [x8, _.nilCell@GOTPAGEOFF]
+	adrp	x8, _.nilCell@GOTPAGE
 Lloh18:
+	ldr	x8, [x8, _.nilCell@GOTPAGEOFF]
+Lloh19:
 	ldr	x8, [x8]
 LBB6_3:                                 ; %L50
 	str	x8, [x20]
@@ -308,7 +325,7 @@ LBB6_3:                                 ; %L50
 	str	x0, [sp, #24]
 	add	sp, sp, #64
 	ret
-	.loh AdrpLdrGotLdr	Lloh16, Lloh17, Lloh18
+	.loh AdrpLdrGotLdr	Lloh17, Lloh18, Lloh19
 	.cfi_endproc
                                         ; -- End function
 	.globl	_newrow                         ; -- Begin function newrow
@@ -344,11 +361,11 @@ _newrow:                                ; @newrow
 	mov	x8, x0
 	b	LBB7_3
 LBB7_2:                                 ; %L54
-Lloh19:
-	adrp	x8, _.nilRow@GOTPAGE
 Lloh20:
-	ldr	x8, [x8, _.nilRow@GOTPAGEOFF]
+	adrp	x8, _.nilRow@GOTPAGE
 Lloh21:
+	ldr	x8, [x8, _.nilRow@GOTPAGEOFF]
+Lloh22:
 	ldr	x8, [x8]
 LBB7_3:                                 ; %L55
 	str	x8, [x20]
@@ -358,7 +375,7 @@ LBB7_3:                                 ; %L55
 	str	x0, [sp, #24]
 	add	sp, sp, #64
 	ret
-	.loh AdrpLdrGotLdr	Lloh19, Lloh20, Lloh21
+	.loh AdrpLdrGotLdr	Lloh20, Lloh21, Lloh22
 	.cfi_endproc
                                         ; -- End function
 	.globl	_newmatrix                      ; -- Begin function newmatrix
@@ -376,19 +393,19 @@ _newmatrix:                             ; @newmatrix
 	bl	_malloc
 	ldp	x2, x1, [sp, #8]
 	bl	_newrow
-Lloh22:
+Lloh23:
 	adrp	x9, _matrix@GOTPAGE
 	mov	x8, x0
 	mov	x0, xzr
-Lloh23:
+Lloh24:
 	ldr	x9, [x9, _matrix@GOTPAGEOFF]
 	str	xzr, [sp, #24]
 	ldp	x29, x30, [sp, #32]             ; 16-byte Folded Reload
-Lloh24:
+Lloh25:
 	str	x8, [x9]
 	add	sp, sp, #48
 	ret
-	.loh AdrpLdrGotStr	Lloh22, Lloh23, Lloh24
+	.loh AdrpLdrGotStr	Lloh23, Lloh24, Lloh25
 	.cfi_endproc
                                         ; -- End function
 	.globl	_getmatrixsize                  ; -- Begin function getmatrixsize
@@ -405,9 +422,9 @@ _getmatrixsize:                         ; @getmatrixsize
 	str	x0, [sp, #16]
 	b.gt	LBB9_2
 ; %bb.1:                                ; %L60
-Lloh25:
-	adrp	x0, l_.read@PAGE
 Lloh26:
+	adrp	x0, l_.read@PAGE
+Lloh27:
 	add	x0, x0, l_.read@PAGEOFF
 	add	x8, sp, #16
 	str	x8, [sp]
@@ -420,7 +437,7 @@ LBB9_2:                                 ; %common.ret
 	str	x0, [sp, #24]
 	add	sp, sp, #48
 	ret
-	.loh AdrpAdd	Lloh25, Lloh26
+	.loh AdrpAdd	Lloh26, Lloh27
 	.cfi_endproc
                                         ; -- End function
 	.globl	_getmaxrange                    ; -- Begin function getmaxrange
@@ -436,18 +453,18 @@ _getmaxrange:                           ; @getmaxrange
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
 	.cfi_offset w20, -32
-Lloh27:
-	adrp	x19, _maxrange@GOTPAGE
 Lloh28:
+	adrp	x19, _maxrange@GOTPAGE
+Lloh29:
 	ldr	x19, [x19, _maxrange@GOTPAGEOFF]
 	str	x0, [sp, #16]
 	ldr	x8, [x19]
 	cmp	x8, #1
 	b.gt	LBB10_2
 ; %bb.1:                                ; %L65
-Lloh29:
-	adrp	x0, l_.read@PAGE
 Lloh30:
+	adrp	x0, l_.read@PAGE
+Lloh31:
 	add	x0, x0, l_.read@PAGEOFF
 	str	x19, [sp]
 	bl	_scanf
@@ -460,8 +477,8 @@ LBB10_2:                                ; %common.ret
 	str	x0, [sp, #24]
 	add	sp, sp, #64
 	ret
-	.loh AdrpLdrGot	Lloh27, Lloh28
-	.loh AdrpAdd	Lloh29, Lloh30
+	.loh AdrpLdrGot	Lloh28, Lloh29
+	.loh AdrpAdd	Lloh30, Lloh31
 	.cfi_endproc
                                         ; -- End function
 	.globl	_main                           ; -- Begin function main
@@ -477,10 +494,10 @@ _main:                                  ; @main
 	.cfi_offset w29, -16
 	.cfi_offset w19, -24
 	.cfi_offset w20, -32
-Lloh31:
+Lloh32:
 	adrp	x19, _maxrange@GOTPAGE
 	mov	x0, xzr
-Lloh32:
+Lloh33:
 	ldr	x19, [x19, _maxrange@GOTPAGEOFF]
 	stp	xzr, xzr, [sp, #8]
 	str	xzr, [x19]
@@ -503,7 +520,7 @@ Lloh32:
 	ldp	x20, x19, [sp, #32]             ; 16-byte Folded Reload
 	add	sp, sp, #64
 	ret
-	.loh AdrpLdrGot	Lloh31, Lloh32
+	.loh AdrpLdrGot	Lloh32, Lloh33
 	.cfi_endproc
                                         ; -- End function
 	.comm	_.nilCell,8,3                   ; @.nilCell

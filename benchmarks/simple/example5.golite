@@ -95,5 +95,5 @@ func main()  {
     domath(b);
     objinstantiation(c);
     temp = ackermann(d,e); 
-    printf("a=%d\nb=%d\n%c=%d,temp=%d",a,b,c,temp); 
+    printf("a=%d\nb=%d\nc=%d\n,temp=%d\n",a,b,c,temp); 
 }

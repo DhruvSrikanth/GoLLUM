@@ -271,7 +271,7 @@ L34:
 	%r83 = load %struct.Row*, %struct.Row** %row
 	%r84 = load %struct.Row*, %struct.Row** @.nilRow
 	%r85 = icmp ne %struct.Row* %r83, %r84
-	br i1 %r85, label %L35, label %L36
+	br i1 %r85, label %L35, label %L43
 
 L35:
 	%r86 = load %struct.Row*, %struct.Row** %row
@@ -288,7 +288,7 @@ L36:
 	%r92 = load %struct.Cell*, %struct.Cell** %cell
 	%r93 = load %struct.Cell*, %struct.Cell** @.nilCell
 	%r94 = icmp ne %struct.Cell* %r92, %r93
-	br i1 %r94, label %L37, label %L38
+	br i1 %r94, label %L37, label %L42
 
 L37:
 	%r95 = load %struct.Cell*, %struct.Cell** %cell

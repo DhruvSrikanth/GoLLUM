@@ -313,7 +313,7 @@ L27:
 	%r130 = load i64, i64* %b
 	%r131 = load i64, i64* %c
 	%r132 = load i64, i64* %temp
-	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([28 x i8], [28 x i8]* @.fstr2, i32 0, i32 0), i64 %r129, i64 %r130, i64 %r131, i64 %r132)
+	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.fstr2, i32 0, i32 0), i64 %r129, i64 %r130, i64 %r131, i64 %r132)
 	br label %L28
 
 L28:
@@ -325,11 +325,11 @@ L28:
 }
 
 
+declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
 declare i32 @scanf(i8*, ...)
-declare i8* @malloc(i32)
 
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
-@.fstr2 = private unnamed_addr constant [28 x i8] c"a=%ld\0Ab=%ld\0A%c=%ld,temp=%ld\00", align 1
+@.fstr2 = private unnamed_addr constant [29 x i8] c"a=%ld\0Ab=%ld\0Ac=%ld\0A,temp=%ld\0A\00", align 1
 

@@ -118,6 +118,8 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 		branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(branchUncondInst)
 	}
+	// Set the false label for the conditional branch as it wouldve moved forward in the ToLLVMCFG call for the body
+	branchCondInst.SetFalseLabel(llvm.GetCurrentLabel())
 
 	// Add new block for canonical form
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())

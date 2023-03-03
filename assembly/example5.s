@@ -282,6 +282,6 @@ l_.read:                                ; @.read
 	.asciz	"%ld"
 
 l_.fstr2:                               ; @.fstr2
-	.asciz	"a=%ld\nb=%ld\n%c=%ld,temp=%ld"
+	.asciz	"a=%ld\nb=%ld\nc=%ld\n,temp=%ld\n"
 
 .subsections_via_symbols

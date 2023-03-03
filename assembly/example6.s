@@ -45,12 +45,10 @@ _prime:                                 ; @prime
 	cmp	x0, #2
 	str	x0, [sp, #8]
 	b.ge	LBB1_2
-LBB1_1:                                 ; %L11
-	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
-	str	xzr, [sp, #40]
+LBB1_1:                                 ; %L6
 	mov	x0, xzr
-	add	sp, sp, #64
-	ret
+	str	xzr, [sp, #40]
+	b	LBB1_7
 LBB1_2:                                 ; %L7
 	ldr	x0, [sp, #8]
 	bl	_isqrt
@@ -61,7 +59,7 @@ LBB1_3:                                 ; %L8
 	ldr	x9, [sp, #32]
 	str	x8, [sp, #24]
 	cmp	x8, x9
-	b.gt	LBB1_5
+	b.gt	LBB1_6
 ; %bb.4:                                ; %L9
                                         ;   in Loop: Header=BB1_3 Depth=1
 	ldr	x8, [sp, #8]
@@ -69,15 +67,19 @@ LBB1_3:                                 ; %L8
 	sdiv	x10, x8, x9
 	msub	x8, x10, x9, x8
 	str	x8, [sp, #16]
-LBB1_5:                                 ; %L10
-                                        ;   in Loop: Header=BB1_3 Depth=1
-	ldr	x8, [sp, #16]
 	cbz	x8, LBB1_1
-; %bb.6:                                ; %L13
+; %bb.5:                                ; %L13
                                         ;   in Loop: Header=BB1_3 Depth=1
 	ldr	x8, [sp, #24]
 	add	x8, x8, #1
 	b	LBB1_3
+LBB1_6:                                 ; %L14
+	mov	w0, #1
+	str	x0, [sp, #40]
+LBB1_7:                                 ; %common.ret
+	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
+	add	sp, sp, #64
+	ret
 	.cfi_endproc
                                         ; -- End function
 	.globl	_main                           ; -- Begin function main
@@ -113,17 +115,29 @@ LBB2_1:                                 ; %L23
 	str	x8, [sp, #8]
 LBB2_2:                                 ; %L18
                                         ; =>This Inner Loop Header: Depth=1
+	ldp	x8, x9, [sp, #8]
+	cmp	x8, x9
+	b.gt	LBB2_5
+; %bb.3:                                ; %L20
+                                        ;   in Loop: Header=BB2_2 Depth=1
 	ldr	x0, [sp, #8]
 	bl	_prime
 	cmp	x0, #1
 	b.ne	LBB2_1
-; %bb.3:                                ; %L21
+; %bb.4:                                ; %L21
                                         ;   in Loop: Header=BB2_2 Depth=1
 	ldr	x8, [sp, #8]
 	mov	x0, x19
 	str	x8, [sp]
 	bl	_printf
 	b	LBB2_1
+LBB2_5:                                 ; %L25
+	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
+	mov	x0, xzr
+	str	xzr, [sp, #24]
+	ldp	x20, x19, [sp, #32]             ; 16-byte Folded Reload
+	add	sp, sp, #64
+	ret
 	.loh AdrpAdd	Lloh2, Lloh3
 	.loh AdrpAdd	Lloh0, Lloh1
 	.cfi_endproc

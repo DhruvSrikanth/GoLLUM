@@ -57,7 +57,7 @@ L7:
 	%r10 = load i64, i64* %stop
 	%r11 = xor i64 1, %r10
 	%r12 = icmp eq i64 %r11, 1
-	br i1 %r12, label %L8, label %L9
+	br i1 %r12, label %L8, label %L13
 
 L8:
 	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %factor)
@@ -96,10 +96,10 @@ L14:
 }
 
 
-declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
 declare i32 @scanf(i8*, ...)
+declare i8* @malloc(i32)
 
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.fstr2 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1

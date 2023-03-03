@@ -74,7 +74,7 @@ L8:
 	%r17 = load i64, i64* %divisor
 	%r18 = load i64, i64* %max
 	%r19 = icmp sle i64 %r17, %r18
-	br i1 %r19, label %L9, label %L10
+	br i1 %r19, label %L9, label %L14
 
 L9:
 	%r20 = load i64, i64* %P_a
@@ -135,7 +135,7 @@ L18:
 	%r34 = load i64, i64* %a
 	%r35 = load i64, i64* %limit
 	%r36 = icmp sle i64 %r34, %r35
-	br i1 %r36, label %L19, label %L20
+	br i1 %r36, label %L19, label %L24
 
 L19:
 	br label %L20
@@ -172,10 +172,10 @@ L25:
 }
 
 
-declare i32 @printf(i8*, ...)
 declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
+declare i32 @printf(i8*, ...)
 
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.fstr2 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1

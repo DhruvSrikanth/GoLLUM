@@ -60,20 +60,12 @@ Lloh2:
 Lloh3:
 	add	x20, x20, l_.fstr2@PAGEOFF
 	stp	xzr, xzr, [sp, #24]
+LBB1_1:                                 ; %L7
+                                        ; =>This Inner Loop Header: Depth=1
 	ldr	x8, [sp, #32]
-	cbz	x8, LBB1_4
-LBB1_1:                                 ; %L9
-	ldr	x8, [sp, #16]
-	cbz	x8, LBB1_3
-LBB1_2:                                 ; %L7
-	ldr	x8, [sp, #32]
-	cbnz	x8, LBB1_1
-	b	LBB1_4
-LBB1_3:                                 ; %L10
-	str	x23, [sp, #32]
-	ldr	x8, [sp, #32]
-	cbnz	x8, LBB1_1
-LBB1_4:                                 ; %L8
+	cbnz	x8, LBB1_4
+; %bb.2:                                ; %L8
+                                        ;   in Loop: Header=BB1_1 Depth=1
 	mov	x0, x19
 	str	x21, [sp]
 	bl	_scanf
@@ -87,8 +79,20 @@ LBB1_4:                                 ; %L8
 	str	x22, [sp]
 	bl	_scanf
 	ldr	x8, [sp, #16]
-	cbnz	x8, LBB1_2
-	b	LBB1_3
+	cbnz	x8, LBB1_1
+; %bb.3:                                ; %L10
+                                        ;   in Loop: Header=BB1_1 Depth=1
+	str	x23, [sp, #32]
+	b	LBB1_1
+LBB1_4:                                 ; %L14
+	ldp	x29, x30, [sp, #96]             ; 16-byte Folded Reload
+	mov	x0, xzr
+	str	xzr, [sp, #40]
+	ldp	x20, x19, [sp, #80]             ; 16-byte Folded Reload
+	ldp	x22, x21, [sp, #64]             ; 16-byte Folded Reload
+	ldp	x24, x23, [sp, #48]             ; 16-byte Folded Reload
+	add	sp, sp, #112
+	ret
 	.loh AdrpAdd	Lloh2, Lloh3
 	.loh AdrpAdd	Lloh0, Lloh1
 	.cfi_endproc

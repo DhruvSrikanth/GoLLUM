@@ -79,3 +79,13 @@ func (b *BranchConditional) GetLabel() string {
 func (b *BranchConditional) SetLabel(newLabel string) {
 	b.blockLabel = newLabel
 }
+
+// Set the true label
+func (b *BranchConditional) SetTrueLabel(newLabel string) {
+	b.trueLabel = newLabel
+}
+
+// Set the false label
+func (b *BranchConditional) SetFalseLabel(newLabel string) {
+	b.falseLabel = newLabel
+}
