@@ -62,8 +62,15 @@ func main() {
 							outputPath := "IR/" + targetInfo.GetFileName() + ".ll"
 							llvm.WriteLLVMRepr(outputPath, llvmRepr)
 
-							// Remove the llvm representation file
-							// llvm.RemoveLLVMRepr(outputPath
+							// Convert the llvm representation to ARM assembly
+							// armRepr := llvm.GetARMAssembly(targetInfo, llvmRepr)
+							if cmd.ARMFlag {
+								// fmt.Println(armRepr)
+							} else {
+								// Write the ARM assembly to the output file
+								// outputPath := "ARM/" + targetInfo.GetFileName() + ".s"
+								// llvm.WriteARMRepr(outputPath, armRepr)
+							}
 						}
 					}
 				} else {
