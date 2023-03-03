@@ -118,7 +118,7 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 	lastInst := blocks[len(blocks)-1].GetLastInstruction()
 	if !strings.Contains(lastInst.String(), "icmp") {
 		// Add a comparison instruction
-		operationInst := llvm.NewBinOp(mostRecentOperand, llvm.OperatorToLLVM("=="), "1")
+		operationInst := llvm.NewBinOp(mostRecentOperand, llvm.OperatorToLLVM("=="), "i64", "1")
 		operationInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(operationInst)
 		mostRecentOperand = llvm.GetPreviousRegister()

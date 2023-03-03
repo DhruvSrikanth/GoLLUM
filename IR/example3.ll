@@ -56,8 +56,8 @@ L5:
 
 L6:
 	%r7 = load %struct.ListNode*, %struct.ListNode** %P_list
-	%r8 = load i64, i64* @.nilListNode
-	%r9 = icmp ne i64 %r7, %r8
+	%r8 = load %struct.ListNode*, %struct.ListNode** @.nilListNode
+	%r9 = icmp ne %struct.ListNode* %r7, %r8
 	br i1 %r9, label %L7, label %L8
 
 L7:
@@ -118,8 +118,8 @@ L14:
 
 L15:
 	%r27 = load %struct.ListNode*, %struct.ListNode** %P_list
-	%r28 = load i64, i64* @.nilListNode
-	%r29 = icmp eq i64 %r27, %r28
+	%r28 = load %struct.ListNode*, %struct.ListNode** @.nilListNode
+	%r29 = icmp eq %struct.ListNode* %r27, %r28
 	br i1 %r29, label %L16, label %L17
 
 L16:
@@ -269,8 +269,8 @@ L33:
 
 L34:
 	%r83 = load %struct.Row*, %struct.Row** %row
-	%r84 = load i64, i64* @.nilRow
-	%r85 = icmp ne i64 %r83, %r84
+	%r84 = load %struct.Row*, %struct.Row** @.nilRow
+	%r85 = icmp ne %struct.Row* %r83, %r84
 	br i1 %r85, label %L35, label %L36
 
 L35:
@@ -286,8 +286,8 @@ L35:
 
 L36:
 	%r92 = load %struct.Cell*, %struct.Cell** %cell
-	%r93 = load i64, i64* @.nilCell
-	%r94 = icmp ne i64 %r92, %r93
+	%r93 = load %struct.Cell*, %struct.Cell** @.nilCell
+	%r94 = icmp ne %struct.Cell* %r92, %r93
 	br i1 %r94, label %L37, label %L38
 
 L37:
@@ -592,10 +592,10 @@ L69:
 }
 
 
+declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
-declare i32 @scanf(i8*, ...)
 
 @.fstr1 = private unnamed_addr constant [18 x i8] c"Max Factorial=%ld\00", align 1
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1

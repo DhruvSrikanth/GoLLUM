@@ -9,6 +9,7 @@ import (
 // Representation of a binop operation
 type BinOp struct {
 	leftRegister    string
+	op              string
 	opType          string
 	rightRegister   string
 	blockLabel      string
@@ -17,7 +18,7 @@ type BinOp struct {
 }
 
 // NewBinOp returns a new free runtime call
-func NewBinOp(leftRegister, opType, rightRegister string) *BinOp {
+func NewBinOp(leftRegister, op, opType, rightRegister string) *BinOp {
 	srcR := make([]int, 0)
 	// This is the most recent register used
 	if strings.Contains(leftRegister, "%r") {
@@ -36,7 +37,7 @@ func NewBinOp(leftRegister, opType, rightRegister string) *BinOp {
 	nextR, _ := strconv.Atoi(GetNextRegister()[2:])
 	tgtR = append(tgtR, nextR)
 
-	return &BinOp{leftRegister, opType, rightRegister, "", srcR, tgtR}
+	return &BinOp{leftRegister, op, opType, rightRegister, "", srcR, tgtR}
 }
 
 // String representation of the binop declaration
@@ -47,8 +48,13 @@ func (b *BinOp) String() string {
 	// Common for all
 	out.WriteString("%r" + strconv.Itoa(b.targetRegisters[len(b.targetRegisters)-1]))
 	out.WriteString(" = ")
+	out.WriteString(b.op)
+	out.WriteString(" ")
+	if strings.Contains(b.opType, "struct.") {
+		out.WriteString("%")
+	}
 	out.WriteString(b.opType)
-	out.WriteString(" i64 ")
+	out.WriteString(" ")
 	out.WriteString(b.leftRegister)
 	out.WriteString(", ")
 	out.WriteString(b.rightRegister)

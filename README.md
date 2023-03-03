@@ -10,7 +10,6 @@
 ![build](https://img.shields.io/badge/build-passing-brightgreen)
 ![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 
-
 ## Build Golite Compiler
 
 ```bash
@@ -31,6 +30,7 @@ go run golite/main.go benchmarks/simple/example2.golite
 | `ast` | Print the parser produced by the parser. | Lexer, Parser | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
 | `sym` | Print the symbol table. | Lexer, Parser | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
 | `llvm` | Print the LLVM IR. | Lexer, Parser, IR Generator | `go run golite/main.go -llvm benchmarks/simple/example1.golite` |
+| `arm64` | Print the ARM64 assembly. | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64 benchmarks/simple/example1.golite` |
 
 Check out the `benchmarks` folder for more examples.
 
@@ -43,10 +43,12 @@ Check out the `benchmarks` folder for more examples.
 | `make test_type_checking` | Runs type checker tests. |
 | `make test_control_flow` | Runs control flow tests. |
 | `make test_parser` | Runs all parser tests. |
+| `make test_llvm` | Runs all llvm tests. |
+| `make test_arm64` | Runs all arm64 tests. |
 | `make test_compiler` | Runs all compiler tests. |
 
 
-Running the tests present in `golite/main_test.go` tests the compiler in both the `lexer` and `parser` phases.
+Running the tests present in `golite/main_test.go` will run all the tests in the `benchmarks` folder.
 
 ## Examples of Golite Programs
 

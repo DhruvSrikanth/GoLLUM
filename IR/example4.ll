@@ -29,8 +29,8 @@ L0:
 
 L1:
 	%r8 = load %struct.Node*, %struct.Node** @head
-	%r9 = load i64, i64* @.nilNode
-	%r10 = icmp eq i64 %r8, %r9
+	%r9 = load %struct.Node*, %struct.Node** @.nilNode
+	%r10 = icmp eq %struct.Node* %r8, %r9
 	br i1 %r10, label %L2, label %L3
 
 L2:
@@ -121,8 +121,8 @@ L12:
 
 L13:
 	%r34 = load %struct.Node*, %struct.Node** %P_curr
-	%r35 = load i64, i64* @.nilNode
-	%r36 = icmp eq i64 %r34, %r35
+	%r35 = load %struct.Node*, %struct.Node** @.nilNode
+	%r36 = icmp eq %struct.Node* %r34, %r35
 	br i1 %r36, label %L14, label %L15
 
 L14:
@@ -303,10 +303,10 @@ L37:
 }
 
 
-declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
+declare i32 @scanf(i8*, ...)
 
 @.fstr1 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.fstr2 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1

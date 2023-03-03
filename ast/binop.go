@@ -305,6 +305,11 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 		lastUsedRegRight = mostRecentOperand
 	}
 
+	// Figure out the kind type of operands we have
+	// By default it is i64
+	// Only when we have struct = nil comparisons does it become a pointer to the struct type
+	opType := "i64"
+
 	// Perform a nil check
 	var nilExprEq Expression
 	if lastUsedRegLeft == "nil" {
@@ -315,16 +320,18 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	// If any is nil, we need to set the value to nullptr for the particular type
 	if lastUsedRegLeft == "nil" || lastUsedRegRight == "nil" {
 		nilReg := "@.nil" + nilExprEq.GetType().String()[1:]
-		llvmTy := llvm.TypeToLLVM((*b.right).GetType())
+		llvmTy := llvm.TypeToLLVM(nilExprEq.GetType())
 		if strings.Contains(llvmTy, "struct.") {
 			llvmTy += "*"
 		}
+		opType = llvmTy
 
 		// Create the load instruction
 		loadInst := llvm.NewLoad(nilReg, llvmTy)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 		mostRecentOperand = llvm.GetPreviousRegister()
+
 	}
 
 	if lastUsedRegLeft == "nil" {
@@ -334,7 +341,7 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	}
 
 	// Perform the operation
-	operationInst := llvm.NewBinOp(lastUsedRegLeft, op, lastUsedRegRight)
+	operationInst := llvm.NewBinOp(lastUsedRegLeft, op, opType, lastUsedRegRight)
 	operationInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(operationInst)
 	mostRecentOperand = llvm.GetPreviousRegister()
