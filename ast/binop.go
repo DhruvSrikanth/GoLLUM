@@ -285,11 +285,16 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	} else if b.left != nil && (blocks[len(blocks)-1].Size() > 0) {
 		if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") && strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "struct.") && strings.Contains((*b.left).String(), ".") && !strings.Contains((*b.left).String(), " ") {
 			// Create the load instruction
-			loadInst := llvm.NewLoad(lastUsedRegLeft, "i64")
+			ty := llvm.TypeToLLVM((*b.left).GetType())
+			if strings.Contains(ty, "struct.") {
+				ty += "*"
+			}
+			loadInst := llvm.NewLoad(lastUsedRegLeft, ty)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 			mostRecentOperand = llvm.GetPreviousRegister()
 			lastUsedRegLeft = mostRecentOperand
+
 		}
 	}
 	if isNamed(funcEntry, lastUsedRegRight[1:]) || (strings.Contains((*b.right).String(), ".") && !strings.Contains((*b.right).String(), " ") && !strings.Contains((*b.right).String(), " ")) {
@@ -309,7 +314,6 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	// By default it is i64
 	// Only when we have struct = nil comparisons does it become a pointer to the struct type
 	opType := "i64"
-
 	// Perform a nil check
 	var nilExprEq Expression
 	if lastUsedRegLeft == "nil" {

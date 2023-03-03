@@ -113,7 +113,7 @@ L15:
 L16:
 	%r28 = load %struct.Node*, %struct.Node** %P_curr
 	%r29 = getelementptr %struct.Node, %struct.Node* %r28, i32 0, i32 1
-	%r30 = load i64, i64* %r29
+	%r30 = load %struct.Node*, %struct.Node** %r29
 	%r31 = load %struct.Node*, %struct.Node** @.nilNode
 	%r32 = icmp eq %struct.Node* %r30, %r31
 	br i1 %r32, label %L17, label %L18
@@ -157,7 +157,7 @@ L22:
 L23:
 	%r48 = load %struct.Node*, %struct.Node** %P_curr
 	%r49 = getelementptr %struct.Node, %struct.Node* %r48, i32 0, i32 2
-	%r50 = load i64, i64* %r49
+	%r50 = load %struct.Node*, %struct.Node** %r49
 	%r51 = load %struct.Node*, %struct.Node** @.nilNode
 	%r52 = icmp eq %struct.Node* %r50, %r51
 	br i1 %r52, label %L24, label %L25
@@ -228,7 +228,7 @@ L34:
 L35:
 	%r70 = load %struct.Node*, %struct.Node** %P_curr
 	%r71 = getelementptr %struct.Node, %struct.Node* %r70, i32 0, i32 1
-	%r72 = load i64, i64* %r71
+	%r72 = load %struct.Node*, %struct.Node** %r71
 	%r73 = load %struct.Node*, %struct.Node** @.nilNode
 	%r74 = icmp ne %struct.Node* %r72, %r73
 	br i1 %r74, label %L36, label %L37
@@ -255,7 +255,7 @@ L38:
 L39:
 	%r83 = load %struct.Node*, %struct.Node** %P_curr
 	%r84 = getelementptr %struct.Node, %struct.Node* %r83, i32 0, i32 2
-	%r85 = load i64, i64* %r84
+	%r85 = load %struct.Node*, %struct.Node** %r84
 	%r86 = load %struct.Node*, %struct.Node** @.nilNode
 	%r87 = icmp ne %struct.Node* %r85, %r86
 	br i1 %r87, label %L40, label %L41
@@ -307,7 +307,7 @@ L48:
 L49:
 	%r96 = load %struct.Node*, %struct.Node** %P_curr
 	%r97 = getelementptr %struct.Node, %struct.Node* %r96, i32 0, i32 1
-	%r98 = load i64, i64* %r97
+	%r98 = load %struct.Node*, %struct.Node** %r97
 	%r99 = load %struct.Node*, %struct.Node** @.nilNode
 	%r100 = icmp ne %struct.Node* %r98, %r99
 	br i1 %r100, label %L50, label %L51
@@ -328,7 +328,7 @@ L52:
 L53:
 	%r105 = load %struct.Node*, %struct.Node** %P_curr
 	%r106 = getelementptr %struct.Node, %struct.Node* %r105, i32 0, i32 2
-	%r107 = load i64, i64* %r106
+	%r107 = load %struct.Node*, %struct.Node** %r106
 	%r108 = load %struct.Node*, %struct.Node** @.nilNode
 	%r109 = icmp ne %struct.Node* %r107, %r108
 	br i1 %r109, label %L54, label %L55
@@ -403,10 +403,10 @@ L64:
 }
 
 
-declare i8* @malloc(i32)
-declare void @free(i8*)
 declare i32 @printf(i8*, ...)
 declare i32 @scanf(i8*, ...)
+declare i8* @malloc(i32)
+declare void @free(i8*)
 
 @.fstr1 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
