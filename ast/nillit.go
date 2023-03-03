@@ -37,6 +37,6 @@ func (nl *NilLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symb
 // Translate the nil node into LLVM IR
 func (nl *NilLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl, string) {
 	// Add the integer literal to the last block
-	// This will never be called because we handle a nil literal assignment in the assign node (it will only occur for lhs = pointer and rhs = nil)
+	// This will never be called because we handle a nil literal assignment in the assign node (it will only occur for lhs = pointer and rhs = nil), binop node or the return node
 	return blocks, constDecls, nl.Value
 }

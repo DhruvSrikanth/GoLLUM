@@ -61,29 +61,31 @@ func (r *Read) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fun
 	return errors, false
 }
 
+// Does a read constant already exist
+func (r *Read) ReadConstantExistsLLVM(constDecls []*llvm.ConstantDecl) bool {
+	for _, decl := range constDecls {
+		if strings.Contains(decl.GetVarName(), "read") {
+			return true
+		}
+	}
+	return false
+}
+
 // Translate the read node to LLVM IR
 func (r *Read) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
-	var mostRecentOperand string
-	// Create the constant decl
-	// Check if the read decl already exists
-	var readConstant bool
-	for _, decl := range constDecls {
-		if strings.Contains(decl.GetVarName(), "read") {
-			readConstant = true
-			break
-		}
-	}
 
 	// Only create the read constant if it does not already exist
-	if !readConstant {
+	if !r.ReadConstantExistsLLVM(constDecls) {
 		// Create the constant decl
 		constDecl := llvm.NewConstantDecl("read", 4, "%ld")
 		constDecls = append(constDecls, constDecl)
 	}
 
 	// Evaluate the lvalue
+	var mostRecentOperand string
 	blocks, constDecls, mostRecentOperand = r.lval.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+
 	// Create the read instruction
 	readInst := llvm.NewRead(mostRecentOperand)
 	readInst.SetLabel(blocks[len(blocks)-1].GetLabel())

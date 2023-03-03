@@ -94,3 +94,8 @@ func (bb *BasicBlock) String() string {
 func (bb *BasicBlock) GetLastInstruction() Instruction {
 	return bb.instructions[len(bb.instructions)-1]
 }
+
+// Get the number of instructions in the basic block.
+func (bb *BasicBlock) Size() int {
+	return len(bb.instructions)
+}

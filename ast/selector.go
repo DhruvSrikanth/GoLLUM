@@ -155,126 +155,94 @@ func (s *SelectorTerm) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 	// Build the LLVM IR for the factor
 	var mostRecentOperand string
 	if len(s.fields) == 0 {
-		// if the variable is a literal, then we pass the literal
-		// otherwise, we pass the register name
-		blocks, constDecls, mostRecentOperand = s.factor.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-		// This loads the value of the factor into a register
 		// This covers the case of local variable, global variable, parameter, function invocation, literal and allocation
+		// Note that if this is a nil literal, we pass it back until we have two sides of a binop where we then load in the nil for that particular corresponding struct
+		blocks, constDecls, mostRecentOperand = s.factor.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 
 	} else {
-		// Only if it is a struct field will the value not be loaded into a register in the above way
+		// struct field
 
 		// Check in the local variables (moves to global scope if not found in local scope)
-		entry := funcEntry.Variables.Contains(s.factor.String())
 		var varName string
 		var varType string
-		if entry == nil {
+		var varEntry *st.VarEntry
+		// Check if it is a parameter or variable (local and global)
+		if varEntry = funcEntry.Variables.Contains(s.factor.String()); varEntry != nil {
+			if varEntry.Scope == st.GLOBAL {
+				varName = "@" + varEntry.Name
+			} else {
+				varName = "%" + varEntry.Name
+			}
+			varType = varEntry.LlvmTy
+		} else {
 			// Check the parameters
 			for _, param := range funcEntry.Parameters {
 				if param.Name == s.factor.String() {
-					entry = param
+					varEntry = param
 					varName = "%P_" + param.Name
-					varType = entry.LlvmTy
+					varType = varEntry.LlvmTy
 					break
 				}
 			}
-		} else {
-			if entry.Scope == st.GLOBAL {
-				varName = "@" + entry.Name
-			} else {
-				varName = "%" + entry.Name
-			}
-			varType = entry.LlvmTy
-		}
-
-		if strings.Contains(varType, "struct.") {
-			varType += "*"
 		}
 
 		// Load the variable into a register
+		if strings.Contains(varType, "struct.") {
+			varType += "*"
+		}
 		loadInst := llvm.NewLoad(varName, varType)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 		mostRecentOperand = llvm.GetPreviousRegister()
 
 		// Get the struct
-		entryStructName := entry.GetType().String()[1:] // Remove the * from the type name
+		entryStructName := varEntry.GetType().String()[1:] // Remove the * from the type name
 		structEntry := tables.Structs.Contains(entryStructName)
 
 		// Get the struct field index
-		var index int
 		var fieldEntry *st.FieldEntry
-		for i, field := range structEntry.Fields {
-			if field.Name == s.fields[0] {
-				index = i
-				fieldEntry = field
-				break
-			}
-		}
+		var fieldIndex int
+
+		fieldEntry, fieldIndex = structEntry.GetField(s.fields[0])
 
 		// Add the getelementptr instruction
-		// Make sure to indicate that the struct is a pointer (in varType)
-
 		if strings.Contains(varType, "struct.") {
 			// Remove the * from the type name
 			varType = varType[:len(varType)-1]
 		}
-
-		selectElementInst := llvm.NewGetElementPtr(mostRecentOperand, varType, index)
+		selectElementInst := llvm.NewGetElementPtr(mostRecentOperand, varType, fieldIndex)
 		selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(selectElementInst)
 		mostRecentOperand = llvm.GetPreviousRegister()
 
-		// Get the type of the field
-		fieldType := fieldEntry.GetType().String()[1:] // Remove the * from the type name
-		structEntry = tables.Structs.Contains(fieldType)
-		varType = fieldEntry.LlvmType // Update the type of the struct
-
-		if strings.Contains(varType, "struct.") {
-			varType += "*"
-		}
-
 		// Do this for all the remaining fields
 		for i := 1; i < len(s.fields); i++ {
-			// If there are more fields then they are structs
+			// Get the type of the field
+			fieldType := fieldEntry.GetType().String()[1:] // Remove the * from the type name
+			structEntry = tables.Structs.Contains(fieldType)
+			varType = fieldEntry.LlvmType // Update the type of the struct
+
 			// Load the value of the field into a register
+			if strings.Contains(varType, "struct.") {
+				varType += "*"
+			}
 			loadInst = llvm.NewLoad(mostRecentOperand, varType)
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 			mostRecentOperand = llvm.GetPreviousRegister()
 
 			// Get the struct field index
-			var index int
-			for j, field := range structEntry.Fields {
-				if field.Name == s.fields[i] {
-					index = j
-					fieldEntry = field
-					break
-				}
-			}
+			fieldEntry, fieldIndex = structEntry.GetField(s.fields[i])
 
+			// Add the getelementptr instruction
 			if strings.Contains(varType, "struct.") {
 				// Remove the * from the type name
 				varType = varType[:len(varType)-1]
 			}
-
-			// Add the getelementptr instruction
-			// Make sure to indicate that the struct is a pointer (in varType)
-			selectElementInst = llvm.NewGetElementPtr(mostRecentOperand, varType, index)
+			selectElementInst = llvm.NewGetElementPtr(mostRecentOperand, varType, fieldIndex)
 			selectElementInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(selectElementInst)
 			mostRecentOperand = llvm.GetPreviousRegister()
-
-			if i != len(s.fields)-1 {
-				// Get the type of the field
-				fieldType = fieldEntry.GetType().String()[1:] // Remove the * from the type name
-				structEntry = tables.Structs.Contains(fieldType)
-				varType = fieldEntry.LlvmType // Update the type of the struct
-
-				if strings.Contains(varType, "struct.") {
-					varType += "*"
-				}
-			}
 		}
 	}
 	return blocks, constDecls, mostRecentOperand

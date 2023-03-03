@@ -54,3 +54,13 @@ func (entry *StructEntry) LLVMTypeConversion() {
 		field.LLVMTypeConversion()
 	}
 }
+
+// Get the field index and entry that matches the given name
+func (entry *StructEntry) GetField(name string) (*FieldEntry, int) {
+	for i, field := range entry.Fields {
+		if field.Name == name {
+			return field, i
+		}
+	}
+	return nil, -1
+}

@@ -1,5 +1,10 @@
-LLVM_PATH="/opt/homebrew/opt/llvm/bin/llc"
+# Define compilers used to test the project
+LLVM_COMPILER="/opt/homebrew/opt/llvm/bin/llc"
+C_COMPILER="clang"
 
+N_EXAMPLES=8
+
+# BUILD
 # Generate grammars
 golite_compiler:
 	@sh build.sh
@@ -7,6 +12,7 @@ golite_compiler:
 compiler:
 	@make --always-make golite_compiler
 
+# TEST
 # Run lexer tests
 test_lexer:
 	@make compiler
@@ -46,3 +52,26 @@ test_parser:
 test_compiler:
 	@make test_lexer
 	@make test_parser
+
+
+# GENERATE
+# Generate llvm for all examples
+llvm_examples:
+	@make compiler
+	@for i in {1..$(N_EXAMPLES)} ; do \
+        go run golite/main.go benchmarks/simple/example$$i.golite ; \
+    done
+
+# Generate assmebly for all examples (using llc)
+assembly_examples:
+	@make llvm_examples
+	@for i in {1..$(N_EXAMPLES)} ; do \
+		$(LLVM_COMPILER) IR/example$$i.ll -o assembly/example$$i.s ; \
+	done
+
+# Generate object files for all examples (using clang)
+object_examples:
+	@make assembly_examples
+	@for i in {1..$(N_EXAMPLES)} ; do \
+		$(C_COMPILER) IR/example$$i.s; \
+	done

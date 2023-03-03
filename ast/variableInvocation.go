@@ -115,34 +115,26 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 	// Check if its a variable or function call
 	var mostRecentOperand string
 	if len(v.arguments) != 0 {
-		// Function
-		// Get the function entry
-		entry := tables.Funcs.Contains(v.identifier)
-		// Need to load all of the arguments into registers
-		// Record the last instruction source register in the block
+		// Function call
+		function := tables.Funcs.Contains(v.identifier)
+
+		// evaluate all of arguments
 		argRegs := make([]string, 0)
-		for _, param := range v.arguments {
+		argTypes := make([]string, 0)
+		for i, param := range v.arguments {
 			// Load the argument into a register by calling the ToLLVMCFG function
 			blocks, constDecls, mostRecentOperand = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-			// isNumber := false
-			// if _, err := strconv.Atoi(mostRecentOperand); err == nil {
-			// 	isNumber = true
-			// }
-			// If the most recent operand is a constant, we need to store it into a register
-			if !strings.HasPrefix(mostRecentOperand, "%r") {
-				storeInst := llvm.NewStore(mostRecentOperand, llvm.GetNextRegister(), "i64")
-				storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-				blocks[len(blocks)-1].AddInstruction(storeInst)
-				mostRecentOperand = llvm.GetPreviousRegister()
-				// Now load the value into a register
-				// loadInst := llvm.NewLoad(mostRecentOperand, "i64")
-				// loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-				// blocks[len(blocks)-1].AddInstruction(loadInst)
-				// mostRecentOperand = llvm.GetPreviousRegister()
 
-			} else if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
-				// If the most recent operand is a pointer, we need to load it into a register
-				loadInst := llvm.NewLoad(mostRecentOperand, "i64")
+			paramTy := function.Parameters[i].LlvmTy
+			if strings.Contains(paramTy, "struct.") {
+				paramTy += "*"
+			}
+			argTypes = append(argTypes, paramTy)
+
+			// If the expression is a constant, then we can pass that directly to the print function
+			if isNamed(funcEntry, mostRecentOperand[1:]) || strings.Contains(param.String(), ".") {
+				// Load the most recent operand in to a register
+				loadInst := llvm.NewLoad(mostRecentOperand, paramTy)
 				loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 				blocks[len(blocks)-1].AddInstruction(loadInst)
 				mostRecentOperand = llvm.GetPreviousRegister()
@@ -151,67 +143,36 @@ func (v *VariableInvocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.B
 			argRegs = append(argRegs, mostRecentOperand)
 		}
 
-		argTypes := make([]string, 0)
-		for _, param := range entry.Parameters {
-			paramTy := param.LlvmTy
-			if strings.Contains(paramTy, "struct.") {
-				paramTy += "*"
-			}
-			argTypes = append(argTypes, param.LlvmTy)
-		}
-
-		retTy := entry.LlvmRetTy
+		retTy := function.LlvmRetTy
 		if strings.Contains(retTy, "struct.") {
 			retTy += "*"
 		}
 
 		// Make the function call
 		// Note that the reassignment of the return to a variable is done in the assignment node as a store instruction
-		fCallInst := llvm.NewFunctionCall(entry.Name, retTy, argRegs, argTypes)
+		fCallInst := llvm.NewFunctionCall(function.Name, retTy, argRegs, argTypes)
 		fCallInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(fCallInst)
 		mostRecentOperand = llvm.GetPreviousRegister()
 	} else {
 		// Variable
-		// Get the variable entry
-		entry := funcEntry.Variables.Contains(v.identifier)
-		if entry == nil {
+		if entry := funcEntry.Variables.Contains(v.identifier); entry != nil {
+			// Local or global variable
+			if entry.Scope == st.GLOBAL {
+				// Global variable
+				mostRecentOperand = "@" + entry.Name
+			} else {
+				// Local variable
+				mostRecentOperand = "%" + entry.Name
+			}
+		} else {
+			// Parameter
 			for _, param := range funcEntry.Parameters {
 				if param.Name == v.identifier {
-					entry = param
+					mostRecentOperand = "%P_" + param.Name
 					break
 				}
 			}
-
-			// Load the parameter into a register
-			// Make the load instruction
-			ty := entry.LlvmTy
-			if strings.Contains(ty, "struct.") {
-				ty += "*"
-			}
-			loadInst := llvm.NewLoad("%P_"+entry.Name, ty)
-			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-			blocks[len(blocks)-1].AddInstruction(loadInst)
-			mostRecentOperand = llvm.GetPreviousRegister()
-
-		} else {
-			// Load the variable into a register
-			var varName string
-			if entry.Scope == st.GLOBAL {
-				varName = "@" + entry.Name
-			} else {
-				varName = "%" + entry.Name
-			}
-
-			ty := entry.LlvmTy
-			if strings.Contains(ty, "struct.") {
-				ty += "*"
-			}
-
-			loadInst := llvm.NewLoad(varName, ty)
-			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-			blocks[len(blocks)-1].AddInstruction(loadInst)
-			mostRecentOperand = llvm.GetPreviousRegister()
 		}
 	}
 	return blocks, constDecls, mostRecentOperand

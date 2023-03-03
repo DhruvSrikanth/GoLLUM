@@ -10,6 +10,7 @@ import (
 type FunctionCall struct {
 	fName           string
 	retTy           string
+	registerNames   []string
 	sourceTypes     []string
 	blockLabel      string
 	sourceRegisters []int
@@ -18,18 +19,21 @@ type FunctionCall struct {
 
 // NewFunctionCall returns a new function call
 func NewFunctionCall(fName string, retTy string, srcReg []string, srcTy []string) *FunctionCall {
+	registerNames := srcReg
 	srcR := make([]int, 0)
 	// Remove the %r from the register names
 	for _, r := range srcReg {
-		r = strings.Replace(r, "%r", "", -1)
-		i, _ := strconv.Atoi(r)
-		srcR = append(srcR, i)
+		if strings.Contains(r, "%r") {
+			r = strings.Replace(r, "%r", "", -1)
+			i, _ := strconv.Atoi(r)
+			srcR = append(srcR, i)
+		}
 	}
 
 	tgtR := make([]int, 0)
 	nextR, _ := strconv.Atoi(GetNextRegister()[2:])
 	tgtR = append(tgtR, nextR)
-	return &FunctionCall{fName, retTy, srcTy, "", srcR, tgtR}
+	return &FunctionCall{fName, retTy, registerNames, srcTy, "", srcR, tgtR}
 }
 
 // String representation of the FunctionCall
@@ -53,7 +57,7 @@ func (f *FunctionCall) String() string {
 			out.WriteString("%")
 		}
 		out.WriteString(f.sourceTypes[i])
-		out.WriteString(" %r" + strconv.Itoa(f.sourceRegisters[i]))
+		out.WriteString(" " + f.registerNames[i])
 		if i < len(f.sourceTypes)-1 {
 			out.WriteString(", ")
 		}

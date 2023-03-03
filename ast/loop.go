@@ -61,6 +61,7 @@ func (l *Loop) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fun
 // Translate the loop node to LLVM IR
 func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	var mostRecentOperand string
+
 	// Before adding a new block, add an unconditional branch to the condition block
 	branchUncondInst := llvm.NewBranchUnconditional(llvm.GetCurrentLabel())
 	branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
@@ -70,14 +71,13 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
 	// Add the previous block to this blocks predecessors
 	condBlock.AddPredecessor(blocks[len(blocks)-1])
-	// Add this block to the last blocks successors
 	blocks[len(blocks)-1].AddSuccessor(condBlock)
-	// Add the condition instructions to the block
 	blocks = append(blocks, condBlock)
+
 	// Get the condition expression to translate to LLVM IR
 	blocks, constDecls, mostRecentOperand = l.condition.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-	// Check the last instruction in the block to see if it is a comparison instruction
-	// If it is not, then we need to add a comparison instruction
+
+	// If the last instruction is not a comparison i.e. the condition is a unary expression, we need to perform a comparison
 	lastInst := blocks[len(blocks)-1].GetLastInstruction()
 	if !strings.Contains(lastInst.String(), "icmp") {
 		// Add a comparison instruction
@@ -92,28 +92,32 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	currLabelID, _ := strconv.Atoi(llvm.GetCurrentLabel()[1:]) // remove the L from the label
 	trueLabel := "L" + strconv.Itoa(currLabelID)
 	falseLabel := "L" + strconv.Itoa(currLabelID+1)
-
 	branchCondInst := llvm.NewBranchConditional(condReg, trueLabel, falseLabel)
 	branchCondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(branchCondInst)
 
 	// Add new block for the body block
 	bodyBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
-	// Add the previous block to this blocks predecessors
+	// Add the previous block to this blocks predecessors and add the body block to the previous blocks successors
 	bodyBlock.AddPredecessor(blocks[len(blocks)-1])
-	// Add this block to the last blocks successors
 	blocks[len(blocks)-1].AddSuccessor(bodyBlock)
-
-	// Append the then block to the list of blocks since the last block will be considered for the block to add instructions to
 	blocks = append(blocks, bodyBlock)
+
+	// Evaluate the body block
 	blocks, constDecls = l.body.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	hasReturn := (blocks[len(blocks)-1].Size() > 0)
+	if hasReturn {
+		hasReturn = strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "ret ")
+	}
 
 	// Add an unconditional branch to the condition block
-	condLabelID := currLabelID - 1
-	condLabel := "L" + strconv.Itoa(condLabelID)
-	branchUncondInst = llvm.NewBranchUnconditional(condLabel)
-	branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-	blocks[len(blocks)-1].AddInstruction(branchUncondInst)
+	if !hasReturn {
+		condLabelID := currLabelID - 1
+		condLabel := "L" + strconv.Itoa(condLabelID)
+		branchUncondInst = llvm.NewBranchUnconditional(condLabel)
+		branchUncondInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(branchUncondInst)
+	}
 
 	// Add new block for canonical form
 	block := llvm.NewBasicBlock(llvm.GetNextLabel())
@@ -124,7 +128,6 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	// Add this block to the last blocks successors
 	blocks[len(blocks)-1].AddSuccessor(block)
 	blocks[len(blocks)-2].AddSuccessor(block)
-	// Add the block to the list of blocks
 	blocks = append(blocks, block)
 
 	return blocks, constDecls

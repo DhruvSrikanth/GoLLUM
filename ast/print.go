@@ -39,6 +39,12 @@ func (p *Print) String() string {
 	return out.String()
 }
 
+func (p *Print) GetString() string {
+	var sb strings.Builder
+	sb.WriteString(p.formatString)
+	return sb.String()
+}
+
 // Build the symbol table for the print
 func (p *Print) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnalysisError) []*SemanticAnalysisError {
 	// Nothing to do here since a print is not added to the symbol table
@@ -74,11 +80,8 @@ func (p *Print) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.Fu
 	return errors, false
 }
 
-// Translate the print node to LLVM IR
-func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
-	// Stay in the same block
-	var mostRecentOperand string
-
+// Format string for llvm
+func (p *Print) LLVMFormatString() (string, int) {
 	// Format the format string
 	formatString := p.GetString()
 	formatString = formatString[1 : len(formatString)-1]
@@ -94,50 +97,40 @@ func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fu
 	size += 1
 	size -= strings.Count(formatString, "\\0A") * 2
 
+	return formatString, size
+}
+
+// Translate the print node to LLVM IR
+func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
+	// Stay in the same block
+
 	// Create the constant decl
+	formattedString, stringSize := p.LLVMFormatString()
 	varName := "fstr" + strconv.Itoa(len(constDecls)+1)
-	constDecl := llvm.NewConstantDecl(varName, size, formatString)
+	constDecl := llvm.NewConstantDecl(varName, stringSize, formattedString)
 	constDecls = append(constDecls, constDecl)
 
-	// Create the print instruction
 	// Evaluate the expressions
-	var registers []string
+	var mostRecentOperand string
+	var argumentRegisters []string
 	for _, expr := range p.expressions {
+		// This fully evaluates the expressions that need to be printed
 		blocks, constDecls, mostRecentOperand = expr.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-
-		// Load the value from the register if the most recent operand is not a local variable, global variable, or constant or parameter
-		needToLoad := true
-		if funcEntry.Variables.Contains(expr.String()) != nil {
-			needToLoad = false
-		} else {
-			for _, param := range funcEntry.Parameters {
-				if param.Name == expr.String() {
-					needToLoad = false
-					break
-				}
-			}
-		}
-
-		if needToLoad {
+		// If the expression is a constant, then we can pass that directly to the print function
+		if isNamed(funcEntry, mostRecentOperand[1:]) || (strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") && strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "struct.")) {
+			// Load the most recent operand in to a register
 			loadInst := llvm.NewLoad(mostRecentOperand, "i64")
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 			mostRecentOperand = llvm.GetPreviousRegister()
 		}
-
-		registers = append(registers, mostRecentOperand)
+		argumentRegisters = append(argumentRegisters, mostRecentOperand)
 	}
 
 	// Create the print instruction
-	printInst := llvm.NewPrintf(varName, registers, size)
+	printInst := llvm.NewPrintf(varName, argumentRegisters, stringSize)
 	printInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(printInst)
 
 	return blocks, constDecls
-}
-
-func (p *Print) GetString() string {
-	var sb strings.Builder
-	sb.WriteString(p.formatString)
-	return sb.String()
 }

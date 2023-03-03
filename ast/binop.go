@@ -242,13 +242,11 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 			op = "mul"
 			// Create the constant -1
 			mostRecentOperand = "-1"
-			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
 			lastUsedRegLeft = mostRecentOperand
 		} else if *b.operator == NOT {
 			op = "xor"
 			// Create the constant 1
 			mostRecentOperand = "1"
-			// This allows leftmostregister to be retrieved by the GetPreviousRegister function
 			lastUsedRegLeft = mostRecentOperand
 		} else {
 			// This should never happen
@@ -267,9 +265,25 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 		blocks, constDecls, mostRecentOperand = (*b.left).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 		// Get the last register used if there is a left expression
 		lastUsedRegLeft = mostRecentOperand
-		// Check if the last instruction was a getelementptr instruction
-		if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
-			// If so, we need to load the value from the address
+	}
+
+	blocks, constDecls, mostRecentOperand = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	lastUsedRegRight = mostRecentOperand
+
+	// If either operand is not a number, we need to load it into a register
+	if isNamed(funcEntry, lastUsedRegLeft[1:]) {
+		// Create the load instruction
+		ty := llvm.TypeToLLVM((*b.left).GetType())
+		if strings.Contains(ty, "struct.") {
+			ty += "*"
+		}
+		loadInst := llvm.NewLoad(lastUsedRegLeft, ty)
+		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(loadInst)
+		mostRecentOperand = llvm.GetPreviousRegister()
+		lastUsedRegLeft = mostRecentOperand
+	} else if b.left != nil && (blocks[len(blocks)-1].Size() > 0) {
+		if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") && strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "struct.") && strings.Contains((*b.left).String(), ".") && !strings.Contains((*b.left).String(), " ") {
 			// Create the load instruction
 			loadInst := llvm.NewLoad(lastUsedRegLeft, "i64")
 			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
@@ -278,27 +292,30 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 			lastUsedRegLeft = mostRecentOperand
 		}
 	}
-
-	blocks, constDecls, mostRecentOperand = (*b.right).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-	// Get the last register used
-	lastUsedRegRight = mostRecentOperand
-	if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
-		// If so, we need to load the value from the address
+	if isNamed(funcEntry, lastUsedRegRight[1:]) || (strings.Contains((*b.right).String(), ".") && !strings.Contains((*b.right).String(), " ") && !strings.Contains((*b.right).String(), " ")) {
 		// Create the load instruction
-		loadInst := llvm.NewLoad(lastUsedRegRight, "i64")
+		ty := llvm.TypeToLLVM((*b.right).GetType())
+		if strings.Contains(ty, "struct.") {
+			ty += "*"
+		}
+		loadInst := llvm.NewLoad(lastUsedRegRight, ty)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 		mostRecentOperand = llvm.GetPreviousRegister()
 		lastUsedRegRight = mostRecentOperand
 	}
 
+	// Perform a nil check
+	var nilExprEq Expression
 	if lastUsedRegLeft == "nil" {
-		// If the left hand side is nil, we need to set the value to nullptr for the particular type
-		// We can do this by performing a load from the address of the default value for the type
-		// Get the type of the lvalue
-		ty := (*b.right).GetType()
-		nilReg := "@.nil" + ty.String()[1:]
-		llvmTy := llvm.TypeToLLVM(ty)
+		nilExprEq = *b.right
+	} else if lastUsedRegRight == "nil" {
+		nilExprEq = *b.left
+	}
+	// If any is nil, we need to set the value to nullptr for the particular type
+	if lastUsedRegLeft == "nil" || lastUsedRegRight == "nil" {
+		nilReg := "@.nil" + nilExprEq.GetType().String()[1:]
+		llvmTy := llvm.TypeToLLVM((*b.right).GetType())
 		if strings.Contains(llvmTy, "struct.") {
 			llvmTy += "*"
 		}
@@ -308,23 +325,11 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 		mostRecentOperand = llvm.GetPreviousRegister()
+	}
+
+	if lastUsedRegLeft == "nil" {
 		lastUsedRegLeft = mostRecentOperand
 	} else if lastUsedRegRight == "nil" {
-		// If the right hand side is nil, we need to set the value to nullptr for the particular type
-		// We can do this by performing a load from the address of the default value for the type
-		// Get the type of the lvalue
-		ty := (*b.left).GetType()
-		nilReg := "@.nil" + ty.String()[1:]
-		llvmTy := llvm.TypeToLLVM(ty)
-		if strings.Contains(llvmTy, "struct.") {
-			llvmTy += "*"
-		}
-
-		// Create the load instruction
-		loadInst := llvm.NewLoad(nilReg, llvmTy)
-		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(loadInst)
-		mostRecentOperand = llvm.GetPreviousRegister()
 		lastUsedRegRight = mostRecentOperand
 	}
 

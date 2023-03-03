@@ -45,9 +45,5 @@ func (bl *BoolLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBl
 	} else {
 		boolVal = "0"
 	}
-	// storeInt := llvm.NewStore(boolVal, llvm.GetNextRegister(), "i64")
-	// Update the label of the instruction
-	// storeInt.SetLabel(blocks[len(blocks)-1].GetLabel())
-	// blocks[len(blocks)-1].AddInstruction(storeInt)
 	return blocks, constDecls, boolVal
 }

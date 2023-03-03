@@ -98,54 +98,43 @@ func (i *Invocation) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 // Translate the invocation node to LLVM IR
 func (i *Invocation) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
+
 	var mostRecentOperand string
-	// Function
-	// Get the function entry
-	entry := tables.Funcs.Contains(i.identifier)
-	// Need to load all of the arguments into registers
-	// Record the last instruction source register in the block
+
+	function := tables.Funcs.Contains(i.identifier)
+
+	// Need to evaluate all arguments first
 	argRegs := make([]string, 0)
-	for _, param := range i.arguments {
+	argTypes := make([]string, 0)
+	for i, param := range i.arguments {
 		// Load the argument into a register by calling the ToLLVMCFG function
 		blocks, constDecls, mostRecentOperand = param.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-		// isNumber := false
-		// if _, err := strconv.Atoi(mostRecentOperand); err == nil {
-		// 	isNumber = true
-		// }
-		if !strings.HasPrefix(mostRecentOperand, "%r") {
-			storeInst := llvm.NewStore(mostRecentOperand, llvm.GetNextRegister(), "i64")
-			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-			blocks[len(blocks)-1].AddInstruction(storeInst)
+		paramTy := function.Parameters[i].LlvmTy
+		if strings.Contains(paramTy, "struct.") {
+			paramTy += "*"
+		}
+		argTypes = append(argTypes, paramTy)
+
+		// If the expression is a constant, then we can pass that directly to the print function
+		if isNamed(funcEntry, mostRecentOperand[1:]) || (strings.Contains(param.String(), ".") && !strings.Contains(param.String(), " ") && !strings.Contains(param.String(), " ")) {
+			// Load the most recent operand in to a register
+			loadInst := llvm.NewLoad(mostRecentOperand, paramTy)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
 			mostRecentOperand = llvm.GetPreviousRegister()
 		}
-		// } else if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
-		// 	// If the most recent operand is a pointer, we need to load it into a register
-		// 	loadInst := llvm.NewLoad(mostRecentOperand, "i64")
-		// 	loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		// 	blocks[len(blocks)-1].AddInstruction(loadInst)
-		// 	mostRecentOperand = llvm.GetPreviousRegister()
-		// }
+
 		// Get the last used register
 		argRegs = append(argRegs, mostRecentOperand)
 	}
 
-	argTypes := make([]string, 0)
-	for _, param := range entry.Parameters {
-		paramTy := param.LlvmTy
-		if strings.Contains(paramTy, "struct.") {
-			paramTy += "*"
-		}
-		argTypes = append(argTypes, param.LlvmTy)
-	}
-
-	retTy := entry.LlvmRetTy
+	retTy := function.LlvmRetTy
 	if strings.Contains(retTy, "struct.") {
 		retTy += "*"
 	}
 
 	// Make the function call
-	// Note that the reassignment of the return to a variable is done in the assignment node as a store instruction
-	fCallInst := llvm.NewFunctionCall(entry.Name, retTy, argRegs, argTypes)
+	fCallInst := llvm.NewFunctionCall(function.Name, retTy, argRegs, argTypes)
 	fCallInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(fCallInst)
 

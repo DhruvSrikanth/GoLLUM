@@ -76,50 +76,48 @@ func (r *Return) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.F
 // Translate the return node to LLVM IR
 func (r *Return) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	var mostRecentOperand string
+	var llvmTy string
 
 	// If the expression exists, then translate it
 	if *r.expression != nil {
+		// If the expression is not void type, then translate it
 		// Translate the expression
 		blocks, constDecls, mostRecentOperand = (*r.expression).ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-		// If this exists, then store the result from the last used register into a new register
-		lastUsedReg := mostRecentOperand
-		exprLLVMType := llvm.TypeToLLVM(r.ty)
-		if strings.Contains(exprLLVMType, "struct.") {
-			exprLLVMType += "*"
+
+		llvmTy = llvm.TypeToLLVM(r.ty)
+		if strings.Contains(llvmTy, "struct.") {
+			llvmTy += "*"
 		}
 
-		storeInst := llvm.NewStore(lastUsedReg, "%"+funcEntry.Name+"_retval", exprLLVMType)
-		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(storeInst)
+		if isNamed(funcEntry, mostRecentOperand[1:]) || (strings.Contains((*r.expression).String(), ".") && !strings.Contains((*r.expression).String(), " ")) {
+			// Load the expression
+			loadInst := llvm.NewLoad(mostRecentOperand, llvmTy)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
+		}
 
-		// Load the return value into the a register
-		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", exprLLVMType)
-		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(loadInst)
-		mostRecentOperand = llvm.GetPreviousRegister()
-
-		// Create the return instruction
-		retInst := llvm.NewReturn(mostRecentOperand, exprLLVMType)
-		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(retInst)
 	} else {
-		// Expression does not exist, so we just return a 0 since we treat this as a void function
-		// the void function is represented by i64 in LLVM IR
-		// First store a 0 into the return value register
-		storeInst := llvm.NewStore("0", "%"+funcEntry.Name+"_retval", "i64")
-		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(storeInst)
-
-		// Load the return value into the a register
-		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", "i64")
-		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(loadInst)
-		mostRecentOperand = llvm.GetPreviousRegister()
-
-		// Create the return instruction
-		retInst := llvm.NewReturn(mostRecentOperand, "i64")
-		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(retInst)
+		// If the expression does not exist, return the void type (i64 in LLVM IR)
+		llvmTy = "i64"
+		// Expression does not exist, so we just return a 0 since we treat this as a void function (i64 LLVM IR - default value is 0)
+		mostRecentOperand = "0"
 	}
+	// Perform a store instruction
+	storeInst := llvm.NewStore(mostRecentOperand, "%"+funcEntry.Name+"_retval", llvmTy)
+	storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(storeInst)
+
+	// Load the return value into the a register
+	loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", llvmTy)
+	loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(loadInst)
+	mostRecentOperand = llvm.GetPreviousRegister()
+
+	// Create the return instruction
+	retInst := llvm.NewReturn(mostRecentOperand, llvmTy)
+	retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(retInst)
+
 	return blocks, constDecls
 }

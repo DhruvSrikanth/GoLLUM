@@ -74,64 +74,28 @@ func (d *Delete) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *st.F
 
 // Translate the delete node to LLVM IR
 func (d *Delete) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
-	// Add load instruction to the block
-	// Get the variable entry
-	// localVariable := funcEntry.Variables.Contains(d.expr.String())
-	// var varName string
-	// if localVariable != nil {
-	// 	if localVariable.Scope == st.LOCAL {
-	// 		varName = "%" + d.expr.String()
-	// 	} else {
-	// 		varName = "@" + d.expr.String()
-	// 	}
-	// } else {
-	// 	// Check the parameters
-	// 	for _, param := range funcEntry.Parameters {
-	// 		if param.Name == d.expr.String() {
-	// 			localVariable = param
-	// 			varName = "%" + param.Name
-	// 		}
-	// 	}
-
-	// 	if localVariable == nil {
-	// 		// Must be a struct field
-	// 		// Evaluate the expression to make the most recent register the one that the expression is placed into
-	// 		blocks = d.expr.ToLLVMCFG(tables, blocks, funcEntry)
-	// 		varName = llvm.GetPreviousRegister()
-	// 	}
-	// }
-
-	// // Create the load instruction
-	// loadInst := llvm.NewLoad(varName, localVariable.LlvmTy)
-	// // Update the instruction label
-	// loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-	// // Add the instruction to the block
-	// blocks[len(blocks)-1].AddInstruction(loadInst)
-
-	var mostRecentOperand string
+	// Get the LLVM type of the expression
+	ty := llvm.TypeToLLVM(d.expr.GetType())
+	// Make it a pointer (we know that this will be a struct type)
+	ty += "*"
 
 	// Evaluate the expression
-	blocks, constDecls, mostRecentOperand = d.expr.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	blocks, constDecls, mostRecentOperand := d.expr.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
 
-	// Get the type of the expression
-	exprType := d.expr.GetType()
-	// Get the LLVM type of the expression
-	exprLlvmType := llvm.TypeToLLVM(exprType)
+	// Load the pointer into a register
+	loadInst := llvm.NewLoad(mostRecentOperand, ty)
+	loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	blocks[len(blocks)-1].AddInstruction(loadInst)
+	mostRecentOperand = llvm.GetPreviousRegister()
 
-	// Add the bitcast instruction to the block
-	sourceReg := mostRecentOperand
-	bitcastInst := llvm.NewBitCast(sourceReg, exprLlvmType+"*", "i8*")
-	// Update the instruction label
+	// Perform a bitcast
+	bitcastInst := llvm.NewBitCast(mostRecentOperand, ty, "i8*")
 	bitcastInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-	// Add the instruction to the block
 	blocks[len(blocks)-1].AddInstruction(bitcastInst)
 
-	// Add the free runtime function call instruction to the block
+	// Use a free runtime call
 	freeInst := llvm.NewFree()
-	// Update the instruction label
 	freeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-	// Add the instruction to the block
 	blocks[len(blocks)-1].AddInstruction(freeInst)
-
 	return blocks, constDecls
 }

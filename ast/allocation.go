@@ -55,25 +55,23 @@ func (d *Allocate) GetType() types.Type {
 // Translate the allocate node into LLVM IR
 func (d *Allocate) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl, string) {
 	var mostRecentOperand string
+
 	// Get the struct entry
 	entry := tables.Structs.Contains(d.structType)
-	// Count the number of fields and multiply by 8 to get the size of the struct
+
+	// Count the number of fields and multiply by 8 to get the size of the struct (since we are using 64 bit or 8 byte literals)
 	i64Size := 8
 	size := len(entry.Fields) * i64Size
+
 	// Allocate the struct
 	mallocInst := llvm.NewMalloc(size)
 	mallocInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-	// Add the malloc instruction to the current block
 	blocks[len(blocks)-1].AddInstruction(mallocInst)
 	mostRecentOperand = llvm.GetPreviousRegister()
 
-	// Get the struct type
-	llvmStructType := llvm.TypeToLLVM(d.ty)
 	// Cast the malloc result to the struct type using bitcast
-	// source register passed in will be the previous register used in the block for the load instruction
-	bitcastInst := llvm.NewBitCast(mostRecentOperand, "i8*", llvmStructType+"*")
+	bitcastInst := llvm.NewBitCast(mostRecentOperand, "i8*", llvm.TypeToLLVM(d.ty)+"*")
 	bitcastInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-	// Add the bitcast instruction to the current block
 	blocks[len(blocks)-1].AddInstruction(bitcastInst)
 	mostRecentOperand = llvm.GetPreviousRegister()
 

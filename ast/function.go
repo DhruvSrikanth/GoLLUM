@@ -207,52 +207,55 @@ func (f *Function) ToLLVM(tables *st.SymbolTables, constantDecls []*llvm.Constan
 	// Maintain canonical form and add a exit block
 	// this is removed during the CFG optimization
 	// Before adding this block, we need to add a branch instruction at the end of the last block to the exit block
-	branchInst := llvm.NewBranchUnconditional(llvm.GetCurrentLabel())
-	branchInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-	blocks[len(blocks)-1].AddInstruction(branchInst)
+	hasReturn := (blocks[len(blocks)-1].Size() > 0)
+	if hasReturn {
+		hasReturn = strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "ret ")
+	}
+	if !hasReturn {
+		branchInst := llvm.NewBranchUnconditional(llvm.GetCurrentLabel())
+		branchInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+		blocks[len(blocks)-1].AddInstruction(branchInst)
+	}
 
-	// Create the exit block
-	exitBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	if !hasReturn {
+		// Create the exit block
+		exitBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+		// add the last block to this blocks predecessors and add this block to the last blocks successors
+		exitBlock.AddPredecessor(blocks[len(blocks)-1])
+		blocks[len(blocks)-1].AddSuccessor(exitBlock)
+		blocks = append(blocks, exitBlock)
+		// Add the return instruction to the exit block if the function is void
+		if funcEntry.RetTy == types.StringToType("void") {
+			// Store a 0 in the return value
+			storeInst := llvm.NewStore("0", "%"+funcEntry.Name+"_retval", "i64")
+			storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(storeInst)
 
-	// add the last block to this blocks predecessors
-	exitBlock.AddPredecessor(blocks[len(blocks)-1])
+			// Load the return register into a register
+			loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", "i64")
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
 
-	// add this block to the last blocks successors
-	blocks[len(blocks)-1].AddSuccessor(exitBlock)
+			// Add the return instruction
+			retInst := llvm.NewReturn(llvm.GetPreviousRegister(), "i64")
+			retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(retInst)
+		} else {
+			LlvmRetTy := funcEntry.LlvmRetTy
+			if strings.Contains(LlvmRetTy, "struct.") {
+				LlvmRetTy += "*"
+			}
+			// If we reach this point, it means the function is not void, therefore, the return value is stored in the return value register
+			// Load the return register into a register
+			loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", LlvmRetTy)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
 
-	// add the block
-	blocks = append(blocks, exitBlock)
-	// Add the return instruction to the exit block if the function is void
-	if funcEntry.RetTy == types.StringToType("void") {
-		// Store a 0 in the return value
-		storeInst := llvm.NewStore("0", "%"+funcEntry.Name+"_retval", "i64")
-		storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(storeInst)
-
-		// Load the return register into a register
-		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", "i64")
-		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(loadInst)
-
-		// Add the return instruction
-		retInst := llvm.NewReturn(llvm.GetPreviousRegister(), "i64")
-		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(retInst)
-	} else {
-		LlvmRetTy := funcEntry.LlvmRetTy
-		if strings.Contains(LlvmRetTy, "struct.") {
-			LlvmRetTy += "*"
+			// Add the return instruction
+			retInst := llvm.NewReturn(llvm.GetPreviousRegister(), LlvmRetTy)
+			retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(retInst)
 		}
-		// If we reach this point, it means the function is not void, therefore, the return value is stored in the return value register
-		// Load the return register into a register
-		loadInst := llvm.NewLoad("%"+funcEntry.Name+"_retval", LlvmRetTy)
-		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(loadInst)
-
-		// Add the return instruction
-		retInst := llvm.NewReturn(llvm.GetPreviousRegister(), LlvmRetTy)
-		retInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(retInst)
 	}
 
 	return tables, llvm.NewFunctionDecl(funcEntry.Name, funcEntry.LlvmRetTy, params, paramTypes, blocks), constantDecls

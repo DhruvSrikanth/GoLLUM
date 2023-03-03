@@ -87,90 +87,69 @@ func (a *Assignment) GetControlFlow(errors []*SemanticAnalysisError, funcEntry *
 func (a *Assignment) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl) {
 	// Stay in the same block
 	var mostRecentOperand string
-	var leftval, rightval bool
 	var leftReg string
-	useNamedReg := false
-	// Check if it us a local variable, global variable, or a parameter
-	// local - %name
-	// global - @name
-	// parameter - %P_name
 
-	varEntry := funcEntry.Variables.Contains(a.variable.String())
-	if varEntry != nil {
-		// This is a local variable or global variable
-		useNamedReg = true
-		// Get the appropriate scope
-		if varEntry.Scope == st.GLOBAL {
-			leftReg = "@" + a.variable.String()
-		} else {
-			leftReg = "%" + a.variable.String()
-		}
-	} else {
-		for _, param := range funcEntry.Parameters {
-			if param.Name == a.variable.String() {
-				useNamedReg = true
-				leftReg = "%P_" + param.Name
-				break
-			}
-		}
-	}
-	if !useNamedReg {
-		// If we are not using a named register, we need to evaluate the lhs value and get the register that the result is stored at
-		// Get the address of the lvalue on the left hand side of the assignment
-		blocks, constDecls, mostRecentOperand = a.variable.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-
-		if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
-			leftval = true
-		}
-		leftReg = mostRecentOperand
-	}
+	// Get the address of the lvalue on the left hand side of the assignment
+	blocks, constDecls, mostRecentOperand = a.variable.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
+	// If the lvalue is a struct, we need to get the address of the struct field so we perform a load
+	// if strings.Contains(a.right.String(), ".") {
+	// 	loadInst := llvm.NewLoad(mostRecentOperand, llvm.TypeToLLVM(a.variable.GetType()))
+	// 	loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+	// 	blocks[len(blocks)-1].AddInstruction(loadInst)
+	// 	mostRecentOperand = llvm.GetPreviousRegister()
+	// }
+	leftReg = mostRecentOperand
 
 	// Get the value of the expression on the right hand side of the assignment
 	var rightReg string
 	if a.right.GetType() == types.StringToType("nil") {
 		// If the right hand side is nil, we need to set the value to nullptr for the particular type
 		// We can do this by performing a load from the address of the default value for the type
-		// Get the type of the lvalue
 		ty := a.variable.GetType()
 		nilReg := "@.nil" + ty.String()[1:]
+
+		// Create the load instruction
 		llvmTy := llvm.TypeToLLVM(ty)
 		if strings.Contains(llvmTy, "struct.") {
 			llvmTy += "*"
 		}
-
-		// Create the load instruction
 		loadInst := llvm.NewLoad(nilReg, llvmTy)
 		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 		mostRecentOperand = llvm.GetPreviousRegister()
-
-		// Get the register that the default value was loaded into
-		rightReg = mostRecentOperand
 	} else {
+		// Evaluate the right hand side expression
 		blocks, constDecls, mostRecentOperand = a.right.ToLLVMCFG(tables, blocks, funcEntry, constDecls)
-		rightReg = mostRecentOperand
-		if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") {
-			rightval = true
+		// Load the right hand side into a register
+		if isNamed(funcEntry, a.right.String()) {
+			llvmTy := llvm.TypeToLLVM(a.right.GetType())
+			if strings.Contains(llvmTy, "struct.") {
+				llvmTy += "*"
+			}
+			loadInst := llvm.NewLoad(mostRecentOperand, llvmTy)
+			loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+			blocks[len(blocks)-1].AddInstruction(loadInst)
+			mostRecentOperand = llvm.GetPreviousRegister()
+		} else if blocks[len(blocks)-1].Size() > 0 {
+			if strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "getelementptr") && strings.Contains(blocks[len(blocks)-1].GetLastInstruction().String(), "struct.") && strings.Contains(a.right.String(), ".") && !strings.Contains(a.right.String(), " ") {
+				llvmTy := llvm.TypeToLLVM(a.right.GetType())
+				if strings.Contains(llvmTy, "struct.") {
+					llvmTy += "*"
+				}
+				loadInst := llvm.NewLoad(mostRecentOperand, llvmTy)
+				loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
+				blocks[len(blocks)-1].AddInstruction(loadInst)
+				mostRecentOperand = llvm.GetPreviousRegister()
+			}
 		}
 	}
+	rightReg = mostRecentOperand
 
-	if leftval && rightval && strings.Contains(rightReg, "%r") {
-		// If the most recent operand is a pointer, we need to load it into a register
-		loadInst := llvm.NewLoad(rightReg, "i64")
-		loadInst.SetLabel(blocks[len(blocks)-1].GetLabel())
-		blocks[len(blocks)-1].AddInstruction(loadInst)
-		mostRecentOperand = llvm.GetPreviousRegister()
-		rightReg = mostRecentOperand
-	}
-	// fmt.Println(leftval, rightval, leftReg, rightReg)
-
-	ty := a.variable.GetType()
-	llvmTy := llvm.TypeToLLVM(ty)
+	// Store the value of the expression into the address of the lvalue
+	llvmTy := llvm.TypeToLLVM(a.variable.GetType())
 	if strings.Contains(llvmTy, "struct.") {
 		llvmTy += "*"
 	}
-
-	// Store the value of the expression into the address of the lvalue
 	storeInst := llvm.NewStore(rightReg, leftReg, llvmTy)
 	storeInst.SetLabel(blocks[len(blocks)-1].GetLabel())
 	blocks[len(blocks)-1].AddInstruction(storeInst)

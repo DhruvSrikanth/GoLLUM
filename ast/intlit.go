@@ -38,12 +38,6 @@ func (il *IntLiteral) TypeCheck(errors []*SemanticAnalysisError, tables *st.Symb
 
 // Translate the allocate node into LLVM IR
 func (il *IntLiteral) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, funcEntry *st.FuncEntry, constDecls []*llvm.ConstantDecl) ([]*llvm.BasicBlock, []*llvm.ConstantDecl, string) {
-	// Add the integer literal to the last block
-	// We should never need to call this lines because the integet literal will be used directly
 	intString := strconv.Itoa(int(il.Value))
-	// storeInt := llvm.NewStore(intString, llvm.GetNextRegister(), "i64")
-	// Update the label of the instruction
-	// storeInt.SetLabel(blocks[len(blocks)-1].GetLabel())
-	// blocks[len(blocks)-1].AddInstruction(storeInt)
 	return blocks, constDecls, intString
 }
