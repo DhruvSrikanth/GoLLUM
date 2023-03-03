@@ -592,10 +592,10 @@ L69:
 }
 
 
+declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
 declare i32 @scanf(i8*, ...)
-declare i8* @malloc(i32)
 
 @.fstr1 = private unnamed_addr constant [18 x i8] c"Max Factorial=%ld\00", align 1
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
