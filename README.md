@@ -168,7 +168,7 @@ func main() {
 
 ## Open Questions
 
-1. How do you compare two structs?
+1. How do you compare two structs (specifically a null with a struct)?
 
 ## Remaining Tasks
 
