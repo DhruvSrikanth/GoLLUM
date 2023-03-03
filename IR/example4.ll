@@ -72,7 +72,7 @@ L6:
 L7:
 	%r18 = load %struct.Node*, %struct.Node** %P_curr
 	%r19 = load %struct.Node*, %struct.Node** @tail
-	%r20 = icmp eq i64 %r18, %r19
+	%r20 = icmp eq %struct.Node* %r18, %r19
 	br i1 %r20, label %L8, label %L9
 
 L8:
@@ -159,7 +159,7 @@ L19:
 	%r50 = getelementptr %struct.Node, %struct.Node* %r49, i32 0, i32 1
 	%r51 = load %struct.Node*, %struct.Node** %r50
 	%r52 = load %struct.Node*, %struct.Node** @tail
-	%r53 = icmp eq i64 %r51, %r52
+	%r53 = icmp eq %struct.Node* %r51, %r52
 	br i1 %r53, label %L20, label %L21
 
 L20:

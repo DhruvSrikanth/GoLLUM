@@ -294,7 +294,6 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 			blocks[len(blocks)-1].AddInstruction(loadInst)
 			mostRecentOperand = llvm.GetPreviousRegister()
 			lastUsedRegLeft = mostRecentOperand
-
 		}
 	}
 	if isNamed(funcEntry, lastUsedRegRight[1:]) || (strings.Contains((*b.right).String(), ".") && !strings.Contains((*b.right).String(), " ") && !strings.Contains((*b.right).String(), " ")) {
@@ -311,9 +310,7 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 	}
 
 	// Figure out the kind type of operands we have
-	// By default it is i64
-	// Only when we have struct = nil comparisons does it become a pointer to the struct type
-	opType := "i64"
+	var opType string
 	// Perform a nil check
 	var nilExprEq Expression
 	if lastUsedRegLeft == "nil" {
@@ -336,6 +333,13 @@ func (b *BinOpExpr) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock
 		blocks[len(blocks)-1].AddInstruction(loadInst)
 		mostRecentOperand = llvm.GetPreviousRegister()
 
+	} else {
+		// Set the operand type
+		// Use right as left may not exist
+		opType = llvm.TypeToLLVM((*b.right).GetType())
+		if strings.Contains(opType, "struct.") {
+			opType += "*"
+		}
 	}
 
 	if lastUsedRegLeft == "nil" {
