@@ -11,22 +11,29 @@ type Cmdline struct {
 	LexFlag         bool
 	ASTFlag         bool
 	SymbolTableFlag bool
-	LLVMFlag        bool
-	ARMFlag         bool
+	LLVMShowFlag    bool
+	ARMShowFlag     bool
+	targetMachine   string
 	Args            []string
 }
 
 // Returns a new Cmdline struct with the program name and arguments
-func newCmdline(program string, lexFlag, astFlag, symbolTableFlag, llvmFlag, ARMFlag bool, args []string) *Cmdline {
+func newCmdline(program string, lexFlag, astFlag, symbolTableFlag, LLVMShowFlag, ARMShowFlag bool, targetMachine string, args []string) *Cmdline {
 	return &Cmdline{
 		Program:         program,
 		LexFlag:         lexFlag,
 		ASTFlag:         astFlag,
 		SymbolTableFlag: symbolTableFlag,
-		LLVMFlag:        llvmFlag,
-		ARMFlag:         ARMFlag,
+		LLVMShowFlag:    LLVMShowFlag,
+		ARMShowFlag:     ARMShowFlag,
+		targetMachine:   targetMachine,
 		Args:            args,
 	}
+}
+
+// Get the target triple
+func (c *Cmdline) GetTargetTriple() string {
+	return c.targetMachine
 }
 
 // ReadCmdline reads the kernel command line and returns a Cmdline struct.
@@ -40,11 +47,14 @@ func ReadCmdline() *Cmdline {
 	}
 
 	programFile := os.Args[0]
+	// targetMachine := "arm64-apple-darwin22.2.0"
+	targetMachine := "x86_64-linux-gnu"
+
 	var lexFlag bool
 	var astFlag bool
 	var symbolTableFlag bool
-	var llvmFlag bool
-	var ARMFlag bool
+	var llvmShowFlag bool
+	var ARMShowFlag bool
 	var args []string
 	if len(os.Args) == 2 {
 		lexFlag = false
@@ -56,10 +66,10 @@ func ReadCmdline() *Cmdline {
 			astFlag = true
 		} else if os.Args[1] == "-sym" {
 			symbolTableFlag = true
-		} else if os.Args[1] == "-llvm" {
-			llvmFlag = true
-		} else if os.Args[1] == "-arm64" {
-			ARMFlag = true
+		} else if os.Args[1] == "-llvmshow" {
+			llvmShowFlag = true
+		} else if os.Args[1] == "-arm64show" {
+			ARMShowFlag = true
 		} else {
 			usage()
 			return nil
@@ -67,7 +77,7 @@ func ReadCmdline() *Cmdline {
 		args = os.Args[2:]
 	}
 
-	cmdline := newCmdline(programFile, lexFlag, astFlag, symbolTableFlag, llvmFlag, ARMFlag, args)
+	cmdline := newCmdline(programFile, lexFlag, astFlag, symbolTableFlag, llvmShowFlag, ARMShowFlag, targetMachine, args)
 
 	return cmdline
 }
@@ -79,7 +89,7 @@ func checkArgs() bool {
 	} else if len(os.Args) > 3 {
 		return false
 	} else if len(os.Args) == 3 {
-		if os.Args[1] != "-lex" && os.Args[1] != "-ast" && os.Args[1] != "-sym" && os.Args[1] != "-llvm" && os.Args[1] != "-arm64" {
+		if os.Args[1] != "-lex" && os.Args[1] != "-ast" && os.Args[1] != "-sym" && os.Args[1] != "-llvmshow" && os.Args[1] != "-arm64show" && os.Args[1] != "-llvm" && os.Args[1] != "-arm64" {
 			return false
 		}
 	}
@@ -94,8 +104,14 @@ func isGoliteFile() bool {
 
 // usage of the program
 func usage() {
-	usage := "Usage: go run golite/main.go [-lex || -ast || -sym || -llvm || arm64] <input source file>\n"
+	usage := "Usage: go run golite/main.go [-lex || -ast || -sym || -llvmshow || llvm=[<target triple>] || arm64show || arm64] <input source file>\n"
 	usage += "Arguments: <input source file> - path to the input source file\n"
-	usage += "Flags: \n-lex - Print the lexed tokens.\n-ast - Print the abstract syntax tree.\n-sym - Print the symbol table.\n-llvm - Print the LLVM IR representation.\n-arm64 - Print the ARM64 assembly representation.\n"
+	usage += "Flags: \n-lex - Print the lexed tokens.\n"
+	usage += "-ast - Print the abstract syntax tree.\n"
+	usage += "-sym - Print the symbol table.\n"
+	usage += "-llvmshow - Print the LLVM IR representation.\n"
+	usage += "-arm64show - Print the ARM64 assembly representation.\n"
+	usage += "-llvm=[<target triple>] - Generate the LLVM IR representation and output the LLVM IR to a file. Default target triple - x86_64-linux-gnu\n"
+	usage += "-arm64 -  Generate the ARM64 assembly representation and output the ARM64 assembly to a file.\n"
 	fmt.Println(usage)
 }

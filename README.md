@@ -24,13 +24,15 @@ go run golite/main.go benchmarks/simple/example2.golite
 
 ## Golite Compiler Flags
 
-| Flag | Description | Stages | Example |
-| --- | --- | --- | --- |
-| `lex` | Print the lexed tokens. | Lexer | `go run golite/main.go -lex benchmarks/simple/example1.golite` |
-| `ast` | Print the parser produced by the parser. | Lexer, Parser | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
-| `sym` | Print the symbol table. | Lexer, Parser | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
-| `llvm` | Print the LLVM IR. | Lexer, Parser, IR Generator | `go run golite/main.go -llvm benchmarks/simple/example1.golite` |
-| `arm64` | Print the ARM64 assembly. | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64 benchmarks/simple/example1.golite` |
+| Flag | Description | Default | Stages | Example |
+| --- | --- | --- | --- | --- |
+| `lex` | Print the lexed tokens. | False | Lexer | `go run golite/main.go -lex benchmarks/simple/example1.golite` |
+| `ast` | Print the parser produced by the parser. | False |  Lexer, Parser | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
+| `sym` | Print the symbol table. | False | Lexer, Parser | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
+| `llvmshow` | Print the LLVM IR. | False | Lexer, Parser, IR Generator | `go run golite/main.go -llvmshow benchmarks/simple/example1.golite` |
+| `llvm=[target triple]` | Generate LLVM IR using target triple (if provided). | x86_64-linux-gnu | Lexer, Parser, IR Generator | `go run golite/main.go -llvm=arm64-apple-darwin22.2.0 benchmarks/simple/example1.golite` |
+| `arm64show` | Print the ARM64 assembly. | False | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64show benchmarks/simple/example1.golite` |
+| `arm64` | Generate ARM64 assembly. | True | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64 benchmarks/simple/example1.golite` |
 
 Check out the `benchmarks` folder for more examples.
 

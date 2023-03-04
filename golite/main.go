@@ -19,7 +19,6 @@ func main() {
 	// Get the input source file path
 	// Input source path is always the last argument
 	inputSourcePath := cmd.Args[len(cmd.Args)-1]
-	targetMachine := "arm64-apple-darwin22.2.0"
 
 	// Get a new lexer
 	lexer := lexer.NewLexer(inputSourcePath)
@@ -48,14 +47,14 @@ func main() {
 					} else {
 						// Continue translation from AST to LLVM IR
 						// Create the target information
-						targetInfo := llvm.NewTargetInformation(inputSourcePath, targetMachine)
+						targetInfo := llvm.NewTargetInformation(inputSourcePath, cmd.GetTargetTriple())
 
 						// Create the source llvm representation
 						llvmProgram := ast.ToLLVM(tables)
 
 						llvmRepr := llvm.GetLLVMSource(targetInfo, llvmProgram)
 						// Print the llvm representation
-						if cmd.LLVMFlag {
+						if cmd.LLVMShowFlag {
 							fmt.Println(llvmRepr)
 						} else {
 							// Write the llvm representation to the output file
@@ -64,7 +63,7 @@ func main() {
 
 							// Convert the llvm representation to ARM assembly
 							armAssembly := llvmProgram.ToARM()
-							if cmd.ARMFlag {
+							if cmd.ARMShowFlag {
 								fmt.Println(armAssembly)
 							} else {
 								// Write the ARM assembly to the output file
