@@ -36,6 +36,12 @@ go run golite/main.go benchmarks/simple/example2.golite
 
 Check out the `benchmarks` folder for more examples.
 
+Note:
+
+- LLVM IR representations are generated in the `IR` folder.
+- ARM assembly representations are generated in the `assembly` folder.
+- Executables produced by the compiler are generated in the root directory of the project.
+
 ## Test Golite Compiler
 
 | Command | Description |
