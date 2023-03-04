@@ -1,6 +1,9 @@
 package llvm
 
-import "bytes"
+import (
+	"bytes"
+	"golite/arm"
+)
 
 // Represents an unconditional branch instruction in LLVM IR
 type BranchUnconditional struct {
@@ -59,4 +62,9 @@ func (b *BranchUnconditional) SetLabel(newLabel string) {
 // Set the destination label
 func (b *BranchUnconditional) SetDestinationLabel(newLabel string) {
 	b.destinationLabel = newLabel
+}
+
+// Convert the instruction to ARM assembly.
+func (b *BranchUnconditional) ToARM() []*arm.Instruction {
+	return nil
 }

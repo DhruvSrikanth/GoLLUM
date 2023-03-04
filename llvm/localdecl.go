@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"golite/arm"
 	"strings"
 )
 
@@ -61,4 +62,9 @@ func (s *LocalDecl) GetLabel() string {
 // Set the label that marks this instruction in code.
 func (s *LocalDecl) SetLabel(newLabel string) {
 	s.blockLabel = newLabel
+}
+
+// Convert LLVM IR to ARM assembly.
+func (s *LocalDecl) ToARM() []*arm.Instruction {
+	return nil
 }

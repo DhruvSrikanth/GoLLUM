@@ -1,6 +1,7 @@
 package llvm
 
 import (
+	"golite/arm"
 	"strconv"
 )
 
@@ -24,4 +25,9 @@ func (c *ConstantDecl) String() string {
 // Get the variable name of the constant declaration.
 func (c *ConstantDecl) GetVarName() string {
 	return c.varName
+}
+
+// Convert the constant declaration to ARM assembly.
+func (c *ConstantDecl) ToARM() []*arm.Instruction {
+	return nil
 }

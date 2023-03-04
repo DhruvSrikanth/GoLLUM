@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"golite/arm"
 	"strconv"
 	"strings"
 )
@@ -90,4 +91,9 @@ func (f *FunctionCall) GetLabel() string {
 // Set the label that marks this instruction in code.
 func (f *FunctionCall) SetLabel(newLabel string) {
 	f.blockLabel = newLabel
+}
+
+// Convert to ARM assembly.
+func (f *FunctionCall) ToARM() []*arm.Instruction {
+	return nil
 }

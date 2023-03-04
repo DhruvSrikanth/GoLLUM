@@ -61,10 +61,10 @@ func (f *FunctionDecl) String() string {
 }
 
 // Convert the LLVM IR to ARM assembly
-func (f *FunctionDecl) ToArm() *arm.FunctionDecl {
+func (f *FunctionDecl) ToARM() *arm.FunctionDecl {
 	blocks := make([]*arm.BasicBlock, 0)
 	for _, block := range f.blocks {
-		blocks = append(blocks, block.ToArm())
+		blocks = append(blocks, block.ToARM())
 	}
 	return arm.NewFunctionDecl(f.name, blocks)
 }

@@ -29,10 +29,9 @@ func (f *FunctionDecl) String() string {
 	out.WriteString("\t.global " + f.name + "\n")
 	out.WriteString("\t.p2align 2\n")
 	out.WriteString(f.name + ":\n")
-	// for _, block := range f.blocks {
-	// 	out.WriteString(block.String())
-	// out.WritrString("\n")
-	// }
+	for _, block := range f.blocks {
+		out.WriteString(block.String())
+	}
 	out.WriteString("\t.size " + f.name + ", (.-" + f.name + ")\n")
 
 	return out.String()

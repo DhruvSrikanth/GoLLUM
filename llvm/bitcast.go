@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"golite/arm"
 	"strconv"
 	"strings"
 )
@@ -81,4 +82,9 @@ func (b *BitCast) GetLabel() string {
 // Set the label that marks this instruction in code.
 func (b *BitCast) SetLabel(newLabel string) {
 	b.blockLabel = newLabel
+}
+
+// Convert the instruction from LLVM IR to ARM assembly.
+func (b *BitCast) ToARM() []*arm.Instruction {
+	return nil
 }

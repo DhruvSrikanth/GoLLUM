@@ -1,5 +1,7 @@
 package llvm
 
+import "golite/arm"
+
 // Interface for instructions.
 type Instruction interface {
 	// Get the registers targeted by the instruction.
@@ -19,4 +21,7 @@ type Instruction interface {
 
 	// String Representation of the instruction.
 	String() string
+
+	// Convert the instruction to ARM assembly.
+	ToARM() []*arm.Instruction
 }

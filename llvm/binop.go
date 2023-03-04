@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"golite/arm"
 	"strconv"
 	"strings"
 )
@@ -90,4 +91,9 @@ func (b *BinOp) SetLabel(newLabel string) {
 // Get the optype of the instruction.
 func (b *BinOp) GetOpType() string {
 	return b.opType
+}
+
+// Convert the BinOp to ARM assembly.
+func (b *BinOp) ToARM() []*arm.Instruction {
+	return nil
 }

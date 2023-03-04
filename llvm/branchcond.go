@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"golite/arm"
 	"strconv"
 	"strings"
 )
@@ -88,4 +89,9 @@ func (b *BranchConditional) SetTrueLabel(newLabel string) {
 // Set the false label
 func (b *BranchConditional) SetFalseLabel(newLabel string) {
 	b.falseLabel = newLabel
+}
+
+// Convert the instruction from LLVM IR to ARM assembly.
+func (b *BranchConditional) ToARM() []*arm.Instruction {
+	return nil
 }

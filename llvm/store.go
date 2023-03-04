@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"golite/arm"
 	"strconv"
 	"strings"
 )
@@ -88,4 +89,9 @@ func (s *Store) GetImmediate() int {
 // Set the label of the block containing the instruction.
 func (s *Store) SetLabel(label string) {
 	s.blockLabel = label
+}
+
+// Convert from LLVM IR to ARM assembly.
+func (s *Store) ToARM() []*arm.Instruction {
+	return nil
 }

@@ -76,7 +76,7 @@ func (p *Program) ToARM() *arm.Program {
 	// Create the ARM program for the function declarations
 	var functionDecls []arm.FunctionDecl
 	for _, fn := range p.functionDecls {
-		functionDecls = append(functionDecls, *(fn.ToArm()))
+		functionDecls = append(functionDecls, *(fn.ToARM()))
 	}
 
 	// Create the ARM program for the constant declarations
