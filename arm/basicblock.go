@@ -1,6 +1,4 @@
-package llvm
-
-import "golite/arm"
+package arm
 
 // Basic Block representation for LLVM IR.
 type BasicBlock struct {
@@ -78,6 +76,11 @@ func (bb *BasicBlock) AddInstruction(inst Instruction) {
 	bb.instructions = append(bb.instructions, inst)
 }
 
+// Add multiple instructions to the basic block.
+func (bb *BasicBlock) AddInstructions(instructions []Instruction) {
+	bb.instructions = append(bb.instructions, instructions...)
+}
+
 // String representation of the basic block.
 func (bb *BasicBlock) String() string {
 	var out string
@@ -100,14 +103,4 @@ func (bb *BasicBlock) GetLastInstruction() Instruction {
 // Get the number of instructions in the basic block.
 func (bb *BasicBlock) Size() int {
 	return len(bb.instructions)
-}
-
-// Conver the basic block to ARM assembly.
-func (bb *BasicBlock) ToArm() *arm.BasicBlock {
-	armBB := arm.NewBasicBlock(bb.label)
-	// for _, inst := range bb.instructions {
-	// 	insts := inst.ToArm()
-	// 	armBB.AddInstructions(insts)
-	// }
-	return armBB
 }

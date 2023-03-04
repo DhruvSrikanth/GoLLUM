@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"golite/arm"
 	"strings"
 )
 
@@ -57,4 +58,13 @@ func (f *FunctionDecl) String() string {
 	out.WriteString("\n}\n")
 
 	return out.String()
+}
+
+// Convert the LLVM IR to ARM assembly
+func (f *FunctionDecl) ToArm() *arm.FunctionDecl {
+	blocks := make([]*arm.BasicBlock, 0)
+	for _, block := range f.blocks {
+		blocks = append(blocks, block.ToArm())
+	}
+	return arm.NewFunctionDecl(f.name, blocks)
 }

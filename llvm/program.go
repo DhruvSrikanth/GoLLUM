@@ -1,6 +1,9 @@
 package llvm
 
-import "bytes"
+import (
+	"bytes"
+	"golite/arm"
+)
 
 // The LLVM program node
 type Program struct {
@@ -58,6 +61,32 @@ func (p *Program) String() string {
 	}
 
 	return out
+}
+
+// Converts the LLVM IR to ARM assembly
+func (p *Program) ToARM() *arm.Program {
+	// Create the ARM program for the global declarations
+	var globalDecls []arm.GlobalDecl
+	for _, global := range p.globalDecls {
+		if !global.IsStructType() {
+			globalDecls = append(globalDecls, *(global.ToARM()))
+		}
+	}
+
+	// Create the ARM program for the function declarations
+	var functionDecls []arm.FunctionDecl
+	for _, fn := range p.functionDecls {
+		functionDecls = append(functionDecls, *(fn.ToArm()))
+	}
+
+	// Create the ARM program for the constant declarations
+	var constantDecls []arm.ConstantDecl
+	// for _, constant := range p.constantDecls {
+	// 	constantDecls = append(constantDecls, *(constant.ToARM()))
+	// }
+
+	return arm.NewProgram(globalDecls, functionDecls, constantDecls)
+
 }
 
 // Combines the target information and the LLVM program into a single object

@@ -63,9 +63,9 @@ func main() {
 							llvm.WriteLLVMRepr(outputPath, llvmRepr)
 
 							// Convert the llvm representation to ARM assembly
-							// armRepr := llvm.GetARMAssembly(targetInfo, llvmRepr)
+							armAssembly := llvmProgram.ToARM()
 							if cmd.ARMFlag {
-								// fmt.Println(armRepr)
+								fmt.Println(armAssembly)
 							} else {
 								// Write the ARM assembly to the output file
 								// outputPath := "ARM/" + targetInfo.GetFileName() + ".s"

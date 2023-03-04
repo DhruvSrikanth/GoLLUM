@@ -43,8 +43,8 @@ Check out the `benchmarks` folder for more examples.
 | `make test_type_checking` | Runs type checker tests. |
 | `make test_control_flow` | Runs control flow tests. |
 | `make test_parser` | Runs all parser tests. |
-| `make test_llvm` | Runs all llvm tests. |
-| `make test_arm64` | Runs all arm64 tests. |
+<!-- | `make test_llvm` | Runs all llvm tests. |
+| `make test_arm64` | Runs all arm64 tests. | -->
 | `make test_compiler` | Runs all compiler tests. |
 
 

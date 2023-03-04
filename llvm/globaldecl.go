@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"bytes"
+	"golite/arm"
 	"strings"
 )
 
@@ -47,4 +48,16 @@ func (s *GlobalDecl) String() string {
 	out.WriteString(" " + s.initVal)
 
 	return out.String()
+}
+
+// Returns if it is a struct type declaration
+func (s *GlobalDecl) IsStructType() bool {
+	return strings.Contains(s.name, "struct.")
+}
+
+// Convert to ARM
+func (s *GlobalDecl) ToARM() *arm.GlobalDecl {
+	size := arm.GetSizeLlvm(s.ty)
+	alignment := arm.GetAlignmentLlvm(s.ty)
+	return arm.NewGlobalDecl(s.name, size, alignment)
 }
