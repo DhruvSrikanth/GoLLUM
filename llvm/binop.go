@@ -3,6 +3,7 @@ package llvm
 import (
 	"bytes"
 	"golite/arm"
+	"golite/stack"
 	"strconv"
 	"strings"
 )
@@ -96,4 +97,8 @@ func (b *BinOp) GetOpType() string {
 // Convert the BinOp to ARM assembly.
 func (b *BinOp) ToARM() []*arm.Instruction {
 	return nil
+}
+
+// Function to build the stack table for the BinOp.
+func (b *BinOp) BuildStackTable(funcName string, stack *stack.Stack) {
 }

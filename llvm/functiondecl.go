@@ -3,6 +3,7 @@ package llvm
 import (
 	"bytes"
 	"golite/arm"
+	"golite/stack"
 	"strings"
 )
 
@@ -58,6 +59,13 @@ func (f *FunctionDecl) String() string {
 	out.WriteString("\n}\n")
 
 	return out.String()
+}
+
+// Build the stack table for each function
+func (f *FunctionDecl) BuildStackTable(stack *stack.Stack) {
+	for _, block := range f.blocks {
+		block.BuildStackTable(f.name, stack)
+	}
 }
 
 // Convert the LLVM IR to ARM assembly

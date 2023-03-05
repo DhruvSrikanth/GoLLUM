@@ -3,6 +3,7 @@ package llvm
 import (
 	"bytes"
 	"golite/arm"
+	"golite/stack"
 	"strings"
 )
 
@@ -70,4 +71,8 @@ func (r *Return) SetLabel(newLabel string) {
 // Convert LLVM IR to ARM assembly.
 func (r *Return) ToARM() []*arm.Instruction {
 	return nil
+}
+
+// Build the stack table for the instruction.
+func (r *Return) BuildStackTable(fName string, stack *stack.Stack) {
 }

@@ -3,6 +3,7 @@ package llvm
 import (
 	"bytes"
 	"golite/arm"
+	"golite/stack"
 )
 
 // The LLVM program node
@@ -61,6 +62,13 @@ func (p *Program) String() string {
 	}
 
 	return out
+}
+
+// Build the stack table for each function
+func (p *Program) BuildStackTable(stack *stack.Stack) {
+	for _, fn := range p.functionDecls {
+		fn.BuildStackTable(stack)
+	}
 }
 
 // Converts the LLVM IR to ARM assembly

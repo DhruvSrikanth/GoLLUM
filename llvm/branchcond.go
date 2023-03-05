@@ -3,6 +3,7 @@ package llvm
 import (
 	"bytes"
 	"golite/arm"
+	"golite/stack"
 	"strconv"
 	"strings"
 )
@@ -94,4 +95,8 @@ func (b *BranchConditional) SetFalseLabel(newLabel string) {
 // Convert the instruction from LLVM IR to ARM assembly.
 func (b *BranchConditional) ToARM() []*arm.Instruction {
 	return nil
+}
+
+// Build the stack table for the instruction.
+func (b *BranchConditional) BuildStackTable(fName string, stack *stack.Stack) {
 }

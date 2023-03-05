@@ -1,6 +1,9 @@
 package llvm
 
-import "golite/arm"
+import (
+	"golite/arm"
+	"golite/stack"
+)
 
 // Basic Block representation for LLVM IR.
 type BasicBlock struct {
@@ -113,4 +116,11 @@ func (bb *BasicBlock) ToARM() *arm.BasicBlock {
 		}
 	}
 	return armBB
+}
+
+// Build the stack table
+func (bb *BasicBlock) BuildStackTable(fnName string, stack *stack.Stack) {
+	for _, inst := range bb.instructions {
+		inst.BuildStackTable(fnName, stack)
+	}
 }

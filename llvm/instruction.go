@@ -1,6 +1,9 @@
 package llvm
 
-import "golite/arm"
+import (
+	"golite/arm"
+	"golite/stack"
+)
 
 // Interface for instructions.
 type Instruction interface {
@@ -24,4 +27,7 @@ type Instruction interface {
 
 	// Convert the instruction to ARM assembly.
 	ToARM() []*arm.Instruction
+
+	// Build the stack table for the instruction.
+	BuildStackTable(funcName string, stack *stack.Stack)
 }

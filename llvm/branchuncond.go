@@ -3,6 +3,7 @@ package llvm
 import (
 	"bytes"
 	"golite/arm"
+	"golite/stack"
 )
 
 // Represents an unconditional branch instruction in LLVM IR
@@ -67,4 +68,8 @@ func (b *BranchUnconditional) SetDestinationLabel(newLabel string) {
 // Convert the instruction to ARM assembly.
 func (b *BranchUnconditional) ToARM() []*arm.Instruction {
 	return nil
+}
+
+// Build the stack table for the instruction.
+func (b *BranchUnconditional) BuildStackTable(funcName string, stack *stack.Stack) {
 }
