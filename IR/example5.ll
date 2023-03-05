@@ -171,15 +171,15 @@ L10:
 	%r83 = load %struct.foo*, %struct.foo** %math1
 	%r84 = bitcast %struct.foo* %r83 to i8*
 	call void @free(i8* %r84)
-	%r86 = load %struct.foo*, %struct.foo** %math2
-	%r87 = bitcast %struct.foo* %r86 to i8*
-	call void @free(i8* %r87)
+	%r85 = load %struct.foo*, %struct.foo** %math2
+	%r86 = bitcast %struct.foo* %r85 to i8*
+	call void @free(i8* %r86)
 	br label %L11
 
 L11:
 	store i64 0, i64* %domath_retval
-	%r89 = load i64, i64* %domath_retval
-	ret i64 %r89
+	%r87 = load i64, i64* %domath_retval
+	ret i64 %r87
 
 
 }
@@ -194,20 +194,20 @@ L12:
 	br label %L13
 
 L13:
-	%r90 = load i64, i64* %P_num
-	%r91 = icmp sgt i64 %r90, 0
-	br i1 %r91, label %L14, label %L15
+	%r88 = load i64, i64* %P_num
+	%r89 = icmp sgt i64 %r88, 0
+	br i1 %r89, label %L14, label %L15
 
 L14:
-	%r92 = call i8* @malloc(i32 24)
-	%r93 = bitcast i8* %r92 to %struct.foo*
-	store %struct.foo* %r93, %struct.foo** %tmp
-	%r94 = load %struct.foo*, %struct.foo** %tmp
-	%r95 = bitcast %struct.foo* %r94 to i8*
-	call void @free(i8* %r95)
-	%r97 = load i64, i64* %P_num
-	%r98 = sub i64 %r97, 1
-	store i64 %r98, i64* %P_num
+	%r90 = call i8* @malloc(i32 24)
+	%r91 = bitcast i8* %r90 to %struct.foo*
+	store %struct.foo* %r91, %struct.foo** %tmp
+	%r92 = load %struct.foo*, %struct.foo** %tmp
+	%r93 = bitcast %struct.foo* %r92 to i8*
+	call void @free(i8* %r93)
+	%r94 = load i64, i64* %P_num
+	%r95 = sub i64 %r94, 1
+	store i64 %r95, i64* %P_num
 	br label %L13
 
 L15:
@@ -215,8 +215,8 @@ L15:
 
 L16:
 	store i64 0, i64* %objinstantiation_retval
-	%r99 = load i64, i64* %objinstantiation_retval
-	ret i64 %r99
+	%r96 = load i64, i64* %objinstantiation_retval
+	ret i64 %r96
 
 
 }
@@ -232,16 +232,16 @@ L17:
 	br label %L18
 
 L18:
-	%r100 = load i64, i64* %P_m
-	%r101 = icmp eq i64 %r100, 0
-	br i1 %r101, label %L19, label %L20
+	%r97 = load i64, i64* %P_m
+	%r98 = icmp eq i64 %r97, 0
+	br i1 %r98, label %L19, label %L20
 
 L19:
-	%r102 = load i64, i64* %P_n
-	%r103 = add i64 %r102, 1
-	store i64 %r103, i64* %ackermann_retval
-	%r104 = load i64, i64* %ackermann_retval
-	ret i64 %r104
+	%r99 = load i64, i64* %P_n
+	%r100 = add i64 %r99, 1
+	store i64 %r100, i64* %ackermann_retval
+	%r101 = load i64, i64* %ackermann_retval
+	ret i64 %r101
 
 L20:
 	br label %L21
@@ -250,36 +250,36 @@ L21:
 	br label %L22
 
 L22:
-	%r105 = load i64, i64* %P_n
-	%r106 = icmp eq i64 %r105, 0
-	br i1 %r106, label %L23, label %L24
+	%r102 = load i64, i64* %P_n
+	%r103 = icmp eq i64 %r102, 0
+	br i1 %r103, label %L23, label %L24
 
 L23:
-	%r107 = load i64, i64* %P_m
-	%r108 = sub i64 %r107, 1
-	%r109 = call i64 @ackermann(i64 %r108, i64 1)
-	store i64 %r109, i64* %ackermann_retval
-	%r110 = load i64, i64* %ackermann_retval
-	ret i64 %r110
+	%r104 = load i64, i64* %P_m
+	%r105 = sub i64 %r104, 1
+	%r106 = call i64 @ackermann(i64 %r105, i64 1)
+	store i64 %r106, i64* %ackermann_retval
+	%r107 = load i64, i64* %ackermann_retval
+	ret i64 %r107
 
 L24:
-	%r111 = load i64, i64* %P_m
+	%r108 = load i64, i64* %P_m
+	%r109 = sub i64 %r108, 1
+	%r110 = load i64, i64* %P_m
+	%r111 = load i64, i64* %P_n
 	%r112 = sub i64 %r111, 1
-	%r113 = load i64, i64* %P_m
-	%r114 = load i64, i64* %P_n
-	%r115 = sub i64 %r114, 1
-	%r116 = call i64 @ackermann(i64 %r113, i64 %r115)
-	%r117 = call i64 @ackermann(i64 %r112, i64 %r116)
-	store i64 %r117, i64* %ackermann_retval
-	%r118 = load i64, i64* %ackermann_retval
-	ret i64 %r118
+	%r113 = call i64 @ackermann(i64 %r110, i64 %r112)
+	%r114 = call i64 @ackermann(i64 %r109, i64 %r113)
+	store i64 %r114, i64* %ackermann_retval
+	%r115 = load i64, i64* %ackermann_retval
+	ret i64 %r115
 
 L25:
 	br label %L26
 
 L26:
-	%r119 = load i64, i64* %ackermann_retval
-	ret i64 %r119
+	%r116 = load i64, i64* %ackermann_retval
+	ret i64 %r116
 
 
 }
@@ -299,27 +299,27 @@ L27:
 	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %c)
 	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %d)
 	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %e)
-	%r120 = load i64, i64* %a
-	%r121 = call i64 @tailrecursive(i64 %r120)
-	%r122 = load i64, i64* %b
-	%r123 = call i64 @domath(i64 %r122)
-	%r124 = load i64, i64* %c
-	%r125 = call i64 @objinstantiation(i64 %r124)
-	%r126 = load i64, i64* %d
-	%r127 = load i64, i64* %e
-	%r128 = call i64 @ackermann(i64 %r126, i64 %r127)
-	store i64 %r128, i64* %temp
-	%r129 = load i64, i64* %a
-	%r130 = load i64, i64* %b
-	%r131 = load i64, i64* %c
-	%r132 = load i64, i64* %temp
-	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.fstr2, i32 0, i32 0), i64 %r129, i64 %r130, i64 %r131, i64 %r132)
+	%r117 = load i64, i64* %a
+	%r118 = call i64 @tailrecursive(i64 %r117)
+	%r119 = load i64, i64* %b
+	%r120 = call i64 @domath(i64 %r119)
+	%r121 = load i64, i64* %c
+	%r122 = call i64 @objinstantiation(i64 %r121)
+	%r123 = load i64, i64* %d
+	%r124 = load i64, i64* %e
+	%r125 = call i64 @ackermann(i64 %r123, i64 %r124)
+	store i64 %r125, i64* %temp
+	%r126 = load i64, i64* %a
+	%r127 = load i64, i64* %b
+	%r128 = load i64, i64* %c
+	%r129 = load i64, i64* %temp
+	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @.fstr2, i32 0, i32 0), i64 %r126, i64 %r127, i64 %r128, i64 %r129)
 	br label %L28
 
 L28:
 	store i64 0, i64* %main_retval
-	%r133 = load i64, i64* %main_retval
-	ret i64 %r133
+	%r130 = load i64, i64* %main_retval
+	ret i64 %r130
 
 
 }

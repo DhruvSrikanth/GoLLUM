@@ -101,4 +101,6 @@ func (b *BinOp) ToARM() []*arm.Instruction {
 
 // Function to build the stack table for the BinOp.
 func (b *BinOp) BuildStackTable(funcName string, stack *stack.Stack) {
+	destinationReg := "r" + strconv.Itoa(b.targetRegisters[len(b.targetRegisters)-1])
+	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8))
 }

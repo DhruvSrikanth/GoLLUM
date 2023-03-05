@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"golite/arm"
 	"golite/stack"
+	"strconv"
 	"strings"
 )
 
@@ -63,8 +64,27 @@ func (f *FunctionDecl) String() string {
 
 // Build the stack table for each function
 func (f *FunctionDecl) BuildStackTable(stack *stack.Stack) {
+	// Add stack frame for the function
+	stack.AddFrame(f.name)
+	// Add fp to the stack
+	stack.AddEntry(f.name, "fp", "0")
+	// Add lr to the stack
+	stack.AddEntry(f.name, "lr", "8")
 	for _, block := range f.blocks {
 		block.BuildStackTable(f.name, stack)
+	}
+	// Add the parameter register to the stack
+	for _, param := range f.params {
+		stack.AddEntry(f.name, "P_"+param, strconv.Itoa(stack.GetFrame(f.name).GetLargestOffset()+8))
+	}
+	// Add the parameter itself if it is greater than the number of avaliable registers
+	nAvailableRegisters := 8
+	for i, param := range f.params {
+		if i >= nAvailableRegisters {
+			stack.AddEntry(f.name, param, strconv.Itoa(stack.GetFrame(f.name).GetLargestOffset()+8))
+		} else {
+			stack.AddEntry(f.name, param, "x"+strconv.Itoa(i))
+		}
 	}
 }
 

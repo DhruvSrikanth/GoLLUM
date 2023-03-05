@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"golite/arm"
 	"golite/stack"
+	"strconv"
 	"strings"
 )
 
@@ -72,4 +73,7 @@ func (s *LocalDecl) ToARM() []*arm.Instruction {
 
 // Build the stack table for the instruction.
 func (s *LocalDecl) BuildStackTable(fName string, stack *stack.Stack) {
+	if !strings.Contains(s.name, "P_") {
+		stack.AddEntry(fName, s.name, strconv.Itoa(stack.GetFrame(fName).GetLargestOffset()+8))
+	}
 }

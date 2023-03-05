@@ -155,64 +155,64 @@ L18:
 	br label %L19
 
 L19:
-	%r49 = load %struct.Node*, %struct.Node** %P_curr
-	%r50 = getelementptr %struct.Node, %struct.Node* %r49, i32 0, i32 1
-	%r51 = load %struct.Node*, %struct.Node** %r50
-	%r52 = load %struct.Node*, %struct.Node** @tail
-	%r53 = icmp eq %struct.Node* %r51, %r52
-	br i1 %r53, label %L20, label %L21
+	%r48 = load %struct.Node*, %struct.Node** %P_curr
+	%r49 = getelementptr %struct.Node, %struct.Node* %r48, i32 0, i32 1
+	%r50 = load %struct.Node*, %struct.Node** %r49
+	%r51 = load %struct.Node*, %struct.Node** @tail
+	%r52 = icmp eq %struct.Node* %r50, %r51
+	br i1 %r52, label %L20, label %L21
 
 L20:
-	%r54 = load %struct.Node*, %struct.Node** @tail
-	store %struct.Node* %r54, %struct.Node** %temp
-	%r55 = load %struct.Node*, %struct.Node** %P_curr
-	store %struct.Node* %r55, %struct.Node** @tail
-	%r56 = load %struct.Node*, %struct.Node** @tail
-	%r57 = getelementptr %struct.Node, %struct.Node* %r56, i32 0, i32 1
-	%r58 = load %struct.Node*, %struct.Node** @.nilNode
-	store %struct.Node* %r58, %struct.Node** %r57
-	%r59 = load %struct.Node*, %struct.Node** %temp
-	%r60 = bitcast %struct.Node* %r59 to i8*
-	call void @free(i8* %r60)
+	%r53 = load %struct.Node*, %struct.Node** @tail
+	store %struct.Node* %r53, %struct.Node** %temp
+	%r54 = load %struct.Node*, %struct.Node** %P_curr
+	store %struct.Node* %r54, %struct.Node** @tail
+	%r55 = load %struct.Node*, %struct.Node** @tail
+	%r56 = getelementptr %struct.Node, %struct.Node* %r55, i32 0, i32 1
+	%r57 = load %struct.Node*, %struct.Node** @.nilNode
+	store %struct.Node* %r57, %struct.Node** %r56
+	%r58 = load %struct.Node*, %struct.Node** %temp
+	%r59 = bitcast %struct.Node* %r58 to i8*
+	call void @free(i8* %r59)
 	br label %L26
 
 L21:
 	br label %L22
 
 L22:
-	%r62 = load %struct.Node*, %struct.Node** %P_curr
-	%r63 = getelementptr %struct.Node, %struct.Node* %r62, i32 0, i32 1
-	%r64 = load %struct.Node*, %struct.Node** %r63
-	%r65 = getelementptr %struct.Node, %struct.Node* %r64, i32 0, i32 0
-	%r66 = load i64, i64* %r65
-	%r67 = load i64, i64* %P_num
-	%r68 = icmp eq i64 %r66, %r67
-	br i1 %r68, label %L23, label %L24
+	%r60 = load %struct.Node*, %struct.Node** %P_curr
+	%r61 = getelementptr %struct.Node, %struct.Node* %r60, i32 0, i32 1
+	%r62 = load %struct.Node*, %struct.Node** %r61
+	%r63 = getelementptr %struct.Node, %struct.Node* %r62, i32 0, i32 0
+	%r64 = load i64, i64* %r63
+	%r65 = load i64, i64* %P_num
+	%r66 = icmp eq i64 %r64, %r65
+	br i1 %r66, label %L23, label %L24
 
 L23:
-	%r69 = load %struct.Node*, %struct.Node** %P_curr
-	%r70 = getelementptr %struct.Node, %struct.Node* %r69, i32 0, i32 1
-	%r71 = load %struct.Node*, %struct.Node** %r70
-	store %struct.Node* %r71, %struct.Node** %temp
+	%r67 = load %struct.Node*, %struct.Node** %P_curr
+	%r68 = getelementptr %struct.Node, %struct.Node* %r67, i32 0, i32 1
+	%r69 = load %struct.Node*, %struct.Node** %r68
+	store %struct.Node* %r69, %struct.Node** %temp
+	%r70 = load %struct.Node*, %struct.Node** %P_curr
+	%r71 = getelementptr %struct.Node, %struct.Node* %r70, i32 0, i32 1
 	%r72 = load %struct.Node*, %struct.Node** %P_curr
 	%r73 = getelementptr %struct.Node, %struct.Node* %r72, i32 0, i32 1
-	%r74 = load %struct.Node*, %struct.Node** %P_curr
+	%r74 = load %struct.Node*, %struct.Node** %r73
 	%r75 = getelementptr %struct.Node, %struct.Node* %r74, i32 0, i32 1
 	%r76 = load %struct.Node*, %struct.Node** %r75
-	%r77 = getelementptr %struct.Node, %struct.Node* %r76, i32 0, i32 1
-	%r78 = load %struct.Node*, %struct.Node** %r77
-	store %struct.Node* %r78, %struct.Node** %r73
-	%r79 = load %struct.Node*, %struct.Node** %temp
-	%r80 = bitcast %struct.Node* %r79 to i8*
-	call void @free(i8* %r80)
+	store %struct.Node* %r76, %struct.Node** %r71
+	%r77 = load %struct.Node*, %struct.Node** %temp
+	%r78 = bitcast %struct.Node* %r77 to i8*
+	call void @free(i8* %r78)
 	br label %L25
 
 L24:
-	%r82 = load %struct.Node*, %struct.Node** %P_curr
-	%r83 = getelementptr %struct.Node, %struct.Node* %r82, i32 0, i32 1
-	%r84 = load %struct.Node*, %struct.Node** %r83
-	%r85 = load i64, i64* %P_num
-	%r86 = call i64 @Del(%struct.Node* %r84, i64 %r85)
+	%r79 = load %struct.Node*, %struct.Node** %P_curr
+	%r80 = getelementptr %struct.Node, %struct.Node* %r79, i32 0, i32 1
+	%r81 = load %struct.Node*, %struct.Node** %r80
+	%r82 = load i64, i64* %P_num
+	%r83 = call i64 @Del(%struct.Node* %r81, i64 %r82)
 	br label %L25
 
 L25:
@@ -229,8 +229,8 @@ L28:
 
 L29:
 	store i64 0, i64* %Del_retval
-	%r87 = load i64, i64* %Del_retval
-	ret i64 %r87
+	%r84 = load i64, i64* %Del_retval
+	ret i64 %r84
 
 
 }
@@ -244,28 +244,28 @@ L30:
 	%i = alloca i64
 	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %x)
 	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %y)
-	%r88 = call i64 @Add(i64 1)
-	%r89 = call i64 @Add(i64 10)
-	%r90 = call i64 @Add(i64 3)
-	%r91 = call i64 @Add(i64 4)
-	%r92 = load i64, i64* %x
-	%r93 = call i64 @Add(i64 %r92)
-	%r94 = load %struct.Node*, %struct.Node** @head
-	%r95 = call i64 @PrintList(%struct.Node* %r94)
+	%r85 = call i64 @Add(i64 1)
+	%r86 = call i64 @Add(i64 10)
+	%r87 = call i64 @Add(i64 3)
+	%r88 = call i64 @Add(i64 4)
+	%r89 = load i64, i64* %x
+	%r90 = call i64 @Add(i64 %r89)
+	%r91 = load %struct.Node*, %struct.Node** @head
+	%r92 = call i64 @PrintList(%struct.Node* %r91)
 	store i64 0, i64* %i
 	br label %L31
 
 L31:
-	%r96 = load i64, i64* %i
-	%r97 = icmp slt i64 %r96, 50000000
-	br i1 %r97, label %L32, label %L33
+	%r93 = load i64, i64* %i
+	%r94 = icmp slt i64 %r93, 50000000
+	br i1 %r94, label %L32, label %L33
 
 L32:
-	%r98 = load i64, i64* %i
-	%r99 = call i64 @Add(i64 %r98)
-	%r100 = load i64, i64* %i
-	%r101 = add i64 %r100, 1
-	store i64 %r101, i64* %i
+	%r95 = load i64, i64* %i
+	%r96 = call i64 @Add(i64 %r95)
+	%r97 = load i64, i64* %i
+	%r98 = add i64 %r97, 1
+	store i64 %r98, i64* %i
 	br label %L31
 
 L33:
@@ -273,31 +273,31 @@ L33:
 	br label %L34
 
 L34:
-	%r102 = load i64, i64* %i
-	%r103 = icmp slt i64 %r102, 50000000
-	br i1 %r103, label %L35, label %L36
+	%r99 = load i64, i64* %i
+	%r100 = icmp slt i64 %r99, 50000000
+	br i1 %r100, label %L35, label %L36
 
 L35:
-	%r104 = load %struct.Node*, %struct.Node** @head
-	%r105 = load i64, i64* %i
-	%r106 = call i64 @Del(%struct.Node* %r104, i64 %r105)
-	%r107 = load i64, i64* %i
-	%r108 = add i64 %r107, 1
-	store i64 %r108, i64* %i
+	%r101 = load %struct.Node*, %struct.Node** @head
+	%r102 = load i64, i64* %i
+	%r103 = call i64 @Del(%struct.Node* %r101, i64 %r102)
+	%r104 = load i64, i64* %i
+	%r105 = add i64 %r104, 1
+	store i64 %r105, i64* %i
 	br label %L34
 
 L36:
+	%r106 = load %struct.Node*, %struct.Node** @head
+	%r107 = load i64, i64* %y
+	%r108 = call i64 @Del(%struct.Node* %r106, i64 %r107)
 	%r109 = load %struct.Node*, %struct.Node** @head
-	%r110 = load i64, i64* %y
-	%r111 = call i64 @Del(%struct.Node* %r109, i64 %r110)
-	%r112 = load %struct.Node*, %struct.Node** @head
-	%r113 = call i64 @PrintList(%struct.Node* %r112)
+	%r110 = call i64 @PrintList(%struct.Node* %r109)
 	br label %L37
 
 L37:
 	store i64 0, i64* %main_retval
-	%r114 = load i64, i64* %main_retval
-	ret i64 %r114
+	%r111 = load i64, i64* %main_retval
+	ret i64 %r111
 
 
 }

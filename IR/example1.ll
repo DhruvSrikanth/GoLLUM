@@ -121,15 +121,15 @@ L10:
 	%r40 = load %struct.nums*, %struct.nums** %x
 	%r41 = bitcast %struct.nums* %r40 to i8*
 	call void @free(i8* %r41)
-	%r43 = load i64, i64* %c
-	%r44 = load i64, i64* %d
-	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.fstr2, i32 0, i32 0), i64 %r43, i64 %r44)
+	%r42 = load i64, i64* %c
+	%r43 = load i64, i64* %d
+	call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @.fstr2, i32 0, i32 0), i64 %r42, i64 %r43)
 	br label %L11
 
 L11:
 	store i64 0, i64* %main_retval
-	%r45 = load i64, i64* %main_retval
-	ret i64 %r45
+	%r44 = load i64, i64* %main_retval
+	ret i64 %r44
 
 
 }

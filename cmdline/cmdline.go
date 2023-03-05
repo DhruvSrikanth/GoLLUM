@@ -71,6 +71,8 @@ func ReadCmdline() *Cmdline {
 
 	cmdline := newCmdline(programFile, *lexFlag, *astFlag, *symbolTableFlag, *LLVMShowFlag, *ARMShowFlag, *ARMFlag, *LLVMTargetTriple, args)
 
+	// cmdline.targetMachine = "arm64-apple-darwin22.2.0"
+
 	return cmdline
 }
 

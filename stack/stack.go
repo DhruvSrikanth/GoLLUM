@@ -20,13 +20,17 @@ func (s *Stack) AddEntry(frameName string, name string, location string) {
 	s.frames[frameName].AddEntry(name, location)
 }
 
+// Get the stack frame
+func (s *Stack) GetFrame(name string) *StackFrame {
+	return s.frames[name]
+}
+
 // String representation of the stack
 func (s *Stack) String() string {
 	var out string
 	for _, frame := range s.frames {
 		out += "------------------\n"
 		out += frame.String()
-		out += "\n"
 		out += "------------------\n"
 	}
 	return out

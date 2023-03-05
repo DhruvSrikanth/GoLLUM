@@ -21,8 +21,6 @@ func NewFree() *Free {
 	mostRecentR, _ := strconv.Atoi(GetPreviousRegister()[2:])
 	srcR = append(srcR, mostRecentR)
 	tgtR := make([]int, 0)
-	nextR, _ := strconv.Atoi(GetNextRegister()[2:])
-	tgtR = append(tgtR, nextR)
 	return &Free{"", srcR, tgtR}
 }
 

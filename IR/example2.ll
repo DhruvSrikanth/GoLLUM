@@ -1,5 +1,5 @@
 source_filename = "example2"
-target triple = "x86_64-linux-gnu"
+target triple = "arm64-apple-darwin22.2.0"
 
 %struct.Node = type {i64, %struct.Node*, %struct.Node*}
 
@@ -355,8 +355,8 @@ L58:
 
 L59:
 	store i64 0, i64* %deleteLeavesTree_retval
-	%r117 = load i64, i64* %deleteLeavesTree_retval
-	ret i64 %r117
+	%r116 = load i64, i64* %deleteLeavesTree_retval
+	ret i64 %r116
 
 
 }
@@ -367,44 +367,44 @@ L60:
 	%main_retval = alloca i64
 	%input = alloca i64
 	%temp = alloca i64
-	%r118 = load %struct.Node*, %struct.Node** @.nilNode
-	store %struct.Node* %r118, %struct.Node** @root
+	%r117 = load %struct.Node*, %struct.Node** @.nilNode
+	store %struct.Node* %r117, %struct.Node** @root
 	store i64 0, i64* %input
 	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %input)
 	br label %L61
 
 L61:
-	%r119 = load i64, i64* %input
-	%r120 = icmp ne i64 %r119, 0
-	br i1 %r120, label %L62, label %L63
+	%r118 = load i64, i64* %input
+	%r119 = icmp ne i64 %r118, 0
+	br i1 %r119, label %L62, label %L63
 
 L62:
-	%r121 = load i64, i64* %input
-	%r122 = load %struct.Node*, %struct.Node** @root
-	%r123 = call i64 @addNode(i64 %r121, %struct.Node* %r122)
+	%r120 = load i64, i64* %input
+	%r121 = load %struct.Node*, %struct.Node** @root
+	%r122 = call i64 @addNode(i64 %r120, %struct.Node* %r121)
 	call i32 (i8*, ...) @scanf(i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.read, i32 0, i32 0), i64* %input)
 	br label %L61
 
 L63:
-	%r124 = load %struct.Node*, %struct.Node** @root
-	%r125 = call i64 @printDepthTree(%struct.Node* %r124)
-	%r126 = load %struct.Node*, %struct.Node** @root
-	%r127 = call i64 @deleteLeavesTree(%struct.Node* %r126)
+	%r123 = load %struct.Node*, %struct.Node** @root
+	%r124 = call i64 @printDepthTree(%struct.Node* %r123)
+	%r125 = load %struct.Node*, %struct.Node** @root
+	%r126 = call i64 @deleteLeavesTree(%struct.Node* %r125)
 	br label %L64
 
 L64:
 	store i64 0, i64* %main_retval
-	%r128 = load i64, i64* %main_retval
-	ret i64 %r128
+	%r127 = load i64, i64* %main_retval
+	ret i64 %r127
 
 
 }
 
 
-declare i32 @printf(i8*, ...)
-declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
+declare i32 @printf(i8*, ...)
+declare i32 @scanf(i8*, ...)
 
 @.fstr1 = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
