@@ -93,3 +93,17 @@ func (s *StackFrame) GetLargestOffset() int {
 	}
 	return largest
 }
+
+// Next available register
+func (s *StackFrame) GetNextRegister() int {
+	var largest int
+	for name, location := range s.table {
+		if strings.Contains(name, "x") {
+			offset, _ := strconv.Atoi(location[1:])
+			if offset > largest {
+				largest = offset
+			}
+		}
+	}
+	return largest + 1
+}

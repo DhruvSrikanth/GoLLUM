@@ -5,6 +5,7 @@ import (
 	"golite/arm"
 	"golite/stack"
 	"strconv"
+	"strings"
 )
 
 // Representation of a free runtime call
@@ -62,7 +63,56 @@ func (f *Free) SetLabel(newLabel string) {
 
 // Convert LLVM IR to ARM assembly.
 func (f *Free) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+
+	stackFrame := stack.GetFrame(fnName)
+	availableRegNum := stackFrame.GetNextRegister()
+	availableReg := "x" + strconv.Itoa(availableRegNum)
+
+	// move whatever is in x0 to the next available register
+	movInst := arm.NewMov(availableReg, "x0")
+	availableRegNum += 1
+	movInst.SetLabel(f.blockLabel)
+	insts = append(insts, movInst)
+
+	// Get the address of the register that holds the value to be freed
+	sourceReg := "r" + strconv.Itoa(f.sourceRegisters[len(f.sourceRegisters)-1])
+	sourceRegAddress := stackFrame.GetLocation(sourceReg)
+
+	if strings.Contains(sourceRegAddress, "x") {
+		// Store the result in the stack by doing a mov
+		movInst := arm.NewMov("x0", sourceRegAddress)
+		movInst.SetLabel(f.blockLabel)
+		insts = append(insts, movInst)
+	} else {
+		// Load the value from the stack
+		availableReg = "x" + strconv.Itoa(availableRegNum)
+		ldrInst := arm.NewLdr(availableReg, sourceRegAddress)
+		availableRegNum += 1
+		ldrInst.SetLabel(f.blockLabel)
+		insts = append(insts, ldrInst)
+
+		// Now move the value to x0
+		movInst := arm.NewMov("x0", availableReg)
+		availableRegNum -= 1
+		movInst.SetLabel(f.blockLabel)
+		insts = append(insts, movInst)
+
+	}
+	availableRegNum -= 1
+
+	// Call the free runtime function
+	callInst := arm.NewBranch("free")
+	callInst.SetLabel(f.blockLabel)
+	insts = append(insts, callInst)
+
+	// Restore the value of x0
+	availableReg = "x" + strconv.Itoa(availableRegNum)
+	movInst = arm.NewMov("x0", availableReg)
+	movInst.SetLabel(f.blockLabel)
+	insts = append(insts, movInst)
+
+	return insts
 }
 
 // Build the stack table for the instruction.

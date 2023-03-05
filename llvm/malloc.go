@@ -5,6 +5,7 @@ import (
 	"golite/arm"
 	"golite/stack"
 	"strconv"
+	"strings"
 )
 
 // Representation of a malloc runtime call
@@ -63,7 +64,50 @@ func (m *Malloc) SetLabel(newLabel string) {
 
 // Convert LLVM IR to ARM assembly.
 func (m *Malloc) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+
+	stackFrame := stack.GetFrame(fnName)
+	availableRegNum := stackFrame.GetNextRegister()
+	availableReg := "x" + strconv.Itoa(availableRegNum)
+
+	// move whatever is in x0 to the next available register
+	movInst := arm.NewMov(availableReg, "x0")
+	movInst.SetLabel(m.blockLabel)
+	insts = append(insts, movInst)
+	availableRegNum += 1
+
+	// Load the size into next available register
+	movInst = arm.NewMov("x0", "#"+strconv.Itoa(m.size))
+	movInst.SetLabel(m.blockLabel)
+	insts = append(insts, movInst)
+
+	// Call the malloc function
+	callInst := arm.NewBranch("malloc")
+	callInst.SetLabel(m.blockLabel)
+	insts = append(insts, callInst)
+
+	// Get the address of the register to be allocated to
+	destinationReg := "r" + strconv.Itoa(m.targetRegisters[len(m.targetRegisters)-1])
+	destinationRegAddress := stackFrame.GetLocation(destinationReg)
+
+	if strings.Contains(destinationRegAddress, "x") {
+		// Store the result in the stack by doing a mov
+		movInst := arm.NewMov(destinationRegAddress, "x0")
+		movInst.SetLabel(m.blockLabel)
+		insts = append(insts, movInst)
+	} else {
+		// Store the result in the stack by doing a str
+		strInst := arm.NewStr("x0", destinationRegAddress)
+		strInst.SetLabel(m.blockLabel)
+		insts = append(insts, strInst)
+	}
+
+	// Restore the value of x0
+	movInst = arm.NewMov("x0", availableReg)
+	movInst.SetLabel(m.blockLabel)
+	insts = append(insts, movInst)
+
+	return insts
 }
 
 // Build the stack table for the instruction.
