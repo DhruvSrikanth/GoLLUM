@@ -1,9 +1,9 @@
-package llvm
+package utils
 
 import "os"
 
-// Write the llvm representation to the output file
-func WriteLLVMRepr(outputPath, llvmRepr string) {
+// Write the representation to the output file
+func WriteRepr(outputPath, llvmRepr string) {
 	// Output path is within the current working directory
 	// Create the output file
 	outFile, err := os.Create(outputPath)
@@ -12,12 +12,12 @@ func WriteLLVMRepr(outputPath, llvmRepr string) {
 	}
 	defer outFile.Close()
 
-	// Write the llvm representation to the output file
+	// Write the representation to the output file
 	outFile.WriteString(llvmRepr)
 }
 
-// Function to remove the temp.ll file created
-func RemoveLLVMRepr(outputPath string) {
+// Function to remove the representation file created
+func RemoveRepr(outputPath string) {
 	// Check if the file exists
 	if _, err := os.Stat(outputPath); err == nil {
 		// Remove the file

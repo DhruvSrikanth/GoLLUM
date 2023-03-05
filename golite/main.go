@@ -8,6 +8,7 @@ import (
 	"golite/parser"
 	sa "golite/semanticanalysis"
 	"golite/stack"
+	"golite/utils"
 )
 
 func main() {
@@ -62,7 +63,8 @@ func main() {
 
 						// Write the llvm representation to the output file
 						outputPath := "IR/" + targetInfo.GetFileName() + ".ll"
-						llvm.WriteLLVMRepr(outputPath, llvmRepr)
+						utils.CreateFolder("IR")
+						utils.WriteRepr(outputPath, llvmRepr)
 
 						// Build the stack table for each function in the LLVM program
 						// Create new stack
@@ -77,8 +79,9 @@ func main() {
 
 						if cmd.ARMFlag {
 							// Write the ARM assembly to the output file
-							// outputPath := "assembly/" + targetInfo.GetFileName() + ".s"
-							// llvm.WriteARMRepr(outputPath, armRepr)
+							outputPath := "assembly/" + targetInfo.GetFileName() + ".s"
+							utils.CreateFolder("assembly")
+							utils.WriteRepr(outputPath, armAssembly.String())
 						}
 					}
 				} else {
