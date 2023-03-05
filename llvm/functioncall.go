@@ -95,7 +95,7 @@ func (f *FunctionCall) SetLabel(newLabel string) {
 }
 
 // Convert to ARM assembly.
-func (f *FunctionCall) ToARM(stack *stack.Stack) []*arm.Instruction {
+func (f *FunctionCall) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	return nil
 }
 

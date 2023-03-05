@@ -26,7 +26,7 @@ type Instruction interface {
 	String() string
 
 	// Convert the instruction to ARM assembly.
-	ToARM(*stack.Stack) []*arm.Instruction
+	ToARM(string, *stack.Stack) []arm.Instruction
 
 	// Build the stack table for the instruction.
 	BuildStackTable(funcName string, stack *stack.Stack)

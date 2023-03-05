@@ -93,7 +93,7 @@ func (s *Store) SetLabel(label string) {
 }
 
 // Convert from LLVM IR to ARM assembly.
-func (s *Store) ToARM(stack *stack.Stack) []*arm.Instruction {
+func (s *Store) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	return nil
 }
 

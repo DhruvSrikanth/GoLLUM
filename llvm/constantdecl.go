@@ -2,6 +2,7 @@ package llvm
 
 import (
 	"golite/arm"
+	"golite/stack"
 	"strconv"
 )
 
@@ -28,6 +29,6 @@ func (c *ConstantDecl) GetVarName() string {
 }
 
 // Convert the constant declaration to ARM assembly.
-func (c *ConstantDecl) ToARM() []*arm.Instruction {
+func (c *ConstantDecl) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	return nil
 }

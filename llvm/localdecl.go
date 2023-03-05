@@ -67,7 +67,7 @@ func (s *LocalDecl) SetLabel(newLabel string) {
 }
 
 // Convert LLVM IR to ARM assembly.
-func (s *LocalDecl) ToARM(stack *stack.Stack) []*arm.Instruction {
+func (s *LocalDecl) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	return nil
 }
 

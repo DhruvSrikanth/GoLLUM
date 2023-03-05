@@ -23,6 +23,11 @@ func (s *StackFrame) AddEntry(name string, location string) {
 	s.table[name] = location
 }
 
+// Size of the stack frame
+func (s *StackFrame) Size() int {
+	return len(s.table)
+}
+
 // String representation of the stack table
 func (s *StackFrame) String() string {
 	var out string

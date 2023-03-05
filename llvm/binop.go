@@ -95,7 +95,7 @@ func (b *BinOp) GetOpType() string {
 }
 
 // Convert the BinOp to ARM assembly.
-func (b *BinOp) ToARM(stack *stack.Stack) []*arm.Instruction {
+func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	return nil
 }
 

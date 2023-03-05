@@ -3,6 +3,7 @@ package llvm
 import (
 	"golite/arm"
 	"golite/stack"
+	"strconv"
 )
 
 // Basic Block representation for LLVM IR.
@@ -81,6 +82,24 @@ func (bb *BasicBlock) AddInstruction(inst Instruction) {
 	bb.instructions = append(bb.instructions, inst)
 }
 
+// Get the predecessor labels.
+func (bb *BasicBlock) GetPredecessorLabels() []string {
+	labels := []string{}
+	for _, pred := range bb.predecessors {
+		labels = append(labels, pred.GetLabel())
+	}
+	return labels
+}
+
+// Get the successor labels.
+func (bb *BasicBlock) GetSuccessorLabels() []string {
+	labels := []string{}
+	for _, succ := range bb.successors {
+		labels = append(labels, succ.GetLabel())
+	}
+	return labels
+}
+
 // String representation of the basic block.
 func (bb *BasicBlock) String() string {
 	var out string
@@ -106,15 +125,49 @@ func (bb *BasicBlock) Size() int {
 }
 
 // Conver the basic block to ARM assembly.
-func (bb *BasicBlock) ToARM(stack *stack.Stack) *arm.BasicBlock {
+func (bb *BasicBlock) ToARM(funcName string, stack *stack.Stack, isFirstBlock bool) *arm.BasicBlock {
 	armBB := arm.NewBasicBlock(bb.label)
+	// Add the prologue to the first basic block.
+	if isFirstBlock {
+		// Grow the size of the stack by the size of the local variables.
+		// amount = (total size of the stack - 1 (lr) - 1 (fp)) * 8 (size of a register)
+		stackFrame := stack.GetFrame(funcName)
+		growBy := (stackFrame.Size() - 2) * 8
+		// Round to the nearest multiple of 16 for alignment.
+		if growBy%16 != 0 {
+			growBy += 16 - (growBy % 16)
+		}
+
+		if growBy > 0 {
+			// Subtract SP by the amount.
+			subInst := arm.NewSub(arm.SP, arm.SP, strconv.Itoa(growBy))
+			subInst.SetLabel(armBB.GetLabel())
+			armBB.AddInstruction(subInst)
+		}
+
+		// Subtract SP by 16 for the link register and the frame pointer.
+		subInst := arm.NewSub(arm.SP, arm.SP, strconv.Itoa(16))
+		subInst.SetLabel(armBB.GetLabel())
+		armBB.AddInstruction(subInst)
+		// Store the link register and the stack pointer.
+		stpInst := arm.NewStp("x29", "x30", arm.SP)
+		stpInst.SetLabel(armBB.GetLabel())
+		armBB.AddInstruction(stpInst)
+		// Move the stack pointer to the frame pointer.
+		movInst := arm.NewMov(arm.FP, arm.SP)
+		movInst.SetLabel(armBB.GetLabel())
+		armBB.AddInstruction(movInst)
+
+	}
+
 	for _, inst := range bb.instructions {
 		// It may be a 1:many mapping from LLVM IR to ARM assembly.
-		insts := inst.ToARM(stack)
+		insts := inst.ToARM(funcName, stack)
 		for _, inst := range insts {
-			armBB.AddInstruction(*inst)
+			armBB.AddInstruction(inst)
 		}
 	}
+
 	return armBB
 }
 

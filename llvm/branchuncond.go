@@ -66,7 +66,7 @@ func (b *BranchUnconditional) SetDestinationLabel(newLabel string) {
 }
 
 // Convert the instruction to ARM assembly.
-func (b *BranchUnconditional) ToARM(stack *stack.Stack) []*arm.Instruction {
+func (b *BranchUnconditional) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	return nil
 }
 

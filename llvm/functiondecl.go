@@ -67,9 +67,9 @@ func (f *FunctionDecl) BuildStackTable(stack *stack.Stack) {
 	// Add stack frame for the function
 	stack.AddFrame(f.name)
 	// Add fp to the stack
-	stack.AddEntry(f.name, "fp", "0")
+	stack.AddEntry(f.name, arm.SP, "0")
 	// Add lr to the stack
-	stack.AddEntry(f.name, "lr", "8")
+	stack.AddEntry(f.name, arm.LR, "8")
 	for _, block := range f.blocks {
 		block.BuildStackTable(f.name, stack)
 	}
@@ -91,8 +91,12 @@ func (f *FunctionDecl) BuildStackTable(stack *stack.Stack) {
 // Convert the LLVM IR to ARM assembly
 func (f *FunctionDecl) ToARM(stack *stack.Stack) *arm.FunctionDecl {
 	blocks := make([]*arm.BasicBlock, 0)
+	isFirstBlock := true
 	for _, block := range f.blocks {
-		blocks = append(blocks, block.ToARM(stack))
+		blocks = append(blocks, block.ToARM(f.name, stack, isFirstBlock))
+		if isFirstBlock {
+			isFirstBlock = false
+		}
 	}
 	return arm.NewFunctionDecl(f.name, blocks)
 }

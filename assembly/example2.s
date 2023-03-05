@@ -1,313 +1,167 @@
-	.section	__TEXT,__text,regular,pure_instructions
-	.build_version macos, 13, 0
-	.globl	_compare                        ; -- Begin function compare
-	.p2align	2
-_compare:                               ; @compare
-	.cfi_startproc
-; %bb.0:                                ; %L0
-	sub	sp, sp, #32
-	.cfi_def_cfa_offset 32
-	cmp	x0, x1
-	stp	x1, x0, [sp, #8]
-	b.ge	LBB0_2
-; %bb.1:                                ; %L2
-	mov	w0, #1
-	b	LBB0_4
-LBB0_2:                                 ; %L4
-	ldp	x9, x8, [sp, #8]
-	cmp	x8, x9
-	b.le	LBB0_5
-; %bb.3:                                ; %L5
-	mov	x0, #-1
-LBB0_4:                                 ; %L2
-	str	x0, [sp, #24]
-	add	sp, sp, #32
-	ret
-LBB0_5:                                 ; %L6
-	mov	x0, xzr
-	str	xzr, [sp, #24]
-	add	sp, sp, #32
-	ret
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_addNode                        ; -- Begin function addNode
-	.p2align	2
-_addNode:                               ; @addNode
-	.cfi_startproc
-; %bb.0:                                ; %L10
-	sub	sp, sp, #80
-	.cfi_def_cfa_offset 80
-	stp	x20, x19, [sp, #48]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #64]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	.cfi_offset w19, -24
-	.cfi_offset w20, -32
-Lloh0:
-	adrp	x19, _.nilNode@GOTPAGE
-Lloh1:
-	ldr	x19, [x19, _.nilNode@GOTPAGEOFF]
-	stp	x1, x0, [sp, #8]
-	ldr	x8, [x19]
-	cmp	x1, x8
-	b.eq	LBB1_4
-; %bb.1:                                ; %L13
-	ldp	x8, x1, [sp, #8]
-	ldr	x0, [x8]
-	bl	_compare
-	cmn	x0, #1
-	str	x0, [sp, #32]
-	b.ne	LBB1_5
-; %bb.2:                                ; %L16
-	ldr	x8, [sp, #8]
-	ldr	x9, [x19]
-	ldr	x8, [x8, #8]
-	cmp	x8, x9
-	b.eq	LBB1_9
-; %bb.3:                                ; %L18
-	ldp	x8, x0, [sp, #8]
-	ldr	x1, [x8, #8]
-	b	LBB1_8
-LBB1_4:                                 ; %L12
-	mov	w0, #24
-	bl	_malloc
-Lloh2:
-	adrp	x9, _root@GOTPAGE
-	ldr	x8, [sp, #16]
-Lloh3:
-	ldr	x9, [x9, _root@GOTPAGEOFF]
-	str	x0, [sp, #24]
-	str	x8, [x0]
-Lloh4:
-	str	x0, [x9]
-	b	LBB1_11
-LBB1_5:                                 ; %L21
-	ldr	x8, [sp, #32]
-	cmp	x8, #1
-	b.ne	LBB1_11
-; %bb.6:                                ; %L23
-	ldr	x8, [sp, #8]
-	ldr	x9, [x19]
-	ldr	x8, [x8, #16]
-	cmp	x8, x9
-	b.eq	LBB1_10
-; %bb.7:                                ; %L25
-	ldp	x8, x0, [sp, #8]
-	ldr	x1, [x8, #16]
-LBB1_8:                                 ; %L31
-	bl	_addNode
-	b	LBB1_11
-LBB1_9:                                 ; %L17
-	mov	w0, #24
-	bl	_malloc
-	ldp	x9, x8, [sp, #8]
-	str	x0, [sp, #24]
-	str	x8, [x0]
-	str	x0, [x9, #8]
-	b	LBB1_11
-LBB1_10:                                ; %L24
-	mov	w0, #24
-	bl	_malloc
-	ldp	x9, x8, [sp, #8]
-	str	x0, [sp, #24]
-	str	x8, [x0]
-	str	x0, [x9, #16]
-LBB1_11:                                ; %L31
-	ldp	x29, x30, [sp, #64]             ; 16-byte Folded Reload
-	mov	x0, xzr
-	str	xzr, [sp, #40]
-	ldp	x20, x19, [sp, #48]             ; 16-byte Folded Reload
-	add	sp, sp, #80
-	ret
-	.loh AdrpLdrGot	Lloh0, Lloh1
-	.loh AdrpLdrGotStr	Lloh2, Lloh3, Lloh4
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_printDepthTree                 ; -- Begin function printDepthTree
-	.p2align	2
-_printDepthTree:                        ; @printDepthTree
-	.cfi_startproc
-; %bb.0:                                ; %L32
-	sub	sp, sp, #64
-	.cfi_def_cfa_offset 64
-	stp	x20, x19, [sp, #32]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #48]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	.cfi_offset w19, -24
-	.cfi_offset w20, -32
-Lloh5:
-	adrp	x19, _.nilNode@GOTPAGE
-Lloh6:
-	ldr	x19, [x19, _.nilNode@GOTPAGEOFF]
-	str	x0, [sp, #8]
-	ldr	x8, [x19]
-	cmp	x0, x8
-	b.eq	LBB2_5
-; %bb.1:                                ; %L35
-	ldr	x8, [sp, #8]
-	ldr	x9, [x19]
-	ldr	x8, [x8, #8]
-	cmp	x8, x9
-	b.eq	LBB2_3
-; %bb.2:                                ; %L36
-	ldr	x8, [sp, #8]
-	ldr	x0, [x8, #8]
-	bl	_printDepthTree
-LBB2_3:                                 ; %L38
-	ldr	x8, [sp, #8]
-Lloh7:
-	adrp	x0, l_.fstr1@PAGE
-Lloh8:
-	add	x0, x0, l_.fstr1@PAGEOFF
-	ldr	x8, [x8]
-	str	x8, [sp, #16]
-	str	x8, [sp]
-	bl	_printf
-	ldr	x8, [sp, #8]
-	ldr	x9, [x19]
-	ldr	x8, [x8, #16]
-	cmp	x8, x9
-	b.eq	LBB2_5
-; %bb.4:                                ; %L40
-	ldr	x8, [sp, #8]
-	ldr	x0, [x8, #16]
-	bl	_printDepthTree
-LBB2_5:                                 ; %L45
-	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
-	mov	x0, xzr
-	str	xzr, [sp, #24]
-	ldp	x20, x19, [sp, #32]             ; 16-byte Folded Reload
-	add	sp, sp, #64
-	ret
-	.loh AdrpLdrGot	Lloh5, Lloh6
-	.loh AdrpAdd	Lloh7, Lloh8
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_deleteLeavesTree               ; -- Begin function deleteLeavesTree
-	.p2align	2
-_deleteLeavesTree:                      ; @deleteLeavesTree
-	.cfi_startproc
-; %bb.0:                                ; %L46
-	sub	sp, sp, #48
-	.cfi_def_cfa_offset 48
-	stp	x20, x19, [sp, #16]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #32]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	.cfi_offset w19, -24
-	.cfi_offset w20, -32
-Lloh9:
-	adrp	x19, _.nilNode@GOTPAGE
-Lloh10:
-	ldr	x19, [x19, _.nilNode@GOTPAGEOFF]
-	str	x0, [sp]
-	ldr	x8, [x19]
-	cmp	x0, x8
-	b.eq	LBB3_6
-; %bb.1:                                ; %L49
-	ldr	x8, [sp]
-	ldr	x9, [x19]
-	ldr	x8, [x8, #8]
-	cmp	x8, x9
-	b.eq	LBB3_3
-; %bb.2:                                ; %L50
-	ldr	x8, [sp]
-	ldr	x0, [x8, #8]
-	bl	_deleteLeavesTree
-LBB3_3:                                 ; %L53
-	ldr	x8, [sp]
-	ldr	x9, [x19]
-	ldr	x8, [x8, #16]
-	cmp	x8, x9
-	b.eq	LBB3_5
-; %bb.4:                                ; %L54
-	ldr	x8, [sp]
-	ldr	x0, [x8, #16]
-	bl	_deleteLeavesTree
-LBB3_5:                                 ; %L56
-	ldr	x0, [sp]
-	bl	_free
-LBB3_6:                                 ; %L59
-	ldp	x29, x30, [sp, #32]             ; 16-byte Folded Reload
-	mov	x0, xzr
-	str	xzr, [sp, #8]
-	ldp	x20, x19, [sp, #16]             ; 16-byte Folded Reload
-	add	sp, sp, #48
-	ret
-	.loh AdrpLdrGot	Lloh9, Lloh10
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_main                           ; -- Begin function main
-	.p2align	2
-_main:                                  ; @main
-	.cfi_startproc
-; %bb.0:                                ; %L60
-	sub	sp, sp, #80
-	.cfi_def_cfa_offset 80
-	stp	x22, x21, [sp, #32]             ; 16-byte Folded Spill
-	stp	x20, x19, [sp, #48]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #64]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	.cfi_offset w19, -24
-	.cfi_offset w20, -32
-	.cfi_offset w21, -40
-	.cfi_offset w22, -48
-Lloh11:
-	adrp	x8, _.nilNode@GOTPAGE
-Lloh12:
-	adrp	x20, _root@GOTPAGE
-	add	x21, sp, #16
-Lloh13:
-	adrp	x19, l_.read@PAGE
-Lloh14:
-	add	x19, x19, l_.read@PAGEOFF
-Lloh15:
-	ldr	x8, [x8, _.nilNode@GOTPAGEOFF]
-Lloh16:
-	ldr	x20, [x20, _root@GOTPAGEOFF]
-	str	xzr, [sp, #16]
-Lloh17:
-	ldr	x8, [x8]
-	str	x8, [x20]
-LBB4_1:                                 ; %L61
-                                        ; =>This Inner Loop Header: Depth=1
-	mov	x0, x19
-	str	x21, [sp]
-	bl	_scanf
-	ldr	x8, [sp, #16]
-	cbz	x8, LBB4_3
-; %bb.2:                                ; %L62
-                                        ;   in Loop: Header=BB4_1 Depth=1
-	ldr	x0, [sp, #16]
-	ldr	x1, [x20]
-	bl	_addNode
-	b	LBB4_1
-LBB4_3:                                 ; %L63
-	ldr	x0, [x20]
-	bl	_printDepthTree
-	ldr	x0, [x20]
-	bl	_deleteLeavesTree
-	ldp	x29, x30, [sp, #64]             ; 16-byte Folded Reload
-	mov	x0, xzr
-	str	xzr, [sp, #24]
-	ldp	x20, x19, [sp, #48]             ; 16-byte Folded Reload
-	ldp	x22, x21, [sp, #32]             ; 16-byte Folded Reload
-	add	sp, sp, #80
-	ret
-	.loh AdrpAdd	Lloh13, Lloh14
-	.loh AdrpLdrGot	Lloh12, Lloh16
-	.loh AdrpLdrGotLdr	Lloh11, Lloh15, Lloh17
-	.cfi_endproc
-                                        ; -- End function
-	.comm	_.nilNode,8,3                   ; @.nilNode
-	.comm	_root,8,3                       ; @root
-	.section	__TEXT,__cstring,cstring_literals
-l_.fstr1:                               ; @.fstr1
-	.asciz	"%ld"
+	.arch armv8-a
 
-l_.read:                                ; @.read
-	.asciz	"%ld"
+	.comm root,8,8
 
-.subsections_via_symbols
+	.text
+
+	.type compare, %function
+	.global compare
+	.p2align 2
+compare:
+L0:
+
+L1:
+
+L2:
+
+L3:
+
+L4:
+
+L5:
+
+L6:
+
+L7:
+
+L8:
+
+L9:
+
+	.size compare, (.-compare)
+
+	.type addNode, %function
+	.global addNode
+	.p2align 2
+addNode:
+L10:
+
+L11:
+
+L12:
+
+L13:
+
+L14:
+
+L15:
+
+L16:
+
+L17:
+
+L18:
+
+L19:
+
+L20:
+
+L21:
+
+L22:
+
+L23:
+
+L24:
+
+L25:
+
+L26:
+
+L27:
+
+L28:
+
+L29:
+
+L30:
+
+L31:
+
+	.size addNode, (.-addNode)
+
+	.type printDepthTree, %function
+	.global printDepthTree
+	.p2align 2
+printDepthTree:
+L32:
+
+L33:
+
+L34:
+
+L35:
+
+L36:
+
+L37:
+
+L38:
+
+L39:
+
+L40:
+
+L41:
+
+L42:
+
+L43:
+
+L44:
+
+L45:
+
+	.size printDepthTree, (.-printDepthTree)
+
+	.type deleteLeavesTree, %function
+	.global deleteLeavesTree
+	.p2align 2
+deleteLeavesTree:
+L46:
+
+L47:
+
+L48:
+
+L49:
+
+L50:
+
+L51:
+
+L52:
+
+L53:
+
+L54:
+
+L55:
+
+L56:
+
+L57:
+
+L58:
+
+L59:
+
+	.size deleteLeavesTree, (.-deleteLeavesTree)
+
+	.type main, %function
+	.global main
+	.p2align 2
+main:
+L60:
+
+L61:
+
+L62:
+
+L63:
+
+L64:
+
+	.size main, (.-main)
+
+

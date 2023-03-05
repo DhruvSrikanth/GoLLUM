@@ -86,7 +86,7 @@ func (g *GetElementPtr) SetLabel(newLabel string) {
 }
 
 // Convert from LLVM IR to ARM assembly.
-func (g *GetElementPtr) ToARM(stack *stack.Stack) []*arm.Instruction {
+func (g *GetElementPtr) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	return nil
 }
 
