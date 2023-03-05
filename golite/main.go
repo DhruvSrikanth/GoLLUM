@@ -68,7 +68,6 @@ func main() {
 						// Create new stack
 						stack := stack.NewStack()
 						llvmProgram.BuildStackTable(stack)
-						// fmt.Println(stack)
 
 						// Convert the llvm representation to ARM assembly
 						armAssembly := llvmProgram.ToARM()

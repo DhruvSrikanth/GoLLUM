@@ -100,5 +100,7 @@ func (f *FunctionCall) ToARM() []*arm.Instruction {
 }
 
 // Build the stack table for the instruction.
-func (f *FunctionCall) BuildStackTable(fName string, stack *stack.Stack) {
+func (f *FunctionCall) BuildStackTable(funcName string, stack *stack.Stack) {
+	destinationReg := "r" + strconv.Itoa(f.targetRegisters[len(f.targetRegisters)-1])
+	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8))
 }

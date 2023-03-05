@@ -91,5 +91,7 @@ func (g *GetElementPtr) ToARM() []*arm.Instruction {
 }
 
 // Build the stack table for the function.
-func (g *GetElementPtr) BuildStackTable(fName string, stack *stack.Stack) {
+func (g *GetElementPtr) BuildStackTable(funcName string, stack *stack.Stack) {
+	destinationReg := "r" + strconv.Itoa(g.targetRegisters[len(g.targetRegisters)-1])
+	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8))
 }

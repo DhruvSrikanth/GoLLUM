@@ -67,5 +67,7 @@ func (m *Malloc) ToARM() []*arm.Instruction {
 }
 
 // Build the stack table for the instruction.
-func (m *Malloc) BuildStackTable(fName string, stack *stack.Stack) {
+func (m *Malloc) BuildStackTable(funcName string, stack *stack.Stack) {
+	destinationReg := "r" + strconv.Itoa(m.targetRegisters[len(m.targetRegisters)-1])
+	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8))
 }
