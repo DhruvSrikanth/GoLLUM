@@ -63,11 +63,9 @@ L10:
 L11:
 
 L12:
-	mov x1, x0
 	mov x0, #24
 	bl malloc
 	str x0, [sp, #64]
-	mov x0, x1
 
 L13:
 
@@ -78,11 +76,9 @@ L15:
 L16:
 
 L17:
-	mov x1, x0
 	mov x0, #24
 	bl malloc
 	str x0, [sp, #216]
-	mov x0, x1
 
 L18:
 
@@ -97,11 +93,9 @@ L22:
 L23:
 
 L24:
-	mov x1, x0
 	mov x0, #24
 	bl malloc
 	str x0, [sp, #376]
-	mov x0, x1
 
 L25:
 
@@ -144,6 +138,12 @@ L36:
 L37:
 
 L38:
+	ldr x1, [sp, #152]
+	mov x1, x1
+	adrp x2, .FSTR1
+	add x2, x2, :lo12:.FSTR1
+	mov x0, x2
+	bl printf
 
 L39:
 
@@ -194,6 +194,9 @@ L54:
 L55:
 
 L56:
+	ldr x1, [sp, #200]
+	mov x0, x1
+	bl free
 
 L57:
 
@@ -231,4 +234,12 @@ L64:
 
 	.size main, (.-main)
 
+
+.FSTR1:
+	.asciz	"%ld"
+	.size	.FSTR1, 4
+
+.READ:
+	.asciz	"%ld"
+	.size	.READ, 4
 

@@ -80,7 +80,7 @@ func (f *Free) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	} else {
 		// Load the value from the stack
 		availableReg := "x" + strconv.Itoa(availableRegNum)
-		ldrInst := arm.NewLdr(availableReg, sourceRegAddress)
+		ldrInst := arm.NewLdr(availableReg, "sp, #"+sourceRegAddress)
 		ldrInst.SetLabel(f.blockLabel)
 		insts = append(insts, ldrInst)
 

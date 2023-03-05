@@ -73,7 +73,62 @@ func (r *Read) SetLabel(newLabel string) {
 
 // Convert LLVM IR to ARM assembly.
 func (r *Read) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+
+	stackFrame := stack.GetFrame(fnName)
+
+	// Compute the address of the string using the global label
+	// and store it in the next available register
+	availableRegNum := stackFrame.GetNextRegister()
+	availableReg := "x" + strconv.Itoa(availableRegNum)
+	availableRegNum += 1
+	adrpInst := arm.NewAdrp(availableReg, ".READ")
+	adrpInst.SetLabel(r.blockLabel)
+	insts = append(insts, adrpInst)
+
+	addInst := arm.NewAdd(availableReg, availableReg, ":lo12:.READ")
+	addInst.SetLabel(r.blockLabel)
+	insts = append(insts, addInst)
+
+	// Move this into x0
+	movInst := arm.NewMov("x0", availableReg)
+	movInst.SetLabel(r.blockLabel)
+	insts = append(insts, movInst)
+
+	if strings.Contains(r.sourceReg, "@") {
+		availableReg = "x" + strconv.Itoa(availableRegNum)
+		src := r.sourceReg[1:]
+		// Global variable that needs to be address found in a different way
+		// Get the address
+		adrpInst := arm.NewAdrp(availableReg, src)
+		adrpInst.SetLabel(r.blockLabel)
+		insts = append(insts, adrpInst)
+		// Get the full address
+		addInst := arm.NewAdd(availableReg, availableReg, ":lo12:"+src)
+		addInst.SetLabel(r.blockLabel)
+		insts = append(insts, addInst)
+		// Move this into x1
+		movInst := arm.NewMov("x1", availableReg)
+		movInst.SetLabel(r.blockLabel)
+		insts = append(insts, movInst)
+
+	} else {
+		src := r.sourceReg[1:]
+		destAddr := stackFrame.GetLocation(src)
+		if strings.Contains(destAddr, "x") {
+			// Do a move into x1
+			movInst := arm.NewMov("x1", destAddr)
+			movInst.SetLabel(r.blockLabel)
+			insts = append(insts, movInst)
+		} else {
+			// Move the address into a register
+			addInst := arm.NewAdd("x1", arm.SP, "#"+destAddr)
+			addInst.SetLabel(r.blockLabel)
+			insts = append(insts, addInst)
+		}
+
+	}
+	return insts
 }
 
 // Build the stack table for the instruction.

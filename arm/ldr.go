@@ -3,22 +3,22 @@ package arm
 // LDR ARM64 instruction
 type Ldr struct {
 	// The target register
-	Target string
-	// The offset of the source register from sp
-	SPOffset string
+	target string
+	// The source address
+	sourceAddress string
 
 	// block label
 	blockLabel string
 }
 
 // NewLDR returns a new LDR instruction
-func NewLdr(target string, spOffset string) *Ldr {
-	return &Ldr{target, spOffset, ""}
+func NewLdr(target string, sourceAddress string) *Ldr {
+	return &Ldr{target, sourceAddress, ""}
 }
 
 // String returns the string representation of the LDR instruction
 func (l *Ldr) String() string {
-	return "ldr " + l.Target + ", [sp, #" + l.SPOffset + "]"
+	return "ldr " + l.target + ", [" + l.sourceAddress + "]"
 }
 
 // Set the label of the instruction
