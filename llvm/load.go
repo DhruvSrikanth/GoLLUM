@@ -85,7 +85,7 @@ func (l *Load) SetLabel(newLabel string) {
 }
 
 // Convert LLVM IR to ARM assembly.
-func (l *Load) ToARM() []*arm.Instruction {
+func (l *Load) ToARM(stack *stack.Stack) []*arm.Instruction {
 	return nil
 }
 

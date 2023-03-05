@@ -62,7 +62,7 @@ func (m *Malloc) SetLabel(newLabel string) {
 }
 
 // Convert LLVM IR to ARM assembly.
-func (m *Malloc) ToARM() []*arm.Instruction {
+func (m *Malloc) ToARM(stack *stack.Stack) []*arm.Instruction {
 	return nil
 }
 

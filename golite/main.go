@@ -70,7 +70,7 @@ func main() {
 						llvmProgram.BuildStackTable(stack)
 
 						// Convert the llvm representation to ARM assembly
-						armAssembly := llvmProgram.ToARM()
+						armAssembly := llvmProgram.ToARM(stack)
 						if cmd.ARMShowFlag {
 							fmt.Println(armAssembly)
 						}

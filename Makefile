@@ -70,7 +70,7 @@ assembly_examples:
 	done
 
 # Generate object files for all examples (using clang)
-object_examples:
+examples_exucutable:
 	@make assembly_examples
 	@for i in {1..$(N_EXAMPLES)} ; do \
 		$(C_COMPILER) assembly/example$$i.s -o example$$i.out;\

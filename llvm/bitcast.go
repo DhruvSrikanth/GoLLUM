@@ -86,7 +86,7 @@ func (b *BitCast) SetLabel(newLabel string) {
 }
 
 // Convert the instruction from LLVM IR to ARM assembly.
-func (b *BitCast) ToARM() []*arm.Instruction {
+func (b *BitCast) ToARM(stack *stack.Stack) []*arm.Instruction {
 	return nil
 }
 

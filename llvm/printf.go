@@ -83,7 +83,7 @@ func (p *Printf) SetLabel(newLabel string) {
 }
 
 // Convert LLVM IR to ARM assembly.
-func (p *Printf) ToARM() []*arm.Instruction {
+func (p *Printf) ToARM(stack *stack.Stack) []*arm.Instruction {
 	return nil
 }
 

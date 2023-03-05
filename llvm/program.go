@@ -72,7 +72,7 @@ func (p *Program) BuildStackTable(stack *stack.Stack) {
 }
 
 // Converts the LLVM IR to ARM assembly
-func (p *Program) ToARM() *arm.Program {
+func (p *Program) ToARM(stack *stack.Stack) *arm.Program {
 	// Create the ARM program for the global declarations
 	var globalDecls []arm.GlobalDecl
 	for _, global := range p.globalDecls {
@@ -84,7 +84,7 @@ func (p *Program) ToARM() *arm.Program {
 	// Create the ARM program for the function declarations
 	var functionDecls []arm.FunctionDecl
 	for _, fn := range p.functionDecls {
-		functionDecls = append(functionDecls, *(fn.ToARM()))
+		functionDecls = append(functionDecls, *(fn.ToARM(stack)))
 	}
 
 	// Create the ARM program for the constant declarations

@@ -106,11 +106,11 @@ func (bb *BasicBlock) Size() int {
 }
 
 // Conver the basic block to ARM assembly.
-func (bb *BasicBlock) ToARM() *arm.BasicBlock {
+func (bb *BasicBlock) ToARM(stack *stack.Stack) *arm.BasicBlock {
 	armBB := arm.NewBasicBlock(bb.label)
 	for _, inst := range bb.instructions {
 		// It may be a 1:many mapping from LLVM IR to ARM assembly.
-		insts := inst.ToARM()
+		insts := inst.ToARM(stack)
 		for _, inst := range insts {
 			armBB.AddInstruction(*inst)
 		}

@@ -89,10 +89,10 @@ func (f *FunctionDecl) BuildStackTable(stack *stack.Stack) {
 }
 
 // Convert the LLVM IR to ARM assembly
-func (f *FunctionDecl) ToARM() *arm.FunctionDecl {
+func (f *FunctionDecl) ToARM(stack *stack.Stack) *arm.FunctionDecl {
 	blocks := make([]*arm.BasicBlock, 0)
 	for _, block := range f.blocks {
-		blocks = append(blocks, block.ToARM())
+		blocks = append(blocks, block.ToARM(stack))
 	}
 	return arm.NewFunctionDecl(f.name, blocks)
 }
