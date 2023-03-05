@@ -30,7 +30,7 @@ go run golite/main.go benchmarks/simple/example2.golite
 | `ast` | Print the parser produced by the parser. | False |  Lexer, Parser | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
 | `sym` | Print the symbol table. | False | Lexer, Parser | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
 | `llvmshow` | Print the LLVM IR. | False | Lexer, Parser, IR Generator | `go run golite/main.go -llvmshow benchmarks/simple/example1.golite` |
-| `llvm=[target triple]` | Generate LLVM IR using target triple (if provided). | x86_64-linux-gnu | Lexer, Parser, IR Generator | `go run golite/main.go -llvm=arm64-apple-darwin22.2.0 benchmarks/simple/example1.golite` |
+| `llvm=[target triple]` | Generate LLVM IR using target triple. | x86_64-linux-gnu | Lexer, Parser, IR Generator | `go run golite/main.go -llvm=arm64-apple-darwin22.2.0 benchmarks/simple/example1.golite` |
 | `arm64show` | Print the ARM64 assembly. | False | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64show benchmarks/simple/example1.golite` |
 | `arm64` | Generate ARM64 assembly. | True | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64 benchmarks/simple/example1.golite` |
 
@@ -51,9 +51,9 @@ Note:
 | `make test_type_checking` | Runs type checker tests. |
 | `make test_control_flow` | Runs control flow tests. |
 | `make test_parser` | Runs all parser tests. |
+| `make test_compiler` | Runs all compiler tests. |
 <!-- | `make test_llvm` | Runs all llvm tests. |
 | `make test_arm64` | Runs all arm64 tests. | -->
-| `make test_compiler` | Runs all compiler tests. |
 
 
 Running the tests present in `golite/main_test.go` will run all the tests in the `benchmarks` folder.
