@@ -13,6 +13,7 @@ func main() {
 	// Parse the command line
 	cmd := cmdline.ReadCmdline()
 	if cmd == nil {
+		cmdline.Usage()
 		return
 	}
 
@@ -56,20 +57,22 @@ func main() {
 						// Print the llvm representation
 						if cmd.LLVMShowFlag {
 							fmt.Println(llvmRepr)
-						} else {
-							// Write the llvm representation to the output file
-							outputPath := "IR/" + targetInfo.GetFileName() + ".ll"
-							llvm.WriteLLVMRepr(outputPath, llvmRepr)
+						}
 
-							// Convert the llvm representation to ARM assembly
-							armAssembly := llvmProgram.ToARM()
-							if cmd.ARMShowFlag {
-								fmt.Println(armAssembly)
-							} else {
-								// Write the ARM assembly to the output file
-								// outputPath := "ARM/" + targetInfo.GetFileName() + ".s"
-								// llvm.WriteARMRepr(outputPath, armRepr)
-							}
+						// Write the llvm representation to the output file
+						outputPath := "IR/" + targetInfo.GetFileName() + ".ll"
+						llvm.WriteLLVMRepr(outputPath, llvmRepr)
+
+						// Convert the llvm representation to ARM assembly
+						armAssembly := llvmProgram.ToARM()
+						if cmd.ARMShowFlag {
+							fmt.Println(armAssembly)
+						}
+
+						if cmd.ARMFlag {
+							// Write the ARM assembly to the output file
+							// outputPath := "assembly/" + targetInfo.GetFileName() + ".s"
+							// llvm.WriteARMRepr(outputPath, armRepr)
 						}
 					}
 				} else {
