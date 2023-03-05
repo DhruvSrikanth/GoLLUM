@@ -2,20 +2,21 @@ package llvm
 
 import (
 	"golite/arm"
-	"golite/stack"
 	"strconv"
+	"strings"
 )
 
 // Representation of a constant declaration (global scope)
 type ConstantDecl struct {
-	varName string
-	length  int
-	value   string
+	varName       string
+	length        int
+	value         string
+	originalValue string
 }
 
 // NewConstantDecl returns a new constant declaration
-func NewConstantDecl(varName string, length int, value string) *ConstantDecl {
-	return &ConstantDecl{varName, length, value}
+func NewConstantDecl(varName string, length int, value string, originalValue string) *ConstantDecl {
+	return &ConstantDecl{varName, length, value, originalValue}
 }
 
 // String representation of the constant declaration
@@ -29,6 +30,13 @@ func (c *ConstantDecl) GetVarName() string {
 }
 
 // Convert the constant declaration to ARM assembly.
-func (c *ConstantDecl) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+func (c *ConstantDecl) ToARM() *arm.ConstantDecl {
+	label := c.varName
+	value := c.originalValue
+	// Replace all %d with %ld
+	value = strings.Replace(value, "%d", "%ld", -1)
+	// Add 1 for the null terminator
+	size := len(value) + 1
+	return arm.NewConstantDecl(label, size, value)
+
 }

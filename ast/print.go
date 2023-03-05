@@ -107,7 +107,7 @@ func (p *Print) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fu
 	// Create the constant decl
 	formattedString, stringSize := p.LLVMFormatString()
 	varName := "fstr" + strconv.Itoa(len(constDecls)+1)
-	constDecl := llvm.NewConstantDecl(varName, stringSize, formattedString)
+	constDecl := llvm.NewConstantDecl(varName, stringSize, formattedString, p.GetString()[1:len(p.GetString())-1])
 	constDecls = append(constDecls, constDecl)
 
 	// Evaluate the expressions

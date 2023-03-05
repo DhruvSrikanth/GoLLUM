@@ -78,7 +78,7 @@ func (r *Read) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	// Only create the read constant if it does not already exist
 	if !r.ReadConstantExistsLLVM(constDecls) {
 		// Create the constant decl
-		constDecl := llvm.NewConstantDecl("read", 4, "%ld")
+		constDecl := llvm.NewConstantDecl("read", 4, "%ld", "%d")
 		constDecls = append(constDecls, constDecl)
 	}
 

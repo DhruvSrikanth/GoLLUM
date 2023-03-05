@@ -89,9 +89,9 @@ func (p *Program) ToARM(stack *stack.Stack) *arm.Program {
 
 	// Create the ARM program for the constant declarations
 	var constantDecls []arm.ConstantDecl
-	// for _, constant := range p.constantDecls {
-	// 	constantDecls = append(constantDecls, *(constant.ToARM()))
-	// }
+	for _, constant := range p.constantDecls {
+		constantDecls = append(constantDecls, *(constant.ToARM()))
+	}
 
 	return arm.NewProgram(globalDecls, functionDecls, constantDecls)
 
