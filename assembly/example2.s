@@ -112,10 +112,15 @@ addNode:
 	mov x0, #24
 	bl malloc
 	str x0, [sp, #64]
+	ldr x1, [sp, #64]
+	str x1, [sp, #72]
 	ldr x1, [sp, #72]
 	str x1, [sp, #32]
 	ldr x1, [sp, #32]
 	str x1, [sp, #80]
+	ldr x1, [sp, #80]
+	add x1, x1, #0
+	str x1, [sp, #88]
 	ldr x1, [sp, #488]
 	str x1, [sp, #96]
 	ldr x1, [sp, #96]
@@ -131,6 +136,9 @@ addNode:
 .L13:
 	ldr x1, [sp, #496]
 	str x1, [sp, #112]
+	ldr x1, [sp, #112]
+	add x1, x1, #0
+	str x1, [sp, #120]
 	ldr x1, [sp, #120]
 	str x1, [sp, #128]
 	ldr x1, [sp, #488]
@@ -155,6 +163,9 @@ addNode:
 .L16:
 	ldr x1, [sp, #496]
 	str x1, [sp, #176]
+	ldr x1, [sp, #176]
+	add x1, x1, #8
+	str x1, [sp, #184]
 	ldr x1, [sp, #184]
 	str x1, [sp, #192]
 	adrp x1, .nilNode
@@ -166,16 +177,24 @@ addNode:
 	mov x0, #24
 	bl malloc
 	str x0, [sp, #216]
+	ldr x1, [sp, #216]
+	str x1, [sp, #224]
 	ldr x1, [sp, #224]
 	str x1, [sp, #32]
 	ldr x1, [sp, #32]
 	str x1, [sp, #232]
+	ldr x1, [sp, #232]
+	add x1, x1, #0
+	str x1, [sp, #240]
 	ldr x1, [sp, #488]
 	str x1, [sp, #248]
 	ldr x1, [sp, #248]
 	str x1, [sp, #240]
 	ldr x1, [sp, #496]
 	str x1, [sp, #256]
+	ldr x1, [sp, #256]
+	add x1, x1, #8
+	str x1, [sp, #264]
 	ldr x1, [sp, #32]
 	str x1, [sp, #272]
 	ldr x1, [sp, #272]
@@ -187,6 +206,9 @@ addNode:
 	str x1, [sp, #280]
 	ldr x1, [sp, #496]
 	str x1, [sp, #288]
+	ldr x1, [sp, #288]
+	add x1, x1, #8
+	str x1, [sp, #296]
 	ldr x1, [sp, #296]
 	str x1, [sp, #304]
 	ldr x1, [sp, #280]
@@ -213,6 +235,9 @@ addNode:
 .L23:
 	ldr x1, [sp, #496]
 	str x1, [sp, #336]
+	ldr x1, [sp, #336]
+	add x1, x1, #16
+	str x1, [sp, #344]
 	ldr x1, [sp, #344]
 	str x1, [sp, #352]
 	adrp x1, .nilNode
@@ -224,16 +249,24 @@ addNode:
 	mov x0, #24
 	bl malloc
 	str x0, [sp, #376]
+	ldr x1, [sp, #376]
+	str x1, [sp, #384]
 	ldr x1, [sp, #384]
 	str x1, [sp, #32]
 	ldr x1, [sp, #32]
 	str x1, [sp, #392]
+	ldr x1, [sp, #392]
+	add x1, x1, #0
+	str x1, [sp, #400]
 	ldr x1, [sp, #488]
 	str x1, [sp, #408]
 	ldr x1, [sp, #408]
 	str x1, [sp, #400]
 	ldr x1, [sp, #496]
 	str x1, [sp, #416]
+	ldr x1, [sp, #416]
+	add x1, x1, #16
+	str x1, [sp, #424]
 	ldr x1, [sp, #32]
 	str x1, [sp, #432]
 	ldr x1, [sp, #432]
@@ -245,6 +278,9 @@ addNode:
 	str x1, [sp, #440]
 	ldr x1, [sp, #496]
 	str x1, [sp, #448]
+	ldr x1, [sp, #448]
+	add x1, x1, #16
+	str x1, [sp, #456]
 	ldr x1, [sp, #456]
 	str x1, [sp, #464]
 	ldr x1, [sp, #440]
@@ -310,6 +346,9 @@ printDepthTree:
 .L35:
 	ldr x1, [sp, #240]
 	str x1, [sp, #56]
+	ldr x1, [sp, #56]
+	add x1, x1, #8
+	str x1, [sp, #64]
 	ldr x1, [sp, #64]
 	str x1, [sp, #72]
 	adrp x1, .nilNode
@@ -320,6 +359,9 @@ printDepthTree:
 .L36:
 	ldr x1, [sp, #240]
 	str x1, [sp, #96]
+	ldr x1, [sp, #96]
+	add x1, x1, #8
+	str x1, [sp, #104]
 	ldr x1, [sp, #104]
 	str x1, [sp, #112]
 	ldr x1, [sp, #112]
@@ -334,6 +376,9 @@ printDepthTree:
 .L38:
 	ldr x1, [sp, #240]
 	str x1, [sp, #128]
+	ldr x1, [sp, #128]
+	add x1, x1, #0
+	str x1, [sp, #136]
 	ldr x1, [sp, #136]
 	str x1, [sp, #144]
 	ldr x1, [sp, #144]
@@ -351,6 +396,9 @@ printDepthTree:
 .L39:
 	ldr x1, [sp, #240]
 	str x1, [sp, #160]
+	ldr x1, [sp, #160]
+	add x1, x1, #16
+	str x1, [sp, #168]
 	ldr x1, [sp, #168]
 	str x1, [sp, #176]
 	adrp x1, .nilNode
@@ -361,6 +409,9 @@ printDepthTree:
 .L40:
 	ldr x1, [sp, #240]
 	str x1, [sp, #200]
+	ldr x1, [sp, #200]
+	add x1, x1, #16
+	str x1, [sp, #208]
 	ldr x1, [sp, #208]
 	str x1, [sp, #216]
 	ldr x1, [sp, #216]
@@ -421,6 +472,9 @@ deleteLeavesTree:
 .L49:
 	ldr x1, [sp, #216]
 	str x1, [sp, #48]
+	ldr x1, [sp, #48]
+	add x1, x1, #8
+	str x1, [sp, #56]
 	ldr x1, [sp, #56]
 	str x1, [sp, #64]
 	adrp x1, .nilNode
@@ -431,6 +485,9 @@ deleteLeavesTree:
 .L50:
 	ldr x1, [sp, #216]
 	str x1, [sp, #88]
+	ldr x1, [sp, #88]
+	add x1, x1, #8
+	str x1, [sp, #96]
 	ldr x1, [sp, #96]
 	str x1, [sp, #104]
 	ldr x1, [sp, #104]
@@ -448,6 +505,9 @@ deleteLeavesTree:
 .L53:
 	ldr x1, [sp, #216]
 	str x1, [sp, #120]
+	ldr x1, [sp, #120]
+	add x1, x1, #16
+	str x1, [sp, #128]
 	ldr x1, [sp, #128]
 	str x1, [sp, #136]
 	adrp x1, .nilNode
@@ -458,6 +518,9 @@ deleteLeavesTree:
 .L54:
 	ldr x1, [sp, #216]
 	str x1, [sp, #160]
+	ldr x1, [sp, #160]
+	add x1, x1, #16
+	str x1, [sp, #168]
 	ldr x1, [sp, #168]
 	str x1, [sp, #176]
 	ldr x1, [sp, #176]
@@ -472,6 +535,8 @@ deleteLeavesTree:
 .L56:
 	ldr x1, [sp, #216]
 	str x1, [sp, #192]
+	ldr x1, [sp, #192]
+	str x1, [sp, #200]
 	ldr x1, [sp, #200]
 	mov x0, x1
 	bl free

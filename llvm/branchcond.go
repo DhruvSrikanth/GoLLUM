@@ -94,7 +94,8 @@ func (b *BranchConditional) SetFalseLabel(newLabel string) {
 
 // Convert the instruction from LLVM IR to ARM assembly.
 func (b *BranchConditional) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+	return insts
 }
 
 // Build the stack table for the instruction.

@@ -87,7 +87,55 @@ func (g *GetElementPtr) SetLabel(newLabel string) {
 
 // Convert from LLVM IR to ARM assembly.
 func (g *GetElementPtr) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+	// We know that the source register is always a %r register in LLVM IR
+	// First load the value of the source register (which is a pointer)
+	// Then add the index * 8 to the value (which is a pointer)
+	// This gives the address of the field we want to access
+	// Now store the address i.e. the value of the source register + index * 8 in the target register
+	stackFrame := stack.GetFrame(fnName)
+	nextAvailableRegNum := stackFrame.GetNextRegister()
+	nextAvailableReg := "x" + strconv.Itoa(nextAvailableRegNum)
+
+	var srcR, destR string
+	srcAddr := stackFrame.GetLocation(g.sourceRegister[1:])
+	if strings.Contains(srcAddr, "x") {
+		// The source register is in a register
+		srcR = srcAddr
+	} else {
+		// The source register an address on the stack
+		// Load the value of the source register into a register
+		loadInst := arm.NewLdr(nextAvailableReg, arm.SP+", #"+srcAddr)
+		loadInst.SetLabel(g.blockLabel)
+		insts = append(insts, loadInst)
+
+		srcR = nextAvailableReg
+	}
+
+	// Add the index * 8 to the value of the source register to get the address of the field we want to access
+	offset := g.index * 8
+	addInst := arm.NewAdd(srcR, srcR, "#"+strconv.Itoa(offset))
+	addInst.SetLabel(g.blockLabel)
+	insts = append(insts, addInst)
+
+	// Get the destination register
+	destAddr := stackFrame.GetLocation("r" + strconv.Itoa(g.targetRegisters[len(g.targetRegisters)-1]))
+	if strings.Contains(destAddr, "x") {
+		// The destination register is in a register
+		destR = destAddr
+		// Do a mov into the destination register
+		movInst := arm.NewMov(destR, srcR)
+		movInst.SetLabel(g.blockLabel)
+		insts = append(insts, movInst)
+	} else {
+		// The destination register is on the stack
+		// Store the value of the source register into the destination register
+		strInst := arm.NewStr(srcR, arm.SP+", #"+destAddr)
+		strInst.SetLabel(g.blockLabel)
+		insts = append(insts, strInst)
+	}
+
+	return insts
 }
 
 // Build the stack table for the function.

@@ -87,7 +87,48 @@ func (b *BitCast) SetLabel(newLabel string) {
 
 // Convert the instruction from LLVM IR to ARM assembly.
 func (b *BitCast) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+
+	stackFrame := stack.GetFrame(fnName)
+
+	availableRegNum := stackFrame.GetNextRegister()
+	availableReg := "x" + strconv.Itoa(availableRegNum)
+
+	var srcR, destR string
+	// The source could be a register or an address
+	// an address => load from address into a register
+	// a register => use the register
+	srcAddr := stackFrame.GetLocation(b.sourceRegister[1:])
+	if strings.Contains(srcAddr, "x") {
+		// Register
+		srcR = srcAddr
+	} else {
+		// Address
+
+		ldrInst := arm.NewLdr(availableReg, arm.SP+", #"+srcAddr)
+		ldrInst.SetLabel(b.blockLabel)
+		insts = append(insts, ldrInst)
+
+		srcR = availableReg
+		availableRegNum += 1
+	}
+
+	// If the destination is a register, we can just move the value
+	// else we will do a store in to the address
+	destAddr := stackFrame.GetLocation("r" + strconv.Itoa(b.targetRegisters[len(b.targetRegisters)-1]))
+	if strings.Contains(destAddr, "x") {
+		// Register
+		destR = destAddr
+		movInst := arm.NewMov(destR, srcR)
+		movInst.SetLabel(b.blockLabel)
+		insts = append(insts, movInst)
+	} else {
+		// Address
+		strInst := arm.NewStr(srcR, arm.SP+", #"+destAddr)
+		strInst.SetLabel(b.blockLabel)
+		insts = append(insts, strInst)
+	}
+	return insts
 }
 
 // Build the stack table for the instruction.
