@@ -103,6 +103,7 @@ func (p *Printf) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			movInst.SetLabel(p.blockLabel)
 			insts = append(insts, movInst)
 		} else {
+			// Load the argument present at the address
 			ldrInst := arm.NewLdr(availableReg, "sp, #"+argumentAddress)
 			ldrInst.SetLabel(p.blockLabel)
 			insts = append(insts, ldrInst)

@@ -3,22 +3,22 @@ package arm
 // STR ARM64 instruction
 type Str struct {
 	// The source register
-	Source string
-	// The offset of the desintation register from sp
-	SPOffset string
+	source string
+	// The address of the desintation
+	destAddress string
 
 	// block label
 	blockLabel string
 }
 
 // NewSTR returns a new STR instruction
-func NewStr(source string, spOffset string) *Str {
-	return &Str{source, spOffset, ""}
+func NewStr(source string, destAddress string) *Str {
+	return &Str{source, destAddress, ""}
 }
 
 // String returns the string representation of the STR instruction
 func (s *Str) String() string {
-	return "str " + s.Source + ", [sp, #" + s.SPOffset + "]"
+	return "str " + s.source + ", [" + s.destAddress + "]"
 }
 
 // Set the label of the instruction

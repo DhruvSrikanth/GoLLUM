@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"golite/arm"
 	"golite/stack"
+	"strings"
 )
 
 // The LLVM program node
@@ -76,9 +77,11 @@ func (p *Program) ToARM(stack *stack.Stack) *arm.Program {
 	// Create the ARM program for the global declarations
 	var globalDecls []arm.GlobalDecl
 	for _, global := range p.globalDecls {
-		if !global.IsStructType() {
-			globalDecls = append(globalDecls, *(global.ToARM()))
+		if global.isNil {
+			nonStructName := strings.Split(global.GetName(), ".")[1]
+			global.SetName(".nil" + nonStructName)
 		}
+		globalDecls = append(globalDecls, *(global.ToARM()))
 	}
 
 	// Create the ARM program for the function declarations

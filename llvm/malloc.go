@@ -97,7 +97,7 @@ func (m *Malloc) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 		insts = append(insts, movInst)
 	} else {
 		// Store the result in the stack by doing a str
-		strInst := arm.NewStr("x0", destinationRegAddress)
+		strInst := arm.NewStr("x0", arm.SP+", #"+destinationRegAddress)
 		strInst.SetLabel(m.blockLabel)
 		insts = append(insts, strInst)
 	}

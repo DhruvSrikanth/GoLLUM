@@ -68,7 +68,8 @@ func (s *LocalDecl) SetLabel(newLabel string) {
 
 // Convert LLVM IR to ARM assembly.
 func (s *LocalDecl) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	// Nothing to return since we allocate the required amount of space in the prologue which is at the start of the function
+	return []arm.Instruction{}
 }
 
 // Build the stack table for the instruction.

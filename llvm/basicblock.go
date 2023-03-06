@@ -140,13 +140,13 @@ func (bb *BasicBlock) ToARM(funcName string, stack *stack.Stack, isFirstBlock bo
 
 		if growBy > 0 {
 			// Subtract SP by the amount.
-			subInst := arm.NewSub(arm.SP, arm.SP, strconv.Itoa(growBy))
+			subInst := arm.NewSub(arm.SP, arm.SP, "#"+strconv.Itoa(growBy))
 			subInst.SetLabel(armBB.GetLabel())
 			armBB.AddInstruction(subInst)
 		}
 
 		// Subtract SP by 16 for the link register and the frame pointer.
-		subInst := arm.NewSub(arm.SP, arm.SP, strconv.Itoa(16))
+		subInst := arm.NewSub(arm.SP, arm.SP, "#16")
 		subInst.SetLabel(armBB.GetLabel())
 		armBB.AddInstruction(subInst)
 		// Store the link register and the stack pointer.

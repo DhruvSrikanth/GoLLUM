@@ -86,7 +86,68 @@ func (l *Load) SetLabel(newLabel string) {
 
 // Convert LLVM IR to ARM assembly.
 func (l *Load) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+	stackFrame := stack.GetFrame(fnName)
+	availableRegNum := stackFrame.GetNextRegister()
+	availableReg := "x" + strconv.Itoa(availableRegNum)
+
+	var toR, fromR string
+
+	// Source registers/addresses
+	if strings.Contains(l.sourceRegister, "@") {
+		// If its a global variable, then we need to load the address in a different way
+		adrpInst := arm.NewAdrp(availableReg, l.sourceRegister[1:])
+		adrpInst.SetLabel(l.blockLabel)
+		insts = append(insts, adrpInst)
+
+		addInst := arm.NewAdd(availableReg, availableReg, ":lo12:"+l.sourceRegister[1:])
+		addInst.SetLabel(l.blockLabel)
+		insts = append(insts, addInst)
+
+		// Load the value into the register
+		ldrInst := arm.NewLdr(availableReg, availableReg)
+		ldrInst.SetLabel(l.blockLabel)
+		insts = append(insts, ldrInst)
+
+		availableRegNum += 1
+
+		fromR = availableReg
+	} else {
+		src := l.sourceRegister[1:]
+		destAddr := stackFrame.GetLocation(src)
+		if strings.Contains(destAddr, "x") {
+			fromR = destAddr
+		} else {
+			// Load the address of the variable into a register
+			ldrInst := arm.NewLdr(availableReg, arm.SP+", #"+destAddr)
+			ldrInst.SetLabel(l.blockLabel)
+			insts = append(insts, ldrInst)
+
+			availableRegNum += 1
+
+			fromR = availableReg
+		}
+	}
+
+	// Destination registers/addresses (it wont be a global variable since we are loading into a new register i.e. in LLVM IR will have %r for static single assignment)
+	dest := "r" + strconv.Itoa(l.targetRegisters[len(l.targetRegisters)-1])
+	destAddr := stackFrame.GetLocation(dest)
+	if strings.Contains(destAddr, "x") {
+		// Do a move since they are both in registers
+		toR = destAddr
+
+		movInst := arm.NewMov(toR, fromR)
+		movInst.SetLabel(l.blockLabel)
+		insts = append(insts, movInst)
+
+	} else {
+		// Store the value of the available register into the destination address
+		strInst := arm.NewStr(fromR, arm.SP+", #"+destAddr)
+		strInst.SetLabel(l.blockLabel)
+		insts = append(insts, strInst)
+	}
+
+	return insts
 }
 
 // Build the stack table for the instruction.

@@ -55,6 +55,21 @@ func (s *GlobalDecl) IsStructType() bool {
 	return strings.Contains(s.name, "struct.")
 }
 
+// Is this a nil declaration
+func (s *GlobalDecl) IsNil() bool {
+	return s.isNil
+}
+
+// Get the name of the global declaration
+func (s *GlobalDecl) GetName() string {
+	return s.name
+}
+
+// Set the name of the global declaration
+func (s *GlobalDecl) SetName(name string) {
+	s.name = name
+}
+
 // Convert to ARM
 func (s *GlobalDecl) ToARM() *arm.GlobalDecl {
 	size := arm.GetSizeLlvm(s.ty)

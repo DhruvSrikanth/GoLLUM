@@ -19,7 +19,7 @@ func NewLdp(dest string, op1 string, op2 string) *Ldp {
 
 // String returns the string representation of the Ldp instruction
 func (l *Ldp) String() string {
-	return "Ldp " + l.Dest + ", " + l.Op1 + ", [" + l.Op2 + "]"
+	return "ldp " + l.Dest + ", " + l.Op1 + ", [" + l.Op2 + "]"
 }
 
 // Set the label of the instruction

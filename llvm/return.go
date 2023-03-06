@@ -80,7 +80,7 @@ func (r *Return) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	instuctions = append(instuctions, ldpInst)
 
 	// Restore the stack pointer
-	addInst := arm.NewAdd(arm.SP, arm.SP, "16")
+	addInst := arm.NewAdd(arm.SP, arm.SP, "#16")
 	addInst.SetLabel(r.blockLabel)
 	instuctions = append(instuctions, addInst)
 
@@ -92,7 +92,7 @@ func (r *Return) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 		growBy += 16 - (growBy % 16)
 	}
 
-	addInst = arm.NewAdd(arm.SP, arm.SP, strconv.Itoa(growBy))
+	addInst = arm.NewAdd(arm.SP, arm.SP, "#"+strconv.Itoa(growBy))
 	addInst.SetLabel(r.blockLabel)
 	instuctions = append(instuctions, addInst)
 
