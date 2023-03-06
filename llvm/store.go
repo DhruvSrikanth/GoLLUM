@@ -140,9 +140,21 @@ func (s *Store) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 		}
 	} else {
 		// This is a literal value
-		movInst := arm.NewMov(availableReg, "#"+s.sourceRegister)
-		movInst.SetLabel(s.blockLabel)
-		insts = append(insts, movInst)
+		// If its a negative value, mov 0 into a register and then sub the value
+		if strings.Contains(s.sourceRegister, "-") {
+			movInst := arm.NewMov(availableReg, "#0")
+			movInst.SetLabel(s.blockLabel)
+			insts = append(insts, movInst)
+
+			subInst := arm.NewSub(availableReg, availableReg, "#"+s.sourceRegister[1:])
+			subInst.SetLabel(s.blockLabel)
+			insts = append(insts, subInst)
+		} else {
+			movInst := arm.NewMov(availableReg, "#"+s.sourceRegister)
+			movInst.SetLabel(s.blockLabel)
+			insts = append(insts, movInst)
+		}
+
 		srcR = availableReg
 		availableRegNum += 1
 	}

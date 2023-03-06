@@ -99,9 +99,20 @@ func (r *Return) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			insts = append(insts, ldrInst)
 		}
 	} else {
-		movInst := arm.NewMov(availableReg, "#"+r.sourceRegister)
-		movInst.SetLabel(r.blockLabel)
-		insts = append(insts, movInst)
+		// If the immediate value is negative, move 0 into a register and then subtract the value from it
+		if strings.Contains(r.sourceRegister, "-") {
+			movInst := arm.NewMov(availableReg, "#0")
+			movInst.SetLabel(r.blockLabel)
+			insts = append(insts, movInst)
+
+			subInst := arm.NewSub(availableReg, availableReg, "#"+r.sourceRegister[1:])
+			subInst.SetLabel(r.blockLabel)
+			insts = append(insts, subInst)
+		} else {
+			movInst := arm.NewMov(availableReg, "#"+r.sourceRegister)
+			movInst.SetLabel(r.blockLabel)
+			insts = append(insts, movInst)
+		}
 	}
 	movInst := arm.NewMov("x0", availableReg)
 	movInst.SetLabel(r.blockLabel)

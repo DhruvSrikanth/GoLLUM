@@ -137,9 +137,20 @@ func (f *FunctionCall) ToARM(fnName string, stack *stack.Stack) []arm.Instructio
 			}
 		} else {
 			// Immediate
-			movInst := arm.NewMov(availableReg, "#"+regName)
-			movInst.SetLabel(f.blockLabel)
-			insts = append(insts, movInst)
+			// Check if its negative
+			if strings.Contains(regName, "-") {
+				movInst := arm.NewMov(availableReg, "#0")
+				movInst.SetLabel(f.blockLabel)
+				insts = append(insts, movInst)
+
+				subInst := arm.NewSub(availableReg, availableReg, "#"+regName[1:])
+				subInst.SetLabel(f.blockLabel)
+				insts = append(insts, subInst)
+			} else {
+				movInst := arm.NewMov(availableReg, "#"+regName)
+				movInst.SetLabel(f.blockLabel)
+				insts = append(insts, movInst)
+			}
 		}
 
 		tempRegs = append(tempRegs, availableReg)

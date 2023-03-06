@@ -23,6 +23,11 @@ compare:
 	str x1, [sp, #24]
 	ldr x1, [sp, #120]
 	str x1, [sp, #32]
+	ldr x1, [sp, #24]
+	ldr x2, [sp, #32]
+	cmp x1, x2
+	cset x3, lt
+	str x3, [sp, #40]
 
 .L2:
 	mov x1, #1
@@ -44,8 +49,18 @@ compare:
 	str x1, [sp, #56]
 	ldr x1, [sp, #120]
 	str x1, [sp, #64]
+	ldr x1, [sp, #56]
+	ldr x2, [sp, #64]
+	cmp x1, x2
+	cset x3, gt
+	str x3, [sp, #72]
 
 .L5:
+	mov x1, #0
+	sub x1, x1, #1
+	mov x2, #1
+	mul x3, x1, x2
+	str x3, [sp, #80]
 	ldr x1, [sp, #80]
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
@@ -107,6 +122,11 @@ addNode:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #48]
+	ldr x1, [sp, #40]
+	ldr x2, [sp, #48]
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #56]
 
 .L12:
 	mov x0, #24
@@ -154,8 +174,18 @@ addNode:
 	bl .L14
 
 .L14:
+	mov x1, #0
+	sub x1, x1, #1
+	mov x2, #1
+	mul x3, x1, x2
+	str x3, [sp, #152]
 	ldr x1, [sp, #24]
 	str x1, [sp, #160]
+	ldr x1, [sp, #160]
+	ldr x2, [sp, #152]
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #168]
 
 .L15:
 	bl .L16
@@ -172,6 +202,11 @@ addNode:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #200]
+	ldr x1, [sp, #192]
+	ldr x2, [sp, #200]
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #208]
 
 .L17:
 	mov x0, #24
@@ -228,6 +263,11 @@ addNode:
 .L21:
 	ldr x1, [sp, #24]
 	str x1, [sp, #320]
+	ldr x1, [sp, #320]
+	mov x2, #1
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #328]
 
 .L22:
 	bl .L23
@@ -244,6 +284,11 @@ addNode:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #360]
+	ldr x1, [sp, #352]
+	ldr x2, [sp, #360]
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #368]
 
 .L24:
 	mov x0, #24
@@ -339,6 +384,11 @@ printDepthTree:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #40]
+	ldr x1, [sp, #32]
+	ldr x2, [sp, #40]
+	cmp x1, x2
+	cset x3, ne
+	str x3, [sp, #48]
 
 .L34:
 	bl .L35
@@ -355,6 +405,11 @@ printDepthTree:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #80]
+	ldr x1, [sp, #72]
+	ldr x2, [sp, #80]
+	cmp x1, x2
+	cset x3, ne
+	str x3, [sp, #88]
 
 .L36:
 	ldr x1, [sp, #240]
@@ -405,6 +460,11 @@ printDepthTree:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #184]
+	ldr x1, [sp, #176]
+	ldr x2, [sp, #184]
+	cmp x1, x2
+	cset x3, ne
+	str x3, [sp, #192]
 
 .L40:
 	ldr x1, [sp, #240]
@@ -465,6 +525,11 @@ deleteLeavesTree:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #32]
+	ldr x1, [sp, #24]
+	ldr x2, [sp, #32]
+	cmp x1, x2
+	cset x3, ne
+	str x3, [sp, #40]
 
 .L48:
 	bl .L49
@@ -481,6 +546,11 @@ deleteLeavesTree:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #72]
+	ldr x1, [sp, #64]
+	ldr x2, [sp, #72]
+	cmp x1, x2
+	cset x3, ne
+	str x3, [sp, #80]
 
 .L50:
 	ldr x1, [sp, #216]
@@ -514,6 +584,11 @@ deleteLeavesTree:
 	add x1, x1, :lo12:.nilNode
 	ldr x1, [x1]
 	str x1, [sp, #144]
+	ldr x1, [sp, #136]
+	ldr x2, [sp, #144]
+	cmp x1, x2
+	cset x3, ne
+	str x3, [sp, #152]
 
 .L54:
 	ldr x1, [sp, #216]
@@ -590,6 +665,11 @@ main:
 .L61:
 	ldr x1, [sp, #24]
 	str x1, [sp, #48]
+	ldr x1, [sp, #48]
+	mov x2, #0
+	cmp x1, x2
+	cset x3, ne
+	str x3, [sp, #56]
 
 .L62:
 	ldr x1, [sp, #24]
