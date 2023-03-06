@@ -70,6 +70,7 @@ func (b *BranchUnconditional) ToARM(fnName string, stack *stack.Stack) []arm.Ins
 	insts := make([]arm.Instruction, 0)
 
 	brInst := arm.NewBranch("." + b.destinationLabel)
+	brInst.SetBranchType("cfg")
 	brInst.SetLabel(b.blockLabel)
 	insts = append(insts, brInst)
 

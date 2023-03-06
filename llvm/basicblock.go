@@ -15,6 +15,8 @@ type BasicBlock struct {
 	// The predecessor and successor basic blocks.
 	predecessors []*BasicBlock
 	successors   []*BasicBlock
+	// The type of block - [BASIC, IF_ENTRY, IF_EXIT, IF_TRUE, IF_FALSE, FOR_ENTRY, FOR_EXIT, FOR_BODY]
+	blockType string
 }
 
 // Create a new basic block.
@@ -24,6 +26,7 @@ func NewBasicBlock(label string) *BasicBlock {
 		instructions: []Instruction{},
 		predecessors: []*BasicBlock{},
 		successors:   []*BasicBlock{},
+		blockType:    "BASIC",
 	}
 }
 
@@ -82,6 +85,16 @@ func (bb *BasicBlock) AddInstruction(inst Instruction) {
 	bb.instructions = append(bb.instructions, inst)
 }
 
+// Get the type of the basic block.
+func (bb *BasicBlock) GetBlockType() string {
+	return bb.blockType
+}
+
+// Set the type of the basic block.
+func (bb *BasicBlock) SetBlockType(blockType string) {
+	bb.blockType = blockType
+}
+
 // Get the predecessor labels.
 func (bb *BasicBlock) GetPredecessorLabels() []string {
 	labels := []string{}
@@ -104,7 +117,9 @@ func (bb *BasicBlock) GetSuccessorLabels() []string {
 func (bb *BasicBlock) String() string {
 	var out string
 	out += bb.label
-	out += ":\n"
+	out += ":"
+	// out += " " + bb.blockType
+	out += "\n"
 	for _, inst := range bb.instructions {
 		out += "\t"
 		out += inst.String()

@@ -69,6 +69,7 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 
 	// Add new block for the condition
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	condBlock.SetBlockType("FOR_ENTRY")
 	// Add the previous block to this blocks predecessors
 	condBlock.AddPredecessor(blocks[len(blocks)-1])
 	blocks[len(blocks)-1].AddSuccessor(condBlock)
@@ -99,8 +100,10 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 
 	// Add new block for the body block
 	bodyBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	bodyBlock.SetBlockType("FOR_BODY")
 	// Add the previous block to this blocks predecessors and add the body block to the previous blocks successors
 	bodyBlock.AddPredecessor(condBlock)
+	bodyBlock.AddSuccessor(condBlock)
 	condBlock.AddSuccessor(bodyBlock)
 	blocks = append(blocks, bodyBlock)
 
@@ -121,15 +124,13 @@ func (l *Loop) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlock, fun
 	branchCondInst.SetFalseLabel(llvm.GetCurrentLabel())
 
 	// Add new block for canonical form
-	block := llvm.NewBasicBlock(llvm.GetNextLabel())
+	exitBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	exitBlock.SetBlockType("FOR_EXIT")
 	// Add the cond block to this blocks predecessors
-	block.AddPredecessor(condBlock)
-	// Add the previous block to this blocks predecessors
-	block.AddPredecessor(bodyBlock)
+	exitBlock.AddPredecessor(condBlock)
 	// Add this block to the last blocks successors
-	condBlock.AddSuccessor(block)
-	bodyBlock.AddSuccessor(block)
-	blocks = append(blocks, block)
+	condBlock.AddSuccessor(exitBlock)
+	blocks = append(blocks, exitBlock)
 
 	return blocks, constDecls
 }

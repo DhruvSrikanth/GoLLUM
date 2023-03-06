@@ -98,5 +98,6 @@ func (f *FunctionDecl) ToARM(stack *stack.Stack) *arm.FunctionDecl {
 			isFirstBlock = false
 		}
 	}
+
 	return arm.NewFunctionDecl(f.name, blocks)
 }

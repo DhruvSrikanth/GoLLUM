@@ -106,6 +106,7 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 
 	// Add new block for the condition
 	condBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	condBlock.SetBlockType("IF_ENTRY")
 	// Add the last block to this block's predecessors and the previous block to this block's successors
 	condBlock.AddPredecessor(blocks[len(blocks)-1])
 	blocks[len(blocks)-1].AddSuccessor(condBlock)
@@ -136,6 +137,7 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 
 	// Add new block for the then block
 	thenBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	thenBlock.SetBlockType("IF_TRUE")
 	// Add the last block to this block's predecessors and the previous block to this block's successors
 	thenBlock.AddPredecessor(condBlock)
 	condBlock.AddSuccessor(thenBlock)
@@ -158,6 +160,7 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 
 	// Add new block for the else block
 	elseBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	elseBlock.SetBlockType("IF_FALSE")
 	// Add the last block to this block's predecessors and
 	elseBlock.AddPredecessor(condBlock)
 	condBlock.AddSuccessor(elseBlock)
@@ -188,11 +191,15 @@ func (c *Conditional) ToLLVMCFG(tables *st.SymbolTables, blocks []*llvm.BasicBlo
 	}
 
 	// Add new block for canonical form
-	block := llvm.NewBasicBlock(llvm.GetNextLabel())
+	exitBlock := llvm.NewBasicBlock(llvm.GetNextLabel())
+	exitBlock.SetBlockType("IF_EXIT")
 	// Add the last block to this block's predecessors
-	block.AddPredecessor(thenBlock)
-	block.AddPredecessor(elseBlock)
-	blocks = append(blocks, block)
+	exitBlock.AddPredecessor(thenBlock)
+	exitBlock.AddPredecessor(elseBlock)
+	// Add the previous block to this block's successors
+	thenBlock.AddSuccessor(exitBlock)
+	elseBlock.AddSuccessor(exitBlock)
+	blocks = append(blocks, exitBlock)
 
 	return blocks, constDecls
 }
