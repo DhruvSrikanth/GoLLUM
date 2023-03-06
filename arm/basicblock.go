@@ -48,6 +48,7 @@ func (bb *BasicBlock) AddInstructions(instructions []Instruction) {
 // String representation of the basic block.
 func (bb *BasicBlock) String() string {
 	var out string
+	out += "."
 	out += bb.label
 	out += ":\n"
 	for _, inst := range bb.instructions {

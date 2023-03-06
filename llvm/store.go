@@ -173,6 +173,7 @@ func (s *Store) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			insts = append(insts, movInst)
 			return insts
 		} else {
+			// Address so use the offset from sp as the address to store in
 			destR = arm.SP + ", #" + destAddr
 		}
 	}

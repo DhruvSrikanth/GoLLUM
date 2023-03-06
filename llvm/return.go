@@ -71,21 +71,54 @@ func (r *Return) SetLabel(newLabel string) {
 
 // Convert LLVM IR to ARM assembly.
 func (r *Return) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	instuctions := make([]arm.Instruction, 0)
+	insts := make([]arm.Instruction, 0)
+
+	// Store the return value in x0
+	stackFrame := stack.GetFrame(fnName)
+	availableRegNum := stackFrame.GetNextRegister()
+	availableReg := "x" + strconv.Itoa(availableRegNum)
+	if strings.Contains(r.sourceRegister, "@") {
+		adrpInst := arm.NewAdrp(availableReg, r.sourceRegister[1:])
+		adrpInst.SetLabel(r.blockLabel)
+		insts = append(insts, adrpInst)
+
+		addInst := arm.NewAdd(availableReg, availableReg, ":lo12:"+r.sourceRegister[1:])
+		addInst.SetLabel(r.blockLabel)
+		insts = append(insts, addInst)
+
+		ldrInst := arm.NewLdr(availableReg, availableReg)
+		ldrInst.SetLabel(r.blockLabel)
+		insts = append(insts, ldrInst)
+	} else if strings.Contains(r.sourceRegister, "%") {
+		srcAddr := stackFrame.GetLocation(r.sourceRegister[1:])
+		if strings.Contains(srcAddr, "x") {
+			availableReg = srcAddr
+		} else {
+			ldrInst := arm.NewLdr(availableReg, arm.SP+", #"+srcAddr)
+			ldrInst.SetLabel(r.blockLabel)
+			insts = append(insts, ldrInst)
+		}
+	} else {
+		movInst := arm.NewMov(availableReg, "#"+r.sourceRegister)
+		movInst.SetLabel(r.blockLabel)
+		insts = append(insts, movInst)
+	}
+	movInst := arm.NewMov("x0", availableReg)
+	movInst.SetLabel(r.blockLabel)
+	insts = append(insts, movInst)
 
 	// Any time there is a return instruction, we need to have the epilogue
 	// Restore the frame pointer and link register
 	ldpInst := arm.NewLdp("x29", "x30", arm.SP)
 	ldpInst.SetLabel(r.blockLabel)
-	instuctions = append(instuctions, ldpInst)
+	insts = append(insts, ldpInst)
 
 	// Restore the stack pointer
 	addInst := arm.NewAdd(arm.SP, arm.SP, "#16")
 	addInst.SetLabel(r.blockLabel)
-	instuctions = append(instuctions, addInst)
+	insts = append(insts, addInst)
 
 	// Add the amount that we grew the stack by previously
-	stackFrame := stack.GetFrame(fnName)
 	growBy := (stackFrame.Size() - 2) * 8
 	// Round to the nearest multiple of 16 for alignment.
 	if growBy%16 != 0 {
@@ -94,14 +127,14 @@ func (r *Return) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 
 	addInst = arm.NewAdd(arm.SP, arm.SP, "#"+strconv.Itoa(growBy))
 	addInst.SetLabel(r.blockLabel)
-	instuctions = append(instuctions, addInst)
+	insts = append(insts, addInst)
 
 	// Return
 	retInst := arm.NewRet()
 	retInst.SetLabel(r.blockLabel)
-	instuctions = append(instuctions, retInst)
+	insts = append(insts, retInst)
 
-	return instuctions
+	return insts
 }
 
 // Build the stack table for the instruction.

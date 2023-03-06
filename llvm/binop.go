@@ -96,7 +96,26 @@ func (b *BinOp) GetOpType() string {
 
 // Convert the BinOp to ARM assembly.
 func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+
+	// Left register could be a literal, global variable, address or register
+	// literal value => move into a register
+	// global variable => load from address into a register
+	// an address => load from address into a register
+	// a register => use the register
+
+	// Right register could be a literal, global variable, address or register
+	// literal value => move into a register
+	// global variable => load from address into a register
+	// an address => load from address into a register
+	// a register => use the register
+
+	// operator can be
+	// add, sub, mul, sdiv
+	// and, or, xor
+	// eq, neq, sgt, sge, slt, sle
+
+	return insts
 }
 
 // Function to build the stack table for the BinOp.

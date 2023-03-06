@@ -96,7 +96,85 @@ func (f *FunctionCall) SetLabel(newLabel string) {
 
 // Convert to ARM assembly.
 func (f *FunctionCall) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	// Push all the arguments onto the stack but putting them in registers
+	// Call the function
+	// Place the return value which is in x0 into the destination register
+	insts := make([]arm.Instruction, 0)
+
+	stackFrame := stack.GetFrame(fnName)
+	availableRegNum := stackFrame.GetNextRegister()
+	tempRegs := make([]string, 0)
+	// Move the arguments into temporary registers
+	for i := 0; i < len(f.registerNames); i++ {
+		regName := f.registerNames[i]
+		availableReg := "x" + strconv.Itoa(availableRegNum)
+		if strings.Contains(regName, "@") {
+			// Global variable
+			adrpInst := arm.NewAdrp(availableReg, regName[1:])
+			adrpInst.SetLabel(f.blockLabel)
+			insts = append(insts, adrpInst)
+
+			addInst := arm.NewAdd(availableReg, availableReg, ":lo12:"+regName[1:])
+			addInst.SetLabel(f.blockLabel)
+			insts = append(insts, addInst)
+
+			ldrInst := arm.NewLdr(availableReg, availableReg)
+			ldrInst.SetLabel(f.blockLabel)
+			insts = append(insts, ldrInst)
+
+		} else if strings.Contains(regName, "%") {
+			srcAddr := stackFrame.GetLocation(regName[1:])
+			if strings.Contains(srcAddr, "x") {
+				// Register
+				movInst := arm.NewMov(availableReg, srcAddr)
+				movInst.SetLabel(f.blockLabel)
+				insts = append(insts, movInst)
+			} else {
+				// Address on the stack
+				ldrInst := arm.NewLdr(availableReg, arm.SP+"#, "+srcAddr)
+				ldrInst.SetLabel(f.blockLabel)
+				insts = append(insts, ldrInst)
+			}
+		} else {
+			// Immediate
+			movInst := arm.NewMov(availableReg, "#"+regName)
+			movInst.SetLabel(f.blockLabel)
+			insts = append(insts, movInst)
+		}
+
+		tempRegs = append(tempRegs, availableReg)
+		availableRegNum += 1
+	}
+
+	// Move the arguments into the correct registers
+	for i := 0; i < len(tempRegs); i++ {
+		movInst := arm.NewMov("x"+strconv.Itoa(i), tempRegs[i])
+		movInst.SetLabel(f.blockLabel)
+		insts = append(insts, movInst)
+	}
+
+	// Call the function
+	callInst := arm.NewBranch(f.fName)
+	callInst.SetLabel(f.blockLabel)
+	insts = append(insts, callInst)
+
+	// Move the return value into the destination register
+	retReg := "x0"
+	destReg := "r" + strconv.Itoa(f.targetRegisters[len(f.targetRegisters)-1])
+	destAddr := stackFrame.GetLocation(destReg)
+	if strings.Contains(destAddr, "x") {
+		// Register
+		movInst := arm.NewMov(destAddr, retReg)
+		movInst.SetLabel(f.blockLabel)
+		insts = append(insts, movInst)
+	} else {
+		// Address on the stack
+		strInst := arm.NewStr(retReg, arm.SP+"#, "+destAddr)
+		strInst.SetLabel(f.blockLabel)
+		insts = append(insts, strInst)
+	}
+
+	return insts
 }
 
 // Build the stack table for the instruction.
