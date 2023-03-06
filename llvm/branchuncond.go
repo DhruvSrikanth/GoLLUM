@@ -67,7 +67,13 @@ func (b *BranchUnconditional) SetDestinationLabel(newLabel string) {
 
 // Convert the instruction to ARM assembly.
 func (b *BranchUnconditional) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
-	return nil
+	insts := make([]arm.Instruction, 0)
+
+	brInst := arm.NewBranch("." + b.destinationLabel)
+	brInst.SetLabel(b.blockLabel)
+	insts = append(insts, brInst)
+
+	return insts
 }
 
 // Build the stack table for the instruction.
