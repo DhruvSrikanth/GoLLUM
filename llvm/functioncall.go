@@ -131,7 +131,7 @@ func (f *FunctionCall) ToARM(fnName string, stack *stack.Stack) []arm.Instructio
 				insts = append(insts, movInst)
 			} else {
 				// Address on the stack
-				ldrInst := arm.NewLdr(availableReg, arm.SP+"#, "+srcAddr)
+				ldrInst := arm.NewLdr(availableReg, arm.SP+", #"+srcAddr)
 				ldrInst.SetLabel(f.blockLabel)
 				insts = append(insts, ldrInst)
 			}
@@ -169,7 +169,7 @@ func (f *FunctionCall) ToARM(fnName string, stack *stack.Stack) []arm.Instructio
 		insts = append(insts, movInst)
 	} else {
 		// Address on the stack
-		strInst := arm.NewStr(retReg, arm.SP+"#, "+destAddr)
+		strInst := arm.NewStr(retReg, arm.SP+", #"+destAddr)
 		strInst.SetLabel(f.blockLabel)
 		insts = append(insts, strInst)
 	}

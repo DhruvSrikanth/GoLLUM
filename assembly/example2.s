@@ -16,6 +16,7 @@ compare:
 	mov fp, sp
 	str x0, [sp, #112]
 	str x1, [sp, #120]
+	bl .L1
 
 .L1:
 	ldr x1, [sp, #112]
@@ -36,6 +37,7 @@ compare:
 	ret
 
 .L3:
+	bl .L4
 
 .L4:
 	ldr x1, [sp, #112]
@@ -68,8 +70,10 @@ compare:
 	ret
 
 .L7:
+	bl .L8
 
 .L8:
+	bl .L9
 
 .L9:
 	ldr x1, [sp, #16]
@@ -94,6 +98,7 @@ addNode:
 	mov fp, sp
 	str x0, [sp, #488]
 	str x1, [sp, #496]
+	bl .L11
 
 .L11:
 	ldr x1, [sp, #496]
@@ -121,6 +126,7 @@ addNode:
 	adrp x2, root
 	add x2, x2, :lo12:root
 	str x1, [x2]
+	bl .L30
 
 .L13:
 	ldr x1, [sp, #496]
@@ -129,20 +135,22 @@ addNode:
 	str x1, [sp, #128]
 	ldr x1, [sp, #488]
 	str x1, [sp, #136]
-	ldr x1, [sp#, 128]
-	ldr x2, [sp#, 136]
+	ldr x1, [sp, #128]
+	ldr x2, [sp, #136]
 	mov x0, x1
 	mov x1, x2
 	bl compare
-	str x0, [sp#, 144]
+	str x0, [sp, #144]
 	ldr x1, [sp, #144]
 	str x1, [sp, #24]
+	bl .L14
 
 .L14:
 	ldr x1, [sp, #24]
 	str x1, [sp, #160]
 
 .L15:
+	bl .L16
 
 .L16:
 	ldr x1, [sp, #496]
@@ -172,6 +180,7 @@ addNode:
 	str x1, [sp, #272]
 	ldr x1, [sp, #272]
 	str x1, [sp, #264]
+	bl .L19
 
 .L18:
 	ldr x1, [sp, #488]
@@ -180,22 +189,26 @@ addNode:
 	str x1, [sp, #288]
 	ldr x1, [sp, #296]
 	str x1, [sp, #304]
-	ldr x1, [sp#, 280]
-	ldr x2, [sp#, 304]
+	ldr x1, [sp, #280]
+	ldr x2, [sp, #304]
 	mov x0, x1
 	mov x1, x2
 	bl addNode
-	str x0, [sp#, 312]
+	str x0, [sp, #312]
+	bl .L19
 
 .L19:
+	bl .L29
 
 .L20:
+	bl .L21
 
 .L21:
 	ldr x1, [sp, #24]
 	str x1, [sp, #320]
 
 .L22:
+	bl .L23
 
 .L23:
 	ldr x1, [sp, #496]
@@ -225,6 +238,7 @@ addNode:
 	str x1, [sp, #432]
 	ldr x1, [sp, #432]
 	str x1, [sp, #424]
+	bl .L26
 
 .L25:
 	ldr x1, [sp, #488]
@@ -233,22 +247,28 @@ addNode:
 	str x1, [sp, #448]
 	ldr x1, [sp, #456]
 	str x1, [sp, #464]
-	ldr x1, [sp#, 440]
-	ldr x2, [sp#, 464]
+	ldr x1, [sp, #440]
+	ldr x2, [sp, #464]
 	mov x0, x1
 	mov x1, x2
 	bl addNode
-	str x0, [sp#, 472]
+	str x0, [sp, #472]
+	bl .L26
 
 .L26:
+	bl .L28
 
 .L27:
+	bl .L28
 
 .L28:
+	bl .L29
 
 .L29:
+	bl .L30
 
 .L30:
+	bl .L31
 
 .L31:
 	mov x1, #0
@@ -274,6 +294,7 @@ printDepthTree:
 	stp x29, x30, [sp]
 	mov fp, sp
 	str x0, [sp, #240]
+	bl .L33
 
 .L33:
 	ldr x1, [sp, #240]
@@ -284,6 +305,7 @@ printDepthTree:
 	str x1, [sp, #40]
 
 .L34:
+	bl .L35
 
 .L35:
 	ldr x1, [sp, #240]
@@ -300,12 +322,14 @@ printDepthTree:
 	str x1, [sp, #96]
 	ldr x1, [sp, #104]
 	str x1, [sp, #112]
-	ldr x1, [sp#, 112]
+	ldr x1, [sp, #112]
 	mov x0, x1
 	bl printDepthTree
-	str x0, [sp#, 120]
+	str x0, [sp, #120]
+	bl .L38
 
 .L37:
+	bl .L38
 
 .L38:
 	ldr x1, [sp, #240]
@@ -322,6 +346,7 @@ printDepthTree:
 	add x2, x2, :lo12:.FSTR1
 	mov x0, x2
 	bl printf
+	bl .L39
 
 .L39:
 	ldr x1, [sp, #240]
@@ -338,18 +363,23 @@ printDepthTree:
 	str x1, [sp, #200]
 	ldr x1, [sp, #208]
 	str x1, [sp, #216]
-	ldr x1, [sp#, 216]
+	ldr x1, [sp, #216]
 	mov x0, x1
 	bl printDepthTree
-	str x0, [sp#, 224]
+	str x0, [sp, #224]
+	bl .L42
 
 .L41:
+	bl .L42
 
 .L42:
+	bl .L44
 
 .L43:
+	bl .L44
 
 .L44:
+	bl .L45
 
 .L45:
 	mov x1, #0
@@ -375,6 +405,7 @@ deleteLeavesTree:
 	stp x29, x30, [sp]
 	mov fp, sp
 	str x0, [sp, #216]
+	bl .L47
 
 .L47:
 	ldr x1, [sp, #216]
@@ -385,6 +416,7 @@ deleteLeavesTree:
 	str x1, [sp, #32]
 
 .L48:
+	bl .L49
 
 .L49:
 	ldr x1, [sp, #216]
@@ -401,14 +433,17 @@ deleteLeavesTree:
 	str x1, [sp, #88]
 	ldr x1, [sp, #96]
 	str x1, [sp, #104]
-	ldr x1, [sp#, 104]
+	ldr x1, [sp, #104]
 	mov x0, x1
 	bl deleteLeavesTree
-	str x0, [sp#, 112]
+	str x0, [sp, #112]
+	bl .L52
 
 .L51:
+	bl .L52
 
 .L52:
+	bl .L53
 
 .L53:
 	ldr x1, [sp, #216]
@@ -425,12 +460,14 @@ deleteLeavesTree:
 	str x1, [sp, #160]
 	ldr x1, [sp, #168]
 	str x1, [sp, #176]
-	ldr x1, [sp#, 176]
+	ldr x1, [sp, #176]
 	mov x0, x1
 	bl deleteLeavesTree
-	str x0, [sp#, 184]
+	str x0, [sp, #184]
+	bl .L56
 
 .L55:
+	bl .L56
 
 .L56:
 	ldr x1, [sp, #216]
@@ -438,10 +475,13 @@ deleteLeavesTree:
 	ldr x1, [sp, #200]
 	mov x0, x1
 	bl free
+	bl .L58
 
 .L57:
+	bl .L58
 
 .L58:
+	bl .L59
 
 .L59:
 	mov x1, #0
@@ -480,6 +520,7 @@ main:
 	add x1, x1, :lo12:.READ
 	mov x0, x1
 	add x1, sp, #24
+	bl .L61
 
 .L61:
 	ldr x1, [sp, #24]
@@ -492,34 +533,36 @@ main:
 	add x1, x1, :lo12:root
 	ldr x1, [x1]
 	str x1, [sp, #72]
-	ldr x1, [sp#, 64]
-	ldr x2, [sp#, 72]
+	ldr x1, [sp, #64]
+	ldr x2, [sp, #72]
 	mov x0, x1
 	mov x1, x2
 	bl addNode
-	str x0, [sp#, 80]
+	str x0, [sp, #80]
 	adrp x1, .READ
 	add x1, x1, :lo12:.READ
 	mov x0, x1
 	add x1, sp, #24
+	bl .L61
 
 .L63:
 	adrp x1, root
 	add x1, x1, :lo12:root
 	ldr x1, [x1]
 	str x1, [sp, #88]
-	ldr x1, [sp#, 88]
+	ldr x1, [sp, #88]
 	mov x0, x1
 	bl printDepthTree
-	str x0, [sp#, 96]
+	str x0, [sp, #96]
 	adrp x1, root
 	add x1, x1, :lo12:root
 	ldr x1, [x1]
 	str x1, [sp, #104]
-	ldr x1, [sp#, 104]
+	ldr x1, [sp, #104]
 	mov x0, x1
 	bl deleteLeavesTree
-	str x0, [sp#, 112]
+	str x0, [sp, #112]
+	bl .L64
 
 .L64:
 	mov x1, #0

@@ -114,7 +114,6 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	// add, sub, mul, sdiv
 	// and, or, xor
 	// eq, neq, sgt, sge, slt, sle
-
 	return insts
 }
 
