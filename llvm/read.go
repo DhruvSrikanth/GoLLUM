@@ -128,6 +128,12 @@ func (r *Read) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 		}
 
 	}
+
+	// Call the scanf function
+	callInst := arm.NewBranch("scanf")
+	callInst.SetLabel(r.blockLabel)
+	insts = append(insts, callInst)
+
 	return insts
 }
 
