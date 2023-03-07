@@ -63,11 +63,18 @@ llvm_examples:
     done
 
 # Generate assmebly for all examples (using llc)
-assembly_examples:
+assembly_examples_llvm:
 	@make llvm_examples
 	@for i in {1..$(N_EXAMPLES)} ; do \
 		$(LLVM_COMPILER) IR/example$$i.ll -o assembly/example$$i.s ; \
 	done
+# Generate assembly for all examples (using arm translation)
+assembly_examples_arm:
+	@make llvm_examples
+	@for i in {1..$(N_EXAMPLES)} ; do \
+		go run golite/main.go -arm64 benchmarks/simple/example$$i.golite ; \
+	done
+
 
 # Generate object files for all examples (using clang)
 examples_executable:

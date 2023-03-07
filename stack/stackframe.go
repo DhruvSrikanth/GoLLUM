@@ -65,7 +65,7 @@ func (s *StackFrame) String() string {
 	for _, pair := range regs {
 		name := pair[0]
 		location := pair[1]
-		out += name + " -> " + "sp + " + location + "\n"
+		out += name + " -> " + location + "\n"
 	}
 	for _, pair := range rest {
 		name := pair[0]
@@ -97,8 +97,8 @@ func (s *StackFrame) GetLargestOffset() int {
 // Next available register
 func (s *StackFrame) GetNextRegister() int {
 	var largest int
-	for name, location := range s.table {
-		if strings.Contains(name, "x") {
+	for _, location := range s.table {
+		if strings.Contains(location, "x") {
 			offset, _ := strconv.Atoi(location[1:])
 			if offset > largest {
 				largest = offset

@@ -1,287 +1,689 @@
-	.section	__TEXT,__text,regular,pure_instructions
-	.build_version macos, 13, 0
-	.globl	_tailrecursive                  ; -- Begin function tailrecursive
-	.p2align	2
-_tailrecursive:                         ; @tailrecursive
-	.cfi_startproc
-; %bb.0:                                ; %L0
-	sub	sp, sp, #48
-	.cfi_def_cfa_offset 48
-	stp	x29, x30, [sp, #32]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	cmp	x0, #1
-	str	x0, [sp, #8]
-	b.lt	LBB0_2
-; %bb.1:                                ; %L4
-	mov	w0, #24
-	bl	_malloc
-Lloh0:
-	adrp	x9, _unusedGlobal@GOTPAGE
-	ldr	x8, [sp, #8]
-Lloh1:
-	ldr	x9, [x9, _unusedGlobal@GOTPAGEOFF]
-	sub	x8, x8, #1
-	str	x0, [sp, #16]
-Lloh2:
-	str	x0, [x9]
-	mov	x0, x8
-	bl	_tailrecursive
-LBB0_2:                                 ; %common.ret
-	ldp	x29, x30, [sp, #32]             ; 16-byte Folded Reload
-	str	xzr, [sp, #24]
-	mov	x0, xzr
-	add	sp, sp, #48
+	.arch armv8-a
+
+	.comm .nilsimple,8,8
+	.comm .nilfoo,8,8
+	.comm globalfoo,8,8
+	.comm unusedGlobal,8,8
+
+	.text
+
+	.type tailrecursive, %function
+	.global tailrecursive
+	.p2align 2
+tailrecursive:
+.L0:
+	sub sp, sp, #112
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	str x0, [sp, #112]
+	b .L1
+
+.L1:
+	ldr x1, [sp, #112]
+	str x1, [sp, #32]
+	ldr x1, [sp, #32]
+	mov x2, #0
+	cmp x1, x2
+	cset x3, le
+	str x3, [sp, #40]
+	ldr x1, [sp, #40]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L3
+
+.L2:
+	mov x1, #0
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #48]
+	ldr x1, [sp, #48]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #112
 	ret
-	.loh AdrpLdrGotStr	Lloh0, Lloh1, Lloh2
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_add                            ; -- Begin function add
-	.p2align	2
-_add:                                   ; @add
-	.cfi_startproc
-; %bb.0:                                ; %L6
-	sub	sp, sp, #32
-	.cfi_def_cfa_offset 32
-	mov	x8, x0
-	add	x0, x0, x1
-	stp	x1, x8, [sp, #8]
-	str	x0, [sp, #24]
-	add	sp, sp, #32
+
+.L3:
+	b .L4
+
+.L4:
+	mov x0, #24
+	bl malloc
+	str x0, [sp, #56]
+	ldr x1, [sp, #56]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
+	str x1, [sp, #24]
+	ldr x1, [sp, #24]
+	str x1, [sp, #72]
+	ldr x1, [sp, #72]
+	adrp x2, unusedGlobal
+	add x2, x2, :lo12:unusedGlobal
+	str x1, [x2]
+	ldr x1, [sp, #112]
+	str x1, [sp, #80]
+	ldr x1, [sp, #80]
+	mov x2, #1
+	sub x3, x1, x2
+	str x3, [sp, #88]
+	ldr x1, [sp, #88]
+	mov x0, x1
+	bl tailrecursive
+	str x0, [sp, #96]
+	b .L5
+
+.L5:
+	mov x1, #0
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #104]
+	ldr x1, [sp, #104]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #112
 	ret
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_domath                         ; -- Begin function domath
-	.p2align	2
-_domath:                                ; @domath
-	.cfi_startproc
-; %bb.0:                                ; %L7
-	sub	sp, sp, #80
-	.cfi_def_cfa_offset 80
-	stp	x20, x19, [sp, #48]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #64]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	.cfi_offset w19, -24
-	.cfi_offset w20, -32
-	str	x0, [sp, #8]
-	mov	w0, #24
-	bl	_malloc
-	mov	x19, x0
-	str	x0, [sp, #32]
-	mov	w0, #8
-	bl	_malloc
-	str	x0, [x19, #16]
-	mov	w0, #24
-	bl	_malloc
-	mov	x19, x0
-	str	x0, [sp, #24]
-	mov	w0, #8
-	bl	_malloc
-	ldp	x10, x9, [sp, #24]
-	mov	w11, #3
-	str	x0, [x19, #16]
-	ldr	x8, [sp, #8]
-	str	x8, [x9]
-	str	x11, [x10]
-	ldr	x8, [x9, #16]
-	ldr	x9, [x9]
-	str	x9, [x8]
-	ldr	x8, [x10, #16]
-	ldr	x9, [x10]
-	str	x9, [x8]
-LBB2_1:                                 ; %L8
-                                        ; =>This Inner Loop Header: Depth=1
-	ldr	x8, [sp, #8]
-	ldr	x0, [sp, #32]
-	cmp	x8, #1
-	b.lt	LBB2_3
-; %bb.2:                                ; %L9
-                                        ;   in Loop: Header=BB2_1 Depth=1
-	ldp	x8, x9, [sp, #24]
-	ldr	x10, [x0]
-	ldr	x11, [x8]
-	ldr	x12, [x9, #16]
-	ldr	x8, [x8, #16]
-	mul	x10, x10, x11
-	ldr	x1, [x9]
-	ldr	x12, [x12]
-	ldr	x0, [x8]
-	mul	x10, x10, x12
-	sdiv	x10, x10, x11
-	str	x10, [sp, #16]
-	bl	_add
-	ldp	x8, x9, [sp, #24]
-	ldr	x10, [sp, #8]
-	ldr	x8, [x8]
-	ldr	x9, [x9]
-	sub	x8, x8, x9
-	sub	x9, x10, #1
-	stp	x9, x8, [sp, #8]
-	b	LBB2_1
-LBB2_3:                                 ; %L10
-	bl	_free
-	ldr	x0, [sp, #24]
-	bl	_free
-	ldp	x29, x30, [sp, #64]             ; 16-byte Folded Reload
-	mov	x0, xzr
-	str	xzr, [sp, #40]
-	ldp	x20, x19, [sp, #48]             ; 16-byte Folded Reload
-	add	sp, sp, #80
+
+	.size tailrecursive, (.-tailrecursive)
+
+	.type add, %function
+	.global add
+	.p2align 2
+add:
+.L6:
+	sub sp, sp, #80
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	str x0, [sp, #56]
+	str x1, [sp, #56]
+	ldr x2, [sp, #56]
+	str x2, [sp, #24]
+	ldr x2, [sp, #56]
+	str x2, [sp, #32]
+	ldr x2, [sp, #24]
+	ldr x3, [sp, #32]
+	add x4, x2, x3
+	str x4, [sp, #40]
+	ldr x2, [sp, #40]
+	str x2, [sp, #16]
+	ldr x2, [sp, #16]
+	str x2, [sp, #48]
+	ldr x2, [sp, #48]
+	mov x0, x2
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #80
 	ret
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_objinstantiation               ; -- Begin function objinstantiation
-	.p2align	2
-_objinstantiation:                      ; @objinstantiation
-	.cfi_startproc
-; %bb.0:                                ; %L12
-	sub	sp, sp, #48
-	.cfi_def_cfa_offset 48
-	stp	x29, x30, [sp, #32]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	str	x0, [sp, #8]
-LBB3_1:                                 ; %L13
-                                        ; =>This Inner Loop Header: Depth=1
-	ldr	x8, [sp, #8]
-	cmp	x8, #1
-	b.lt	LBB3_3
-; %bb.2:                                ; %L14
-                                        ;   in Loop: Header=BB3_1 Depth=1
-	mov	w0, #24
-	bl	_malloc
-	str	x0, [sp, #16]
-	bl	_free
-	ldr	x8, [sp, #8]
-	sub	x8, x8, #1
-	str	x8, [sp, #8]
-	b	LBB3_1
-LBB3_3:                                 ; %L16
-	ldp	x29, x30, [sp, #32]             ; 16-byte Folded Reload
-	mov	x0, xzr
-	str	xzr, [sp, #24]
-	add	sp, sp, #48
+
+	.size add, (.-add)
+
+	.type domath, %function
+	.global domath
+	.p2align 2
+domath:
+.L7:
+	sub sp, sp, #640
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	str x0, [sp, #640]
+	mov x0, #24
+	bl malloc
+	str x0, [sp, #48]
+	ldr x1, [sp, #48]
+	str x1, [sp, #56]
+	ldr x1, [sp, #56]
+	str x1, [sp, #24]
+	ldr x1, [sp, #24]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
+	add x1, x1, #16
+	str x1, [sp, #72]
+	mov x0, #8
+	bl malloc
+	str x0, [sp, #80]
+	ldr x1, [sp, #80]
+	str x1, [sp, #88]
+	ldr x1, [sp, #88]
+	str x1, [sp, #72]
+	mov x0, #24
+	bl malloc
+	str x0, [sp, #96]
+	ldr x1, [sp, #96]
+	str x1, [sp, #104]
+	ldr x1, [sp, #104]
+	str x1, [sp, #32]
+	ldr x1, [sp, #32]
+	str x1, [sp, #112]
+	ldr x1, [sp, #112]
+	add x1, x1, #16
+	str x1, [sp, #120]
+	mov x0, #8
+	bl malloc
+	str x0, [sp, #128]
+	ldr x1, [sp, #128]
+	str x1, [sp, #136]
+	ldr x1, [sp, #136]
+	str x1, [sp, #120]
+	ldr x1, [sp, #24]
+	str x1, [sp, #144]
+	ldr x1, [sp, #144]
+	add x1, x1, #0
+	str x1, [sp, #152]
+	ldr x1, [sp, #640]
+	str x1, [sp, #160]
+	ldr x1, [sp, #160]
+	str x1, [sp, #152]
+	ldr x1, [sp, #32]
+	str x1, [sp, #168]
+	ldr x1, [sp, #168]
+	add x1, x1, #0
+	str x1, [sp, #176]
+	mov x1, #3
+	str x1, [sp, #176]
+	ldr x1, [sp, #24]
+	str x1, [sp, #184]
+	ldr x1, [sp, #184]
+	add x1, x1, #16
+	str x1, [sp, #192]
+	ldr x1, [sp, #192]
+	str x1, [sp, #200]
+	ldr x1, [sp, #200]
+	add x1, x1, #0
+	str x1, [sp, #208]
+	ldr x1, [sp, #24]
+	str x1, [sp, #216]
+	ldr x1, [sp, #216]
+	add x1, x1, #0
+	str x1, [sp, #224]
+	ldr x1, [sp, #224]
+	str x1, [sp, #232]
+	ldr x1, [sp, #232]
+	str x1, [sp, #208]
+	ldr x1, [sp, #32]
+	str x1, [sp, #240]
+	ldr x1, [sp, #240]
+	add x1, x1, #16
+	str x1, [sp, #248]
+	ldr x1, [sp, #248]
+	str x1, [sp, #256]
+	ldr x1, [sp, #256]
+	add x1, x1, #0
+	str x1, [sp, #264]
+	ldr x1, [sp, #32]
+	str x1, [sp, #272]
+	ldr x1, [sp, #272]
+	add x1, x1, #0
+	str x1, [sp, #280]
+	ldr x1, [sp, #280]
+	str x1, [sp, #288]
+	ldr x1, [sp, #288]
+	str x1, [sp, #264]
+	b .L8
+
+.L8:
+	ldr x1, [sp, #640]
+	str x1, [sp, #296]
+	ldr x1, [sp, #296]
+	mov x2, #0
+	cmp x1, x2
+	cset x3, gt
+	str x3, [sp, #304]
+	ldr x1, [sp, #304]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L10
+
+.L9:
+	ldr x1, [sp, #24]
+	str x1, [sp, #312]
+	ldr x1, [sp, #312]
+	add x1, x1, #0
+	str x1, [sp, #320]
+	ldr x1, [sp, #32]
+	str x1, [sp, #328]
+	ldr x1, [sp, #328]
+	add x1, x1, #0
+	str x1, [sp, #336]
+	ldr x1, [sp, #320]
+	str x1, [sp, #344]
+	ldr x1, [sp, #336]
+	str x1, [sp, #352]
+	ldr x1, [sp, #344]
+	ldr x2, [sp, #352]
+	mul x3, x1, x2
+	str x3, [sp, #360]
+	ldr x1, [sp, #360]
+	str x1, [sp, #40]
+	ldr x1, [sp, #24]
+	str x1, [sp, #368]
+	ldr x1, [sp, #368]
+	add x1, x1, #16
+	str x1, [sp, #376]
+	ldr x1, [sp, #376]
+	str x1, [sp, #384]
+	ldr x1, [sp, #384]
+	add x1, x1, #0
+	str x1, [sp, #392]
+	ldr x1, [sp, #40]
+	str x1, [sp, #400]
+	ldr x1, [sp, #392]
+	str x1, [sp, #408]
+	ldr x1, [sp, #400]
+	ldr x2, [sp, #408]
+	mul x3, x1, x2
+	str x3, [sp, #416]
+	ldr x1, [sp, #32]
+	str x1, [sp, #424]
+	ldr x1, [sp, #424]
+	add x1, x1, #0
+	str x1, [sp, #432]
+	ldr x1, [sp, #432]
+	str x1, [sp, #440]
+	ldr x1, [sp, #416]
+	ldr x2, [sp, #440]
+	sdiv x3, x1, x2
+	str x3, [sp, #448]
+	ldr x1, [sp, #448]
+	str x1, [sp, #40]
+	ldr x1, [sp, #32]
+	str x1, [sp, #456]
+	ldr x1, [sp, #456]
+	add x1, x1, #16
+	str x1, [sp, #464]
+	ldr x1, [sp, #464]
+	str x1, [sp, #472]
+	ldr x1, [sp, #472]
+	add x1, x1, #0
+	str x1, [sp, #480]
+	ldr x1, [sp, #480]
+	str x1, [sp, #488]
+	ldr x1, [sp, #24]
+	str x1, [sp, #496]
+	ldr x1, [sp, #496]
+	add x1, x1, #0
+	str x1, [sp, #504]
+	ldr x1, [sp, #504]
+	str x1, [sp, #512]
+	ldr x1, [sp, #488]
+	ldr x2, [sp, #512]
+	mov x0, x1
+	mov x1, x2
+	bl add
+	str x0, [sp, #520]
+	ldr x1, [sp, #520]
+	str x1, [sp, #40]
+	ldr x1, [sp, #32]
+	str x1, [sp, #528]
+	ldr x1, [sp, #528]
+	add x1, x1, #0
+	str x1, [sp, #536]
+	ldr x1, [sp, #24]
+	str x1, [sp, #544]
+	ldr x1, [sp, #544]
+	add x1, x1, #0
+	str x1, [sp, #552]
+	ldr x1, [sp, #536]
+	str x1, [sp, #560]
+	ldr x1, [sp, #552]
+	str x1, [sp, #568]
+	ldr x1, [sp, #560]
+	ldr x2, [sp, #568]
+	sub x3, x1, x2
+	str x3, [sp, #576]
+	ldr x1, [sp, #576]
+	str x1, [sp, #40]
+	ldr x1, [sp, #640]
+	str x1, [sp, #584]
+	ldr x1, [sp, #584]
+	mov x2, #1
+	sub x3, x1, x2
+	str x3, [sp, #592]
+	ldr x1, [sp, #592]
+	str x1, [sp, #640]
+	b .L8
+
+.L10:
+	ldr x1, [sp, #24]
+	str x1, [sp, #600]
+	ldr x1, [sp, #600]
+	str x1, [sp, #608]
+	ldr x1, [sp, #608]
+	mov x0, x1
+	bl free
+	ldr x1, [sp, #32]
+	str x1, [sp, #616]
+	ldr x1, [sp, #616]
+	str x1, [sp, #624]
+	ldr x1, [sp, #624]
+	mov x0, x1
+	bl free
+	b .L11
+
+.L11:
+	mov x1, #0
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #632]
+	ldr x1, [sp, #632]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #640
 	ret
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_ackermann                      ; -- Begin function ackermann
-	.p2align	2
-_ackermann:                             ; @ackermann
-	.cfi_startproc
-; %bb.0:                                ; %L17
-	sub	sp, sp, #64
-	.cfi_def_cfa_offset 64
-	stp	x20, x19, [sp, #32]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #48]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	.cfi_offset w19, -24
-	.cfi_offset w20, -32
-	stp	x1, x0, [sp, #8]
-	cbz	x0, LBB4_3
-; %bb.1:                                ; %L22
-	ldr	x8, [sp, #16]
-	sub	x19, x8, #1
-	cbz	x1, LBB4_4
-; %bb.2:                                ; %L24
-	ldp	x8, x0, [sp, #8]
-	sub	x1, x8, #1
-	bl	_ackermann
-	mov	x1, x0
-	mov	x0, x19
-	b	LBB4_5
-LBB4_3:                                 ; %L19
-	add	x0, x1, #1
-	b	LBB4_6
-LBB4_4:                                 ; %L23
-	mov	x0, x19
-	mov	w1, #1
-LBB4_5:                                 ; %common.ret
-	bl	_ackermann
-LBB4_6:                                 ; %common.ret
-	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
-	str	x0, [sp, #24]
-	ldp	x20, x19, [sp, #32]             ; 16-byte Folded Reload
-	add	sp, sp, #64
+
+	.size domath, (.-domath)
+
+	.type objinstantiation, %function
+	.global objinstantiation
+	.p2align 2
+objinstantiation:
+.L12:
+	sub sp, sp, #112
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	str x0, [sp, #104]
+	b .L13
+
+.L13:
+	ldr x1, [sp, #104]
+	str x1, [sp, #32]
+	ldr x1, [sp, #32]
+	mov x2, #0
+	cmp x1, x2
+	cset x3, gt
+	str x3, [sp, #40]
+	ldr x1, [sp, #40]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L15
+
+.L14:
+	mov x0, #24
+	bl malloc
+	str x0, [sp, #48]
+	ldr x1, [sp, #48]
+	str x1, [sp, #56]
+	ldr x1, [sp, #56]
+	str x1, [sp, #24]
+	ldr x1, [sp, #24]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
+	str x1, [sp, #72]
+	ldr x1, [sp, #72]
+	mov x0, x1
+	bl free
+	ldr x1, [sp, #104]
+	str x1, [sp, #80]
+	ldr x1, [sp, #80]
+	mov x2, #1
+	sub x3, x1, x2
+	str x3, [sp, #88]
+	ldr x1, [sp, #88]
+	str x1, [sp, #104]
+	b .L13
+
+.L15:
+	b .L16
+
+.L16:
+	mov x1, #0
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #96]
+	ldr x1, [sp, #96]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #112
 	ret
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_main                           ; -- Begin function main
-	.p2align	2
-_main:                                  ; @main
-	.cfi_startproc
-; %bb.0:                                ; %L27
-	sub	sp, sp, #128
-	.cfi_def_cfa_offset 128
-	stp	x20, x19, [sp, #96]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #112]            ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	.cfi_offset w19, -24
-	.cfi_offset w20, -32
-Lloh3:
-	adrp	x19, l_.read@PAGE
-Lloh4:
-	add	x19, x19, l_.read@PAGEOFF
-	add	x8, sp, #80
-	mov	x0, x19
-	str	x8, [sp]
-	bl	_scanf
-	add	x8, sp, #72
-	mov	x0, x19
-	str	x8, [sp]
-	bl	_scanf
-	add	x8, sp, #64
-	mov	x0, x19
-	str	x8, [sp]
-	bl	_scanf
-	add	x8, sp, #56
-	mov	x0, x19
-	str	x8, [sp]
-	bl	_scanf
-	add	x8, sp, #48
-	mov	x0, x19
-	str	x8, [sp]
-	bl	_scanf
-	ldr	x0, [sp, #80]
-	bl	_tailrecursive
-	ldr	x0, [sp, #72]
-	bl	_domath
-	ldr	x0, [sp, #64]
-	bl	_objinstantiation
-	ldp	x1, x0, [sp, #48]
-	bl	_ackermann
-	ldr	x11, [sp, #64]
-Lloh5:
-	adrp	x8, l_.fstr2@PAGE
-Lloh6:
-	add	x8, x8, l_.fstr2@PAGEOFF
-	str	x0, [sp, #40]
-	ldp	x10, x9, [sp, #72]
-	stp	x11, x0, [sp, #16]
-	mov	x0, x8
-	stp	x9, x10, [sp]
-	bl	_printf
-	ldp	x29, x30, [sp, #112]            ; 16-byte Folded Reload
-	mov	x0, xzr
-	str	xzr, [sp, #88]
-	ldp	x20, x19, [sp, #96]             ; 16-byte Folded Reload
-	add	sp, sp, #128
+
+	.size objinstantiation, (.-objinstantiation)
+
+	.type ackermann, %function
+	.global ackermann
+	.p2align 2
+ackermann:
+.L17:
+	sub sp, sp, #208
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	str x0, [sp, #184]
+	str x1, [sp, #192]
+	b .L18
+
+.L18:
+	ldr x2, [sp, #184]
+	str x2, [sp, #24]
+	ldr x2, [sp, #24]
+	mov x3, #0
+	cmp x2, x3
+	cset x4, eq
+	str x4, [sp, #32]
+	ldr x2, [sp, #32]
+	mov x3, #0
+	cmp x2, x3
+	b.eq .L20
+
+.L19:
+	ldr x2, [sp, #192]
+	str x2, [sp, #40]
+	ldr x2, [sp, #40]
+	mov x3, #1
+	add x4, x2, x3
+	str x4, [sp, #48]
+	ldr x2, [sp, #48]
+	str x2, [sp, #16]
+	ldr x2, [sp, #16]
+	str x2, [sp, #56]
+	ldr x2, [sp, #56]
+	mov x0, x2
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #208
 	ret
-	.loh AdrpAdd	Lloh5, Lloh6
-	.loh AdrpAdd	Lloh3, Lloh4
-	.cfi_endproc
-                                        ; -- End function
-	.comm	_.nilsimple,8,3                 ; @.nilsimple
-	.comm	_.nilfoo,8,3                    ; @.nilfoo
-	.comm	_globalfoo,8,3                  ; @globalfoo
-	.comm	_unusedGlobal,8,3               ; @unusedGlobal
-	.section	__TEXT,__cstring,cstring_literals
-l_.read:                                ; @.read
+
+.L20:
+	b .L21
+
+.L21:
+	b .L22
+
+.L22:
+	ldr x2, [sp, #192]
+	str x2, [sp, #64]
+	ldr x2, [sp, #64]
+	mov x3, #0
+	cmp x2, x3
+	cset x4, eq
+	str x4, [sp, #72]
+	ldr x2, [sp, #72]
+	mov x3, #0
+	cmp x2, x3
+	b.eq .L24
+
+.L23:
+	ldr x2, [sp, #184]
+	str x2, [sp, #80]
+	ldr x2, [sp, #80]
+	mov x3, #1
+	sub x4, x2, x3
+	str x4, [sp, #88]
+	ldr x2, [sp, #88]
+	mov x3, #1
+	mov x0, x2
+	mov x1, x3
+	bl ackermann
+	str x0, [sp, #96]
+	ldr x2, [sp, #96]
+	str x2, [sp, #16]
+	ldr x2, [sp, #16]
+	str x2, [sp, #104]
+	ldr x2, [sp, #104]
+	mov x0, x2
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #208
+	ret
+
+.L24:
+	ldr x2, [sp, #184]
+	str x2, [sp, #112]
+	ldr x2, [sp, #112]
+	mov x3, #1
+	sub x4, x2, x3
+	str x4, [sp, #120]
+	ldr x2, [sp, #184]
+	str x2, [sp, #128]
+	ldr x2, [sp, #192]
+	str x2, [sp, #136]
+	ldr x2, [sp, #136]
+	mov x3, #1
+	sub x4, x2, x3
+	str x4, [sp, #144]
+	ldr x2, [sp, #128]
+	ldr x3, [sp, #144]
+	mov x0, x2
+	mov x1, x3
+	bl ackermann
+	str x0, [sp, #152]
+	ldr x2, [sp, #120]
+	ldr x3, [sp, #152]
+	mov x0, x2
+	mov x1, x3
+	bl ackermann
+	str x0, [sp, #160]
+	ldr x2, [sp, #160]
+	str x2, [sp, #16]
+	ldr x2, [sp, #16]
+	str x2, [sp, #168]
+	ldr x2, [sp, #168]
+	mov x0, x2
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #208
+	ret
+
+.L25:
+	b .L26
+
+.L26:
+	ldr x2, [sp, #16]
+	str x2, [sp, #176]
+	ldr x2, [sp, #176]
+	mov x0, x2
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #208
+	ret
+
+	.size ackermann, (.-ackermann)
+
+	.type main, %function
+	.global main
+	.p2align 2
+main:
+.L27:
+	sub sp, sp, #176
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #24
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #32
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #40
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #48
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #56
+	ldr x1, [sp, #24]
+	str x1, [sp, #72]
+	ldr x1, [sp, #72]
+	mov x0, x1
+	bl tailrecursive
+	str x0, [sp, #80]
+	ldr x1, [sp, #32]
+	str x1, [sp, #88]
+	ldr x1, [sp, #88]
+	mov x0, x1
+	bl domath
+	str x0, [sp, #96]
+	ldr x1, [sp, #40]
+	str x1, [sp, #104]
+	ldr x1, [sp, #104]
+	mov x0, x1
+	bl objinstantiation
+	str x0, [sp, #112]
+	ldr x1, [sp, #48]
+	str x1, [sp, #120]
+	ldr x1, [sp, #56]
+	str x1, [sp, #128]
+	ldr x1, [sp, #120]
+	ldr x2, [sp, #128]
+	mov x0, x1
+	mov x1, x2
+	bl ackermann
+	str x0, [sp, #136]
+	ldr x1, [sp, #136]
+	str x1, [sp, #64]
+	ldr x1, [sp, #24]
+	str x1, [sp, #144]
+	ldr x1, [sp, #32]
+	str x1, [sp, #152]
+	ldr x1, [sp, #40]
+	str x1, [sp, #160]
+	ldr x1, [sp, #64]
+	str x1, [sp, #168]
+	ldr x1, [sp, #144]
+	ldr x2, [sp, #152]
+	ldr x3, [sp, #160]
+	ldr x4, [sp, #168]
+	mov x1, x1
+	mov x2, x2
+	mov x3, x3
+	mov x4, x4
+	adrp x5, .FSTR2
+	add x5, x5, :lo12:.FSTR2
+	mov x0, x5
+	bl printf
+	b .L28
+
+.L28:
+	mov x1, #0
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #176]
+	ldr x1, [sp, #176]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #176
+	ret
+
+	.size main, (.-main)
+
+
+.READ:
 	.asciz	"%ld"
+	.size	.READ, 4
 
-l_.fstr2:                               ; @.fstr2
+.FSTR2:
 	.asciz	"a=%ld\nb=%ld\nc=%ld\n,temp=%ld\n"
+	.size	.FSTR2, 33
 
-.subsections_via_symbols

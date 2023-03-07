@@ -1,5 +1,5 @@
 source_filename = "example1"
-target triple = "arm64-apple-darwin22.2.0"
+target triple = "x86_64-linux-gnu"
 
 %struct.nums = type {i64, i64}
 
@@ -135,10 +135,10 @@ L11:
 }
 
 
+declare i32 @scanf(i8*, ...)
 declare i8* @malloc(i32)
 declare void @free(i8*)
 declare i32 @printf(i8*, ...)
-declare i32 @scanf(i8*, ...)
 
 @.read = private unnamed_addr constant [4 x i8] c"%ld\00", align 1
 @.fstr2 = private unnamed_addr constant [12 x i8] c"c=%ld\0Ad=%ld\00", align 1

@@ -1,5 +1,5 @@
 source_filename = "example5"
-target triple = "arm64-apple-darwin22.2.0"
+target triple = "x86_64-linux-gnu"
 
 %struct.simple = type {i64}
 %struct.foo = type {i64, i64, %struct.simple*}

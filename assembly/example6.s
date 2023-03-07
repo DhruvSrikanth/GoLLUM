@@ -1,152 +1,340 @@
-	.section	__TEXT,__text,regular,pure_instructions
-	.build_version macos, 13, 0
-	.globl	_isqrt                          ; -- Begin function isqrt
-	.p2align	2
-_isqrt:                                 ; @isqrt
-	.cfi_startproc
-; %bb.0:                                ; %L0
-	mov	w8, #1
-	mov	w9, #3
-	str	x0, [sp, #-32]!
-	.cfi_def_cfa_offset 32
-LBB0_1:                                 ; %L1
-                                        ; =>This Inner Loop Header: Depth=1
-	stp	x9, x8, [sp, #8]
-	ldr	x9, [sp]
-	cmp	x8, x9
-	b.gt	LBB0_3
-; %bb.2:                                ; %L2
-                                        ;   in Loop: Header=BB0_1 Depth=1
-	ldp	x9, x8, [sp, #8]
-	add	x8, x8, x9
-	add	x9, x9, #2
-	b	LBB0_1
-LBB0_3:                                 ; %L3
-	ldr	x8, [sp, #8]
-	cmp	x8, #0
-	cinc	x8, x8, lt
-	asr	x8, x8, #1
-	sub	x0, x8, #1
-	str	x0, [sp, #24]
-	add	sp, sp, #32
-	ret
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_prime                          ; -- Begin function prime
-	.p2align	2
-_prime:                                 ; @prime
-	.cfi_startproc
-; %bb.0:                                ; %L4
-	sub	sp, sp, #64
-	.cfi_def_cfa_offset 64
-	stp	x29, x30, [sp, #48]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	cmp	x0, #2
-	str	x0, [sp, #8]
-	b.ge	LBB1_2
-LBB1_1:                                 ; %L6
-	mov	x0, xzr
-	str	xzr, [sp, #40]
-	b	LBB1_7
-LBB1_2:                                 ; %L7
-	ldr	x0, [sp, #8]
-	bl	_isqrt
-	mov	w8, #2
-	str	x0, [sp, #32]
-LBB1_3:                                 ; %L8
-                                        ; =>This Inner Loop Header: Depth=1
-	ldr	x9, [sp, #32]
-	str	x8, [sp, #24]
-	cmp	x8, x9
-	b.gt	LBB1_6
-; %bb.4:                                ; %L9
-                                        ;   in Loop: Header=BB1_3 Depth=1
-	ldr	x8, [sp, #8]
-	ldr	x9, [sp, #24]
-	sdiv	x10, x8, x9
-	msub	x8, x10, x9, x8
-	str	x8, [sp, #16]
-	cbz	x8, LBB1_1
-; %bb.5:                                ; %L13
-                                        ;   in Loop: Header=BB1_3 Depth=1
-	ldr	x8, [sp, #24]
-	add	x8, x8, #1
-	b	LBB1_3
-LBB1_6:                                 ; %L14
-	mov	w0, #1
-	str	x0, [sp, #40]
-LBB1_7:                                 ; %common.ret
-	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
-	add	sp, sp, #64
-	ret
-	.cfi_endproc
-                                        ; -- End function
-	.globl	_main                           ; -- Begin function main
-	.p2align	2
-_main:                                  ; @main
-	.cfi_startproc
-; %bb.0:                                ; %L17
-	sub	sp, sp, #64
-	.cfi_def_cfa_offset 64
-	stp	x20, x19, [sp, #32]             ; 16-byte Folded Spill
-	stp	x29, x30, [sp, #48]             ; 16-byte Folded Spill
-	.cfi_offset w30, -8
-	.cfi_offset w29, -16
-	.cfi_offset w19, -24
-	.cfi_offset w20, -32
-Lloh0:
-	adrp	x0, l_.read@PAGE
-Lloh1:
-	add	x0, x0, l_.read@PAGEOFF
-	add	x8, sp, #16
-	str	x8, [sp]
-	bl	_scanf
-Lloh2:
-	adrp	x19, l_.fstr2@PAGE
-Lloh3:
-	add	x19, x19, l_.fstr2@PAGEOFF
-	str	xzr, [sp, #8]
-	b	LBB2_2
-LBB2_1:                                 ; %L23
-                                        ;   in Loop: Header=BB2_2 Depth=1
-	ldr	x8, [sp, #8]
-	add	x8, x8, #1
-	str	x8, [sp, #8]
-LBB2_2:                                 ; %L18
-                                        ; =>This Inner Loop Header: Depth=1
-	ldp	x8, x9, [sp, #8]
-	cmp	x8, x9
-	b.gt	LBB2_5
-; %bb.3:                                ; %L20
-                                        ;   in Loop: Header=BB2_2 Depth=1
-	ldr	x0, [sp, #8]
-	bl	_prime
-	cmp	x0, #1
-	b.ne	LBB2_1
-; %bb.4:                                ; %L21
-                                        ;   in Loop: Header=BB2_2 Depth=1
-	ldr	x8, [sp, #8]
-	mov	x0, x19
-	str	x8, [sp]
-	bl	_printf
-	b	LBB2_1
-LBB2_5:                                 ; %L25
-	ldp	x29, x30, [sp, #48]             ; 16-byte Folded Reload
-	mov	x0, xzr
-	str	xzr, [sp, #24]
-	ldp	x20, x19, [sp, #32]             ; 16-byte Folded Reload
-	add	sp, sp, #64
-	ret
-	.loh AdrpAdd	Lloh2, Lloh3
-	.loh AdrpAdd	Lloh0, Lloh1
-	.cfi_endproc
-                                        ; -- End function
-	.section	__TEXT,__cstring,cstring_literals
-l_.read:                                ; @.read
-	.asciz	"%ld"
+	.arch armv8-a
 
-l_.fstr2:                               ; @.fstr2
-	.asciz	"%ld"
 
-.subsections_via_symbols
+	.text
+
+	.type isqrt, %function
+	.global isqrt
+	.p2align 2
+isqrt:
+.L0:
+	sub sp, sp, #144
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	str x0, [sp, #136]
+	mov x1, #1
+	str x1, [sp, #24]
+	mov x1, #3
+	str x1, [sp, #32]
+	b .L1
+
+.L1:
+	ldr x1, [sp, #24]
+	str x1, [sp, #40]
+	ldr x1, [sp, #136]
+	str x1, [sp, #48]
+	ldr x1, [sp, #40]
+	ldr x2, [sp, #48]
+	cmp x1, x2
+	cset x3, le
+	str x3, [sp, #56]
+	ldr x1, [sp, #56]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L3
+
+.L2:
+	ldr x1, [sp, #24]
+	str x1, [sp, #64]
+	ldr x1, [sp, #32]
+	str x1, [sp, #72]
+	ldr x1, [sp, #64]
+	ldr x2, [sp, #72]
+	add x3, x1, x2
+	str x3, [sp, #80]
+	ldr x1, [sp, #80]
+	str x1, [sp, #24]
+	ldr x1, [sp, #32]
+	str x1, [sp, #88]
+	ldr x1, [sp, #88]
+	mov x2, #2
+	add x3, x1, x2
+	str x3, [sp, #96]
+	ldr x1, [sp, #96]
+	str x1, [sp, #32]
+	b .L1
+
+.L3:
+	ldr x1, [sp, #32]
+	str x1, [sp, #104]
+	ldr x1, [sp, #104]
+	mov x2, #2
+	sdiv x3, x1, x2
+	str x3, [sp, #112]
+	ldr x1, [sp, #112]
+	mov x2, #1
+	sub x3, x1, x2
+	str x3, [sp, #120]
+	ldr x1, [sp, #120]
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #128]
+	ldr x1, [sp, #128]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #144
+	ret
+
+	.size isqrt, (.-isqrt)
+
+	.type prime, %function
+	.global prime
+	.p2align 2
+prime:
+.L4:
+	sub sp, sp, #224
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	str x0, [sp, #216]
+	b .L5
+
+.L5:
+	ldr x1, [sp, #216]
+	str x1, [sp, #40]
+	ldr x1, [sp, #40]
+	mov x2, #2
+	cmp x1, x2
+	cset x3, lt
+	str x3, [sp, #48]
+	ldr x1, [sp, #48]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L7
+
+.L6:
+	mov x1, #0
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #56]
+	ldr x1, [sp, #56]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #224
+	ret
+
+.L7:
+	ldr x1, [sp, #216]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
+	mov x0, x1
+	bl isqrt
+	str x0, [sp, #72]
+	ldr x1, [sp, #72]
+	str x1, [sp, #24]
+	mov x1, #2
+	str x1, [sp, #24]
+	b .L8
+
+.L8:
+	ldr x1, [sp, #24]
+	str x1, [sp, #80]
+	ldr x1, [sp, #24]
+	str x1, [sp, #88]
+	ldr x1, [sp, #80]
+	ldr x2, [sp, #88]
+	cmp x1, x2
+	cset x3, le
+	str x3, [sp, #96]
+	ldr x1, [sp, #96]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L14
+
+.L9:
+	ldr x1, [sp, #216]
+	str x1, [sp, #104]
+	ldr x1, [sp, #24]
+	str x1, [sp, #112]
+	ldr x1, [sp, #104]
+	ldr x2, [sp, #112]
+	sdiv x3, x1, x2
+	str x3, [sp, #120]
+	ldr x1, [sp, #24]
+	str x1, [sp, #128]
+	ldr x1, [sp, #120]
+	ldr x2, [sp, #128]
+	mul x3, x1, x2
+	str x3, [sp, #136]
+	ldr x1, [sp, #216]
+	str x1, [sp, #144]
+	ldr x1, [sp, #144]
+	ldr x2, [sp, #136]
+	sub x3, x1, x2
+	str x3, [sp, #152]
+	ldr x1, [sp, #152]
+	str x1, [sp, #32]
+	b .L10
+
+.L10:
+	ldr x1, [sp, #32]
+	str x1, [sp, #160]
+	ldr x1, [sp, #160]
+	mov x2, #0
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #168]
+	ldr x1, [sp, #168]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L12
+
+.L11:
+	mov x1, #0
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #176]
+	ldr x1, [sp, #176]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #224
+	ret
+
+.L12:
+	b .L13
+
+.L13:
+	ldr x1, [sp, #24]
+	str x1, [sp, #184]
+	ldr x1, [sp, #184]
+	mov x2, #1
+	add x3, x1, x2
+	str x3, [sp, #192]
+	ldr x1, [sp, #192]
+	str x1, [sp, #24]
+	b .L8
+
+.L14:
+	mov x1, #1
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #200]
+	ldr x1, [sp, #200]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #224
+	ret
+
+.L15:
+	b .L16
+
+.L16:
+	ldr x1, [sp, #16]
+	str x1, [sp, #208]
+	ldr x1, [sp, #208]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #224
+	ret
+
+	.size prime, (.-prime)
+
+	.type main, %function
+	.global main
+	.p2align 2
+main:
+.L17:
+	sub sp, sp, #112
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #24
+	mov x1, #0
+	str x1, [sp, #32]
+	b .L18
+
+.L18:
+	ldr x1, [sp, #32]
+	str x1, [sp, #40]
+	ldr x1, [sp, #24]
+	str x1, [sp, #48]
+	ldr x1, [sp, #40]
+	ldr x2, [sp, #48]
+	cmp x1, x2
+	cset x3, le
+	str x3, [sp, #56]
+	ldr x1, [sp, #56]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L24
+
+.L19:
+	b .L20
+
+.L20:
+	ldr x1, [sp, #32]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
+	mov x0, x1
+	bl prime
+	str x0, [sp, #72]
+	ldr x1, [sp, #72]
+	mov x2, #1
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #80]
+	ldr x1, [sp, #80]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L22
+
+.L21:
+	ldr x1, [sp, #32]
+	str x1, [sp, #88]
+	ldr x1, [sp, #88]
+	mov x1, x1
+	adrp x2, .FSTR2
+	add x2, x2, :lo12:.FSTR2
+	mov x0, x2
+	bl printf
+	b .L23
+
+.L22:
+	b .L23
+
+.L23:
+	ldr x1, [sp, #32]
+	str x1, [sp, #96]
+	ldr x1, [sp, #96]
+	mov x2, #1
+	add x3, x1, x2
+	str x3, [sp, #104]
+	ldr x1, [sp, #104]
+	str x1, [sp, #32]
+	b .L18
+
+.L24:
+	b .L25
+
+.L25:
+	mov x1, #0
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #112]
+	ldr x1, [sp, #112]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #112
+	ret
+
+	.size main, (.-main)
+
+
+.READ:
+	.asciz	"%ld"
+	.size	.READ, 4
+
+.FSTR2:
+	.asciz	"%ld"
+	.size	.FSTR2, 4
+
