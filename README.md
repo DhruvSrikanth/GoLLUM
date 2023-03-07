@@ -179,5 +179,4 @@ func main() {
 ## Remaining Tasks
 
 1. Update code based on feedback on milestone 2.
-2. Get LLVM IR to ARM64 assembly completed and working.
 
