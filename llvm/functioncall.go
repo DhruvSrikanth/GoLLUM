@@ -191,5 +191,5 @@ func (f *FunctionCall) ToARM(fnName string, stack *stack.Stack) []arm.Instructio
 // Build the stack table for the instruction.
 func (f *FunctionCall) BuildStackTable(funcName string, stack *stack.Stack) {
 	destinationReg := "r" + strconv.Itoa(f.targetRegisters[len(f.targetRegisters)-1])
-	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8))
+	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8), "value")
 }

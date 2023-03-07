@@ -10,17 +10,17 @@ type StackFrame struct {
 	// The name of the stack table (corresponds to function name)
 	name string
 	// The stack table
-	table map[string]string
+	table map[string]*StackEntry
 }
 
 // Create a new stack table
 func NewStackFrame(name string) *StackFrame {
-	return &StackFrame{name, make(map[string]string)}
+	return &StackFrame{name, make(map[string]*StackEntry)}
 }
 
 // Add a new entry to the stack table
-func (s *StackFrame) AddEntry(name string, location string) {
-	s.table[name] = location
+func (s *StackFrame) AddEntry(name string, location string, ty string) {
+	s.table[name] = NewStackEntry(location, ty)
 }
 
 // Size of the stack frame
@@ -34,7 +34,8 @@ func (s *StackFrame) String() string {
 	out += "Stack Frame: " + s.name + "\n"
 	regs := make([][]string, 0)
 	rest := make([][]string, 0)
-	for name, location := range s.table {
+	for name, entry := range s.table {
+		location := entry.GetLocation()
 		if strings.Contains(location, "x") {
 			regs = append(regs, []string{name, location})
 		} else {
@@ -77,14 +78,20 @@ func (s *StackFrame) String() string {
 
 // Get the location of a variable in the stack table
 func (s *StackFrame) GetLocation(name string) string {
-	return s.table[name]
+	return s.table[name].GetLocation()
+}
+
+// Get the type of a variable in the stack table
+func (s *StackFrame) GetType(name string) string {
+	return s.table[name].GetType()
 }
 
 // Get the largest offset in the stack table
 func (s *StackFrame) GetLargestOffset() int {
 	var largest int
-	for name, location := range s.table {
-		if !strings.Contains(name, "x") {
+	for _, entry := range s.table {
+		location := entry.GetLocation()
+		if !strings.Contains(location, "x") {
 			offset, _ := strconv.Atoi(location)
 			if offset > largest {
 				largest = offset
@@ -97,7 +104,8 @@ func (s *StackFrame) GetLargestOffset() int {
 // Next available register
 func (s *StackFrame) GetNextRegister() int {
 	var largest int
-	for _, location := range s.table {
+	for _, entry := range s.table {
+		location := entry.GetLocation()
 		if strings.Contains(location, "x") {
 			offset, _ := strconv.Atoi(location[1:])
 			if offset > largest {

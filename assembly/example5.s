@@ -1,594 +1,246 @@
 	.arch armv8-a
 
-	.comm .nilsimple,8,8
-	.comm .nilfoo,8,8
-	.comm globalfoo,8,8
-	.comm unusedGlobal,8,8
 
 	.text
 
-	.type tailrecursive, %function
-	.global tailrecursive
+	.type isqrt, %function
+	.global isqrt
 	.p2align 2
-tailrecursive:
+isqrt:
 .L0:
-	sub sp, sp, #112
+	sub sp, sp, #144
 	sub sp, sp, #16
 	stp x29, x30, [sp]
 	mov fp, sp
-	str x0, [sp, #112]
+	str x0, [sp, #136]
+	mov x1, #1
+	str x1, [sp, #24]
+	mov x1, #3
+	str x1, [sp, #32]
 	b .L1
 
 .L1:
-	ldr x1, [sp, #112]
-	str x1, [sp, #32]
-	ldr x1, [sp, #32]
-	mov x2, #0
+	ldr x1, [sp, #24]
+	str x1, [sp, #40]
+	ldr x1, [sp, #136]
+	str x1, [sp, #48]
+	ldr x1, [sp, #40]
+	ldr x2, [sp, #48]
 	cmp x1, x2
 	cset x3, le
-	str x3, [sp, #40]
-	ldr x1, [sp, #40]
+	str x3, [sp, #56]
+	ldr x1, [sp, #56]
 	mov x2, #0
 	cmp x1, x2
 	b.eq .L3
 
 .L2:
-	mov x1, #0
+	ldr x1, [sp, #24]
+	str x1, [sp, #64]
+	ldr x1, [sp, #32]
+	str x1, [sp, #72]
+	ldr x1, [sp, #64]
+	ldr x2, [sp, #72]
+	add x3, x1, x2
+	str x3, [sp, #80]
+	ldr x1, [sp, #80]
+	str x1, [sp, #24]
+	ldr x1, [sp, #32]
+	str x1, [sp, #88]
+	ldr x1, [sp, #88]
+	mov x2, #2
+	add x3, x1, x2
+	str x3, [sp, #96]
+	ldr x1, [sp, #96]
+	str x1, [sp, #32]
+	b .L1
+
+.L3:
+	ldr x1, [sp, #32]
+	str x1, [sp, #104]
+	ldr x1, [sp, #104]
+	mov x2, #2
+	sdiv x3, x1, x2
+	str x3, [sp, #112]
+	ldr x1, [sp, #112]
+	mov x2, #1
+	sub x3, x1, x2
+	str x3, [sp, #120]
+	ldr x1, [sp, #120]
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #48]
-	ldr x1, [sp, #48]
+	str x1, [sp, #128]
+	ldr x1, [sp, #128]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
-	add sp, sp, #112
+	add sp, sp, #144
 	ret
 
-.L3:
-	b .L4
+	.size isqrt, (.-isqrt)
 
+	.type prime, %function
+	.global prime
+	.p2align 2
+prime:
 .L4:
-	mov x0, #24
-	bl malloc
-	str x0, [sp, #56]
-	ldr x1, [sp, #56]
-	str x1, [sp, #64]
-	ldr x1, [sp, #64]
-	str x1, [sp, #24]
-	ldr x1, [sp, #24]
-	str x1, [sp, #72]
-	ldr x1, [sp, #72]
-	adrp x2, unusedGlobal
-	add x2, x2, :lo12:unusedGlobal
-	str x1, [x2]
-	ldr x1, [sp, #112]
-	str x1, [sp, #80]
-	ldr x1, [sp, #80]
-	mov x2, #1
-	sub x3, x1, x2
-	str x3, [sp, #88]
-	ldr x1, [sp, #88]
-	mov x0, x1
-	bl tailrecursive
-	str x0, [sp, #96]
+	sub sp, sp, #224
+	sub sp, sp, #16
+	stp x29, x30, [sp]
+	mov fp, sp
+	str x0, [sp, #224]
 	b .L5
 
 .L5:
+	ldr x1, [sp, #224]
+	str x1, [sp, #48]
+	ldr x1, [sp, #48]
+	mov x2, #2
+	cmp x1, x2
+	cset x3, lt
+	str x3, [sp, #56]
+	ldr x1, [sp, #56]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L7
+
+.L6:
 	mov x1, #0
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #104]
-	ldr x1, [sp, #104]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
-	add sp, sp, #112
+	add sp, sp, #224
 	ret
 
-	.size tailrecursive, (.-tailrecursive)
-
-	.type add, %function
-	.global add
-	.p2align 2
-add:
-.L6:
-	sub sp, sp, #80
-	sub sp, sp, #16
-	stp x29, x30, [sp]
-	mov fp, sp
-	str x0, [sp, #56]
-	str x1, [sp, #56]
-	ldr x2, [sp, #56]
-	str x2, [sp, #24]
-	ldr x2, [sp, #56]
-	str x2, [sp, #32]
-	ldr x2, [sp, #24]
-	ldr x3, [sp, #32]
-	add x4, x2, x3
-	str x4, [sp, #40]
-	ldr x2, [sp, #40]
-	str x2, [sp, #16]
-	ldr x2, [sp, #16]
-	str x2, [sp, #48]
-	ldr x2, [sp, #48]
-	mov x0, x2
-	ldp x29, x30, [sp]
-	add sp, sp, #16
-	add sp, sp, #80
-	ret
-
-	.size add, (.-add)
-
-	.type domath, %function
-	.global domath
-	.p2align 2
-domath:
 .L7:
-	sub sp, sp, #640
-	sub sp, sp, #16
-	stp x29, x30, [sp]
-	mov fp, sp
-	str x0, [sp, #640]
-	mov x0, #24
-	bl malloc
-	str x0, [sp, #48]
-	ldr x1, [sp, #48]
-	str x1, [sp, #56]
-	ldr x1, [sp, #56]
-	str x1, [sp, #24]
-	ldr x1, [sp, #24]
-	str x1, [sp, #64]
-	ldr x1, [sp, #64]
-	add x1, x1, #16
+	ldr x1, [sp, #224]
 	str x1, [sp, #72]
-	mov x0, #8
-	bl malloc
+	ldr x1, [sp, #72]
+	mov x0, x1
+	bl isqrt
 	str x0, [sp, #80]
 	ldr x1, [sp, #80]
-	str x1, [sp, #88]
-	ldr x1, [sp, #88]
-	str x1, [sp, #72]
-	mov x0, #24
-	bl malloc
-	str x0, [sp, #96]
-	ldr x1, [sp, #96]
-	str x1, [sp, #104]
-	ldr x1, [sp, #104]
+	str x1, [sp, #24]
+	mov x1, #2
 	str x1, [sp, #32]
-	ldr x1, [sp, #32]
-	str x1, [sp, #112]
-	ldr x1, [sp, #112]
-	add x1, x1, #16
-	str x1, [sp, #120]
-	mov x0, #8
-	bl malloc
-	str x0, [sp, #128]
-	ldr x1, [sp, #128]
-	str x1, [sp, #136]
-	ldr x1, [sp, #136]
-	str x1, [sp, #120]
-	ldr x1, [sp, #24]
-	str x1, [sp, #144]
-	ldr x1, [sp, #144]
-	add x1, x1, #0
-	str x1, [sp, #152]
-	ldr x1, [sp, #640]
-	str x1, [sp, #160]
-	ldr x1, [sp, #160]
-	str x1, [sp, #152]
-	ldr x1, [sp, #32]
-	str x1, [sp, #168]
-	ldr x1, [sp, #168]
-	add x1, x1, #0
-	str x1, [sp, #176]
-	mov x1, #3
-	str x1, [sp, #176]
-	ldr x1, [sp, #24]
-	str x1, [sp, #184]
-	ldr x1, [sp, #184]
-	add x1, x1, #16
-	str x1, [sp, #192]
-	ldr x1, [sp, #192]
-	str x1, [sp, #200]
-	ldr x1, [sp, #200]
-	add x1, x1, #0
-	str x1, [sp, #208]
-	ldr x1, [sp, #24]
-	str x1, [sp, #216]
-	ldr x1, [sp, #216]
-	add x1, x1, #0
-	str x1, [sp, #224]
-	ldr x1, [sp, #224]
-	str x1, [sp, #232]
-	ldr x1, [sp, #232]
-	str x1, [sp, #208]
-	ldr x1, [sp, #32]
-	str x1, [sp, #240]
-	ldr x1, [sp, #240]
-	add x1, x1, #16
-	str x1, [sp, #248]
-	ldr x1, [sp, #248]
-	str x1, [sp, #256]
-	ldr x1, [sp, #256]
-	add x1, x1, #0
-	str x1, [sp, #264]
-	ldr x1, [sp, #32]
-	str x1, [sp, #272]
-	ldr x1, [sp, #272]
-	add x1, x1, #0
-	str x1, [sp, #280]
-	ldr x1, [sp, #280]
-	str x1, [sp, #288]
-	ldr x1, [sp, #288]
-	str x1, [sp, #264]
 	b .L8
 
 .L8:
-	ldr x1, [sp, #640]
-	str x1, [sp, #296]
-	ldr x1, [sp, #296]
+	ldr x1, [sp, #32]
+	str x1, [sp, #88]
+	ldr x1, [sp, #24]
+	str x1, [sp, #96]
+	ldr x1, [sp, #88]
+	ldr x2, [sp, #96]
+	cmp x1, x2
+	cset x3, le
+	str x3, [sp, #104]
+	ldr x1, [sp, #104]
 	mov x2, #0
 	cmp x1, x2
-	cset x3, gt
-	str x3, [sp, #304]
-	ldr x1, [sp, #304]
-	mov x2, #0
-	cmp x1, x2
-	b.eq .L10
+	b.eq .L14
 
 .L9:
-	ldr x1, [sp, #24]
-	str x1, [sp, #312]
-	ldr x1, [sp, #312]
-	add x1, x1, #0
-	str x1, [sp, #320]
+	ldr x1, [sp, #224]
+	str x1, [sp, #112]
 	ldr x1, [sp, #32]
-	str x1, [sp, #328]
-	ldr x1, [sp, #328]
-	add x1, x1, #0
-	str x1, [sp, #336]
-	ldr x1, [sp, #320]
-	str x1, [sp, #344]
-	ldr x1, [sp, #336]
-	str x1, [sp, #352]
-	ldr x1, [sp, #344]
-	ldr x2, [sp, #352]
-	mul x3, x1, x2
-	str x3, [sp, #360]
-	ldr x1, [sp, #360]
-	str x1, [sp, #40]
-	ldr x1, [sp, #24]
-	str x1, [sp, #368]
-	ldr x1, [sp, #368]
-	add x1, x1, #16
-	str x1, [sp, #376]
-	ldr x1, [sp, #376]
-	str x1, [sp, #384]
-	ldr x1, [sp, #384]
-	add x1, x1, #0
-	str x1, [sp, #392]
-	ldr x1, [sp, #40]
-	str x1, [sp, #400]
-	ldr x1, [sp, #392]
-	str x1, [sp, #408]
-	ldr x1, [sp, #400]
-	ldr x2, [sp, #408]
-	mul x3, x1, x2
-	str x3, [sp, #416]
-	ldr x1, [sp, #32]
-	str x1, [sp, #424]
-	ldr x1, [sp, #424]
-	add x1, x1, #0
-	str x1, [sp, #432]
-	ldr x1, [sp, #432]
-	str x1, [sp, #440]
-	ldr x1, [sp, #416]
-	ldr x2, [sp, #440]
+	str x1, [sp, #120]
+	ldr x1, [sp, #112]
+	ldr x2, [sp, #120]
 	sdiv x3, x1, x2
-	str x3, [sp, #448]
-	ldr x1, [sp, #448]
-	str x1, [sp, #40]
+	str x3, [sp, #128]
 	ldr x1, [sp, #32]
-	str x1, [sp, #456]
-	ldr x1, [sp, #456]
-	add x1, x1, #16
-	str x1, [sp, #464]
-	ldr x1, [sp, #464]
-	str x1, [sp, #472]
-	ldr x1, [sp, #472]
-	add x1, x1, #0
-	str x1, [sp, #480]
-	ldr x1, [sp, #480]
-	str x1, [sp, #488]
-	ldr x1, [sp, #24]
-	str x1, [sp, #496]
-	ldr x1, [sp, #496]
-	add x1, x1, #0
-	str x1, [sp, #504]
-	ldr x1, [sp, #504]
-	str x1, [sp, #512]
-	ldr x1, [sp, #488]
-	ldr x2, [sp, #512]
-	mov x0, x1
-	mov x1, x2
-	bl add
-	str x0, [sp, #520]
-	ldr x1, [sp, #520]
-	str x1, [sp, #40]
-	ldr x1, [sp, #32]
-	str x1, [sp, #528]
-	ldr x1, [sp, #528]
-	add x1, x1, #0
-	str x1, [sp, #536]
-	ldr x1, [sp, #24]
-	str x1, [sp, #544]
-	ldr x1, [sp, #544]
-	add x1, x1, #0
-	str x1, [sp, #552]
-	ldr x1, [sp, #536]
-	str x1, [sp, #560]
-	ldr x1, [sp, #552]
-	str x1, [sp, #568]
-	ldr x1, [sp, #560]
-	ldr x2, [sp, #568]
+	str x1, [sp, #136]
+	ldr x1, [sp, #128]
+	ldr x2, [sp, #136]
+	mul x3, x1, x2
+	str x3, [sp, #144]
+	ldr x1, [sp, #224]
+	str x1, [sp, #152]
+	ldr x1, [sp, #152]
+	ldr x2, [sp, #144]
 	sub x3, x1, x2
-	str x3, [sp, #576]
-	ldr x1, [sp, #576]
+	str x3, [sp, #160]
+	ldr x1, [sp, #160]
 	str x1, [sp, #40]
-	ldr x1, [sp, #640]
-	str x1, [sp, #584]
-	ldr x1, [sp, #584]
-	mov x2, #1
-	sub x3, x1, x2
-	str x3, [sp, #592]
-	ldr x1, [sp, #592]
-	str x1, [sp, #640]
-	b .L8
+	b .L10
 
 .L10:
-	ldr x1, [sp, #24]
-	str x1, [sp, #600]
-	ldr x1, [sp, #600]
-	str x1, [sp, #608]
-	ldr x1, [sp, #608]
-	mov x0, x1
-	bl free
-	ldr x1, [sp, #32]
-	str x1, [sp, #616]
-	ldr x1, [sp, #616]
-	str x1, [sp, #624]
-	ldr x1, [sp, #624]
-	mov x0, x1
-	bl free
-	b .L11
+	ldr x1, [sp, #40]
+	str x1, [sp, #168]
+	ldr x1, [sp, #168]
+	mov x2, #0
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #176]
+	ldr x1, [sp, #176]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L12
 
 .L11:
 	mov x1, #0
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #632]
-	ldr x1, [sp, #632]
+	str x1, [sp, #184]
+	ldr x1, [sp, #184]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
-	add sp, sp, #640
+	add sp, sp, #224
 	ret
 
-	.size domath, (.-domath)
-
-	.type objinstantiation, %function
-	.global objinstantiation
-	.p2align 2
-objinstantiation:
 .L12:
-	sub sp, sp, #112
-	sub sp, sp, #16
-	stp x29, x30, [sp]
-	mov fp, sp
-	str x0, [sp, #104]
 	b .L13
 
 .L13:
-	ldr x1, [sp, #104]
-	str x1, [sp, #32]
 	ldr x1, [sp, #32]
-	mov x2, #0
-	cmp x1, x2
-	cset x3, gt
-	str x3, [sp, #40]
-	ldr x1, [sp, #40]
-	mov x2, #0
-	cmp x1, x2
-	b.eq .L15
+	str x1, [sp, #192]
+	ldr x1, [sp, #192]
+	mov x2, #1
+	add x3, x1, x2
+	str x3, [sp, #200]
+	ldr x1, [sp, #200]
+	str x1, [sp, #32]
+	b .L8
 
 .L14:
-	mov x0, #24
-	bl malloc
-	str x0, [sp, #48]
-	ldr x1, [sp, #48]
-	str x1, [sp, #56]
-	ldr x1, [sp, #56]
-	str x1, [sp, #24]
-	ldr x1, [sp, #24]
-	str x1, [sp, #64]
-	ldr x1, [sp, #64]
-	str x1, [sp, #72]
-	ldr x1, [sp, #72]
+	mov x1, #1
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #208]
+	ldr x1, [sp, #208]
 	mov x0, x1
-	bl free
-	ldr x1, [sp, #104]
-	str x1, [sp, #80]
-	ldr x1, [sp, #80]
-	mov x2, #1
-	sub x3, x1, x2
-	str x3, [sp, #88]
-	ldr x1, [sp, #88]
-	str x1, [sp, #104]
-	b .L13
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #224
+	ret
 
 .L15:
 	b .L16
 
 .L16:
-	mov x1, #0
-	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #96]
-	ldr x1, [sp, #96]
+	str x1, [sp, #216]
+	ldr x1, [sp, #216]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
-	add sp, sp, #112
+	add sp, sp, #224
 	ret
 
-	.size objinstantiation, (.-objinstantiation)
-
-	.type ackermann, %function
-	.global ackermann
-	.p2align 2
-ackermann:
-.L17:
-	sub sp, sp, #208
-	sub sp, sp, #16
-	stp x29, x30, [sp]
-	mov fp, sp
-	str x0, [sp, #184]
-	str x1, [sp, #192]
-	b .L18
-
-.L18:
-	ldr x2, [sp, #184]
-	str x2, [sp, #24]
-	ldr x2, [sp, #24]
-	mov x3, #0
-	cmp x2, x3
-	cset x4, eq
-	str x4, [sp, #32]
-	ldr x2, [sp, #32]
-	mov x3, #0
-	cmp x2, x3
-	b.eq .L20
-
-.L19:
-	ldr x2, [sp, #192]
-	str x2, [sp, #40]
-	ldr x2, [sp, #40]
-	mov x3, #1
-	add x4, x2, x3
-	str x4, [sp, #48]
-	ldr x2, [sp, #48]
-	str x2, [sp, #16]
-	ldr x2, [sp, #16]
-	str x2, [sp, #56]
-	ldr x2, [sp, #56]
-	mov x0, x2
-	ldp x29, x30, [sp]
-	add sp, sp, #16
-	add sp, sp, #208
-	ret
-
-.L20:
-	b .L21
-
-.L21:
-	b .L22
-
-.L22:
-	ldr x2, [sp, #192]
-	str x2, [sp, #64]
-	ldr x2, [sp, #64]
-	mov x3, #0
-	cmp x2, x3
-	cset x4, eq
-	str x4, [sp, #72]
-	ldr x2, [sp, #72]
-	mov x3, #0
-	cmp x2, x3
-	b.eq .L24
-
-.L23:
-	ldr x2, [sp, #184]
-	str x2, [sp, #80]
-	ldr x2, [sp, #80]
-	mov x3, #1
-	sub x4, x2, x3
-	str x4, [sp, #88]
-	ldr x2, [sp, #88]
-	mov x3, #1
-	mov x0, x2
-	mov x1, x3
-	bl ackermann
-	str x0, [sp, #96]
-	ldr x2, [sp, #96]
-	str x2, [sp, #16]
-	ldr x2, [sp, #16]
-	str x2, [sp, #104]
-	ldr x2, [sp, #104]
-	mov x0, x2
-	ldp x29, x30, [sp]
-	add sp, sp, #16
-	add sp, sp, #208
-	ret
-
-.L24:
-	ldr x2, [sp, #184]
-	str x2, [sp, #112]
-	ldr x2, [sp, #112]
-	mov x3, #1
-	sub x4, x2, x3
-	str x4, [sp, #120]
-	ldr x2, [sp, #184]
-	str x2, [sp, #128]
-	ldr x2, [sp, #192]
-	str x2, [sp, #136]
-	ldr x2, [sp, #136]
-	mov x3, #1
-	sub x4, x2, x3
-	str x4, [sp, #144]
-	ldr x2, [sp, #128]
-	ldr x3, [sp, #144]
-	mov x0, x2
-	mov x1, x3
-	bl ackermann
-	str x0, [sp, #152]
-	ldr x2, [sp, #120]
-	ldr x3, [sp, #152]
-	mov x0, x2
-	mov x1, x3
-	bl ackermann
-	str x0, [sp, #160]
-	ldr x2, [sp, #160]
-	str x2, [sp, #16]
-	ldr x2, [sp, #16]
-	str x2, [sp, #168]
-	ldr x2, [sp, #168]
-	mov x0, x2
-	ldp x29, x30, [sp]
-	add sp, sp, #16
-	add sp, sp, #208
-	ret
-
-.L25:
-	b .L26
-
-.L26:
-	ldr x2, [sp, #16]
-	str x2, [sp, #176]
-	ldr x2, [sp, #176]
-	mov x0, x2
-	ldp x29, x30, [sp]
-	add sp, sp, #16
-	add sp, sp, #208
-	ret
-
-	.size ackermann, (.-ackermann)
+	.size prime, (.-prime)
 
 	.type main, %function
 	.global main
 	.p2align 2
 main:
-.L27:
-	sub sp, sp, #176
+.L17:
+	sub sp, sp, #112
 	sub sp, sp, #16
 	stp x29, x30, [sp]
 	mov fp, sp
@@ -597,88 +249,83 @@ main:
 	mov x0, x1
 	add x1, sp, #24
 	bl scanf
-	adrp x1, .READ
-	add x1, x1, :lo12:.READ
-	mov x0, x1
-	add x1, sp, #32
-	bl scanf
-	adrp x1, .READ
-	add x1, x1, :lo12:.READ
-	mov x0, x1
-	add x1, sp, #40
-	bl scanf
-	adrp x1, .READ
-	add x1, x1, :lo12:.READ
-	mov x0, x1
-	add x1, sp, #48
-	bl scanf
-	adrp x1, .READ
-	add x1, x1, :lo12:.READ
-	mov x0, x1
-	add x1, sp, #56
-	bl scanf
+	mov x1, #0
+	str x1, [sp, #32]
+	b .L18
+
+.L18:
+	ldr x1, [sp, #32]
+	str x1, [sp, #40]
 	ldr x1, [sp, #24]
-	str x1, [sp, #72]
-	ldr x1, [sp, #72]
+	str x1, [sp, #48]
+	ldr x1, [sp, #40]
+	ldr x2, [sp, #48]
+	cmp x1, x2
+	cset x3, le
+	str x3, [sp, #56]
+	ldr x1, [sp, #56]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L24
+
+.L19:
+	b .L20
+
+.L20:
+	ldr x1, [sp, #32]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
 	mov x0, x1
-	bl tailrecursive
-	str x0, [sp, #80]
+	bl prime
+	str x0, [sp, #72]
+	ldr x1, [sp, #72]
+	mov x2, #1
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #80]
+	ldr x1, [sp, #80]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L22
+
+.L21:
 	ldr x1, [sp, #32]
 	str x1, [sp, #88]
 	ldr x1, [sp, #88]
-	mov x0, x1
-	bl domath
-	str x0, [sp, #96]
-	ldr x1, [sp, #40]
-	str x1, [sp, #104]
-	ldr x1, [sp, #104]
-	mov x0, x1
-	bl objinstantiation
-	str x0, [sp, #112]
-	ldr x1, [sp, #48]
-	str x1, [sp, #120]
-	ldr x1, [sp, #56]
-	str x1, [sp, #128]
-	ldr x1, [sp, #120]
-	ldr x2, [sp, #128]
-	mov x0, x1
-	mov x1, x2
-	bl ackermann
-	str x0, [sp, #136]
-	ldr x1, [sp, #136]
-	str x1, [sp, #64]
-	ldr x1, [sp, #24]
-	str x1, [sp, #144]
-	ldr x1, [sp, #32]
-	str x1, [sp, #152]
-	ldr x1, [sp, #40]
-	str x1, [sp, #160]
-	ldr x1, [sp, #64]
-	str x1, [sp, #168]
-	ldr x1, [sp, #144]
-	ldr x2, [sp, #152]
-	ldr x3, [sp, #160]
-	ldr x4, [sp, #168]
 	mov x1, x1
-	mov x2, x2
-	mov x3, x3
-	mov x4, x4
-	adrp x5, .FSTR2
-	add x5, x5, :lo12:.FSTR2
-	mov x0, x5
+	adrp x2, .FSTR2
+	add x2, x2, :lo12:.FSTR2
+	mov x0, x2
 	bl printf
-	b .L28
+	b .L23
 
-.L28:
+.L22:
+	b .L23
+
+.L23:
+	ldr x1, [sp, #32]
+	str x1, [sp, #96]
+	ldr x1, [sp, #96]
+	mov x2, #1
+	add x3, x1, x2
+	str x3, [sp, #104]
+	ldr x1, [sp, #104]
+	str x1, [sp, #32]
+	b .L18
+
+.L24:
+	b .L25
+
+.L25:
 	mov x1, #0
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #176]
-	ldr x1, [sp, #176]
+	str x1, [sp, #112]
+	ldr x1, [sp, #112]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
-	add sp, sp, #176
+	add sp, sp, #112
 	ret
 
 	.size main, (.-main)
@@ -689,6 +336,6 @@ main:
 	.size	.READ, 4
 
 .FSTR2:
-	.asciz	"a=%ld\nb=%ld\nc=%ld\n,temp=%ld\n"
-	.size	.FSTR2, 33
+	.asciz	"%ld"
+	.size	.FSTR2, 4
 

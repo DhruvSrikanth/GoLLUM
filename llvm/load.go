@@ -115,6 +115,7 @@ func (l *Load) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 	} else {
 		src := l.sourceRegister[1:]
 		destAddr := stackFrame.GetLocation(src)
+		destAddrTy := stackFrame.GetType(src)
 		if strings.Contains(destAddr, "x") {
 			fromR = destAddr
 		} else {
@@ -123,9 +124,16 @@ func (l *Load) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			ldrInst.SetLabel(l.blockLabel)
 			insts = append(insts, ldrInst)
 
+			if destAddrTy == "pointer" {
+				// We need to load the value at the address since its a adress of a pointer which is a address of a value
+				// Weve already loaded the address so now we just need to load the value at that address
+				ldrInst := arm.NewLdr(availableReg, availableReg)
+				ldrInst.SetLabel(l.blockLabel)
+				insts = append(insts, ldrInst)
+			}
 			availableRegNum += 1
-
 			fromR = availableReg
+
 		}
 	}
 
@@ -153,5 +161,5 @@ func (l *Load) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 // Build the stack table for the instruction.
 func (l *Load) BuildStackTable(funcName string, stack *stack.Stack) {
 	destinationReg := "r" + strconv.Itoa(l.targetRegisters[len(l.targetRegisters)-1])
-	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8))
+	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8), "value")
 }

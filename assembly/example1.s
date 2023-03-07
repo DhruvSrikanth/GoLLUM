@@ -179,78 +179,82 @@ main:
 	mov fp, sp
 	mov x0, #16
 	bl malloc
-	str x0, [sp, #48]
-	ldr x1, [sp, #48]
-	str x1, [sp, #56]
+	str x0, [sp, #56]
 	ldr x1, [sp, #56]
-	str x1, [sp, #24]
-	adrp x1, .READ
-	add x1, x1, :lo12:.READ
-	mov x0, x1
-	add x1, sp, #40
-	bl scanf
-	ldr x1, [sp, #24]
 	str x1, [sp, #64]
 	ldr x1, [sp, #64]
-	add x1, x1, #0
-	str x1, [sp, #72]
-	ldr x1, [sp, #40]
-	str x1, [sp, #80]
-	ldr x1, [sp, #80]
-	str x1, [sp, #72]
+	str x1, [sp, #24]
 	adrp x1, .READ
 	add x1, x1, :lo12:.READ
 	mov x0, x1
-	add x1, sp, #40
+	add x1, sp, #48
 	bl scanf
 	ldr x1, [sp, #24]
+	str x1, [sp, #72]
+	ldr x1, [sp, #72]
+	add x1, x1, #0
+	str x1, [sp, #80]
+	ldr x1, [sp, #48]
 	str x1, [sp, #88]
 	ldr x1, [sp, #88]
-	add x1, x1, #8
-	str x1, [sp, #96]
-	ldr x1, [sp, #40]
-	str x1, [sp, #104]
-	ldr x1, [sp, #104]
-	str x1, [sp, #96]
+	ldr x3, [sp, #80]
+	str x1, [x3]
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #48
+	bl scanf
 	ldr x1, [sp, #24]
+	str x1, [sp, #96]
+	ldr x1, [sp, #96]
+	add x1, x1, #8
+	str x1, [sp, #104]
+	ldr x1, [sp, #48]
 	str x1, [sp, #112]
 	ldr x1, [sp, #112]
-	add x1, x1, #0
+	ldr x3, [sp, #104]
+	str x1, [x3]
+	ldr x1, [sp, #24]
 	str x1, [sp, #120]
 	ldr x1, [sp, #120]
+	add x1, x1, #0
 	str x1, [sp, #128]
 	ldr x1, [sp, #128]
+	ldr x1, [x1]
+	str x1, [sp, #136]
+	ldr x1, [sp, #136]
 	mov x0, x1
 	bl fib1
-	str x0, [sp, #136]
-	ldr x1, [sp, #136]
-	str x1, [sp, #24]
-	ldr x1, [sp, #24]
-	str x1, [sp, #144]
+	str x0, [sp, #144]
 	ldr x1, [sp, #144]
-	add x1, x1, #8
-	str x1, [sp, #152]
-	ldr x1, [sp, #152]
-	str x1, [sp, #160]
-	ldr x1, [sp, #160]
-	mov x0, x1
-	bl fib2
-	str x0, [sp, #168]
-	ldr x1, [sp, #168]
 	str x1, [sp, #32]
 	ldr x1, [sp, #24]
-	str x1, [sp, #176]
+	str x1, [sp, #152]
+	ldr x1, [sp, #152]
+	add x1, x1, #8
+	str x1, [sp, #160]
+	ldr x1, [sp, #160]
+	ldr x1, [x1]
+	str x1, [sp, #168]
+	ldr x1, [sp, #168]
+	mov x0, x1
+	bl fib2
+	str x0, [sp, #176]
 	ldr x1, [sp, #176]
+	str x1, [sp, #40]
+	ldr x1, [sp, #24]
 	str x1, [sp, #184]
 	ldr x1, [sp, #184]
+	str x1, [sp, #192]
+	ldr x1, [sp, #192]
 	mov x0, x1
 	bl free
-	ldr x1, [sp, #24]
-	str x1, [sp, #192]
 	ldr x1, [sp, #32]
 	str x1, [sp, #200]
-	ldr x1, [sp, #192]
-	ldr x2, [sp, #200]
+	ldr x1, [sp, #40]
+	str x1, [sp, #208]
+	ldr x1, [sp, #200]
+	ldr x2, [sp, #208]
 	mov x1, x1
 	mov x2, x2
 	adrp x3, .FSTR2
@@ -263,8 +267,8 @@ main:
 	mov x1, #0
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #208]
-	ldr x1, [sp, #208]
+	str x1, [sp, #216]
+	ldr x1, [sp, #216]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16

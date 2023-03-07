@@ -156,7 +156,8 @@ addNode:
 	ldr x2, [sp, #488]
 	str x2, [sp, #96]
 	ldr x2, [sp, #96]
-	str x2, [sp, #88]
+	ldr x4, [sp, #88]
+	str x2, [x4]
 	ldr x2, [sp, #32]
 	str x2, [sp, #104]
 	ldr x2, [sp, #104]
@@ -172,6 +173,7 @@ addNode:
 	add x2, x2, #0
 	str x2, [sp, #120]
 	ldr x2, [sp, #120]
+	ldr x2, [x2]
 	str x2, [sp, #128]
 	ldr x2, [sp, #488]
 	str x2, [sp, #136]
@@ -213,6 +215,7 @@ addNode:
 	add x2, x2, #8
 	str x2, [sp, #184]
 	ldr x2, [sp, #184]
+	ldr x2, [x2]
 	str x2, [sp, #192]
 	adrp x2, .nilNode
 	add x2, x2, :lo12:.nilNode
@@ -244,7 +247,8 @@ addNode:
 	ldr x2, [sp, #488]
 	str x2, [sp, #248]
 	ldr x2, [sp, #248]
-	str x2, [sp, #240]
+	ldr x4, [sp, #240]
+	str x2, [x4]
 	ldr x2, [sp, #496]
 	str x2, [sp, #256]
 	ldr x2, [sp, #256]
@@ -253,7 +257,8 @@ addNode:
 	ldr x2, [sp, #32]
 	str x2, [sp, #272]
 	ldr x2, [sp, #272]
-	str x2, [sp, #264]
+	ldr x4, [sp, #264]
+	str x2, [x4]
 	b .L19
 
 .L18:
@@ -265,6 +270,7 @@ addNode:
 	add x2, x2, #8
 	str x2, [sp, #296]
 	ldr x2, [sp, #296]
+	ldr x2, [x2]
 	str x2, [sp, #304]
 	ldr x2, [sp, #280]
 	ldr x3, [sp, #304]
@@ -303,6 +309,7 @@ addNode:
 	add x2, x2, #16
 	str x2, [sp, #344]
 	ldr x2, [sp, #344]
+	ldr x2, [x2]
 	str x2, [sp, #352]
 	adrp x2, .nilNode
 	add x2, x2, :lo12:.nilNode
@@ -334,7 +341,8 @@ addNode:
 	ldr x2, [sp, #488]
 	str x2, [sp, #408]
 	ldr x2, [sp, #408]
-	str x2, [sp, #400]
+	ldr x4, [sp, #400]
+	str x2, [x4]
 	ldr x2, [sp, #496]
 	str x2, [sp, #416]
 	ldr x2, [sp, #416]
@@ -343,7 +351,8 @@ addNode:
 	ldr x2, [sp, #32]
 	str x2, [sp, #432]
 	ldr x2, [sp, #432]
-	str x2, [sp, #424]
+	ldr x4, [sp, #424]
+	str x2, [x4]
 	b .L26
 
 .L25:
@@ -355,6 +364,7 @@ addNode:
 	add x2, x2, #16
 	str x2, [sp, #456]
 	ldr x2, [sp, #456]
+	ldr x2, [x2]
 	str x2, [sp, #464]
 	ldr x2, [sp, #440]
 	ldr x3, [sp, #464]
@@ -432,6 +442,7 @@ printDepthTree:
 	add x1, x1, #8
 	str x1, [sp, #64]
 	ldr x1, [sp, #64]
+	ldr x1, [x1]
 	str x1, [sp, #72]
 	adrp x1, .nilNode
 	add x1, x1, :lo12:.nilNode
@@ -454,6 +465,7 @@ printDepthTree:
 	add x1, x1, #8
 	str x1, [sp, #104]
 	ldr x1, [sp, #104]
+	ldr x1, [x1]
 	str x1, [sp, #112]
 	ldr x1, [sp, #112]
 	mov x0, x1
@@ -471,6 +483,7 @@ printDepthTree:
 	add x1, x1, #0
 	str x1, [sp, #136]
 	ldr x1, [sp, #136]
+	ldr x1, [x1]
 	str x1, [sp, #144]
 	ldr x1, [sp, #144]
 	str x1, [sp, #24]
@@ -491,6 +504,7 @@ printDepthTree:
 	add x1, x1, #16
 	str x1, [sp, #168]
 	ldr x1, [sp, #168]
+	ldr x1, [x1]
 	str x1, [sp, #176]
 	adrp x1, .nilNode
 	add x1, x1, :lo12:.nilNode
@@ -513,6 +527,7 @@ printDepthTree:
 	add x1, x1, #16
 	str x1, [sp, #208]
 	ldr x1, [sp, #208]
+	ldr x1, [x1]
 	str x1, [sp, #216]
 	ldr x1, [sp, #216]
 	mov x0, x1
@@ -585,6 +600,7 @@ deleteLeavesTree:
 	add x1, x1, #8
 	str x1, [sp, #56]
 	ldr x1, [sp, #56]
+	ldr x1, [x1]
 	str x1, [sp, #64]
 	adrp x1, .nilNode
 	add x1, x1, :lo12:.nilNode
@@ -607,6 +623,7 @@ deleteLeavesTree:
 	add x1, x1, #8
 	str x1, [sp, #96]
 	ldr x1, [sp, #96]
+	ldr x1, [x1]
 	str x1, [sp, #104]
 	ldr x1, [sp, #104]
 	mov x0, x1
@@ -627,6 +644,7 @@ deleteLeavesTree:
 	add x1, x1, #16
 	str x1, [sp, #128]
 	ldr x1, [sp, #128]
+	ldr x1, [x1]
 	str x1, [sp, #136]
 	adrp x1, .nilNode
 	add x1, x1, :lo12:.nilNode
@@ -649,6 +667,7 @@ deleteLeavesTree:
 	add x1, x1, #16
 	str x1, [sp, #168]
 	ldr x1, [sp, #168]
+	ldr x1, [x1]
 	str x1, [sp, #176]
 	ldr x1, [sp, #176]
 	mov x0, x1

@@ -113,6 +113,7 @@ find:
 	add x2, x2, #8
 	str x2, [sp, #56]
 	ldr x2, [sp, #56]
+	ldr x2, [x2]
 	str x2, [sp, #64]
 	ldr x2, [sp, #184]
 	str x2, [sp, #72]
@@ -133,6 +134,7 @@ find:
 	add x2, x2, #16
 	str x2, [sp, #96]
 	ldr x2, [sp, #96]
+	ldr x2, [x2]
 	str x2, [sp, #104]
 	ldr x2, [sp, #104]
 	str x2, [sp, #16]
@@ -154,6 +156,7 @@ find:
 	add x2, x2, #0
 	str x2, [sp, #136]
 	ldr x2, [sp, #136]
+	ldr x2, [x2]
 	str x2, [sp, #144]
 	ldr x2, [sp, #120]
 	ldr x3, [sp, #144]
@@ -244,7 +247,8 @@ add:
 	ldr x3, [sp, #216]
 	str x3, [sp, #80]
 	ldr x3, [sp, #80]
-	str x3, [sp, #72]
+	ldr x5, [sp, #72]
+	str x3, [x5]
 	ldr x3, [sp, #232]
 	str x3, [sp, #88]
 	ldr x3, [sp, #88]
@@ -253,7 +257,8 @@ add:
 	ldr x3, [sp, #224]
 	str x3, [sp, #104]
 	ldr x3, [sp, #104]
-	str x3, [sp, #96]
+	ldr x5, [sp, #96]
+	str x3, [x5]
 	ldr x3, [sp, #232]
 	str x3, [sp, #112]
 	ldr x3, [sp, #112]
@@ -264,7 +269,8 @@ add:
 	ldr x3, [x3]
 	str x3, [sp, #128]
 	ldr x3, [sp, #128]
-	str x3, [sp, #120]
+	ldr x5, [sp, #120]
+	str x3, [x5]
 	b .L18
 
 .L17:
@@ -283,6 +289,7 @@ add:
 	add x3, x3, #0
 	str x3, [sp, #176]
 	ldr x3, [sp, #176]
+	ldr x3, [x3]
 	str x3, [sp, #184]
 	ldr x3, [sp, #152]
 	ldr x4, [sp, #160]
@@ -293,7 +300,8 @@ add:
 	bl add
 	str x0, [sp, #192]
 	ldr x3, [sp, #192]
-	str x3, [sp, #144]
+	ldr x5, [sp, #144]
+	str x3, [x5]
 	b .L18
 
 .L18:
@@ -504,131 +512,136 @@ maxfactorial:
 	sub sp, sp, #16
 	stp x29, x30, [sp]
 	mov fp, sp
-	str x0, [sp, #280]
-	str x1, [sp, #288]
-	ldr x2, [sp, #280]
-	str x2, [sp, #40]
-	ldr x2, [sp, #40]
-	add x2, x2, #0
+	str x0, [sp, #288]
+	str x1, [sp, #296]
+	ldr x2, [sp, #288]
 	str x2, [sp, #48]
+	ldr x2, [sp, #48]
+	add x2, x2, #0
+	str x2, [sp, #56]
 	adrp x2, .nilListNode
 	add x2, x2, :lo12:.nilListNode
 	ldr x2, [x2]
-	str x2, [sp, #56]
-	ldr x2, [sp, #56]
-	str x2, [sp, #48]
+	str x2, [sp, #64]
+	ldr x2, [sp, #64]
+	ldr x4, [sp, #56]
+	str x2, [x4]
 	adrp x2, matrix
 	add x2, x2, :lo12:matrix
 	ldr x2, [x2]
-	str x2, [sp, #64]
-	ldr x2, [sp, #64]
-	str x2, [sp, #16]
+	str x2, [sp, #72]
+	ldr x2, [sp, #72]
+	str x2, [sp, #24]
 	b .L34
 
 .L34:
-	ldr x2, [sp, #16]
-	str x2, [sp, #72]
+	ldr x2, [sp, #24]
+	str x2, [sp, #80]
 	adrp x2, .nilRow
 	add x2, x2, :lo12:.nilRow
 	ldr x2, [x2]
-	str x2, [sp, #80]
-	ldr x2, [sp, #72]
-	ldr x3, [sp, #80]
+	str x2, [sp, #88]
+	ldr x2, [sp, #80]
+	ldr x3, [sp, #88]
 	cmp x2, x3
 	cset x4, ne
-	str x4, [sp, #88]
-	ldr x2, [sp, #88]
+	str x4, [sp, #96]
+	ldr x2, [sp, #96]
 	mov x3, #0
 	cmp x2, x3
 	b.eq .L43
 
 .L35:
-	ldr x2, [sp, #16]
-	str x2, [sp, #96]
-	ldr x2, [sp, #96]
-	add x2, x2, #8
+	ldr x2, [sp, #24]
 	str x2, [sp, #104]
 	ldr x2, [sp, #104]
+	add x2, x2, #8
 	str x2, [sp, #112]
 	ldr x2, [sp, #112]
-	str x2, [sp, #24]
-	ldr x2, [sp, #16]
+	ldr x2, [x2]
 	str x2, [sp, #120]
 	ldr x2, [sp, #120]
-	add x2, x2, #0
+	str x2, [sp, #32]
+	ldr x2, [sp, #24]
 	str x2, [sp, #128]
 	ldr x2, [sp, #128]
+	add x2, x2, #0
 	str x2, [sp, #136]
 	ldr x2, [sp, #136]
-	str x2, [sp, #16]
+	ldr x2, [x2]
+	str x2, [sp, #144]
+	ldr x2, [sp, #144]
+	str x2, [sp, #24]
 	b .L36
 
 .L36:
-	ldr x2, [sp, #24]
-	str x2, [sp, #144]
+	ldr x2, [sp, #32]
+	str x2, [sp, #152]
 	adrp x2, .nilCell
 	add x2, x2, :lo12:.nilCell
 	ldr x2, [x2]
-	str x2, [sp, #152]
-	ldr x2, [sp, #144]
-	ldr x3, [sp, #152]
+	str x2, [sp, #160]
+	ldr x2, [sp, #152]
+	ldr x3, [sp, #160]
 	cmp x2, x3
 	cset x4, ne
-	str x4, [sp, #160]
-	ldr x2, [sp, #160]
+	str x4, [sp, #168]
+	ldr x2, [sp, #168]
 	mov x3, #0
 	cmp x2, x3
 	b.eq .L42
 
 .L37:
-	ldr x2, [sp, #24]
-	str x2, [sp, #168]
-	ldr x2, [sp, #168]
-	add x2, x2, #8
+	ldr x2, [sp, #32]
 	str x2, [sp, #176]
 	ldr x2, [sp, #176]
+	add x2, x2, #8
 	str x2, [sp, #184]
-	ldr x2, [sp, #280]
-	str x2, [sp, #192]
 	ldr x2, [sp, #184]
-	ldr x3, [sp, #192]
+	ldr x2, [x2]
+	str x2, [sp, #192]
+	ldr x2, [sp, #288]
+	str x2, [sp, #200]
+	ldr x2, [sp, #192]
+	ldr x3, [sp, #200]
 	mov x0, x2
 	mov x1, x3
 	bl factorial
-	str x0, [sp, #200]
-	ldr x2, [sp, #200]
-	str x2, [sp, #32]
-	ldr x2, [sp, #24]
-	str x2, [sp, #208]
+	str x0, [sp, #208]
 	ldr x2, [sp, #208]
-	add x2, x2, #0
+	str x2, [sp, #40]
+	ldr x2, [sp, #32]
 	str x2, [sp, #216]
 	ldr x2, [sp, #216]
+	add x2, x2, #0
 	str x2, [sp, #224]
 	ldr x2, [sp, #224]
-	str x2, [sp, #24]
+	ldr x2, [x2]
+	str x2, [sp, #232]
+	ldr x2, [sp, #232]
+	str x2, [sp, #32]
 	b .L38
 
 .L38:
-	ldr x2, [sp, #32]
-	str x2, [sp, #232]
-	ldr x2, [sp, #288]
+	ldr x2, [sp, #40]
 	str x2, [sp, #240]
-	ldr x2, [sp, #232]
-	ldr x3, [sp, #240]
+	ldr x2, [sp, #296]
+	str x2, [sp, #248]
+	ldr x2, [sp, #240]
+	ldr x3, [sp, #248]
 	cmp x2, x3
 	cset x4, gt
-	str x4, [sp, #248]
-	ldr x2, [sp, #248]
+	str x4, [sp, #256]
+	ldr x2, [sp, #256]
 	mov x3, #0
 	cmp x2, x3
 	b.eq .L40
 
 .L39:
-	ldr x2, [sp, #32]
-	str x2, [sp, #256]
-	ldr x2, [sp, #256]
-	str x2, [sp, #288]
+	ldr x2, [sp, #40]
+	str x2, [sp, #264]
+	ldr x2, [sp, #264]
+	str x2, [sp, #296]
 	b .L41
 
 .L40:
@@ -641,9 +654,9 @@ maxfactorial:
 	b .L34
 
 .L43:
-	ldr x2, [sp, #288]
-	str x2, [sp, #264]
-	ldr x2, [sp, #264]
+	ldr x2, [sp, #296]
+	str x2, [sp, #272]
+	ldr x2, [sp, #272]
 	mov x1, x2
 	adrp x3, .FSTR1
 	add x3, x3, :lo12:.FSTR1
@@ -655,8 +668,8 @@ maxfactorial:
 	mov x2, #0
 	str x2, [sp, #16]
 	ldr x2, [sp, #16]
-	str x2, [sp, #272]
-	ldr x2, [sp, #272]
+	str x2, [sp, #280]
+	ldr x2, [sp, #280]
 	mov x0, x2
 	ldp x29, x30, [sp]
 	add sp, sp, #16
@@ -747,7 +760,8 @@ newcell:
 	bl newvalue
 	str x0, [sp, #56]
 	ldr x3, [sp, #56]
-	str x3, [sp, #32]
+	ldr x5, [sp, #32]
+	str x3, [x5]
 	b .L47
 
 .L47:
@@ -791,7 +805,8 @@ newcell:
 	bl newcell
 	str x0, [sp, #136]
 	ldr x3, [sp, #136]
-	str x3, [sp, #88]
+	ldr x5, [sp, #88]
+	str x3, [x5]
 	b .L50
 
 .L49:
@@ -805,7 +820,8 @@ newcell:
 	ldr x3, [x3]
 	str x3, [sp, #160]
 	ldr x3, [sp, #160]
-	str x3, [sp, #152]
+	ldr x5, [sp, #152]
+	str x3, [x5]
 	b .L50
 
 .L50:
@@ -859,7 +875,8 @@ newrow:
 	bl newcell
 	str x0, [sp, #72]
 	ldr x3, [sp, #72]
-	str x3, [sp, #32]
+	ldr x5, [sp, #32]
+	str x3, [x5]
 	b .L52
 
 .L52:
@@ -903,7 +920,8 @@ newrow:
 	bl newrow
 	str x0, [sp, #152]
 	ldr x3, [sp, #152]
-	str x3, [sp, #104]
+	ldr x5, [sp, #104]
+	str x3, [x5]
 	b .L55
 
 .L54:
@@ -917,7 +935,8 @@ newrow:
 	ldr x3, [x3]
 	str x3, [sp, #176]
 	ldr x3, [sp, #176]
-	str x3, [sp, #168]
+	ldr x5, [sp, #168]
+	str x3, [x5]
 	b .L55
 
 .L55:
@@ -945,26 +964,26 @@ newmatrix:
 	sub sp, sp, #16
 	stp x29, x30, [sp]
 	mov fp, sp
-	str x0, [sp, #64]
-	str x1, [sp, #72]
+	str x0, [sp, #72]
+	str x1, [sp, #80]
 	mov x0, #16
 	bl malloc
-	str x0, [sp, #16]
-	ldr x2, [sp, #16]
-	str x2, [sp, #24]
-	ldr x2, [sp, #64]
+	str x0, [sp, #24]
+	ldr x2, [sp, #24]
 	str x2, [sp, #32]
 	ldr x2, [sp, #72]
 	str x2, [sp, #40]
-	ldr x2, [sp, #24]
-	ldr x3, [sp, #32]
-	ldr x4, [sp, #40]
+	ldr x2, [sp, #80]
+	str x2, [sp, #48]
+	ldr x2, [sp, #32]
+	ldr x3, [sp, #40]
+	ldr x4, [sp, #48]
 	mov x0, x2
 	mov x1, x3
 	mov x2, x4
 	bl newrow
-	str x0, [sp, #48]
-	ldr x2, [sp, #48]
+	str x0, [sp, #56]
+	ldr x2, [sp, #56]
 	adrp x3, matrix
 	add x3, x3, :lo12:matrix
 	str x2, [x3]
@@ -974,8 +993,8 @@ newmatrix:
 	mov x2, #0
 	str x2, [sp, #16]
 	ldr x2, [sp, #16]
-	str x2, [sp, #56]
-	ldr x2, [sp, #56]
+	str x2, [sp, #64]
+	ldr x2, [sp, #64]
 	mov x0, x2
 	ldp x29, x30, [sp]
 	add sp, sp, #16
@@ -993,18 +1012,18 @@ getmatrixsize:
 	sub sp, sp, #16
 	stp x29, x30, [sp]
 	mov fp, sp
-	str x0, [sp, #80]
+	str x0, [sp, #88]
 	b .L59
 
 .L59:
-	ldr x1, [sp, #80]
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
+	ldr x1, [sp, #88]
+	str x1, [sp, #24]
+	ldr x1, [sp, #24]
 	mov x2, #0
 	cmp x1, x2
 	cset x3, le
-	str x3, [sp, #24]
-	ldr x1, [sp, #24]
+	str x3, [sp, #32]
+	ldr x1, [sp, #32]
 	mov x2, #0
 	cmp x1, x2
 	b.eq .L61
@@ -1013,24 +1032,24 @@ getmatrixsize:
 	adrp x1, .READ
 	add x1, x1, :lo12:.READ
 	mov x0, x1
-	add x1, sp, #80
+	add x1, sp, #88
 	bl scanf
-	ldr x1, [sp, #80]
-	str x1, [sp, #32]
-	ldr x1, [sp, #32]
+	ldr x1, [sp, #88]
+	str x1, [sp, #40]
+	ldr x1, [sp, #40]
 	mov x0, x1
 	bl getmatrixsize
-	str x0, [sp, #40]
+	str x0, [sp, #48]
 	b .L62
 
 .L61:
-	ldr x1, [sp, #80]
-	str x1, [sp, #48]
-	ldr x1, [sp, #48]
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
+	ldr x1, [sp, #88]
 	str x1, [sp, #56]
 	ldr x1, [sp, #56]
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
@@ -1038,13 +1057,13 @@ getmatrixsize:
 	ret
 
 .L62:
-	ldr x1, [sp, #80]
-	str x1, [sp, #64]
-	ldr x1, [sp, #64]
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
+	ldr x1, [sp, #88]
 	str x1, [sp, #72]
 	ldr x1, [sp, #72]
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #80]
+	ldr x1, [sp, #80]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
@@ -1062,20 +1081,20 @@ getmaxrange:
 	sub sp, sp, #16
 	stp x29, x30, [sp]
 	mov fp, sp
-	str x0, [sp, #80]
+	str x0, [sp, #88]
 	b .L64
 
 .L64:
 	adrp x1, maxrange
 	add x1, x1, :lo12:maxrange
 	ldr x1, [x1]
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
+	str x1, [sp, #24]
+	ldr x1, [sp, #24]
 	mov x2, #1
 	cmp x1, x2
 	cset x3, le
-	str x3, [sp, #24]
-	ldr x1, [sp, #24]
+	str x3, [sp, #32]
+	ldr x1, [sp, #32]
 	mov x2, #0
 	cmp x1, x2
 	b.eq .L66
@@ -1091,23 +1110,23 @@ getmaxrange:
 	adrp x1, maxrange
 	add x1, x1, :lo12:maxrange
 	ldr x1, [x1]
-	str x1, [sp, #32]
-	ldr x1, [sp, #32]
+	str x1, [sp, #40]
+	ldr x1, [sp, #40]
 	mov x0, x1
 	bl getmaxrange
-	str x0, [sp, #40]
+	str x0, [sp, #48]
 	b .L67
 
 .L66:
 	adrp x1, maxrange
 	add x1, x1, :lo12:maxrange
 	ldr x1, [x1]
-	str x1, [sp, #48]
-	ldr x1, [sp, #48]
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
 	str x1, [sp, #56]
 	ldr x1, [sp, #56]
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #64]
+	ldr x1, [sp, #64]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
@@ -1118,12 +1137,12 @@ getmaxrange:
 	adrp x1, maxrange
 	add x1, x1, :lo12:maxrange
 	ldr x1, [x1]
-	str x1, [sp, #64]
-	ldr x1, [sp, #64]
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
 	str x1, [sp, #72]
 	ldr x1, [sp, #72]
+	str x1, [sp, #16]
+	ldr x1, [sp, #16]
+	str x1, [sp, #80]
+	ldr x1, [sp, #80]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16

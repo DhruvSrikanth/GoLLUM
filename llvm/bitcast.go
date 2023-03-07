@@ -134,5 +134,5 @@ func (b *BitCast) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 // Build the stack table for the instruction.
 func (b *BitCast) BuildStackTable(funcName string, stack *stack.Stack) {
 	destinationReg := "r" + strconv.Itoa(b.targetRegisters[len(b.targetRegisters)-1])
-	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8))
+	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8), "value")
 }

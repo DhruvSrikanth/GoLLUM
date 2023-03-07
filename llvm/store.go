@@ -188,10 +188,11 @@ func (s *Store) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 		availableRegNum += 1
 	}
 
-	// The destination could be a global variable, a register or an address
+	// The destination could be a global variable, a register, an address on the stack, or a pointer to an address
 	// global variable => use the address with a store
 	// register => do a move instead of a store
 	// address => use the address with a store
+	// pointer to an address => load the address of the pointer which is the value of the register and then do a store into that address i.e. [loaded reg]
 
 	availableReg = "x" + strconv.Itoa(availableRegNum)
 	if strings.Contains(s.targetRegister, "@") {
@@ -205,8 +206,13 @@ func (s *Store) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 		insts = append(insts, addInst)
 
 		destR = availableReg
+
+		strInst := arm.NewStr(srcR, destR)
+		strInst.SetLabel(s.blockLabel)
+		insts = append(insts, strInst)
 	} else {
 		destAddr := stackFrame.GetLocation(s.targetRegister[1:])
+		destAddrTy := stackFrame.GetType(s.targetRegister[1:])
 		if strings.Contains(destAddr, "x") {
 			// Register so do a mov with the srcR
 			movInst := arm.NewMov(destAddr, srcR)
@@ -215,13 +221,24 @@ func (s *Store) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			return insts
 		} else {
 			// Address so use the offset from sp as the address to store in
-			destR = arm.SP + ", #" + destAddr
+			if destAddrTy == "value" {
+				destR = arm.SP + ", #" + destAddr
+				strInst := arm.NewStr(srcR, destR)
+				strInst.SetLabel(s.blockLabel)
+				insts = append(insts, strInst)
+			} else {
+				// This is a pointer so we need to load the address of the pointer and then store the value at that address
+				availableReg = "x" + strconv.Itoa(availableRegNum+1)
+				ldrInst := arm.NewLdr(availableReg, arm.SP+", #"+destAddr)
+				ldrInst.SetLabel(s.blockLabel)
+				insts = append(insts, ldrInst)
+
+				strInst := arm.NewStr(srcR, availableReg)
+				strInst.SetLabel(s.blockLabel)
+				insts = append(insts, strInst)
+			}
 		}
 	}
-
-	strInst := arm.NewStr(srcR, destR)
-	strInst.SetLabel(s.blockLabel)
-	insts = append(insts, strInst)
 
 	return insts
 }

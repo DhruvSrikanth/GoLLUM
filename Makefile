@@ -2,7 +2,7 @@
 LLVM_COMPILER="/opt/homebrew/opt/llvm/bin/llc"
 C_COMPILER="clang"
 
-N_EXAMPLES=7
+N_EXAMPLES=6
 
 # BUILD
 # Generate grammars
@@ -77,8 +77,15 @@ assembly_examples_arm:
 
 
 # Generate object files for all examples (using clang)
-examples_executable:
-	@make assembly_examples
+llvm_examples_executable:
+	@make assembly_examples_llvm
+	@for i in {1..$(N_EXAMPLES)} ; do \
+		$(C_COMPILER) assembly/example$$i.s -o example$$i.out;\
+	done
+
+# Generate object files for all examples (using arm translation)
+arm_examples_executable:
+	@make assembly_examples_arm
 	@for i in {1..$(N_EXAMPLES)} ; do \
 		$(C_COMPILER) assembly/example$$i.s -o example$$i.out;\
 	done

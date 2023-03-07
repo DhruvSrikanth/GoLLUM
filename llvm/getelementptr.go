@@ -119,7 +119,8 @@ func (g *GetElementPtr) ToARM(fnName string, stack *stack.Stack) []arm.Instructi
 	insts = append(insts, addInst)
 
 	// Get the destination register
-	destAddr := stackFrame.GetLocation("r" + strconv.Itoa(g.targetRegisters[len(g.targetRegisters)-1]))
+	llvmDestReg := "r" + strconv.Itoa(g.targetRegisters[len(g.targetRegisters)-1])
+	destAddr := stackFrame.GetLocation(llvmDestReg)
 	if strings.Contains(destAddr, "x") {
 		// The destination register is in a register
 		destR = destAddr
@@ -134,12 +135,13 @@ func (g *GetElementPtr) ToARM(fnName string, stack *stack.Stack) []arm.Instructi
 		strInst.SetLabel(g.blockLabel)
 		insts = append(insts, strInst)
 	}
-
 	return insts
 }
 
 // Build the stack table for the function.
 func (g *GetElementPtr) BuildStackTable(funcName string, stack *stack.Stack) {
+	// We need to indicate that the llvmDestReg is an address to the value and not the value itself
+	// In a subequent LDR or STR instruction, we will have to use load it into a register, then use [reg] to indicate that it needs to be stored or loaded from the address
 	destinationReg := "r" + strconv.Itoa(g.targetRegisters[len(g.targetRegisters)-1])
-	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8))
+	stack.AddEntry(funcName, destinationReg, strconv.Itoa(stack.GetFrame(funcName).GetLargestOffset()+8), "pointer")
 }

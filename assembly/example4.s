@@ -31,7 +31,8 @@ Add:
 	ldr x1, [sp, #176]
 	str x1, [sp, #64]
 	ldr x1, [sp, #64]
-	str x1, [sp, #56]
+	ldr x3, [sp, #56]
+	str x1, [x3]
 	ldr x1, [sp, #24]
 	str x1, [sp, #72]
 	ldr x1, [sp, #72]
@@ -42,7 +43,8 @@ Add:
 	ldr x1, [x1]
 	str x1, [sp, #88]
 	ldr x1, [sp, #88]
-	str x1, [sp, #80]
+	ldr x3, [sp, #80]
+	str x1, [x3]
 	b .L1
 
 .L1:
@@ -90,7 +92,8 @@ Add:
 	ldr x1, [sp, #24]
 	str x1, [sp, #152]
 	ldr x1, [sp, #152]
-	str x1, [sp, #144]
+	ldr x3, [sp, #144]
+	str x1, [x3]
 	ldr x1, [sp, #24]
 	str x1, [sp, #160]
 	ldr x1, [sp, #160]
@@ -152,6 +155,7 @@ PrintList:
 	add x1, x1, #0
 	str x1, [sp, #64]
 	ldr x1, [sp, #64]
+	ldr x1, [x1]
 	str x1, [sp, #72]
 	ldr x1, [sp, #72]
 	str x1, [sp, #24]
@@ -172,6 +176,7 @@ PrintList:
 	add x1, x1, #0
 	str x1, [sp, #96]
 	ldr x1, [sp, #96]
+	ldr x1, [x1]
 	str x1, [sp, #104]
 	ldr x1, [sp, #104]
 	str x1, [sp, #24]
@@ -189,6 +194,7 @@ PrintList:
 	add x1, x1, #8
 	str x1, [sp, #128]
 	ldr x1, [sp, #128]
+	ldr x1, [x1]
 	str x1, [sp, #136]
 	ldr x1, [sp, #136]
 	mov x0, x1
@@ -258,6 +264,7 @@ Del:
 	add x2, x2, #0
 	str x2, [sp, #64]
 	ldr x2, [sp, #64]
+	ldr x2, [x2]
 	str x2, [sp, #72]
 	ldr x2, [sp, #448]
 	str x2, [sp, #80]
@@ -286,6 +293,7 @@ Del:
 	add x2, x2, #8
 	str x2, [sp, #112]
 	ldr x2, [sp, #112]
+	ldr x2, [x2]
 	str x2, [sp, #120]
 	ldr x2, [sp, #120]
 	adrp x3, head
@@ -310,6 +318,7 @@ Del:
 	add x2, x2, #8
 	str x2, [sp, #152]
 	ldr x2, [sp, #152]
+	ldr x2, [x2]
 	str x2, [sp, #160]
 	adrp x2, tail
 	add x2, x2, :lo12:tail
@@ -350,7 +359,8 @@ Del:
 	ldr x2, [x2]
 	str x2, [sp, #216]
 	ldr x2, [sp, #216]
-	str x2, [sp, #208]
+	ldr x4, [sp, #208]
+	str x2, [x4]
 	ldr x2, [sp, #24]
 	str x2, [sp, #224]
 	ldr x2, [sp, #224]
@@ -370,11 +380,13 @@ Del:
 	add x2, x2, #8
 	str x2, [sp, #248]
 	ldr x2, [sp, #248]
+	ldr x2, [x2]
 	str x2, [sp, #256]
 	ldr x2, [sp, #256]
 	add x2, x2, #0
 	str x2, [sp, #264]
 	ldr x2, [sp, #264]
+	ldr x2, [x2]
 	str x2, [sp, #272]
 	ldr x2, [sp, #448]
 	str x2, [sp, #280]
@@ -395,6 +407,7 @@ Del:
 	add x2, x2, #8
 	str x2, [sp, #304]
 	ldr x2, [sp, #304]
+	ldr x2, [x2]
 	str x2, [sp, #312]
 	ldr x2, [sp, #312]
 	str x2, [sp, #24]
@@ -409,14 +422,17 @@ Del:
 	add x2, x2, #8
 	str x2, [sp, #344]
 	ldr x2, [sp, #344]
+	ldr x2, [x2]
 	str x2, [sp, #352]
 	ldr x2, [sp, #352]
 	add x2, x2, #8
 	str x2, [sp, #360]
 	ldr x2, [sp, #360]
+	ldr x2, [x2]
 	str x2, [sp, #368]
 	ldr x2, [sp, #368]
-	str x2, [sp, #328]
+	ldr x4, [sp, #328]
+	str x2, [x4]
 	ldr x2, [sp, #24]
 	str x2, [sp, #376]
 	ldr x2, [sp, #376]
@@ -433,6 +449,7 @@ Del:
 	add x2, x2, #8
 	str x2, [sp, #400]
 	ldr x2, [sp, #400]
+	ldr x2, [x2]
 	str x2, [sp, #408]
 	ldr x2, [sp, #448]
 	str x2, [sp, #416]
@@ -487,46 +504,46 @@ main:
 	adrp x1, .READ
 	add x1, x1, :lo12:.READ
 	mov x0, x1
-	add x1, sp, #24
+	add x1, sp, #32
 	bl scanf
 	mov x1, #1
 	mov x0, x1
 	bl Add
-	str x0, [sp, #40]
+	str x0, [sp, #48]
 	mov x1, #10
 	mov x0, x1
 	bl Add
-	str x0, [sp, #48]
+	str x0, [sp, #56]
 	mov x1, #3
 	mov x0, x1
 	bl Add
-	str x0, [sp, #56]
+	str x0, [sp, #64]
 	mov x1, #4
 	mov x0, x1
 	bl Add
-	str x0, [sp, #64]
+	str x0, [sp, #72]
 	ldr x1, [sp, #24]
-	str x1, [sp, #72]
-	ldr x1, [sp, #72]
+	str x1, [sp, #80]
+	ldr x1, [sp, #80]
 	mov x0, x1
 	bl Add
-	str x0, [sp, #80]
+	str x0, [sp, #88]
 	adrp x1, head
 	add x1, x1, :lo12:head
 	ldr x1, [x1]
-	str x1, [sp, #88]
-	ldr x1, [sp, #88]
+	str x1, [sp, #96]
+	ldr x1, [sp, #96]
 	mov x0, x1
 	bl PrintList
-	str x0, [sp, #96]
+	str x0, [sp, #104]
 	mov x1, #0
-	str x1, [sp, #32]
+	str x1, [sp, #40]
 	b .L31
 
 .L31:
-	ldr x1, [sp, #32]
-	str x1, [sp, #104]
-	ldr x1, [sp, #104]
+	ldr x1, [sp, #40]
+	str x1, [sp, #112]
+	ldr x1, [sp, #112]
 	mov x2, #4095
 	add x2, x2, #4095
 	add x2, x2, #4095
@@ -12740,38 +12757,38 @@ main:
 	add x2, x2, #50
 	cmp x1, x2
 	cset x3, lt
-	str x3, [sp, #112]
-	ldr x1, [sp, #112]
+	str x3, [sp, #120]
+	ldr x1, [sp, #120]
 	mov x2, #0
 	cmp x1, x2
 	b.eq .L33
 
 .L32:
-	ldr x1, [sp, #32]
-	str x1, [sp, #120]
-	ldr x1, [sp, #120]
+	ldr x1, [sp, #40]
+	str x1, [sp, #128]
+	ldr x1, [sp, #128]
 	mov x0, x1
 	bl Add
-	str x0, [sp, #128]
-	ldr x1, [sp, #32]
-	str x1, [sp, #136]
-	ldr x1, [sp, #136]
+	str x0, [sp, #136]
+	ldr x1, [sp, #40]
+	str x1, [sp, #144]
+	ldr x1, [sp, #144]
 	mov x2, #1
 	add x3, x1, x2
-	str x3, [sp, #144]
-	ldr x1, [sp, #144]
-	str x1, [sp, #32]
+	str x3, [sp, #152]
+	ldr x1, [sp, #152]
+	str x1, [sp, #40]
 	b .L31
 
 .L33:
 	mov x1, #0
-	str x1, [sp, #32]
+	str x1, [sp, #40]
 	b .L34
 
 .L34:
-	ldr x1, [sp, #32]
-	str x1, [sp, #152]
-	ldr x1, [sp, #152]
+	ldr x1, [sp, #40]
+	str x1, [sp, #160]
+	ldr x1, [sp, #160]
 	mov x2, #4095
 	add x2, x2, #4095
 	add x2, x2, #4095
@@ -24985,8 +25002,8 @@ main:
 	add x2, x2, #50
 	cmp x1, x2
 	cset x3, lt
-	str x3, [sp, #160]
-	ldr x1, [sp, #160]
+	str x3, [sp, #168]
+	ldr x1, [sp, #168]
 	mov x2, #0
 	cmp x1, x2
 	b.eq .L36
@@ -24995,54 +25012,54 @@ main:
 	adrp x1, head
 	add x1, x1, :lo12:head
 	ldr x1, [x1]
-	str x1, [sp, #168]
-	ldr x1, [sp, #32]
 	str x1, [sp, #176]
-	ldr x1, [sp, #168]
-	ldr x2, [sp, #176]
+	ldr x1, [sp, #40]
+	str x1, [sp, #184]
+	ldr x1, [sp, #176]
+	ldr x2, [sp, #184]
 	mov x0, x1
 	mov x1, x2
 	bl Del
-	str x0, [sp, #184]
-	ldr x1, [sp, #32]
-	str x1, [sp, #192]
-	ldr x1, [sp, #192]
+	str x0, [sp, #192]
+	ldr x1, [sp, #40]
+	str x1, [sp, #200]
+	ldr x1, [sp, #200]
 	mov x2, #1
 	add x3, x1, x2
-	str x3, [sp, #200]
-	ldr x1, [sp, #200]
-	str x1, [sp, #32]
+	str x3, [sp, #208]
+	ldr x1, [sp, #208]
+	str x1, [sp, #40]
 	b .L34
 
 .L36:
 	adrp x1, head
 	add x1, x1, :lo12:head
 	ldr x1, [x1]
-	str x1, [sp, #208]
-	ldr x1, [sp, #24]
 	str x1, [sp, #216]
-	ldr x1, [sp, #208]
-	ldr x2, [sp, #216]
+	ldr x1, [sp, #32]
+	str x1, [sp, #224]
+	ldr x1, [sp, #216]
+	ldr x2, [sp, #224]
 	mov x0, x1
 	mov x1, x2
 	bl Del
-	str x0, [sp, #224]
+	str x0, [sp, #232]
 	adrp x1, head
 	add x1, x1, :lo12:head
 	ldr x1, [x1]
-	str x1, [sp, #232]
-	ldr x1, [sp, #232]
+	str x1, [sp, #240]
+	ldr x1, [sp, #240]
 	mov x0, x1
 	bl PrintList
-	str x0, [sp, #240]
+	str x0, [sp, #248]
 	b .L37
 
 .L37:
 	mov x1, #0
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #248]
-	ldr x1, [sp, #248]
+	str x1, [sp, #256]
+	ldr x1, [sp, #256]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16

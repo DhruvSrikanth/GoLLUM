@@ -16,8 +16,8 @@ func (s *Stack) AddFrame(name string) {
 }
 
 // Add a new entry to the stack frame
-func (s *Stack) AddEntry(frameName string, name string, location string) {
-	s.frames[frameName].AddEntry(name, location)
+func (s *Stack) AddEntry(frameName string, name string, location string, ty string) {
+	s.frames[frameName].AddEntry(name, location, ty)
 }
 
 // Get the stack frame

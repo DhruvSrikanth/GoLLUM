@@ -3,325 +3,180 @@
 
 	.text
 
-	.type isqrt, %function
-	.global isqrt
+	.type fact, %function
+	.global fact
 	.p2align 2
-isqrt:
+fact:
 .L0:
-	sub sp, sp, #144
+	sub sp, sp, #112
 	sub sp, sp, #16
 	stp x29, x30, [sp]
 	mov fp, sp
-	str x0, [sp, #136]
-	mov x1, #1
-	str x1, [sp, #24]
-	mov x1, #3
-	str x1, [sp, #32]
+	str x0, [sp, #104]
 	b .L1
 
 .L1:
+	ldr x1, [sp, #104]
+	str x1, [sp, #24]
 	ldr x1, [sp, #24]
-	str x1, [sp, #40]
-	ldr x1, [sp, #136]
-	str x1, [sp, #48]
-	ldr x1, [sp, #40]
-	ldr x2, [sp, #48]
+	mov x2, #1
 	cmp x1, x2
 	cset x3, le
-	str x3, [sp, #56]
-	ldr x1, [sp, #56]
+	str x3, [sp, #32]
+	ldr x1, [sp, #32]
 	mov x2, #0
 	cmp x1, x2
 	b.eq .L3
 
 .L2:
-	ldr x1, [sp, #24]
-	str x1, [sp, #64]
-	ldr x1, [sp, #32]
-	str x1, [sp, #72]
-	ldr x1, [sp, #64]
-	ldr x2, [sp, #72]
-	add x3, x1, x2
-	str x3, [sp, #80]
-	ldr x1, [sp, #80]
-	str x1, [sp, #24]
-	ldr x1, [sp, #32]
-	str x1, [sp, #88]
-	ldr x1, [sp, #88]
-	mov x2, #2
-	add x3, x1, x2
-	str x3, [sp, #96]
-	ldr x1, [sp, #96]
-	str x1, [sp, #32]
-	b .L1
-
-.L3:
-	ldr x1, [sp, #32]
-	str x1, [sp, #104]
-	ldr x1, [sp, #104]
-	mov x2, #2
-	sdiv x3, x1, x2
-	str x3, [sp, #112]
-	ldr x1, [sp, #112]
-	mov x2, #1
-	sub x3, x1, x2
-	str x3, [sp, #120]
-	ldr x1, [sp, #120]
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
-	str x1, [sp, #128]
-	ldr x1, [sp, #128]
-	mov x0, x1
-	ldp x29, x30, [sp]
-	add sp, sp, #16
-	add sp, sp, #144
-	ret
-
-	.size isqrt, (.-isqrt)
-
-	.type prime, %function
-	.global prime
-	.p2align 2
-prime:
-.L4:
-	sub sp, sp, #224
-	sub sp, sp, #16
-	stp x29, x30, [sp]
-	mov fp, sp
-	str x0, [sp, #216]
-	b .L5
-
-.L5:
-	ldr x1, [sp, #216]
-	str x1, [sp, #40]
-	ldr x1, [sp, #40]
-	mov x2, #2
-	cmp x1, x2
-	cset x3, lt
-	str x3, [sp, #48]
-	ldr x1, [sp, #48]
-	mov x2, #0
-	cmp x1, x2
-	b.eq .L7
-
-.L6:
-	mov x1, #0
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
-	str x1, [sp, #56]
-	ldr x1, [sp, #56]
-	mov x0, x1
-	ldp x29, x30, [sp]
-	add sp, sp, #16
-	add sp, sp, #224
-	ret
-
-.L7:
-	ldr x1, [sp, #216]
-	str x1, [sp, #64]
-	ldr x1, [sp, #64]
-	mov x0, x1
-	bl isqrt
-	str x0, [sp, #72]
-	ldr x1, [sp, #72]
-	str x1, [sp, #24]
-	mov x1, #2
-	str x1, [sp, #24]
-	b .L8
-
-.L8:
-	ldr x1, [sp, #24]
-	str x1, [sp, #80]
-	ldr x1, [sp, #24]
-	str x1, [sp, #88]
-	ldr x1, [sp, #80]
-	ldr x2, [sp, #88]
-	cmp x1, x2
-	cset x3, le
-	str x3, [sp, #96]
-	ldr x1, [sp, #96]
-	mov x2, #0
-	cmp x1, x2
-	b.eq .L14
-
-.L9:
-	ldr x1, [sp, #216]
-	str x1, [sp, #104]
-	ldr x1, [sp, #24]
-	str x1, [sp, #112]
-	ldr x1, [sp, #104]
-	ldr x2, [sp, #112]
-	sdiv x3, x1, x2
-	str x3, [sp, #120]
-	ldr x1, [sp, #24]
-	str x1, [sp, #128]
-	ldr x1, [sp, #120]
-	ldr x2, [sp, #128]
-	mul x3, x1, x2
-	str x3, [sp, #136]
-	ldr x1, [sp, #216]
-	str x1, [sp, #144]
-	ldr x1, [sp, #144]
-	ldr x2, [sp, #136]
-	sub x3, x1, x2
-	str x3, [sp, #152]
-	ldr x1, [sp, #152]
-	str x1, [sp, #32]
-	b .L10
-
-.L10:
-	ldr x1, [sp, #32]
-	str x1, [sp, #160]
-	ldr x1, [sp, #160]
-	mov x2, #0
-	cmp x1, x2
-	cset x3, eq
-	str x3, [sp, #168]
-	ldr x1, [sp, #168]
-	mov x2, #0
-	cmp x1, x2
-	b.eq .L12
-
-.L11:
-	mov x1, #0
-	str x1, [sp, #16]
-	ldr x1, [sp, #16]
-	str x1, [sp, #176]
-	ldr x1, [sp, #176]
-	mov x0, x1
-	ldp x29, x30, [sp]
-	add sp, sp, #16
-	add sp, sp, #224
-	ret
-
-.L12:
-	b .L13
-
-.L13:
-	ldr x1, [sp, #24]
-	str x1, [sp, #184]
-	ldr x1, [sp, #184]
-	mov x2, #1
-	add x3, x1, x2
-	str x3, [sp, #192]
-	ldr x1, [sp, #192]
-	str x1, [sp, #24]
-	b .L8
-
-.L14:
 	mov x1, #1
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #200]
-	ldr x1, [sp, #200]
+	str x1, [sp, #40]
+	ldr x1, [sp, #40]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
-	add sp, sp, #224
+	add sp, sp, #112
 	ret
 
-.L15:
-	b .L16
-
-.L16:
+.L3:
+	ldr x1, [sp, #104]
+	str x1, [sp, #48]
+	ldr x1, [sp, #48]
+	mov x2, #1
+	sub x3, x1, x2
+	str x3, [sp, #56]
+	ldr x1, [sp, #56]
+	mov x0, x1
+	bl fact
+	str x0, [sp, #64]
+	ldr x1, [sp, #104]
+	str x1, [sp, #72]
+	ldr x1, [sp, #72]
+	ldr x2, [sp, #64]
+	mul x3, x1, x2
+	str x3, [sp, #80]
+	ldr x1, [sp, #80]
+	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #208]
-	ldr x1, [sp, #208]
+	str x1, [sp, #88]
+	ldr x1, [sp, #88]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16
-	add sp, sp, #224
+	add sp, sp, #112
 	ret
 
-	.size prime, (.-prime)
+.L4:
+	b .L5
+
+.L5:
+	ldr x1, [sp, #16]
+	str x1, [sp, #96]
+	ldr x1, [sp, #96]
+	mov x0, x1
+	ldp x29, x30, [sp]
+	add sp, sp, #16
+	add sp, sp, #112
+	ret
+
+	.size fact, (.-fact)
 
 	.type main, %function
 	.global main
 	.p2align 2
 main:
-.L17:
+.L6:
 	sub sp, sp, #112
 	sub sp, sp, #16
 	stp x29, x30, [sp]
 	mov fp, sp
-	adrp x1, .READ
-	add x1, x1, :lo12:.READ
-	mov x0, x1
-	add x1, sp, #24
-	bl scanf
+	mov x1, #0
+	str x1, [sp, #24]
 	mov x1, #0
 	str x1, [sp, #32]
-	b .L18
+	b .L7
 
-.L18:
-	ldr x1, [sp, #32]
-	str x1, [sp, #40]
+.L7:
 	ldr x1, [sp, #24]
-	str x1, [sp, #48]
-	ldr x1, [sp, #40]
-	ldr x2, [sp, #48]
-	cmp x1, x2
-	cset x3, le
-	str x3, [sp, #56]
-	ldr x1, [sp, #56]
-	mov x2, #0
-	cmp x1, x2
-	b.eq .L24
-
-.L19:
-	b .L20
-
-.L20:
-	ldr x1, [sp, #32]
-	str x1, [sp, #64]
+	str x1, [sp, #56]
+	mov x1, #1
+	ldr x2, [sp, #56]
+	eor x3, x1, x2
+	str x3, [sp, #64]
 	ldr x1, [sp, #64]
-	mov x0, x1
-	bl prime
-	str x0, [sp, #72]
-	ldr x1, [sp, #72]
 	mov x2, #1
 	cmp x1, x2
 	cset x3, eq
-	str x3, [sp, #80]
-	ldr x1, [sp, #80]
+	str x3, [sp, #72]
+	ldr x1, [sp, #72]
 	mov x2, #0
 	cmp x1, x2
-	b.eq .L22
+	b.eq .L13
 
-.L21:
+.L8:
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #32
+	bl scanf
 	ldr x1, [sp, #32]
-	str x1, [sp, #88]
+	str x1, [sp, #80]
+	ldr x1, [sp, #80]
+	mov x0, x1
+	bl fact
+	str x0, [sp, #88]
 	ldr x1, [sp, #88]
+	str x1, [sp, #48]
+	ldr x1, [sp, #48]
+	str x1, [sp, #96]
+	ldr x1, [sp, #96]
 	mov x1, x1
 	adrp x2, .FSTR2
 	add x2, x2, :lo12:.FSTR2
 	mov x0, x2
 	bl printf
-	b .L23
+	adrp x1, .READ
+	add x1, x1, :lo12:.READ
+	mov x0, x1
+	add x1, sp, #40
+	bl scanf
+	b .L9
 
-.L22:
-	b .L23
-
-.L23:
-	ldr x1, [sp, #32]
-	str x1, [sp, #96]
-	ldr x1, [sp, #96]
-	mov x2, #1
-	add x3, x1, x2
-	str x3, [sp, #104]
+.L9:
+	ldr x1, [sp, #40]
+	str x1, [sp, #104]
 	ldr x1, [sp, #104]
-	str x1, [sp, #32]
-	b .L18
+	mov x2, #0
+	cmp x1, x2
+	cset x3, eq
+	str x3, [sp, #112]
+	ldr x1, [sp, #112]
+	mov x2, #0
+	cmp x1, x2
+	b.eq .L11
 
-.L24:
-	b .L25
+.L10:
+	mov x1, #1
+	str x1, [sp, #24]
+	b .L12
 
-.L25:
+.L11:
+	b .L12
+
+.L12:
+	b .L7
+
+.L13:
+	b .L14
+
+.L14:
 	mov x1, #0
 	str x1, [sp, #16]
 	ldr x1, [sp, #16]
-	str x1, [sp, #112]
-	ldr x1, [sp, #112]
+	str x1, [sp, #120]
+	ldr x1, [sp, #120]
 	mov x0, x1
 	ldp x29, x30, [sp]
 	add sp, sp, #16

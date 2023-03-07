@@ -75,6 +75,6 @@ func (s *LocalDecl) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 // Build the stack table for the instruction.
 func (s *LocalDecl) BuildStackTable(fName string, stack *stack.Stack) {
 	if !strings.Contains(s.name, "P_") {
-		stack.AddEntry(fName, s.name, strconv.Itoa(stack.GetFrame(fName).GetLargestOffset()+8))
+		stack.AddEntry(fName, s.name, strconv.Itoa(stack.GetFrame(fName).GetLargestOffset()+8), "value")
 	}
 }

@@ -67,23 +67,23 @@ func (f *FunctionDecl) BuildStackTable(stack *stack.Stack) {
 	// Add stack frame for the function
 	stack.AddFrame(f.name)
 	// Add fp to the stack
-	stack.AddEntry(f.name, arm.SP, "0")
+	stack.AddEntry(f.name, arm.SP, "0", "value")
 	// Add lr to the stack
-	stack.AddEntry(f.name, arm.LR, "8")
+	stack.AddEntry(f.name, arm.LR, "8", "value")
 	for _, block := range f.blocks {
 		block.BuildStackTable(f.name, stack)
 	}
 	// Add the parameter register to the stack
 	for _, param := range f.params {
-		stack.AddEntry(f.name, "P_"+param, strconv.Itoa(stack.GetFrame(f.name).GetLargestOffset()+8))
+		stack.AddEntry(f.name, "P_"+param, strconv.Itoa(stack.GetFrame(f.name).GetLargestOffset()+8), "value")
 	}
 	// Add the parameter itself if it is greater than the number of avaliable registers
 	nAvailableRegisters := 8
 	for i, param := range f.params {
 		if i >= nAvailableRegisters {
-			stack.AddEntry(f.name, param, strconv.Itoa(stack.GetFrame(f.name).GetLargestOffset()+8))
+			stack.AddEntry(f.name, param, strconv.Itoa(stack.GetFrame(f.name).GetLargestOffset()+8), "value")
 		} else {
-			stack.AddEntry(f.name, param, "x"+strconv.Itoa(i))
+			stack.AddEntry(f.name, param, "x"+strconv.Itoa(i), "value")
 		}
 	}
 }
