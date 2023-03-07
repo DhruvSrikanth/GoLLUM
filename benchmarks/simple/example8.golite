@@ -1,13 +1,26 @@
+type nums struct {
+	a int;
+	b int;
+};
+
 func main () {
-	var a int;
-	var b int;
-	var c int;
+	var pair *nums;
+	var a,b int;
+	var c, d int;
 
-	a = 129;
-	scan b;
+	pair = new nums;
 
-	c = a + b;
-	printf("%d\n", a);
-	printf("%d\n", b);
-	printf("%d\n", c);
+	scan a;
+	//scan b;
+
+	pair.a = a;
+	//pair.b = b;
+
+	c = pair.a;
+	//d = pair.b;
+
+	printf("P - (%d, %d)\n", c, d);
+
+	delete pair;
+
 }

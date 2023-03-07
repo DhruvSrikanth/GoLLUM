@@ -105,13 +105,44 @@ func (r *Return) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			movInst.SetLabel(r.blockLabel)
 			insts = append(insts, movInst)
 
-			subInst := arm.NewSub(availableReg, availableReg, "#"+r.sourceRegister[1:])
+			// Max value is 4095, so we can subtract the value from 0
+			num, _ := strconv.Atoi(r.sourceRegister[1:])
+			for num > 4095 {
+				subInst := arm.NewSub(availableReg, availableReg, "#4095")
+				subInst.SetLabel(r.blockLabel)
+				insts = append(insts, subInst)
+				num -= 4095
+			}
+
+			remaining := strconv.Itoa(num)
+			subInst := arm.NewSub(availableReg, availableReg, "#"+remaining)
 			subInst.SetLabel(r.blockLabel)
 			insts = append(insts, subInst)
 		} else {
-			movInst := arm.NewMov(availableReg, "#"+r.sourceRegister)
-			movInst.SetLabel(r.blockLabel)
-			insts = append(insts, movInst)
+			if num, _ := strconv.Atoi(r.sourceRegister); num > 4095 {
+				// Move the value into a register
+				movInst := arm.NewMov(availableReg, "#4095")
+				movInst.SetLabel(r.blockLabel)
+				insts = append(insts, movInst)
+
+				remaining := num - 4095
+				for remaining > 4095 {
+					addInst := arm.NewAdd(availableReg, availableReg, "#4095")
+					addInst.SetLabel(r.blockLabel)
+					insts = append(insts, addInst)
+					remaining -= 4095
+				}
+
+				remainingStr := strconv.Itoa(remaining)
+				addInst := arm.NewAdd(availableReg, availableReg, "#"+remainingStr)
+				addInst.SetLabel(r.blockLabel)
+				insts = append(insts, addInst)
+			} else {
+				// If the value is less than 4095, we can just move it into x0
+				movInst := arm.NewMov(availableReg, "#"+r.sourceRegister)
+				movInst.SetLabel(r.blockLabel)
+				insts = append(insts, movInst)
+			}
 		}
 	}
 	movInst := arm.NewMov("x0", availableReg)

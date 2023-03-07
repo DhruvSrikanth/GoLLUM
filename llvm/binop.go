@@ -147,17 +147,45 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			movInst.SetLabel(b.blockLabel)
 			insts = append(insts, movInst)
 
-			subInst := arm.NewSub(availableReg, availableReg, "#"+leftReg[1:])
+			num, _ := strconv.Atoi(leftReg[1:])
+			// 4095 is the max value that we will move at a time
+			for num > 4095 {
+				subInst := arm.NewSub(availableReg, availableReg, "#4095")
+				subInst.SetLabel(b.blockLabel)
+				insts = append(insts, subInst)
+
+				num -= 4095
+			}
+			remaining := strconv.Itoa(num)
+			subInst := arm.NewSub(availableReg, availableReg, "#"+remaining)
 			subInst.SetLabel(b.blockLabel)
 			insts = append(insts, subInst)
 
 			leftR = availableReg
 			availableRegNum += 1
 		} else {
-			movInst := arm.NewMov(availableReg, "#"+b.leftRegister)
-			movInst.SetLabel(b.blockLabel)
-			insts = append(insts, movInst)
+			// 4095 is the max value that we will move at a time
+			if num, _ := strconv.Atoi(b.leftRegister); num > 4095 {
+				movInst := arm.NewMov(availableReg, "#4095")
+				movInst.SetLabel(b.blockLabel)
+				insts = append(insts, movInst)
+				remaining := num - 4095
+				for remaining > 4095 {
+					addInst := arm.NewAdd(availableReg, availableReg, "#4095")
+					addInst.SetLabel(b.blockLabel)
+					insts = append(insts, addInst)
 
+					remaining -= 4095
+				}
+				remainingStr := strconv.Itoa(remaining)
+				addInst := arm.NewAdd(availableReg, availableReg, "#"+remainingStr)
+				addInst.SetLabel(b.blockLabel)
+				insts = append(insts, addInst)
+			} else {
+				movInst := arm.NewMov(availableReg, "#"+b.leftRegister)
+				movInst.SetLabel(b.blockLabel)
+				insts = append(insts, movInst)
+			}
 			leftR = availableReg
 			availableRegNum += 1
 		}
@@ -208,16 +236,41 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			movInst.SetLabel(b.blockLabel)
 			insts = append(insts, movInst)
 
-			subInst := arm.NewSub(availableReg, availableReg, "#"+rightReg[1:])
+			num, _ := strconv.Atoi(rightReg[1:])
+			// 4095 is the max value that we will move at a time
+			for num > 4095 {
+				subInst := arm.NewSub(availableReg, availableReg, "#4095")
+				subInst.SetLabel(b.blockLabel)
+				insts = append(insts, subInst)
+			}
+			remaining := strconv.Itoa(num)
+			subInst := arm.NewSub(availableReg, availableReg, "#"+remaining)
 			subInst.SetLabel(b.blockLabel)
 			insts = append(insts, subInst)
 
 			rightR = availableReg
 			availableRegNum += 1
 		} else {
-			movInst := arm.NewMov(availableReg, "#"+b.rightRegister)
-			movInst.SetLabel(b.blockLabel)
-			insts = append(insts, movInst)
+			// 4095 is the max value that we will move at a time
+			if num, _ := strconv.Atoi(b.rightRegister); num > 4095 {
+				movInst := arm.NewMov(availableReg, "#4095")
+				movInst.SetLabel(b.blockLabel)
+				insts = append(insts, movInst)
+				remaining := num - 4095
+				for remaining > 4095 {
+					addInst := arm.NewAdd(availableReg, availableReg, "#4095")
+					addInst.SetLabel(b.blockLabel)
+					insts = append(insts, addInst)
+				}
+				remainingStr := strconv.Itoa(remaining)
+				addInst := arm.NewAdd(availableReg, availableReg, "#"+remainingStr)
+				addInst.SetLabel(b.blockLabel)
+				insts = append(insts, addInst)
+			} else {
+				movInst := arm.NewMov(availableReg, "#"+b.rightRegister)
+				movInst.SetLabel(b.blockLabel)
+				insts = append(insts, movInst)
+			}
 
 			rightR = availableReg
 			availableRegNum += 1
