@@ -242,6 +242,8 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 				subInst := arm.NewSub(availableReg, availableReg, "#4095")
 				subInst.SetLabel(b.blockLabel)
 				insts = append(insts, subInst)
+
+				num -= 4095
 			}
 			remaining := strconv.Itoa(num)
 			subInst := arm.NewSub(availableReg, availableReg, "#"+remaining)
@@ -261,6 +263,8 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 					addInst := arm.NewAdd(availableReg, availableReg, "#4095")
 					addInst.SetLabel(b.blockLabel)
 					insts = append(insts, addInst)
+
+					remaining -= 4095
 				}
 				remainingStr := strconv.Itoa(remaining)
 				addInst := arm.NewAdd(availableReg, availableReg, "#"+remainingStr)
