@@ -5,14 +5,15 @@ import "fmt"
 // Branch to label ARM64 instruction
 type Branch struct {
 	// The label to branch to
-	label      string
-	blockLabel string
-	branchType string
+	label         string
+	blockLabel    string
+	branchType    string
+	conditionFlag string
 }
 
 // NewBranch returns a new branch instruction
 func NewBranch(label string) *Branch {
-	return &Branch{label, "", "function"}
+	return &Branch{label, "", "function", ""}
 }
 
 // String representation of the branch instruction
@@ -21,6 +22,8 @@ func (b *Branch) String() string {
 		return "bl " + b.label
 	} else if b.branchType == "cfg" {
 		return "b " + b.label
+	} else if b.branchType == "conditional" {
+		return "b." + b.conditionFlag + " " + b.label
 	} else {
 		fmt.Println("[error in branch translation]")
 		return ""
@@ -45,4 +48,14 @@ func (b *Branch) GetBranchType() string {
 // Set the branch type of the instruction.
 func (b *Branch) SetBranchType(newType string) {
 	b.branchType = newType
+}
+
+// Get the condition flag of the instruction.
+func (b *Branch) GetConditionFlag() string {
+	return b.conditionFlag
+}
+
+// Set the condition flag of the instruction.
+func (b *Branch) SetConditionFlag(newFlag string) {
+	b.conditionFlag = newFlag
 }

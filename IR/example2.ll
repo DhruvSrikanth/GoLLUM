@@ -1,5 +1,5 @@
 source_filename = "example2"
-target triple = "arm64-apple-darwin22.2.0"
+target triple = "x86_64-linux-gnu"
 
 %struct.Node = type {i64, %struct.Node*, %struct.Node*}
 

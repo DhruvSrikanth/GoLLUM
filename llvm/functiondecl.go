@@ -92,10 +92,110 @@ func (f *FunctionDecl) BuildStackTable(stack *stack.Stack) {
 func (f *FunctionDecl) ToARM(stack *stack.Stack) *arm.FunctionDecl {
 	blocks := make([]*arm.BasicBlock, 0)
 	isFirstBlock := true
+
 	for _, block := range f.blocks {
 		blocks = append(blocks, block.ToARM(f.name, stack, isFirstBlock))
 		if isFirstBlock {
 			isFirstBlock = false
+		}
+	}
+
+	stackFrame := stack.GetFrame(f.name)
+
+	// Add the conditional branches to the end of the block if they are cfg entry blocks
+	for i, armBlock := range blocks {
+		llvmBlock := f.blocks[i]
+		availableRegNum := stackFrame.GetNextRegister()
+		if llvmBlock.IsIfEntry() {
+			var op1R, op2R string
+
+			availableReg := "x" + strconv.Itoa(availableRegNum)
+			availableRegNum += 1
+
+			// Add an instruction to branch
+			condBranchLLVMInst := llvmBlock.GetLastInstruction().(*BranchConditional)
+
+			condReg := condBranchLLVMInst.GetConditionRegister()
+			condAddr := stackFrame.GetLocation(condReg[1:])
+			if strings.Contains(condAddr, "x") {
+				// Already in register
+				op1R = condAddr
+			} else {
+				// In an address on the stack
+				ldrInst := arm.NewLdr(availableReg, arm.SP+", #"+condAddr)
+				ldrInst.SetLabel(llvmBlock.GetLabel())
+				armBlock.AddInstruction(ldrInst)
+
+				op1R = availableReg
+
+			}
+
+			availableReg = "x" + strconv.Itoa(availableRegNum)
+			availableRegNum += 1
+			// Move #0 to a register because we want to check if the condition is false
+			movInst := arm.NewMov(availableReg, "#0")
+			movInst.SetLabel(llvmBlock.GetLabel())
+			armBlock.AddInstruction(movInst)
+
+			op2R = availableReg
+
+			// Compare the two registers
+			cmpInst := arm.NewCmp(op1R, op2R)
+			cmpInst.SetLabel(llvmBlock.GetLabel())
+			armBlock.AddInstruction(cmpInst)
+
+			// Branch to the false label if the condition is true i.e. icmp condition is false == 0
+			falseLabel := "." + condBranchLLVMInst.GetFalseLabel()
+			bInst := arm.NewBranch(falseLabel)
+			bInst.SetLabel(llvmBlock.GetLabel())
+			bInst.SetBranchType("conditional")
+			bInst.SetConditionFlag("eq")
+			armBlock.AddInstruction(bInst)
+		} else if llvmBlock.IsForEntry() {
+			var op1R, op2R string
+
+			availableReg := "x" + strconv.Itoa(availableRegNum)
+			availableRegNum += 1
+
+			// Add an instruction to branch
+			condBranchLLVMInst := llvmBlock.GetLastInstruction().(*BranchConditional)
+
+			condReg := condBranchLLVMInst.GetConditionRegister()
+			condAddr := stackFrame.GetLocation(condReg[1:])
+			if strings.Contains(condAddr, "x") {
+				// Already in register
+				op1R = condAddr
+			} else {
+				// In an address on the stack
+				ldrInst := arm.NewLdr(availableReg, arm.SP+", #"+condAddr)
+				ldrInst.SetLabel(llvmBlock.GetLabel())
+				armBlock.AddInstruction(ldrInst)
+
+				op1R = availableReg
+
+			}
+
+			availableReg = "x" + strconv.Itoa(availableRegNum)
+			availableRegNum += 1
+			// Move #0 to a register because we want to check if the condition is false
+			movInst := arm.NewMov(availableReg, "#0")
+			movInst.SetLabel(llvmBlock.GetLabel())
+			armBlock.AddInstruction(movInst)
+
+			op2R = availableReg
+
+			// Compare the two registers
+			cmpInst := arm.NewCmp(op1R, op2R)
+			cmpInst.SetLabel(llvmBlock.GetLabel())
+			armBlock.AddInstruction(cmpInst)
+
+			// Branch to the false label if the condition is true i.e. icmp condition is false == 0
+			falseLabel := "." + condBranchLLVMInst.GetFalseLabel()
+			bInst := arm.NewBranch(falseLabel)
+			bInst.SetLabel(llvmBlock.GetLabel())
+			bInst.SetBranchType("conditional")
+			bInst.SetConditionFlag("eq")
+			armBlock.AddInstruction(bInst)
 		}
 	}
 

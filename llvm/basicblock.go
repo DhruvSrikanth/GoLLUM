@@ -30,6 +30,16 @@ func NewBasicBlock(label string) *BasicBlock {
 	}
 }
 
+// Determine if the blocktype is an if entry block.
+func (bb *BasicBlock) IsIfEntry() bool {
+	return bb.blockType == "IF_ENTRY"
+}
+
+// Determine if the blocktype is an for entry block.
+func (bb *BasicBlock) IsForEntry() bool {
+	return bb.blockType == "FOR_ENTRY"
+}
+
 // Add a predecessor basic block.
 func (bb *BasicBlock) AddPredecessor(pred *BasicBlock) {
 	bb.predecessors = append(bb.predecessors, pred)
@@ -172,7 +182,6 @@ func (bb *BasicBlock) ToARM(funcName string, stack *stack.Stack, isFirstBlock bo
 		movInst := arm.NewMov(arm.FP, arm.SP)
 		movInst.SetLabel(armBB.GetLabel())
 		armBB.AddInstruction(movInst)
-
 	}
 
 	for _, inst := range bb.instructions {
