@@ -12,12 +12,14 @@
 ![Go](https://img.shields.io/badge/Go-1.18-blue)
 ![LLVM](https://img.shields.io/badge/LLVM-15.0.7__1-red)
 ![Clang](https://img.shields.io/badge/Clang-15.0.7-green)
+![ARM](https://img.shields.io/badge/ARM-64-red)
 
 ## Requirements
 
 - [Go](https://golang.org/dl/) 1.18 or higher
 - [LLVM](https://llvm.org/) 15.0.7_1 or higher (only required for running LLVM tests or building executables with LLVM backend)
 - [Clang](https://clang.llvm.org/)
+- [ARM](https://developer.arm.com/) 64-bit
 
 ## Build Golite Compiler
 
@@ -42,8 +44,8 @@ go run golite/main.go benchmarks/simple/example2.golite
 | `llvmshow` | Print the LLVM IR. | False | Lexer, Parser, IR Generator | `go run golite/main.go -llvmshow benchmarks/simple/example1.golite` |
 | `llvm=[target triple]` | Generate LLVM IR using target triple. | x86_64-linux-gnu | Lexer, Parser, IR Generator | `go run golite/main.go -llvm=arm64-apple-darwin22.2.0 benchmarks/simple/example1.golite` |
 | `arm64show` | Print the ARM64 assembly. | False | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64show benchmarks/simple/example1.golite` |
-| `S` | Generate ARM64 assembly. | True | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64 benchmarks/simple/example1.golite` |
-| `o [output file]` | Output file name. | `a.out` | Lexer, Parser, IR Generator, ARM64 Generator, Assembler | `go run golite/main.go -o output benchmarks/simple/example1.golite` |
+| `S` | Generate ARM64 assembly. | False | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64 benchmarks/simple/example1.golite` |
+| `o [output file]` | Output file name. | a.out | Lexer, Parser, IR Generator, ARM64 Generator, Assembler | `go run golite/main.go -o output benchmarks/simple/example1.golite` |
 
 Check out the `benchmarks` folder for more examples.
 
