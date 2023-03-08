@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"golite/arm"
 	"golite/stack"
+	"golite/utils"
 	"strconv"
 	"strings"
 )
@@ -148,16 +149,31 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 			insts = append(insts, movInst)
 
 			num, _ := strconv.Atoi(leftReg[1:])
-			// 4095 is the max value that we will move at a time
-			for num > 4095 {
-				subInst := arm.NewSub(availableReg, availableReg, "#4095")
-				subInst.SetLabel(b.blockLabel)
-				insts = append(insts, subInst)
+			availableRegNum += 1
+			nextReg := "x" + strconv.Itoa(availableRegNum)
+			hexNum := utils.IntToHex(int64(num))
+			hexSplit := utils.SplitHex(hexNum)
+			// Move the upper 16 bits into the register and shift left by 48 bits
+			movzInst := arm.NewMovz(nextReg, "#"+hexSplit[0]+", lsl #48")
+			movzInst.SetLabel(b.blockLabel)
+			insts = append(insts, movzInst)
 
-				num -= 4095
-			}
-			remaining := strconv.Itoa(num)
-			subInst := arm.NewSub(availableReg, availableReg, "#"+remaining)
+			// Move the next 16 bits into the register and shift left by 32 bits
+			movkInst := arm.NewMovk(nextReg, "#"+hexSplit[1]+", lsl #32")
+			movkInst.SetLabel(b.blockLabel)
+			insts = append(insts, movkInst)
+
+			// Move the next 16 bits into the register and shift left by 16 bits
+			movkInst = arm.NewMovk(nextReg, "#"+hexSplit[2]+", lsl #16")
+			movkInst.SetLabel(b.blockLabel)
+			insts = append(insts, movkInst)
+
+			// Move the last 16 bits into the register
+			movkInst = arm.NewMovk(nextReg, "#"+hexSplit[3]+", lsl #0")
+			movkInst.SetLabel(b.blockLabel)
+			insts = append(insts, movkInst)
+
+			subInst := arm.NewSub(availableReg, availableReg, nextReg)
 			subInst.SetLabel(b.blockLabel)
 			insts = append(insts, subInst)
 
@@ -166,21 +182,27 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 		} else {
 			// 4095 is the max value that we will move at a time
 			if num, _ := strconv.Atoi(b.leftRegister); num > 4095 {
-				movInst := arm.NewMov(availableReg, "#4095")
-				movInst.SetLabel(b.blockLabel)
-				insts = append(insts, movInst)
-				remaining := num - 4095
-				for remaining > 4095 {
-					addInst := arm.NewAdd(availableReg, availableReg, "#4095")
-					addInst.SetLabel(b.blockLabel)
-					insts = append(insts, addInst)
+				hexNum := utils.IntToHex(int64(num))
+				hexSplit := utils.SplitHex(hexNum)
+				// Move the upper 16 bits into the register and shift left by 48 bits
+				movzInst := arm.NewMovz(availableReg, "#"+hexSplit[0]+", lsl #48")
+				movzInst.SetLabel(b.blockLabel)
+				insts = append(insts, movzInst)
 
-					remaining -= 4095
-				}
-				remainingStr := strconv.Itoa(remaining)
-				addInst := arm.NewAdd(availableReg, availableReg, "#"+remainingStr)
-				addInst.SetLabel(b.blockLabel)
-				insts = append(insts, addInst)
+				// Move the next 16 bits into the register and shift left by 32 bits
+				movkInst := arm.NewMovk(availableReg, "#"+hexSplit[1]+", lsl #32")
+				movkInst.SetLabel(b.blockLabel)
+				insts = append(insts, movkInst)
+
+				// Move the next 16 bits into the register and shift left by 16 bits
+				movkInst = arm.NewMovk(availableReg, "#"+hexSplit[2]+", lsl #16")
+				movkInst.SetLabel(b.blockLabel)
+				insts = append(insts, movkInst)
+
+				// Move the last 16 bits into the register
+				movkInst = arm.NewMovk(availableReg, "#"+hexSplit[3]+", lsl #0")
+				movkInst.SetLabel(b.blockLabel)
+				insts = append(insts, movkInst)
 			} else {
 				movInst := arm.NewMov(availableReg, "#"+b.leftRegister)
 				movInst.SetLabel(b.blockLabel)
@@ -238,15 +260,31 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 
 			num, _ := strconv.Atoi(rightReg[1:])
 			// 4095 is the max value that we will move at a time
-			for num > 4095 {
-				subInst := arm.NewSub(availableReg, availableReg, "#4095")
-				subInst.SetLabel(b.blockLabel)
-				insts = append(insts, subInst)
+			availableRegNum += 1
+			nextReg := "x" + strconv.Itoa(availableRegNum)
+			hexNum := utils.IntToHex(int64(num))
+			hexSplit := utils.SplitHex(hexNum)
+			// Move the upper 16 bits into the register and shift left by 48 bits
+			movzInst := arm.NewMovz(nextReg, "#"+hexSplit[0]+", lsl #48")
+			movzInst.SetLabel(b.blockLabel)
+			insts = append(insts, movzInst)
 
-				num -= 4095
-			}
-			remaining := strconv.Itoa(num)
-			subInst := arm.NewSub(availableReg, availableReg, "#"+remaining)
+			// Move the next 16 bits into the register and shift left by 32 bits
+			movkInst := arm.NewMovk(nextReg, "#"+hexSplit[1]+", lsl #32")
+			movkInst.SetLabel(b.blockLabel)
+			insts = append(insts, movkInst)
+
+			// Move the next 16 bits into the register and shift left by 16 bits
+			movkInst = arm.NewMovk(nextReg, "#"+hexSplit[2]+", lsl #16")
+			movkInst.SetLabel(b.blockLabel)
+			insts = append(insts, movkInst)
+
+			// Move the last 16 bits into the register
+			movkInst = arm.NewMovk(nextReg, "#"+hexSplit[3]+", lsl #0")
+			movkInst.SetLabel(b.blockLabel)
+			insts = append(insts, movkInst)
+
+			subInst := arm.NewSub(availableReg, availableReg, nextReg)
 			subInst.SetLabel(b.blockLabel)
 			insts = append(insts, subInst)
 
@@ -255,21 +293,27 @@ func (b *BinOp) ToARM(fnName string, stack *stack.Stack) []arm.Instruction {
 		} else {
 			// 4095 is the max value that we will move at a time
 			if num, _ := strconv.Atoi(b.rightRegister); num > 4095 {
-				movInst := arm.NewMov(availableReg, "#4095")
-				movInst.SetLabel(b.blockLabel)
-				insts = append(insts, movInst)
-				remaining := num - 4095
-				for remaining > 4095 {
-					addInst := arm.NewAdd(availableReg, availableReg, "#4095")
-					addInst.SetLabel(b.blockLabel)
-					insts = append(insts, addInst)
+				hexNum := utils.IntToHex(int64(num))
+				hexSplit := utils.SplitHex(hexNum)
+				// Move the upper 16 bits into the register and shift left by 48 bits
+				movzInst := arm.NewMovz(availableReg, "#"+hexSplit[0]+", lsl #48")
+				movzInst.SetLabel(b.blockLabel)
+				insts = append(insts, movzInst)
 
-					remaining -= 4095
-				}
-				remainingStr := strconv.Itoa(remaining)
-				addInst := arm.NewAdd(availableReg, availableReg, "#"+remainingStr)
-				addInst.SetLabel(b.blockLabel)
-				insts = append(insts, addInst)
+				// Move the next 16 bits into the register and shift left by 32 bits
+				movkInst := arm.NewMovk(availableReg, "#"+hexSplit[1]+", lsl #32")
+				movkInst.SetLabel(b.blockLabel)
+				insts = append(insts, movkInst)
+
+				// Move the next 16 bits into the register and shift left by 16 bits
+				movkInst = arm.NewMovk(availableReg, "#"+hexSplit[2]+", lsl #16")
+				movkInst.SetLabel(b.blockLabel)
+				insts = append(insts, movkInst)
+
+				// Move the last 16 bits into the register
+				movkInst = arm.NewMovk(availableReg, "#"+hexSplit[3]+", lsl #0")
+				movkInst.SetLabel(b.blockLabel)
+				insts = append(insts, movkInst)
 			} else {
 				movInst := arm.NewMov(availableReg, "#"+b.rightRegister)
 				movInst.SetLabel(b.blockLabel)

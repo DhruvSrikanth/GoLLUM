@@ -3,8 +3,8 @@ package arm
 // Mov ARM64 instruction
 type Mov struct {
 	// The destination register
-	Dest   string
-	Source string
+	dest   string
+	source string
 	// block label
 	blockLabel string
 }
@@ -16,7 +16,7 @@ func NewMov(dest string, src string) *Mov {
 
 // String returns the string representation of the Mov instruction
 func (m *Mov) String() string {
-	return "mov " + m.Dest + ", " + m.Source
+	return "mov " + m.dest + ", " + m.source
 }
 
 // Set the label of the instruction
