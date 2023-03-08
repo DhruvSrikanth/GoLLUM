@@ -27,10 +27,10 @@ func PrintList(curr *Node) {
 
     if (curr == tail) {
        printValue = curr.num;
-       printf("%d",printValue);
+       printf("%d\n",printValue);
     } else {
        printValue = curr.num;
-       printf("%d",printValue);
+       printf("%d\n",printValue);
        PrintList(curr.next);
     }
 }

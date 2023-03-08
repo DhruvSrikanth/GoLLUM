@@ -58,9 +58,45 @@ test_frontend:
 	@make test_lexer
 	@make test_parser
 
+# Run all llvm tests
+test_llvm:
+	@make llvm_examples_executable
+	@for i in {1..$(N_EXAMPLES)} ; do \
+		./example$$i.out < benchmarks/simple/input$$i.txt > output$$i.txt ; \
+		if cmp -s output$$i.txt benchmarks/simple/expected$$i.txt ; \
+		then \
+			echo "Test $$i passed" ; \
+		else \
+			echo "Test $$i failed" ; \
+		fi ; \
+	done
+	@rm example*
+	@rm output*.txt
+
+# Run all arm64 tests
+test_arm:
+	@make arm_examples_executable
+	@for i in {1..$(N_EXAMPLES)} ; do \
+		./example$$i.out < benchmarks/simple/input$$i.txt > output$$i.txt ; \
+		if cmp -s output$$i.txt benchmarks/simple/expected$$i.txt ; \
+		then \
+			echo "Test $$i passed" ; \
+		else \
+			echo "Test $$i failed" ; \
+		fi ; \
+	done
+	@rm example*
+	@rm output*.txt
+
+# Run all backend tests
+test_backend:
+	@make test_llvm
+	@make test_arm
+
 # Run all compiler tests
 test_compiler:
 	@make test_frontend
+	@make test_backend
 
 # GENERATE
 # Generate llvm for all examples
@@ -93,5 +129,5 @@ llvm_examples_executable:
 # Generate object files for all examples (using arm translation)
 arm_examples_executable:
 	@for i in {1..$(N_EXAMPLES)} ; do \
-		$(GO_COMPILER) run golite/main.go -s -o example$$i.out benchmarks/simple/example$$i.golite ; \
+		$(GO_COMPILER) run golite/main.go -o example$$i.out benchmarks/simple/example$$i.golite ; \
 	done

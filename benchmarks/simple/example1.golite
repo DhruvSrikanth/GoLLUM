@@ -39,6 +39,6 @@ func main() {
 
     delete x;
 
-    printf("c=%d\nd=%d",c,d); 
+    printf("c=%d\nd=%d\n",c,d); 
 }
 

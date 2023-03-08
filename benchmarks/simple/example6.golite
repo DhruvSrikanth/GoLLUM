@@ -17,7 +17,7 @@ func main () {
 	for(!stop) {
 		scan factor;
         temp = fact(factor); 
-    	printf("%d",temp); 
+    	printf("%d\n",temp); 
         scan toStop;
 		if(toStop == 0) {
 			stop = true;

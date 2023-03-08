@@ -95,7 +95,7 @@ func maxfactorial (list *ListNode, max int)  {
          }
       }
    }
-   printf("Max Factorial=%d", max); 
+   printf("Max Factorial=%d\n", max); 
 }
 
 func newvalue (height int, width int) int {

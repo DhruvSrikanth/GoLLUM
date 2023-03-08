@@ -58,7 +58,7 @@ func printDepthTree (curr *Node)  {
 			printDepthTree(curr.left);
 		}
         temp = curr.value;
-		printf("%d",temp);
+		printf("%d\n",temp);
 
 		if(curr.right !=nil) {
 			printDepthTree(curr.right);

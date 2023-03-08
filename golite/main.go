@@ -62,35 +62,35 @@ func main() {
 						// Print the llvm representation
 						if cmd.LLVMShowFlag {
 							fmt.Println(llvmRepr)
-						}
-
-						// Write the llvm representation to the output file
-						llvmPath := targetInfo.GetFileName() + ".ll"
-						utils.WriteRepr(llvmPath, llvmRepr)
-
-						// Build the stack table for each function in the LLVM program
-						// Create new stack
-						stack := stack.NewStack()
-						llvmProgram.BuildStackTable(stack)
-
-						// Convert the llvm representation to ARM assembly
-						armAssembly := llvmProgram.ToARM(stack)
-						if cmd.ARMShowFlag {
-							fmt.Println(armAssembly)
-						}
-
-						var assemblyPath string
-						if cmd.ARMFlag {
-							// Write the ARM assembly to the output file
-							assemblyPath = targetInfo.GetFileName() + ".s"
-							utils.WriteRepr(assemblyPath, armAssembly.String())
 						} else {
-							assemblyPath = "temp.s"
-							utils.WriteRepr(assemblyPath, armAssembly.String())
-							// Generate the executable file
-							utils.GenerateExecutable(assemblyPath, cmd.AssemblyFileName)
-							// Remove the temporary assembly file
-							utils.RemoveRepr(assemblyPath)
+							// Write the llvm representation to the output file
+							llvmPath := targetInfo.GetFileName() + ".ll"
+							utils.WriteRepr(llvmPath, llvmRepr)
+
+							// Build the stack table for each function in the LLVM program
+							// Create new stack
+							stack := stack.NewStack()
+							llvmProgram.BuildStackTable(stack)
+
+							// Convert the llvm representation to ARM assembly
+							armAssembly := llvmProgram.ToARM(stack)
+							if cmd.ARMShowFlag {
+								fmt.Println(armAssembly)
+							}
+
+							var assemblyPath string
+							if cmd.ARMFlag {
+								// Write the ARM assembly to the output file
+								assemblyPath = targetInfo.GetFileName() + ".s"
+								utils.WriteRepr(assemblyPath, armAssembly.String())
+							} else {
+								assemblyPath = "temp.s"
+								utils.WriteRepr(assemblyPath, armAssembly.String())
+								// Generate the executable file
+								utils.GenerateExecutable(assemblyPath, cmd.AssemblyFileName)
+								// Remove the temporary assembly file
+								utils.RemoveRepr(assemblyPath)
+							}
 						}
 					}
 				} else {
