@@ -65,8 +65,7 @@ func main() {
 						}
 
 						// Write the llvm representation to the output file
-						llvmPath := "IR/" + targetInfo.GetFileName() + ".ll"
-						utils.CreateFolder("IR")
+						llvmPath := targetInfo.GetFileName() + ".ll"
 						utils.WriteRepr(llvmPath, llvmRepr)
 
 						// Build the stack table for each function in the LLVM program
@@ -80,19 +79,18 @@ func main() {
 							fmt.Println(armAssembly)
 						}
 
-						utils.CreateFolder("assembly")
 						var assemblyPath string
 						if cmd.ARMFlag {
 							// Write the ARM assembly to the output file
-							assemblyPath = "assembly/" + targetInfo.GetFileName() + ".s"
+							assemblyPath = targetInfo.GetFileName() + ".s"
 							utils.WriteRepr(assemblyPath, armAssembly.String())
 						} else {
-							assemblyPath = "assembly/temp.s"
+							assemblyPath = "temp.s"
 							utils.WriteRepr(assemblyPath, armAssembly.String())
 							// Generate the executable file
 							utils.GenerateExecutable(assemblyPath, cmd.AssemblyFileName)
 							// Remove the temporary assembly file
-							// utils.RemoveRepr(assemblyPath)
+							utils.RemoveRepr(assemblyPath)
 						}
 					}
 				} else {

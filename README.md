@@ -49,11 +49,7 @@ Check out the `benchmarks` folder for more examples.
 
 Important to note:
 
-- LLVM IR representations are generated in the `IR` folder in the root directory of the project.
-- ARM assembly representations are generated in the `assembly` folder in the root directory of the project. 
-- Intermediate folders such as `IR` and `assembly` will be created automatically for you if they do not exist.
-- Intermediate files and folders will **NOT** be deleted after the program is run.
-- Executables produced by the compiler are generated in the root directory of the project.
+- Executables produced by the compiler along with any intermediate files requested through flags are generated in the root directory of the project.
 
 ## Test Golite Compiler
 

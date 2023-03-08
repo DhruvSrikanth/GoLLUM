@@ -69,13 +69,12 @@ llvm_examples:
 	@for i in {1..$(N_EXAMPLES)} ; do \
         $(GO_COMPILER) run golite/main.go -llvm=$(ARCH) benchmarks/simple/example$$i.golite ; \
     done
-	@rm a.out
 
 # Generate assmebly for all examples (using llc)
 assembly_examples_llvm:
 	@make llvm_examples
 	@for i in {1..$(N_EXAMPLES)} ; do \
-		$(LLVM_COMPILER) IR/example$$i.ll -o assembly/example$$i.s ; \
+		$(LLVM_COMPILER) example$$i.ll -o example$$i.s ; \
 	done
 
 # Generate assembly for all examples (using arm translation)
@@ -88,11 +87,11 @@ assembly_examples_arm:
 llvm_examples_executable:
 	@make assembly_examples_llvm
 	@for i in {1..$(N_EXAMPLES)} ; do \
-		$(ASSEMBLER) assembly/example$$i.s -o example$$i.out;\
+		$(ASSEMBLER) example$$i.s -o example$$i.out;\
 	done
 
 # Generate object files for all examples (using arm translation)
 arm_examples_executable:
 	@for i in {1..$(N_EXAMPLES)} ; do \
-		$(GO_COMPILER) run golite/main.go -s -o benchmarks/simple/example$$i.golite ; \
+		$(GO_COMPILER) run golite/main.go -s -o example$$i.out benchmarks/simple/example$$i.golite ; \
 	done

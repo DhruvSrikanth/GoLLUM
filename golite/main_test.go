@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"golite/utils"
 	"os/exec"
 	"strings"
 	"testing"
@@ -115,11 +114,6 @@ func TestControlFlow(t *testing.T) {
 			}
 		})
 	}
-
-	// Remove the IR created from the tests
-	utils.RemoveFolder("IR")
-	// Remove the assembly folder created from the tests
-	utils.RemoveFolder("assembly")
 }
 
 func TestTypeChecker(t *testing.T) {
@@ -152,9 +146,4 @@ func TestTypeChecker(t *testing.T) {
 			}
 		})
 	}
-
-	// Remove the IR created from the tests
-	utils.RemoveFolder("IR")
-	// Remove the assembly folder created from the tests
-	utils.RemoveFolder("assembly")
 }
