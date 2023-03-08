@@ -9,6 +9,15 @@
 
 ![build](https://img.shields.io/badge/build-passing-brightgreen)
 ![coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+![Go](https://img.shields.io/badge/Go-1.18-blue)
+![LLVM](https://img.shields.io/badge/LLVM-15.0.7__1-red)
+![Clang](https://img.shields.io/badge/Clang-15.0.7-green)
+
+## Requirements
+
+- [Go](https://golang.org/dl/) 1.18 or higher
+- [LLVM](https://llvm.org/) 15.0.7_1 or higher (only required for running LLVM tests or building executables with LLVM backend)
+- [Clang](https://clang.llvm.org/)
 
 ## Build Golite Compiler
 
@@ -26,20 +35,24 @@ go run golite/main.go benchmarks/simple/example2.golite
 
 | Flag | Description | Default | Stages | Example |
 | --- | --- | --- | --- | --- |
+| `h` | Print the program usage and flags. | False | None | `go run golite/main.go -h benchmarks/simple/example1.golite` |
 | `lex` | Print the lexed tokens. | False | Lexer | `go run golite/main.go -lex benchmarks/simple/example1.golite` |
 | `ast` | Print the parser produced by the parser. | False |  Lexer, Parser | `go run golite/main.go -ast benchmarks/simple/example1.golite` |
 | `sym` | Print the symbol table. | False | Lexer, Parser | `go run golite/main.go -sym benchmarks/simple/example1.golite` |
 | `llvmshow` | Print the LLVM IR. | False | Lexer, Parser, IR Generator | `go run golite/main.go -llvmshow benchmarks/simple/example1.golite` |
 | `llvm=[target triple]` | Generate LLVM IR using target triple. | x86_64-linux-gnu | Lexer, Parser, IR Generator | `go run golite/main.go -llvm=arm64-apple-darwin22.2.0 benchmarks/simple/example1.golite` |
 | `arm64show` | Print the ARM64 assembly. | False | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64show benchmarks/simple/example1.golite` |
-| `arm64` | Generate ARM64 assembly. | True | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64 benchmarks/simple/example1.golite` |
+| `S` | Generate ARM64 assembly. | True | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -arm64 benchmarks/simple/example1.golite` |
+| `o [output file]` | Output file name. | `a.out` | Lexer, Parser, IR Generator, ARM64 Generator | `go run golite/main.go -o output benchmarks/simple/example1.golite` |
 
 Check out the `benchmarks` folder for more examples.
 
-Note:
+Important to note:
 
-- LLVM IR representations are generated in the `IR` folder.
-- ARM assembly representations are generated in the `assembly` folder.
+- LLVM IR representations are generated in the `IR` folder in the root directory of the project.
+- ARM assembly representations are generated in the `assembly` folder in the root directory of the project. 
+- Intermediate folders such as `IR` and `assembly` will be created automatically for you if they do not exist.
+- Intermediate files and folders will **NOT** be deleted after the program is run.
 - Executables produced by the compiler are generated in the root directory of the project.
 
 ## Test Golite Compiler
@@ -51,12 +64,13 @@ Note:
 | `make test_type_checking` | Runs type checker tests. |
 | `make test_control_flow` | Runs control flow tests. |
 | `make test_parser` | Runs all parser tests. |
+| `make test_frontend` | Runs frontend tests. |
 | `make test_compiler` | Runs all compiler tests. |
-<!-- | `make test_llvm` | Runs all llvm tests. |
-| `make test_arm64` | Runs all arm64 tests. | -->
-
 
 Running the tests present in `golite/main_test.go` will run all the tests in the `benchmarks` folder.
+
+Important to note:
+- To run any LLVM IR tests, you will need to have LLVM installed on your machine.
 
 ## Examples of Golite Programs
 
@@ -175,8 +189,3 @@ func main() {
     printf("%d", a);
 }
 ```
-
-## Remaining Tasks
-
-1. Update code based on feedback on milestone 2.
-

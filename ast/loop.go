@@ -5,6 +5,7 @@ import (
 	"golite/llvm"
 	st "golite/symboltable"
 	"golite/token"
+	"golite/types"
 	"strconv"
 	"strings"
 )
@@ -43,6 +44,9 @@ func (l *Loop) BuildSymbolTable(tables *st.SymbolTables, errors []*SemanticAnaly
 func (l *Loop) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Type check the condition
 	errors = l.condition.TypeCheck(errors, tables, funcEntry)
+	if l.condition.GetType() != types.StringToType("bool") {
+		errors = append(errors, NewSemanticAnalysisError("Condition must be of type bool", "type error", l.Token))
+	}
 
 	// Type check the body
 	errors = l.body.TypeCheck(errors, tables, funcEntry)

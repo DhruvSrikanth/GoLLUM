@@ -19,5 +19,13 @@ func NewSemanticAnalysisError(message, errorType string, tok *token.Token) *Sema
 
 // String representation of the Semantic Analysis Error
 func (e *SemanticAnalysisError) String() string {
-	return fmt.Sprintf("semantic error at line (%d), col (%d): %s (%s)", e.token.GetLine(), e.token.GetColumn(), e.Message, e.Type)
+	var line, col int
+	if e.token == nil {
+		line = -1
+		col = -1
+	} else {
+		line = e.token.GetLine()
+		col = e.token.GetColumn()
+	}
+	return fmt.Sprintf("semantic error at line (%d), col (%d): %s (%s)", line, col, e.Message, e.Type)
 }

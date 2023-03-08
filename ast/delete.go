@@ -6,6 +6,7 @@ import (
 	st "golite/symboltable"
 	"golite/token"
 	"golite/types"
+	"strings"
 )
 
 // Delete node in the AST
@@ -41,15 +42,23 @@ func (d *Delete) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTab
 	// Type check the expression
 	errors = d.expr.TypeCheck(errors, tables, funcEntry)
 
+	// It may be a struct field so we need to split on '.' and check
+	exprStr := d.expr.String()
+	split := strings.Split(exprStr, ".")
+	if len(split) > 1 {
+		exprStr = split[0]
+	}
+
 	// Check if expression has been declared
-	if funcEntry.Variables.Contains(d.expr.String()) == nil {
+	if funcEntry.Variables.Contains(exprStr) == nil {
 		// Check the parameters
 		found := false
 		for _, param := range funcEntry.Parameters {
-			if param.Name == d.expr.String() {
+			if param.Name == exprStr {
 				found = true
 			}
 		}
+
 		if !found {
 			errors = append(errors, NewSemanticAnalysisError(d.expr.String()+" has not been declared.", "undeclared identifier", d.Token))
 		}

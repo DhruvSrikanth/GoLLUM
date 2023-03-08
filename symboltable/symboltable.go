@@ -108,3 +108,8 @@ func (st *SymbolTable[T]) Contains(id string) T {
 	var emptyEntry T
 	return emptyEntry
 }
+
+// Get the table of the symbol table
+func (st *SymbolTable[T]) GetTable() map[string]T {
+	return st.table
+}

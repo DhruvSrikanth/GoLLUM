@@ -52,6 +52,9 @@ func (c *Conditional) BuildSymbolTable(tables *st.SymbolTables, errors []*Semant
 func (c *Conditional) TypeCheck(errors []*SemanticAnalysisError, tables *st.SymbolTables, funcEntry *st.FuncEntry) []*SemanticAnalysisError {
 	// Type check the condition
 	errors = c.condition.TypeCheck(errors, tables, funcEntry)
+	if c.condition.GetType() != types.StringToType("bool") {
+		errors = append(errors, NewSemanticAnalysisError("Condition must be of type bool", "type error", c.Token))
+	}
 
 	// Type check the then block
 	errors = c.thenBlock.TypeCheck(errors, tables, funcEntry)

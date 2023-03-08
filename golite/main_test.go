@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"golite/utils"
 	"os/exec"
 	"strings"
 	"testing"
@@ -99,8 +100,8 @@ func TestControlFlow(t *testing.T) {
 		{"../benchmarks/parser/control flow/good/good7.golite", []string{""}},
 
 		// Bad programs
-		{"../benchmarks/parser/control flow/bad/bad1.golite", []string{"semantic error at line (7), col (0): control flow does not reach return statement (invalid control flow)", "Failed semantic analysis"}},
-		{"../benchmarks/parser/control flow/bad/bad2.golite", []string{"semantic error at line (2), col (0): control flow does not reach return statement (invalid control flow)", "Failed semantic analysis"}},
+		{"../benchmarks/parser/control flow/bad/bad1.golite", []string{"semantic error at line (-1), col (-1): main function not found (main function error)", "semantic error at line (7), col (0): control flow does not reach return statement (invalid control flow)", "Failed semantic analysis"}},
+		{"../benchmarks/parser/control flow/bad/bad2.golite", []string{"semantic error at line (-1), col (-1): main function not found (main function error)", "semantic error at line (2), col (0): control flow does not reach return statement (invalid control flow)", "Failed semantic analysis"}},
 	}
 	for num, test := range parseTests {
 		testname := fmt.Sprintf("T=%v", num+1)
@@ -114,6 +115,11 @@ func TestControlFlow(t *testing.T) {
 			}
 		})
 	}
+
+	// Remove the IR created from the tests
+	utils.RemoveFolder("IR")
+	// Remove the assembly folder created from the tests
+	utils.RemoveFolder("assembly")
 }
 
 func TestTypeChecker(t *testing.T) {
@@ -146,4 +152,9 @@ func TestTypeChecker(t *testing.T) {
 			}
 		})
 	}
+
+	// Remove the IR created from the tests
+	utils.RemoveFolder("IR")
+	// Remove the assembly folder created from the tests
+	utils.RemoveFolder("assembly")
 }

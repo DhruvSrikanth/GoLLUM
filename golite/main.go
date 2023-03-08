@@ -17,11 +17,14 @@ func main() {
 	if cmd == nil {
 		cmdline.Usage()
 		return
+	} else if cmd.HelpFlag {
+		cmdline.Usage()
+		return
 	}
 
 	// Get the input source file path
 	// Input source path is always the last argument
-	inputSourcePath := cmd.Args[len(cmd.Args)-1]
+	inputSourcePath := cmd.InputProgram
 
 	// Get a new lexer
 	lexer := lexer.NewLexer(inputSourcePath)
@@ -62,15 +65,14 @@ func main() {
 						}
 
 						// Write the llvm representation to the output file
-						outputPath := "IR/" + targetInfo.GetFileName() + ".ll"
+						llvmPath := "IR/" + targetInfo.GetFileName() + ".ll"
 						utils.CreateFolder("IR")
-						utils.WriteRepr(outputPath, llvmRepr)
+						utils.WriteRepr(llvmPath, llvmRepr)
 
 						// Build the stack table for each function in the LLVM program
 						// Create new stack
 						stack := stack.NewStack()
 						llvmProgram.BuildStackTable(stack)
-						// fmt.Println(stack)
 
 						// Convert the llvm representation to ARM assembly
 						armAssembly := llvmProgram.ToARM(stack)
@@ -78,11 +80,19 @@ func main() {
 							fmt.Println(armAssembly)
 						}
 
+						utils.CreateFolder("assembly")
+						var assemblyPath string
 						if cmd.ARMFlag {
 							// Write the ARM assembly to the output file
-							outputPath := "assembly/" + targetInfo.GetFileName() + ".s"
-							utils.CreateFolder("assembly")
-							utils.WriteRepr(outputPath, armAssembly.String())
+							assemblyPath = "assembly/" + targetInfo.GetFileName() + ".s"
+							utils.WriteRepr(assemblyPath, armAssembly.String())
+						} else {
+							assemblyPath = "assembly/temp.s"
+							utils.WriteRepr(assemblyPath, armAssembly.String())
+							// Generate the executable file
+							utils.GenerateExecutable(assemblyPath, cmd.AssemblyFileName)
+							// Remove the temporary assembly file
+							// utils.RemoveRepr(assemblyPath)
 						}
 					}
 				} else {
