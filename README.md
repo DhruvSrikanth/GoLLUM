@@ -68,7 +68,7 @@ Important to note:
 | `make test_frontend` | Runs frontend tests. |
 | `make test_llvm` | Runs LLVM IR generator tests. |
 | `make test_arm` | Runs ARM64 generator tests. |
-| `make backend` | Runs backend tests. |
+| `make test_backend` | Runs backend tests. |
 | `make test_compiler` | Runs all compiler tests. |
 
 Running the tests present in `golite/main_test.go` will run all the tests in the `benchmarks` folder.
