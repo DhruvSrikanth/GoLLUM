@@ -31,6 +31,7 @@ test_type_checker:
 	@make compiler
 	@cd golite && \
 	$(GO_COMPILER) test -v -run TestTypeChecker && \
+	rm -f *.ll \ 
 	cd ..
 
 # Run control flow tests
@@ -38,6 +39,7 @@ test_control_flow:
 	@make compiler
 	@cd golite && \
 	$(GO_COMPILER) test -v -run TestControlFlow && \
+	rm -f *.ll \ 
 	cd ..
 
 # Run the ast tests

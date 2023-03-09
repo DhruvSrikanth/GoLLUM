@@ -21,6 +21,9 @@
 - [Clang](https://clang.llvm.org/)
 - [ARM](https://developer.arm.com/) 64-bit
 
+More information on *[GoLite](https://github.com/mpcs51300-win23/proj-gollum)* and *[GoLLUM](https://github.com/mpcs51300-win23/proj-gollum)*, the *GoLite* compiler, and the compiler report can be found [here](dhruvsrikanth.md).
+
+
 ## Build Golite Compiler
 
 ```bash
