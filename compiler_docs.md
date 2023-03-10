@@ -124,7 +124,7 @@ The final stage of the backend as well as the overall compiler is code generatio
 
 ```c
 int n = 10;
-int a = malloc(n * sizeof(int));
+int *a = malloc(n * sizeof(int));
 int index = 5;
 int b;
 b = *(a + index * sizeof(int));
