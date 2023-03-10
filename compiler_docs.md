@@ -39,7 +39,7 @@ The lexer is the first stage of the compiler and is a part of the compiler front
 | `FOR` | `for` | For keyword |
 | `SCAN` | `scan` | Scan keyword |
 | `PRINTF` | `printf` | Printf keyword |
-| `INT_LIT` | `[1-9][0-9]*` | `[0]` | Integer literal |
+| `INT_LIT` | `[1-9][0-9]* \| [0]` | Integer literal |
 | `STRING_LIT` | `'"'.*?'"'` | String literal |
 | `BOOL_LIT` | `true \| false` | Boolean literal |
 | `NIL_LIT` | `nil` | Nil literal |
@@ -124,7 +124,7 @@ The final stage of the backend as well as the overall compiler is code generatio
 
 ```c
 int n = 10;
-int *a = malloc(n * sizeof(int));
+int a = malloc(n * sizeof(int));
 int index = 5;
 int b;
 b = *(a + index * sizeof(int));
