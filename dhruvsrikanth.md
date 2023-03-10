@@ -39,9 +39,9 @@ The lexer is the first stage of the compiler and is a part of the compiler front
 | `FOR` | `for` | For keyword |
 | `SCAN` | `scan` | Scan keyword |
 | `PRINTF` | `printf` | Printf keyword |
-| `INT_LIT` | `[1-9][0-9]* | [0]` | Integer literal |
+| `INT_LIT` | `[1-9][0-9]*` | `[0]` | Integer literal |
 | `STRING_LIT` | `'"'.*?'"'` | String literal |
-| `BOOL_LIT` | `true | false` | Boolean literal |
+| `BOOL_LIT` | `true \| false` | Boolean literal |
 | `NIL_LIT` | `nil` | Nil literal |
 | `INT` | `int` | Integer type |
 | `BOOL` | `bool` | Boolean type |
